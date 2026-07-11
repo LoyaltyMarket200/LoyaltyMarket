@@ -1525,4 +1525,66 @@ body {
   .browse-main .product-grid {
     grid-template-columns: 1fr;
   }
+}/* ===== STEP 4 - JIJI PRODUCT CARDS ===== */
+
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:24px;
+}
+
+.product-card{
+    background:#fff;
+    border-radius:14px;
+    overflow:hidden;
+    transition:.25s;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.product-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.product-image{
+    width:100%;
+    height:220px;
+    overflow:hidden;
+    margin:0;
+    border-radius:0;
+}
+
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.3s;
+}
+
+.product-card:hover img{
+    transform:scale(1.05);
+}
+
+.product-card h3{
+    font-size:18px;
+    margin:15px;
+    color:#111827;
+}
+
+.product-card .price{
+    margin:0 15px;
+    color:#16a34a;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.product-card .location,
+.product-card .condition{
+    margin:8px 15px;
+    color:#64748b;
+    font-size:14px;
+}
+
+.heart{
+    z-index:2;
 }
