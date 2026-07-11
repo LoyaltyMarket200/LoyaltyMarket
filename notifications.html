@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Notifications - LoyaltyMarket</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="theme-color" content="#1e3a8a">
+
+  <style>
+    .nav-messages-link,
+    .nav-notifications-link {
+      position: relative;
+    }
+
+    .unread-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: #dc2626;
+      color: #ffffff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .unread-badge.has-unread {
+      display: flex;
+    }
+
+    .notifications-page {
+      width: min(900px, 92%);
+      min-height: 70vh;
+      margin: 35px auto 70px;
+    }
+
+    .notifications-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .notifications-title h1 {
+      margin: 0 0 6px;
+      color: #0f172a;
+      font-size: 32px;
+    }
+
+    .notifications-title p {
+      margin: 0;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .notification-header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mark-all-btn,
+    .clear-read-btn {
+      padding: 11px 16px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mark-all-btn {
+      border: none;
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .mark-all-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .clear-read-btn {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+    }
+
+    .clear-read-btn:hover {
+      background: #f8fafc;
+    }
+
+    .notification-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .notification-filter-btn {
+      padding: 9px 15px;
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .notification-filter-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
+
+    .notifications-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .notification-card {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      gap: 15px;
+      align-items: flex-start;
+      padding: 18px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 5px 16px rgba(15, 23, 42, 0.06);
+    }
+
+    .notification-card.unread {
+      border-left: 5px solid #2563eb;
+      background: #eff6ff;
+    }
+
+    .notification-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #dbeafe;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .notification-content {
+      min-width: 0;
+    }
+
+    .notification-content h3 {
+      margin: 0 0 6px;
+      color: #0f172a;
+      font-size: 16px;
+    }
+
+    .notification-content p {
+      margin: 0;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .notification-date {
+      margin-top: 9px !important;
+      color: #94a3b8 !important;
+      font-size: 12px !important;
+    }
+
+    .notification-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 110px;
+    }
+
+    .notification-action-btn,
+    .notification-open-link,
+    .notification-delete-btn {
+      padding: 8px 11px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .notification-action-btn {
+      border: none;
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .notification-open-link {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+    }
+
+    .notification-delete-btn {
+      border: none;
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .notifications-empty,
+    .notifications-loading,
+    .notifications-error {
+      padding: 55px 20px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      background: #ffffff;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .notifications-empty h2 {
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    .notifications-empty a {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 11px 18px;
+      border-radius: 9px;
+      background: #2563eb;
+      color: #ffffff;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    @media (max-width: 700px) {
+      .notification-card {
+        grid-template-columns: 45px 1fr;
+      }
+
+      .notification-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 21px;
+      }
+
+      .notification-actions {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .notification-action-btn,
+      .notification-open-link,
+      .notification-delete-btn {
+        flex: 1;
+        min-width: 110px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <a
+      href="index.html"
+      class="logo"
+      style="text-decoration: none;"
+    >
+      <h2>🇱🇷 LoyaltyMarket</h2>
+    </a>
+
+    <input
+      type="text"
+      class="search-box"
+      placeholder="Search Products, Cars, Phones..."
+    >
+
+    <div class="nav-buttons">
+      <a href="index.html" class="login-btn">
+        Home
+      </a>
+
+      <a
+        href="messages.html"
+        class="register-btn nav-messages-link"
+      >
+        My Messages
+
+        <span
+          id="messageUnreadBadge"
+          class="unread-badge"
+        >
+          0
+        </span>
+      </a>
+
+      <a
+        href="notifications.html"
+        class="register-btn nav-notifications-link"
+      >
+        Notifications
+
+        <span
+          id="notificationUnreadBadge"
+          class="unread-badge"
+        >
+          0
+        </span>
+      </a>
+
+      <a href="dashboard.html" class="register-btn">
+        Dashboard
+      </a>
+
+      <a href="sell.html" class="sell-btn">
+        Sell Product
+      </a>
+    </div>
+  </header>
+
+  <main class="notifications-page">
+
+    <div class="notifications-header">
+      <div class="notifications-title">
+        <h1>🔔 Notifications</h1>
+
+        <p id="notificationSummary">
+          Loading your notifications...
+        </p>
+      </div>
+
+      <div class="notification-header-actions">
+        <button
+          type="button"
+          id="markAllReadBtn"
+          class="mark-all-btn"
+        >
+          Mark All As Read
+        </button>
+
+        <button
+          type="button"
+          id="clearReadBtn"
+          class="clear-read-btn"
+        >
+          Delete Read
+        </button>
+      </div>
+    </div>
+
+    <div class="notification-filters">
+      <button
+        type="button"
+        class="notification-filter-btn active"
+        data-filter="all"
+      >
+        All
+      </button>
+
+      <button
+        type="button"
+        class="notification-filter-btn"
+        data-filter="unread"
+      >
+        Unread
+      </button>
+
+      <button
+        type="button"
+        class="notification-filter-btn"
+        data-filter="message"
+      >
+        Messages
+      </button>
+
+      <button
+        type="button"
+        class="notification-filter-btn"
+        data-filter="listing"
+      >
+        Listings
+      </button>
+
+      <button
+        type="button"
+        class="notification-filter-btn"
+        data-filter="admin"
+      >
+        Admin
+      </button>
+    </div>
+
+    <section
+      id="notificationsList"
+      class="notifications-list"
+    >
+      <div class="notifications-loading">
+        Loading notifications...
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+
+    <p>Buy And Sell Products Across Liberia.</p>
+
+    <p>
+      &copy; 2026 LoyaltyMarket. All Rights Reserved.
+    </p>
+  </footer>
+
+  <script type="module">
+    import {
+      db,
+      auth
+    } from "./firebase.js";
+
+    import {
+      collection,
+      query,
+      where,
+      onSnapshot,
+      doc,
+      updateDoc,
+      deleteDoc,
+      writeBatch
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const notificationsList =
+      document.getElementById("notificationsList");
+
+    const notificationSummary =
+      document.getElementById("notificationSummary");
+
+    const markAllReadBtn =
+      document.getElementById("markAllReadBtn");
+
+    const clearReadBtn =
+      document.getElementById("clearReadBtn");
+
+    const notificationUnreadBadge =
+      document.getElementById(
+        "notificationUnreadBadge"
+      );
+
+    const messageUnreadBadge =
+      document.getElementById(
+        "messageUnreadBadge"
+      );
+
+    const filterButtons =
+      document.querySelectorAll(
+        ".notification-filter-btn"
+      );
+
+    let currentUser = null;
+    let allNotifications = [];
+    let currentFilter = "all";
+    let notificationUnsubscribe = null;
+    let messageUnsubscribe = null;
+
+    function safeText(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function getNotificationIcon(type) {
+      if (type === "message") {
+        return "💬";
+      }
+
+      if (type === "wishlist") {
+        return "❤️";
+      }
+
+      if (type === "verification") {
+        return "✅";
+      }
+
+      if (type === "featured") {
+        return "⭐";
+      }
+
+      if (type === "report") {
+        return "🚩";
+      }
+
+      if (type === "listing") {
+        return "📦";
+      }
+
+      if (type === "payment") {
+        return "💳";
+      }
+
+      if (type === "admin") {
+        return "🛡️";
+      }
+
+      return "🔔";
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) {
+        return "Just now";
+      }
+
+      try {
+        const date = timestamp.toDate
+          ? timestamp.toDate()
+          : new Date(timestamp);
+
+        return date.toLocaleString();
+      } catch (error) {
+        return "Recently";
+      }
+    }
+
+    function getTimestampValue(notification) {
+      if (
+        notification.createdAt &&
+        notification.createdAt.toMillis
+      ) {
+        return notification.createdAt.toMillis();
+      }
+
+      if (notification.createdAt) {
+        const parsedDate =
+          new Date(notification.createdAt).getTime();
+
+        return Number.isNaN(parsedDate)
+          ? 0
+          : parsedDate;
+      }
+
+      return 0;
+    }
+
+    function updateUnreadBadge() {
+      const unreadCount =
+        allNotifications.filter(
+          (notification) =>
+            notification.read !== true
+        ).length;
+
+      if (unreadCount > 0) {
+        notificationUnreadBadge.textContent =
+          unreadCount > 9
+            ? "9+"
+            : String(unreadCount);
+
+        notificationUnreadBadge.classList.add(
+          "has-unread"
+        );
+      } else {
+        notificationUnreadBadge.textContent = "0";
+
+        notificationUnreadBadge.classList.remove(
+          "has-unread"
+        );
+      }
+
+      notificationSummary.textContent =
+        `${allNotifications.length} notification${
+          allNotifications.length === 1
+            ? ""
+            : "s"
+        } • ${unreadCount} unread`;
+    }
+
+    function getFilteredNotifications() {
+      if (currentFilter === "all") {
+        return allNotifications;
+      }
+
+      if (currentFilter === "unread") {
+        return allNotifications.filter(
+          (notification) =>
+            notification.read !== true
+        );
+      }
+
+      if (currentFilter === "listing") {
+        return allNotifications.filter(
+          (notification) =>
+            notification.type === "listing" ||
+            notification.type === "wishlist" ||
+            notification.type === "featured"
+        );
+      }
+
+      if (currentFilter === "admin") {
+        return allNotifications.filter(
+          (notification) =>
+            notification.type === "admin" ||
+            notification.type === "report" ||
+            notification.type === "verification"
+        );
+      }
+
+      return allNotifications.filter(
+        (notification) =>
+          notification.type === currentFilter
+      );
+    }
+
+    function renderNotifications() {
+      const filteredNotifications =
+        getFilteredNotifications();
+
+      if (filteredNotifications.length === 0) {
+        notificationsList.innerHTML = `
+          <div class="notifications-empty">
+            <h2>No notifications found</h2>
+
+            <p>
+              New messages, listing updates and account
+              alerts will appear here.
+            </p>
+
+            <a href="index.html">
+              Browse Marketplace
+            </a>
+          </div>
+        `;
+
+        return;
+      }
+
+      notificationsList.innerHTML =
+        filteredNotifications
+          .map((notification) => {
+            const title =
+              notification.title ||
+              "LoyaltyMarket Notification";
+
+            const message =
+              notification.message ||
+              "You have a new update.";
+
+            const type =
+              notification.type ||
+              "general";
+
+            const isUnread =
+              notification.read !== true;
+
+            const link =
+              notification.link ||
+              "";
+
+            return `
+              <article
+                class="notification-card ${
+                  isUnread ? "unread" : ""
+                }"
+                data-notification-id="${
+                  notification.id
+                }"
+              >
+                <div class="notification-icon">
+                  ${getNotificationIcon(type)}
+                </div>
+
+                <div class="notification-content">
+                  <h3>${safeText(title)}</h3>
+
+                  <p>${safeText(message)}</p>
+
+                  <p class="notification-date">
+                    ${formatDate(
+                      notification.createdAt
+                    )}
+                  </p>
+                </div>
+
+                <div class="notification-actions">
+                  ${
+                    isUnread
+                      ? `
+                        <button
+                          type="button"
+                          class="notification-action-btn"
+                          data-action="read"
+                          data-id="${notification.id}"
+                        >
+                          Mark Read
+                        </button>
+                      `
+                      : ""
+                  }
+
+                  ${
+                    link
+                      ? `
+                        <a
+                          href="${safeText(link)}"
+                          class="notification-open-link"
+                          data-open-id="${notification.id}"
+                        >
+                          Open
+                        </a>
+                      `
+                      : ""
+                  }
+
+                  <button
+                    type="button"
+                    class="notification-delete-btn"
+                    data-action="delete"
+                    data-id="${notification.id}"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+
+      document
+        .querySelectorAll(
+          '[data-action="read"]'
+        )
+        .forEach((button) => {
+          button.addEventListener(
+            "click",
+            async () => {
+              const notificationId =
+                button.getAttribute("data-id");
+
+              await markNotificationRead(
+                notificationId
+              );
+            }
+          );
+        });
+
+      document
+        .querySelectorAll(
+          '[data-action="delete"]'
+        )
+        .forEach((button) => {
+          button.addEventListener(
+            "click",
+            async () => {
+              const notificationId =
+                button.getAttribute("data-id");
+
+              await removeNotification(
+                notificationId
+              );
+            }
+          );
+        });
+
+      document
+        .querySelectorAll("[data-open-id]")
+        .forEach((link) => {
+          link.addEventListener(
+            "click",
+            async () => {
+              const notificationId =
+                link.getAttribute(
+                  "data-open-id"
+                );
+
+              try {
+                await markNotificationRead(
+                  notificationId,
+                  false
+                );
+              } catch (error) {
+                console.error(
+                  "Could not mark notification read:",
+                  error
+                );
+              }
+            }
+          );
+        });
+    }
+
+    async function markNotificationRead(
+      notificationId,
+      rerenderImmediately = true
+    ) {
+      if (!currentUser || !notificationId) {
+        return;
+      }
+
+      try {
+        await updateDoc(
+          doc(
+            db,
+            "notifications",
+            notificationId
+          ),
+          {
+            read: true
+          }
+        );
+
+        if (rerenderImmediately) {
+          const notification =
+            allNotifications.find(
+              (item) =>
+                item.id === notificationId
+            );
+
+          if (notification) {
+            notification.read = true;
+          }
+
+          updateUnreadBadge();
+          renderNotifications();
+        }
+      } catch (error) {
+        alert(
+          "Could not update notification: " +
+          error.message
+        );
+      }
+    }
+
+    async function removeNotification(
+      notificationId
+    ) {
+      if (!currentUser || !notificationId) {
+        return;
+      }
+
+      try {
+        await deleteDoc(
+          doc(
+            db,
+            "notifications",
+            notificationId
+          )
+        );
+      } catch (error) {
+        alert(
+          "Could not delete notification: " +
+          error.message
+        );
+      }
+    }
+
+    async function markAllNotificationsRead() {
+      if (!currentUser) {
+        return;
+      }
+
+      const unreadNotifications =
+        allNotifications.filter(
+          (notification) =>
+            notification.read !== true
+        );
+
+      if (unreadNotifications.length === 0) {
+        alert("All notifications are already read.");
+        return;
+      }
+
+      markAllReadBtn.disabled = true;
+      markAllReadBtn.textContent = "Updating...";
+
+      try {
+        const batch = writeBatch(db);
+
+        unreadNotifications.forEach(
+          (notification) => {
+            batch.update(
+              doc(
+                db,
+                "notifications",
+                notification.id
+              ),
+              {
+                read: true
+              }
+            );
+          }
+        );
+
+        await batch.commit();
+      } catch (error) {
+        alert(
+          "Could not mark notifications as read: " +
+          error.message
+        );
+      } finally {
+        markAllReadBtn.disabled = false;
+        markAllReadBtn.textContent =
+          "Mark All As Read";
+      }
+    }
+
+    async function deleteReadNotifications() {
+      if (!currentUser) {
+        return;
+      }
+
+      const readNotifications =
+        allNotifications.filter(
+          (notification) =>
+            notification.read === true
+        );
+
+      if (readNotifications.length === 0) {
+        alert("There are no read notifications to delete.");
+        return;
+      }
+
+      const confirmed = confirm(
+        "Delete all read notifications?"
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      clearReadBtn.disabled = true;
+      clearReadBtn.textContent = "Deleting...";
+
+      try {
+        const batch = writeBatch(db);
+
+        readNotifications.forEach(
+          (notification) => {
+            batch.delete(
+              doc(
+                db,
+                "notifications",
+                notification.id
+              )
+            );
+          }
+        );
+
+        await batch.commit();
+      } catch (error) {
+        alert(
+          "Could not delete notifications: " +
+          error.message
+        );
+      } finally {
+        clearReadBtn.disabled = false;
+        clearReadBtn.textContent =
+          "Delete Read";
+      }
+    }
+
+    function listenForNotifications(userId) {
+      if (notificationUnsubscribe) {
+        notificationUnsubscribe();
+      }
+
+      const notificationsQuery = query(
+        collection(db, "notifications"),
+        where("userId", "==", userId)
+      );
+
+      notificationUnsubscribe =
+        onSnapshot(
+          notificationsQuery,
+          (snapshot) => {
+            allNotifications =
+              snapshot.docs.map(
+                (documentSnapshot) => ({
+                  id: documentSnapshot.id,
+                  ...documentSnapshot.data()
+                })
+              );
+
+            allNotifications.sort(
+              (first, second) =>
+                getTimestampValue(second) -
+                getTimestampValue(first)
+            );
+
+            updateUnreadBadge();
+            renderNotifications();
+          },
+          (error) => {
+            console.error(
+              "Notifications error:",
+              error
+            );
+
+            notificationSummary.textContent =
+              "Unable to load notifications";
+
+            notificationsList.innerHTML = `
+              <div class="notifications-error">
+                Could not load notifications:
+                ${safeText(error.message)}
+              </div>
+            `;
+          }
+        );
+    }
+
+    function listenForUnreadMessages(userId) {
+      if (messageUnsubscribe) {
+        messageUnsubscribe();
+      }
+
+      const unreadMessagesQuery = query(
+        collection(db, "messages"),
+        where("receiverId", "==", userId),
+        where("read", "==", false)
+      );
+
+      messageUnsubscribe =
+        onSnapshot(
+          unreadMessagesQuery,
+          (snapshot) => {
+            const unreadCount =
+              snapshot.size;
+
+            if (unreadCount > 0) {
+              messageUnreadBadge.textContent =
+                unreadCount > 9
+                  ? "9+"
+                  : String(unreadCount);
+
+              messageUnreadBadge.classList.add(
+                "has-unread"
+              );
+            } else {
+              messageUnreadBadge.textContent =
+                "0";
+
+              messageUnreadBadge.classList.remove(
+                "has-unread"
+              );
+            }
+          }
+        );
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        filterButtons.forEach(
+          (filterButton) => {
+            filterButton.classList.remove(
+              "active"
+            );
+          }
+        );
+
+        button.classList.add("active");
+
+        currentFilter =
+          button.getAttribute("data-filter");
+
+        renderNotifications();
+      });
+    });
+
+    markAllReadBtn.addEventListener(
+      "click",
+      markAllNotificationsRead
+    );
+
+    clearReadBtn.addEventListener(
+      "click",
+      deleteReadNotifications
+    );
+
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      listenForNotifications(user.uid);
+      listenForUnreadMessages(user.uid);
+    });
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("service-worker.js")
+          .then(() => {
+            console.log(
+              "Service worker registered."
+            );
+          })
+          .catch((error) => {
+            console.error(
+              "Service worker registration failed:",
+              error
+            );
+          });
+      });
+    }
+  </script>
+
+</body>
+</html>
