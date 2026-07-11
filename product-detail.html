@@ -28,6 +28,23 @@
       color: #fff;
       border-color: #dc2626;
     }
+    .buy-now-btn {
+      background: #059669;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .buy-now-btn:hover {
+      background: #047857;
+    }
+    .buy-now-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
     .modal-overlay {
       display: none;
       position: fixed;
@@ -175,6 +192,7 @@
     <p class="detail-condition" id="productCondition">Condition: Not listed</p>
 
     <div class="detail-actions">
+      <button id="buyNowBtn" class="buy-now-btn" type="button">🛒 Buy Now</button>
       <a id="contactSellerBtn" class="contact-btn" href="#">Contact Seller</a>
       <button id="saveBtn" class="heart-btn" type="button">♡ Save</button>
     </div>
@@ -258,10 +276,14 @@ const reportCancelBtn = document.getElementById("reportCancelBtn");
 const reportSubmitBtn = document.getElementById("reportSubmitBtn");
 const unreadBadge = document.getElementById("unreadBadge");
 const saveBtn = document.getElementById("saveBtn");
+const buyNowBtn = document.getElementById("buyNowBtn");
 
 let currentUser = null;
 let loadedProductTitle = "";
 let loadedSellerId = "";
+let loadedPriceUsd = "0";
+let loadedPriceLrd = "0";
+let loadedImage = "";
 let isSaved = false;
 
 function listenForUnreadMessages(userId) {
@@ -327,6 +349,50 @@ async function toggleSave() {
     alert("Could not update your wishlist: " + error.message);
   } finally {
     saveBtn.disabled = false;
+  }
+}
+
+async function buyNow() {
+  if (!currentUser) {
+    alert("Please log in to buy a product.");
+    window.location.href = "login.html";
+    return;
+  }
+  if (!productId) return;
+
+  if (currentUser.uid === loadedSellerId) {
+    alert("You can't buy your own listing.");
+    return;
+  }
+
+  const confirmBuy = confirm(`Confirm order for "${loadedProductTitle}" — US$${loadedPriceUsd} | L$${loadedPriceLrd}?`);
+  if (!confirmBuy) return;
+
+  buyNowBtn.disabled = true;
+  buyNowBtn.textContent = "Placing order...";
+
+  try {
+    await addDoc(collection(db, "orders"), {
+      productId: productId,
+      productTitle: loadedProductTitle,
+      productImage: loadedImage,
+      priceUsd: loadedPriceUsd,
+      priceLrd: loadedPriceLrd,
+      buyerId: currentUser.uid,
+      buyerEmail: currentUser.email,
+      sellerId: loadedSellerId,
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
+
+    alert("Order placed! You can track it in My Orders.");
+    window.location.href = "orders.html";
+
+  } catch (error) {
+    alert("Could not place order: " + error.message);
+  } finally {
+    buyNowBtn.disabled = false;
+    buyNowBtn.textContent = "🛒 Buy Now";
   }
 }
 
@@ -402,6 +468,9 @@ async function loadProduct() {
 
     loadedProductTitle = title;
     loadedSellerId = sellerId;
+    loadedPriceUsd = priceUsd;
+    loadedPriceLrd = priceLrd;
+    loadedImage = images[0];
 
     productTitle.textContent = title;
     productPrice.textContent = `US$${priceUsd} | L$${priceLrd}`;
@@ -500,6 +569,7 @@ reportBtn.addEventListener("click", openReportModal);
 reportCancelBtn.addEventListener("click", closeReportModal);
 reportSubmitBtn.addEventListener("click", submitReport);
 saveBtn.addEventListener("click", toggleSave);
+buyNowBtn.addEventListener("click", buyNow);
 
 reportModalOverlay.addEventListener("click", (event) => {
   if (event.target === reportModalOverlay) closeReportModal();
