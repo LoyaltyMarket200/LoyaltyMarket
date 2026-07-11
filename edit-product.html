@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Product - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <a href="index.html" class="login-btn">Home</a>
+  <a href="dashboard.html" class="register-btn">Dashboard</a>
+</header>
+
+<section class="sell-section">
+  <div class="sell-card">
+    <h1>Edit Your Product</h1>
+    <p class="sell-subtitle">Update your listing details below.</p>
+
+    <form class="sell-form" id="editForm">
+      <label>Product Title</label>
+      <input type="text" id="title" required>
+
+      <label>Category</label>
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option>Phones</option>
+        <option>Electronics</option>
+        <option>Vehicles</option>
+        <option>Property</option>
+        <option>Fashion</option>
+        <option>Jobs</option>
+      </select>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label>Price USD</label>
+          <input type="number" id="priceUsd" required>
+        </div>
+
+        <div class="form-col">
+          <label>Price L$</label>
+          <input type="number" id="priceLrd" required>
+        </div>
+      </div>
+
+      <label>Condition</label>
+      <select id="condition" required>
+        <option value="">Select Condition</option>
+        <option>Brand New</option>
+        <option>Used</option>
+        <option>Foreign Used</option>
+      </select>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label>County</label>
+          <input type="text" id="county" required>
+        </div>
+
+        <div class="form-col">
+          <label>City</label>
+          <input type="text" id="city" required>
+        </div>
+      </div>
+
+      <label>Product Image URL</label>
+      <input type="url" id="imageUrl">
+
+      <label>Description</label>
+      <textarea id="description" rows="5" required></textarea>
+
+      <label>Phone Number</label>
+      <input type="tel" id="phone" required>
+
+      <button type="submit" class="post-btn">Save Changes</button>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+let currentUser = null;
+
+if (!productId) {
+  alert("No product selected to edit.");
+  window.location.href = "dashboard.html";
+}
+
+async function loadProduct() {
+  try {
+    const productRef = doc(db, "products", productId);
+    const productSnap = await getDoc(productRef);
+
+    if (!productSnap.exists()) {
+      alert("This product no longer exists.");
+      window.location.href = "dashboard.html";
+      return;
+    }
+
+    const product = productSnap.data();
+
+    if (product.sellerId !== currentUser.uid) {
+      alert("You do not have permission to edit this listing.");
+      window.location.href = "dashboard.html";
+      return;
+    }
+
+    document.getElementById("title").value = product.title || "";
+    document.getElementById("category").value = product.category || "";
+    document.getElementById("priceUsd").value = product.priceUsd || "";
+    document.getElementById("priceLrd").value = product.priceLrd || "";
+    document.getElementById("condition").value = product.condition || "";
+    document.getElementById("county").value = product.county || "";
+    document.getElementById("city").value = product.city || "";
+    document.getElementById("imageUrl").value = product.imageUrl || "";
+    document.getElementById("description").value = product.description || "";
+    document.getElementById("phone").value = product.phone || "";
+
+  } catch (error) {
+    alert("Could not load product: " + error.message);
+    window.location.href = "dashboard.html";
+  }
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    loadProduct();
+  } else {
+    window.location.href = "login.html";
+  }
+});
+
+document.getElementById("editForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const updatedProduct = {
+    title: document.getElementById("title").value.trim(),
+    category: document.getElementById("category").value,
+    priceUsd: document.getElementById("priceUsd").value,
+    priceLrd: document.getElementById("priceLrd").value,
+    condition: document.getElementById("condition").value,
+    county: document.getElementById("county").value.trim(),
+    city: document.getElementById("city").value.trim(),
+    imageUrl: document.getElementById("imageUrl").value.trim(),
+    description: document.getElementById("description").value.trim(),
+    phone: document.getElementById("phone").value.trim()
+  };
+
+  try {
+    await updateDoc(doc(db, "products", productId), updatedProduct);
+    alert("Product updated successfully!");
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    alert("Could not save changes: " + error.message);
+  }
+});
+</script>
+
+</body>
+</html>

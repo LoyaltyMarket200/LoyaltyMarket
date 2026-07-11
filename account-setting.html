@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Settings - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
+
+  <a href="index.html" class="login-btn">Home</a>
+  <a href="dashboard.html" class="register-btn">Dashboard</a>
+</header>
+
+<section class="dashboard-section">
+
+  <aside class="dashboard-sidebar">
+    <div class="dashboard-profile">
+      <div class="dashboard-avatar">👤</div>
+      <h3 id="userEmail">Loading...</h3>
+      <p>⭐ Verified Seller</p>
+      <p class="member-since">Member since 2026</p>
+    </div>
+
+    <nav class="dashboard-nav">
+      <a href="dashboard.html" class="dashboard-nav-link">📋 My Listings</a>
+      <a href="wishlist.html" class="dashboard-nav-link">❤️ My Wishlist</a>
+      <a href="sell.html" class="dashboard-nav-link">➕ Post New Listing</a>
+      <a href="account-settings.html" class="dashboard-nav-link active">⚙️ Account Settings</a>
+    </nav>
+  </aside>
+
+  <main class="dashboard-main">
+    <h1>Account Settings</h1>
+    <p class="dashboard-subtitle">Manage your account information and password.</p>
+
+    <div class="settings-card">
+      <h3>Account Information</h3>
+
+      <label>Email Address</label>
+      <input type="email" id="currentEmail" disabled>
+
+      <p class="settings-hint">Your email cannot be changed at this time.</p>
+    </div>
+
+    <div class="settings-card">
+      <h3>Change Password</h3>
+
+      <form id="passwordForm">
+        <label>Current Password</label>
+        <input type="password" id="currentPassword" required>
+
+        <label>New Password</label>
+        <input type="password" id="newPassword" required minlength="6">
+
+        <label>Confirm New Password</label>
+        <input type="password" id="confirmPassword" required minlength="6">
+
+        <button type="submit" class="post-btn">Update Password</button>
+      </form>
+    </div>
+
+    <div class="settings-card danger-zone">
+      <h3>Danger Zone</h3>
+      <p class="settings-hint">Logging out will end your current session.</p>
+      <button id="logoutSettingsBtn" class="delete-btn" style="width:auto; padding:12px 24px;">Log Out</button>
+    </div>
+
+  </main>
+
+</section>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { auth } from "./firebase.js";
+import {
+  onAuthStateChanged,
+  signOut,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const currentEmail = document.getElementById("currentEmail");
+const userEmail = document.getElementById("userEmail");
+const passwordForm = document.getElementById("passwordForm");
+const logoutSettingsBtn = document.getElementById("logoutSettingsBtn");
+
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    currentEmail.value = user.email;
+    userEmail.textContent = user.email;
+  } else {
+    window.location.href = "login.html";
+  }
+});
+
+passwordForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const currentPassword = document.getElementById("currentPassword").value;
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (newPassword !== confirmPassword) {
+    alert("New passwords do not match.");
+    return;
+  }
+
+  try {
+    const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
+    await reauthenticateWithCredential(currentUser, credential);
+    await updatePassword(currentUser, newPassword);
+
+    alert("Password updated successfully!");
+    passwordForm.reset();
+  } catch (error) {
+    alert("Could not update password: " + error.message);
+  }
+});
+
+logoutSettingsBtn.addEventListener("click", async () => {
+  await signOut(auth);
+  alert("Logged out successfully!");
+  window.location.href = "login.html";
+});
+</script>
+
+</body>
+</html>

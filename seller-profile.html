@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Profile - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
+
+  <a href="index.html" class="login-btn">Home</a>
+</header>
+
+<section class="seller-profile-section">
+
+  <div class="seller-profile-card">
+    <div class="seller-profile-avatar">👤</div>
+    <h1 id="sellerName">Loading...</h1>
+    <p id="sellerVerified"></p>
+    <p class="member-since" id="sellerMemberSince"></p>
+    <p class="seller-listing-count" id="sellerListingCount"></p>
+  </div>
+
+  <div class="seller-listings-section">
+    <h2>Listings from this seller</h2>
+    <div class="seller-listings-grid" id="sellerListingsGrid">
+      <p>Loading listings...</p>
+    </div>
+  </div>
+
+  <div class="seller-reviews-section">
+    <h2>Reviews <span id="averageRating"></span></h2>
+
+    <div class="review-form-card" id="reviewFormCard" style="display:none;">
+      <h3>Leave a Review</h3>
+      <form id="reviewForm">
+        <label>Rating</label>
+        <select id="reviewRating" required>
+          <option value="">Select rating</option>
+          <option value="5">⭐⭐⭐⭐⭐ (5) Excellent</option>
+          <option value="4">⭐⭐⭐⭐ (4) Good</option>
+          <option value="3">⭐⭐⭐ (3) Average</option>
+          <option value="2">⭐⭐ (2) Poor</option>
+          <option value="1">⭐ (1) Terrible</option>
+        </select>
+
+        <label>Comment</label>
+        <textarea id="reviewComment" rows="3" placeholder="Share your experience with this seller..." required></textarea>
+
+        <button type="submit" class="post-btn">Submit Review</button>
+      </form>
+    </div>
+
+    <p id="loginToReviewMsg" style="display:none; color:#64748b;">
+      <a href="login.html" style="color:#2563eb; font-weight:600;">Login</a> to leave a review.
+    </p>
+
+    <p id="ownProfileMsg" style="display:none; color:#64748b;">
+      This is your own profile — you can't review yourself.
+    </p>
+
+    <div class="reviews-list" id="reviewsList">
+      <p>Loading reviews...</p>
+    </div>
+  </div>
+
+</section>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const params = new URLSearchParams(window.location.search);
+const sellerId = params.get("id");
+
+const sellerName = document.getElementById("sellerName");
+const sellerVerified = document.getElementById("sellerVerified");
+const sellerMemberSince = document.getElementById("sellerMemberSince");
+const sellerListingCount = document.getElementById("sellerListingCount");
+const sellerListingsGrid = document.getElementById("sellerListingsGrid");
+const averageRating = document.getElementById("averageRating");
+const reviewFormCard = document.getElementById("reviewFormCard");
+const reviewForm = document.getElementById("reviewForm");
+const loginToReviewMsg = document.getElementById("loginToReviewMsg");
+const ownProfileMsg = document.getElementById("ownProfileMsg");
+const reviewsList = document.getElementById("reviewsList");
+
+let currentUser = null;
+let currentUserName = "";
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function starsFor(rating) {
+  const fullStars = "⭐".repeat(rating);
+  return fullStars;
+}
+
+async function loadSellerProfile() {
+  if (!sellerId) {
+    sellerName.textContent = "Seller not found";
+    sellerListingsGrid.innerHTML = "<p>No seller ID was provided.</p>";
+    return;
+  }
+
+  try {
+    const userDoc = await getDoc(doc(db, "users", sellerId));
+
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+
+      sellerName.textContent = userData.name || "LoyaltyMarket Seller";
+
+      if (userData.verified === true) {
+        sellerVerified.textContent = "⭐ Verified Seller";
+      } else {
+        sellerVerified.textContent = "Unverified Seller";
+      }
+
+      if (userData.createdAt && userData.createdAt.seconds) {
+        const date = new Date(userData.createdAt.seconds * 1000);
+        sellerMemberSince.textContent = "Member since " + date.getFullYear();
+      } else {
+        sellerMemberSince.textContent = "Member";
+      }
+    } else {
+      sellerName.textContent = "LoyaltyMarket Seller";
+      sellerVerified.textContent = "Unverified Seller";
+      sellerMemberSince.textContent = "Member";
+    }
+
+    await loadSellerListings();
+    await loadReviews();
+
+  } catch (error) {
+    sellerName.textContent = "Could not load seller";
+    sellerListingsGrid.innerHTML = `<p>${safeText(error.message)}</p>`;
+  }
+}
+
+async function loadSellerListings() {
+  try {
+    const listingsQuery = query(
+      collection(db, "products"),
+      where("sellerId", "==", sellerId),
+      where("status", "==", "active")
+    );
+
+    const snapshot = await getDocs(listingsQuery);
+
+    sellerListingCount.textContent =
+      snapshot.size === 1
+        ? "1 active listing"
+        : `${snapshot.size} active listings`;
+
+    if (snapshot.empty) {
+      sellerListingsGrid.innerHTML = "<p>This seller has no active listings right now.</p>";
+      return;
+    }
+
+    sellerListingsGrid.innerHTML = "";
+
+    snapshot.forEach((productDoc) => {
+      const product = productDoc.data();
+
+      const image =
+        product.imageUrl ||
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+
+      const card = document.createElement("a");
+      card.href = "product-detail.html?id=" + productDoc.id;
+      card.style.textDecoration = "none";
+      card.style.color = "inherit";
+
+      card.innerHTML = `
+        <div class="product-card">
+          <div class="product-image">
+            <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
+          </div>
+          <h3>${safeText(product.title || "Untitled Product")}</h3>
+          <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
+          <p class="location">📍 ${safeText(product.city || "")}, ${safeText(product.county || "Liberia")}</p>
+        </div>
+      `;
+
+      sellerListingsGrid.appendChild(card);
+    });
+
+  } catch (error) {
+    sellerListingsGrid.innerHTML = `<p>Could not load listings: ${safeText(error.message)}</p>`;
+  }
+}
+
+async function loadReviews() {
+  try {
+    const reviewsQuery = query(
+      collection(db, "reviews"),
+      where("sellerId", "==", sellerId),
+      orderBy("createdAt", "desc")
+    );
+
+    const snapshot = await getDocs(reviewsQuery);
+
+    if (snapshot.empty) {
+      averageRating.textContent = "";
+      reviewsList.innerHTML = "<p>No reviews yet. Be the first to review this seller.</p>";
+      return;
+    }
+
+    let totalStars = 0;
+    let reviewCount = 0;
+    reviewsList.innerHTML = "";
+
+    snapshot.forEach((reviewDoc) => {
+      const review = reviewDoc.data();
+      const rating = Number(review.rating) || 0;
+
+      totalStars += rating;
+      reviewCount++;
+
+      const reviewCard = document.createElement("div");
+      reviewCard.className = "review-card";
+
+      let dateText = "";
+      if (review.createdAt && review.createdAt.seconds) {
+        const date = new Date(review.createdAt.seconds * 1000);
+        dateText = date.toLocaleDateString();
+      }
+
+      reviewCard.innerHTML = `
+        <div class="review-header">
+          <strong>${safeText(review.reviewerName || "Anonymous Buyer")}</strong>
+          <span class="review-stars">${starsFor(rating)}</span>
+        </div>
+        <p class="review-comment">${safeText(review.comment || "")}</p>
+        <p class="review-date">${safeText(dateText)}</p>
+      `;
+
+      reviewsList.appendChild(reviewCard);
+    });
+
+    const avg = (totalStars / reviewCount).toFixed(1);
+    averageRating.textContent = `(${avg} ⭐ from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
+
+  } catch (error) {
+    reviewsList.innerHTML = `<p>Could not load reviews: ${safeText(error.message)}</p>`;
+  }
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+
+    try {
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      currentUserName = userDoc.exists() ? (userDoc.data().name || user.email) : user.email;
+    } catch (error) {
+      currentUserName = user.email;
+    }
+
+    if (user.uid === sellerId) {
+      ownProfileMsg.style.display = "block";
+      reviewFormCard.style.display = "none";
+      loginToReviewMsg.style.display = "none";
+    } else {
+      reviewFormCard.style.display = "block";
+      loginToReviewMsg.style.display = "none";
+      ownProfileMsg.style.display = "none";
+    }
+  } else {
+    currentUser = null;
+    reviewFormCard.style.display = "none";
+    loginToReviewMsg.style.display = "block";
+    ownProfileMsg.style.display = "none";
+  }
+});
+
+reviewForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  if (!currentUser) {
+    alert("You must be logged in to leave a review.");
+    return;
+  }
+
+  const rating = document.getElementById("reviewRating").value;
+  const comment = document.getElementById("reviewComment").value.trim();
+
+  if (!rating || !comment) {
+    alert("Please select a rating and write a comment.");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "reviews"), {
+      sellerId: sellerId,
+      reviewerId: currentUser.uid,
+      reviewerName: currentUserName,
+      rating: Number(rating),
+      comment: comment,
+      createdAt: serverTimestamp()
+    });
+
+    alert("Review submitted successfully!");
+    reviewForm.reset();
+    loadReviews();
+
+  } catch (error) {
+    alert("Could not submit review: " + error.message);
+  }
+});
+
+loadSellerProfile();
+</script>
+
+</body>
+</html>

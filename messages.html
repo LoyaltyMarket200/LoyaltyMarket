@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Messages - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .inbox-wrap {
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 0 16px;
+    }
+    .inbox-wrap h1 {
+      color: #111;
+      margin-bottom: 4px;
+    }
+    .inbox-subtitle {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .conversation-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .conversation-card:hover {
+      border-color: #2563eb;
+    }
+    .conversation-card img {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .conversation-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .conversation-info h4 {
+      margin: 0 0 2px 0;
+      font-size: 15px;
+      color: #111;
+    }
+    .conversation-last-message {
+      margin: 0;
+      font-size: 13px;
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .conversation-time {
+      font-size: 12px;
+      color: #999;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .inbox-empty-state {
+      text-align: center;
+      color: #888;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 40px 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <input
+    type="text"
+    class="search-box"
+    placeholder="Search Products, Cars, Phones..."
+  >
+
+  <div class="nav-buttons">
+    <a href="index.html" class="login-btn">Home</a>
+    <a href="dashboard.html" class="register-btn">Dashboard</a>
+  </div>
+</header>
+
+<div class="inbox-wrap">
+  <h1>My Messages</h1>
+  <p class="inbox-subtitle">Conversations with buyers and sellers.</p>
+
+  <div id="conversationsList">
+    <p style="text-align:center; color:#888;">Loading conversations...</p>
+  </div>
+</div>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { db, auth } from "./firebase.js";
+
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const conversationsList = document.getElementById("conversationsList");
+
+let currentUser = null;
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function formatTime(timestamp) {
+  if (!timestamp || !timestamp.toDate) {
+    return "";
+  }
+  return timestamp.toDate().toLocaleDateString([], {
+    month: "short",
+    day: "numeric"
+  });
+}
+
+async function loadConversations() {
+  conversationsList.innerHTML = '<p style="text-align:center; color:#888;">Loading conversations...</p>';
+
+  try {
+    const sentQuery = query(
+      collection(db, "messages"),
+      where("senderId", "==", currentUser.uid)
+    );
+
+    const receivedQuery = query(
+      collection(db, "messages"),
+      where("receiverId", "==", currentUser.uid)
+    );
+
+    const [sentSnapshot, receivedSnapshot] = await Promise.all([
+      getDocs(sentQuery),
+      getDocs(receivedQuery)
+    ]);
+
+    const allMessages = [
+      ...sentSnapshot.docs.map((docSnap) => docSnap.data()),
+      ...receivedSnapshot.docs.map((docSnap) => docSnap.data())
+    ];
+
+    if (allMessages.length === 0) {
+      conversationsList.innerHTML = `
+        <div class="inbox-empty-state">
+          <h3>No conversations yet</h3>
+          <p style="margin-top:8px;">When you message a seller or someone messages you about a listing, it will show up here.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const conversationsByChatId = {};
+
+    allMessages.forEach((message) => {
+      const existing = conversationsByChatId[message.chatId];
+      const messageTime = message.createdAt?.seconds || 0;
+      const existingTime = existing?.createdAt?.seconds || 0;
+
+      if (!existing || messageTime > existingTime) {
+        conversationsByChatId[message.chatId] = message;
+      }
+    });
+
+    const conversations = Object.values(conversationsByChatId).sort(
+      (a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)
+    );
+
+    conversationsList.innerHTML = "";
+
+    for (const conversation of conversations) {
+      const otherUserId =
+        conversation.senderId === currentUser.uid
+          ? conversation.receiverId
+          : conversation.senderId;
+
+      let productTitle = "Untitled Listing";
+      let productImage =
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop";
+
+      try {
+        const productSnap = await getDoc(doc(db, "products", conversation.productId));
+        if (productSnap.exists()) {
+          const product = productSnap.data();
+          productTitle = product.title || productTitle;
+          productImage =
+            product.imageUrl ||
+            (product.images && product.images[0]) ||
+            productImage;
+        }
+      } catch (error) {
+        // fallback text used if product lookup fails
+      }
+
+      const card = document.createElement("a");
+      card.className = "conversation-card";
+      card.href =
+        "chat.html?product=" +
+        encodeURIComponent(conversation.productId) +
+        "&seller=" +
+        encodeURIComponent(otherUserId);
+
+      card.innerHTML = `
+        <img src="${safeText(productImage)}" alt="${safeText(productTitle)}">
+        <div class="conversation-info">
+          <h4>${safeText(productTitle)}</h4>
+          <p class="conversation-last-message">${safeText(conversation.text)}</p>
+        </div>
+        <span class="conversation-time">${formatTime(conversation.createdAt)}</span>
+      `;
+
+      conversationsList.appendChild(card);
+    }
+
+  } catch (error) {
+    conversationsList.innerHTML = `
+      <div class="inbox-empty-state">
+        <h3>Could not load conversations</h3>
+        <p style="margin-top:8px;">${safeText(error.message)}</p>
+      </div>
+    `;
+  }
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = user;
+  loadConversations();
+});
+</script>
+
+</body>
+</html>

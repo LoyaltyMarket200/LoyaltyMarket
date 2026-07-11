@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <a href="index.html" class="login-btn">Home</a>
+  <a href="register.html" class="register-btn">Register</a>
+</header>
+
+<section class="auth-section">
+  <div class="auth-card">
+    <h1>Welcome Back</h1>
+    <p class="auth-subtitle">Login to buy, sell, and manage your LoyaltyMarket account.</p>
+
+    <form class="auth-form" id="loginForm">
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="you@example.com" required>
+
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+
+      <div class="auth-options">
+        <label class="remember-me">
+          <input type="checkbox">
+          Remember Me
+        </label>
+
+        <a href="#" class="forgot-link">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="auth-btn">Login</button>
+    </form>
+
+    <p class="auth-switch">
+      Don't Have An Account? <a href="register.html">Create One</a>
+    </p>
+  </div>
+</section>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { auth } from "./firebase.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const loginForm = document.getElementById("loginForm");
+
+loginForm.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    alert("Login Successful!");
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    alert(error.message);
+  }
+});
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
+</script>
+
+</body>
+</html>

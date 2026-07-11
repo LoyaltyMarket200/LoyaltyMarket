@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+  <style>
+    .nav-messages-link {
+      position: relative;
+    }
+    .unread-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+    .unread-badge.has-unread {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
+
+  <div class="nav-buttons">
+    <a href="index.html" class="login-btn">Home</a>
+    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link">
+      My Messages
+      <span id="unreadBadge" class="unread-badge">0</span>
+    </a>
+    <a href="dashboard.html" class="register-btn">Dashboard</a>
+    <a href="sell.html" class="sell-btn">Sell Product</a>
+  </div>
+</header>
+
+<section class="search-header">
+  <h2>❤️ My Wishlist</h2>
+  <p class="results-count" id="wishlist-count">Loading...</p>
+</section>
+
+<main class="search-results" id="wishlist-container">
+  <p>Loading your saved items...</p>
+</main>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { db, auth } from "./firebase.js";
+
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  deleteDoc,
+  query,
+  where,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const unreadBadge = document.getElementById("unreadBadge");
+const container = document.getElementById("wishlist-container");
+const countText = document.getElementById("wishlist-count");
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function listenForUnreadMessages(userId) {
+  const unreadQuery = query(
+    collection(db, "messages"),
+    where("receiverId", "==", userId),
+    where("read", "==", false)
+  );
+
+  onSnapshot(unreadQuery, (snapshot) => {
+    const count = snapshot.size;
+
+    if (count > 0) {
+      unreadBadge.textContent = count > 9 ? "9+" : String(count);
+      unreadBadge.classList.add("has-unread");
+    } else {
+      unreadBadge.classList.remove("has-unread");
+    }
+  });
+}
+
+async function loadWishlist(userId) {
+  container.innerHTML = "<p>Loading your saved items...</p>";
+
+  try {
+    const wishlistItemsSnapshot = await getDocs(
+      collection(db, "wishlists", userId, "items")
+    );
+
+    if (wishlistItemsSnapshot.empty) {
+      countText.textContent = "0 items saved";
+      container.innerHTML =
+        '<p style="color:#64748b; padding:20px;">You haven\'t saved any products yet. Browse the <a href="index.html" style="color:#3b82f6;">marketplace</a> and tap the heart icon to save items here.</p>';
+      return;
+    }
+
+    const savedItems = [];
+
+    wishlistItemsSnapshot.forEach((wishlistDoc) => {
+      savedItems.push({
+        productId: wishlistDoc.id,
+        ...wishlistDoc.data()
+      });
+    });
+
+    const products = [];
+
+    for (const item of savedItems) {
+      const productRef = doc(db, "products", item.productId);
+      const productSnapshot = await getDoc(productRef);
+
+      if (productSnapshot.exists()) {
+        products.push({
+          id: item.productId,
+          ...productSnapshot.data()
+        });
+      }
+    }
+
+    if (products.length === 0) {
+      countText.textContent = "0 items saved";
+      container.innerHTML =
+        '<p style="color:#64748b; padding:20px;">You haven\'t saved any products yet. Browse the <a href="index.html" style="color:#3b82f6;">marketplace</a> and tap the heart icon to save items here.</p>';
+      return;
+    }
+
+    countText.textContent = products.length + " item(s) saved";
+
+    container.innerHTML = products
+      .map((product) => {
+        const image =
+          product.imageUrl ||
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+
+        const isFeatured = product.featured === true;
+        const detailUrl =
+          "product-detail.html?id=" + encodeURIComponent(product.id);
+
+        return `
+          <div class="product-card" data-product-id="${product.id}">
+            <span class="badge">${isFeatured ? "⭐ Featured" : "Saved"}</span>
+            <button class="heart active" data-remove-id="${product.id}">❤️</button>
+            <a href="${detailUrl}" style="text-decoration:none; color:inherit;">
+              <div class="product-image">
+                <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
+              </div>
+              <h3>${safeText(product.title || "Untitled Product")}</h3>
+              <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
+              <p class="location">📍 ${safeText(product.city || "")}, ${safeText(product.county || "Liberia")}</p>
+              <p class="condition">${safeText(product.condition || "Not listed")}</p>
+            </a>
+          </div>
+        `;
+      })
+      .join("");
+
+    document.querySelectorAll("[data-remove-id]").forEach((button) => {
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const productId = button.getAttribute("data-remove-id");
+
+        try {
+          await deleteDoc(doc(db, "wishlists", userId, "items", productId));
+          loadWishlist(userId);
+        } catch (error) {
+          alert("Could not remove item: " + error.message);
+        }
+      });
+    });
+
+  } catch (error) {
+    countText.textContent = "Unable to load wishlist";
+    container.innerHTML = `<p style="color:#64748b; padding:20px;">Could not load your saved items: ${safeText(error.message)}</p>`;
+  }
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    listenForUnreadMessages(user.uid);
+    loadWishlist(user.uid);
+  } else {
+    window.location.href = "login.html";
+  }
+});
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
+</script>
+
+</body>
+</html>

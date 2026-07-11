@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicles - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .badge-featured {
+      background: #d97706 !important;
+      color: #fff !important;
+    }
+    .nav-messages-link {
+      position: relative;
+    }
+    .unread-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+    .unread-badge.has-unread {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <input
+    type="text"
+    class="search-box"
+    id="searchInput"
+    placeholder="Search Vehicles..."
+  >
+
+  <div class="nav-buttons">
+    <a href="index.html" class="login-btn">Home</a>
+    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link">
+      My Messages
+      <span id="unreadBadge" class="unread-badge">0</span>
+    </a>
+    <a href="dashboard.html" class="register-btn">Dashboard</a>
+    <a href="sell.html" class="sell-btn">Sell Product</a>
+  </div>
+</header>
+
+<section class="search-header">
+  <h2>🚗 Vehicles</h2>
+  <p class="results-count" id="resultsCount">Loading products...</p>
+</section>
+
+<section class="search-layout">
+
+  <aside class="search-filters">
+    <h3>Filter Results</h3>
+
+    <label for="countyFilter">County</label>
+    <select id="countyFilter">
+      <option value="">All Counties</option>
+      <option value="Montserrado">Montserrado</option>
+      <option value="Margibi">Margibi</option>
+      <option value="Grand Bassa">Grand Bassa</option>
+      <option value="Nimba">Nimba</option>
+      <option value="Bong">Bong</option>
+    </select>
+
+    <label for="priceFilter">Price Range</label>
+    <select id="priceFilter">
+      <option value="">Any Price</option>
+      <option value="1000">Under US$1,000</option>
+      <option value="5000">Under US$5,000</option>
+      <option value="10000">Under US$10,000</option>
+      <option value="over10000">Over US$10,000</option>
+    </select>
+
+    <label for="conditionFilter">Condition</label>
+    <select id="conditionFilter">
+      <option value="">Any Condition</option>
+      <option value="Brand New">Brand New</option>
+      <option value="Used">Used</option>
+      <option value="Foreign Used">Foreign Used</option>
+    </select>
+
+    <button class="apply-filters-btn" id="applyFiltersBtn">
+      Apply Filters
+    </button>
+
+    <button
+      class="apply-filters-btn"
+      id="clearFiltersBtn"
+      style="margin-top:10px; background:#64748b;"
+    >
+      Clear Filters
+    </button>
+  </aside>
+
+  <main class="search-results" id="vehiclesGrid">
+    <p>Loading Vehicles products...</p>
+  </main>
+
+</section>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { db, auth } from "./firebase.js";
+
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const vehiclesGrid = document.getElementById("vehiclesGrid");
+const resultsCount = document.getElementById("resultsCount");
+const searchInput = document.getElementById("searchInput");
+const countyFilter = document.getElementById("countyFilter");
+const priceFilter = document.getElementById("priceFilter");
+const conditionFilter = document.getElementById("conditionFilter");
+const applyFiltersBtn = document.getElementById("applyFiltersBtn");
+const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+
+let allVehicles = [];
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function displayProducts(products) {
+  vehiclesGrid.innerHTML = "";
+
+  const numberOfProducts = products.length;
+
+  resultsCount.textContent =
+    numberOfProducts === 1
+      ? "Showing 1 product"
+      : `Showing ${numberOfProducts} products`;
+
+  if (numberOfProducts === 0) {
+    vehiclesGrid.innerHTML = `
+      <div style="background:white; padding:30px; border-radius:14px;">
+        <h3>No Vehicles Found</h3>
+        <p style="margin-top:8px; color:#64748b;">
+          Try changing your filters or post the first Vehicles product.
+        </p>
+        <a
+          href="sell.html"
+          class="sell-btn"
+          style="display:inline-block; margin-top:18px; text-decoration:none;"
+        >
+          Sell a Vehicle
+        </a>
+      </div>
+    `;
+    return;
+  }
+
+  products.forEach((product) => {
+    const image =
+      product.imageUrl ||
+      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=500&h=350&fit=crop";
+
+    const isFeatured = product.featured === true;
+
+    const productLink = document.createElement("a");
+
+    productLink.href =
+      "product-detail.html?id=" + encodeURIComponent(product.id);
+
+    productLink.style.textDecoration = "none";
+    productLink.style.color = "inherit";
+
+    productLink.innerHTML = `
+      <div class="product-card">
+        <span class="badge ${isFeatured ? "badge-featured" : ""}">${isFeatured ? "⭐ Featured" : "New"}</span>
+
+        <button
+          class="heart"
+          type="button"
+          aria-label="Save product"
+          onclick="event.preventDefault(); event.stopPropagation();"
+        >
+          ♡
+        </button>
+
+        <div class="product-image">
+          <img
+            src="${safeText(image)}"
+            alt="${safeText(product.title || "Vehicle")}"
+          >
+        </div>
+
+        <h3>${safeText(product.title || "Untitled Product")}</h3>
+
+        <p class="price">
+          US$${safeText(product.priceUsd || "0")}
+          |
+          L$${safeText(product.priceLrd || "0")}
+        </p>
+
+        <p class="location">
+          📍 ${safeText(product.city || "")},
+          ${safeText(product.county || "Liberia")}
+        </p>
+
+        <p class="condition">
+          ${safeText(product.condition || "Not listed")}
+        </p>
+      </div>
+    `;
+
+    vehiclesGrid.appendChild(productLink);
+  });
+}
+
+function applyFilters() {
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  const selectedCounty = countyFilter.value;
+  const selectedPrice = priceFilter.value;
+  const selectedCondition = conditionFilter.value;
+
+  const filteredProducts = allVehicles.filter((product) => {
+    const title = String(product.title || "").toLowerCase();
+    const description = String(product.description || "").toLowerCase();
+    const county = String(product.county || "");
+    const condition = String(product.condition || "");
+    const price = Number(product.priceUsd || 0);
+
+    const matchesSearch =
+      !searchTerm ||
+      title.includes(searchTerm) ||
+      description.includes(searchTerm);
+
+    const matchesCounty =
+      !selectedCounty || county === selectedCounty;
+
+    const matchesCondition =
+      !selectedCondition || condition === selectedCondition;
+
+    let matchesPrice = true;
+
+    if (selectedPrice === "1000") {
+      matchesPrice = price < 1000;
+    }
+
+    if (selectedPrice === "5000") {
+      matchesPrice = price < 5000;
+    }
+
+    if (selectedPrice === "10000") {
+      matchesPrice = price < 10000;
+    }
+
+    if (selectedPrice === "over10000") {
+      matchesPrice = price >= 10000;
+    }
+
+    return (
+      matchesSearch &&
+      matchesCounty &&
+      matchesCondition &&
+      matchesPrice
+    );
+  });
+
+  displayProducts(filteredProducts);
+}
+
+async function loadVehicles() {
+  vehiclesGrid.innerHTML = "<p>Loading Vehicles products...</p>";
+
+  try {
+    const vehiclesQuery = query(
+      collection(db, "products"),
+      where("category", "==", "Vehicles")
+    );
+
+    const snapshot = await getDocs(vehiclesQuery);
+
+    allVehicles = [];
+
+    snapshot.forEach((productDocument) => {
+      allVehicles.push({
+        id: productDocument.id,
+        ...productDocument.data()
+      });
+    });
+
+    allVehicles.sort((firstProduct, secondProduct) => {
+      const firstTime =
+        firstProduct.createdAt?.seconds || 0;
+
+      const secondTime =
+        secondProduct.createdAt?.seconds || 0;
+
+      return secondTime - firstTime;
+    });
+
+    allVehicles.sort((firstProduct, secondProduct) => {
+      const firstFeatured = firstProduct.featured === true ? 1 : 0;
+      const secondFeatured = secondProduct.featured === true ? 1 : 0;
+      return secondFeatured - firstFeatured;
+    });
+
+    displayProducts(allVehicles);
+
+  } catch (error) {
+    console.error(error);
+
+    resultsCount.textContent = "Unable to load products";
+
+    vehiclesGrid.innerHTML = `
+      <div style="background:white; padding:30px; border-radius:14px;">
+        <h3>Could Not Load Vehicles</h3>
+        <p style="margin-top:8px; color:#64748b;">
+          ${safeText(error.message)}
+        </p>
+      </div>
+    `;
+  }
+}
+
+applyFiltersBtn.addEventListener("click", applyFilters);
+
+searchInput.addEventListener("input", applyFilters);
+
+clearFiltersBtn.addEventListener("click", function() {
+  searchInput.value = "";
+  countyFilter.value = "";
+  priceFilter.value = "";
+  conditionFilter.value = "";
+
+  displayProducts(allVehicles);
+});
+
+loadVehicles();
+
+const unreadBadge = document.getElementById("unreadBadge");
+
+function listenForUnreadMessages(userId) {
+  const unreadQuery = query(
+    collection(db, "messages"),
+    where("receiverId", "==", userId),
+    where("read", "==", false)
+  );
+
+  onSnapshot(unreadQuery, (snapshot) => {
+    const count = snapshot.size;
+
+    if (count > 0) {
+      unreadBadge.textContent = count > 9 ? "9+" : String(count);
+      unreadBadge.classList.add("has-unread");
+    } else {
+      unreadBadge.classList.remove("has-unread");
+    }
+  });
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    listenForUnreadMessages(user.uid);
+  }
+});
+</script>
+
+</body>
+</html>

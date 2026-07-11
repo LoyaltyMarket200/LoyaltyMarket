@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LoyaltyMarket - Liberia's Marketplace</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+  <style>
+    .badge-featured {
+      background: #d97706 !important;
+      color: #fff !important;
+    }
+    .nav-messages-link {
+      position: relative;
+    }
+    .unread-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+    .unread-badge.has-unread {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
+
+  <div class="nav-buttons">
+    <a href="login.html" id="loginBtn" class="login-btn">Login</a>
+    <a href="register.html" id="registerBtn" class="register-btn">Register</a>
+    <a href="dashboard.html" id="dashboardBtn" class="register-btn" style="display:none;">Dashboard</a>
+    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link" style="display:none;">
+      My Messages
+      <span id="unreadBadge" class="unread-badge">0</span>
+    </a>
+    <a href="sell.html" class="sell-btn">Sell Product</a>
+  </div>
+</header>
+
+<section class="hero">
+  <h4>🇱🇷 Liberia's Marketplace</h4>
+  <h1>Buy & Sell Anything In Liberia</h1>
+  <p>Find Phones, Vehicles, Property, Fashion, Electronics, Jobs And Much More.</p>
+
+  <div class="hero-buttons">
+    <a href="#products" class="shop-btn">Start Shopping</a>
+    <a href="sell.html" class="sell-btn2">Sell Product</a>
+  </div>
+</section>
+
+<section class="filters">
+  <select>
+    <option>Select County</option>
+    <option>Montserrado</option>
+    <option>Margibi</option>
+    <option>Grand Bassa</option>
+    <option>Nimba</option>
+    <option>Bong</option>
+  </select>
+
+  <select>
+    <option>Select Category</option>
+    <option>Phones</option>
+    <option>Electronics</option>
+    <option>Vehicles</option>
+    <option>Property</option>
+    <option>Fashion</option>
+    <option>Jobs</option>
+  </select>
+
+  <select>
+    <option>Price Range</option>
+    <option>Under US$100</option>
+    <option>Under US$500</option>
+    <option>Under US$1,000</option>
+    <option>Over US$1,000</option>
+  </select>
+
+  <select>
+    <option>Condition</option>
+    <option>Brand New</option>
+    <option>Used</option>
+    <option>Foreign Used</option>
+  </select>
+
+  <button class="search-btn">Search</button>
+</section>
+
+<section class="categories">
+  <h2>Popular Categories</h2>
+  <div class="category-grid">
+    <a href="category-phones.html" style="text-decoration:none; color:inherit;"><div class="category-card">📱 Phones</div></a>
+    <a href="category-electronics.html" style="text-decoration:none; color:inherit;"><div class="category-card">💻 Electronics</div></a>
+    <a href="category-vehicles.html" style="text-decoration:none; color:inherit;"><div class="category-card">🚗 Vehicles</div></a>
+    <a href="category-property.html" style="text-decoration:none; color:inherit;"><div class="category-card">🏠 Property</div></a>
+    <a href="category-fashion.html" style="text-decoration:none; color:inherit;"><div class="category-card">👕 Fashion</div></a>
+    <a href="category-jobs.html" style="text-decoration:none; color:inherit;"><div class="category-card">💼 Jobs</div></a>
+  </div>
+</section>
+
+<section class="featured-products" id="products">
+  <h2>Latest Products</h2>
+  <div class="product-grid" id="productGrid">
+    <p>Loading products...</p>
+  </div>
+</section>
+
+<section class="why-choose">
+  <h2>Why Choose LoyaltyMarket?</h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <h3>Built For Liberia</h3>
+      <p>A marketplace designed for buyers and sellers across Liberia.</p>
+    </div>
+
+    <div class="why-card">
+      <h3>USD & L$ Prices</h3>
+      <p>We show prices in both US Dollars and Liberian Dollars.</p>
+    </div>
+
+    <div class="why-card">
+      <h3>Trusted Sellers</h3>
+      <p>We support verified sellers, ratings, and safer transactions.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy and sell products, cars, phones, and more. Discover Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { db, auth } from "./firebase.js";
+import { collection, getDocs, query, orderBy, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const productGrid = document.getElementById("productGrid");
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const dashboardBtn = document.getElementById("dashboardBtn");
+const messagesBtn = document.getElementById("messagesBtn");
+const unreadBadge = document.getElementById("unreadBadge");
+
+async function loadProducts() {
+  productGrid.innerHTML = "<p>Loading products...</p>";
+
+  try {
+    const productsQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(productsQuery);
+
+    productGrid.innerHTML = "";
+
+    if (snapshot.empty) {
+      productGrid.innerHTML = "<p>No products posted yet. Be the first to sell on LoyaltyMarket.</p>";
+      return;
+    }
+
+    const allProducts = snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      data: docSnap.data()
+    }));
+
+    allProducts.sort((a, b) => {
+      const aFeatured = a.data.featured === true ? 1 : 0;
+      const bFeatured = b.data.featured === true ? 1 : 0;
+      return bFeatured - aFeatured;
+    });
+
+    allProducts.forEach(({ id, data: product }) => {
+      const image = product.imageUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+      const title = product.title || "Untitled Product";
+      const priceUsd = product.priceUsd || "0";
+      const priceLrd = product.priceLrd || "0";
+      const city = product.city || "Liberia";
+      const county = product.county || "";
+      const condition = product.condition || "Used";
+      const isFeatured = product.featured === true;
+
+      const productCard = document.createElement("a");
+      productCard.href = "product-detail.html?id=" + id;
+      productCard.style.textDecoration = "none";
+      productCard.style.color = "inherit";
+
+      productCard.innerHTML = `
+        <div class="product-card">
+          <span class="badge ${isFeatured ? "badge-featured" : ""}">${isFeatured ? "⭐ Featured" : "New"}</span>
+          <button class="heart" type="button">♡</button>
+          <div class="product-image">
+            <img src="${image}" alt="${title}">
+          </div>
+          <h3>${title}</h3>
+          <p class="price">US$${priceUsd} | L$${priceLrd}</p>
+          <p class="location">📍 ${city}, ${county}</p>
+          <p class="condition">${condition}</p>
+        </div>
+      `;
+
+      productGrid.appendChild(productCard);
+    });
+
+  } catch (error) {
+    productGrid.innerHTML = "<p>Could not load products. Please try again.</p>";
+    alert(error.message);
+  }
+}
+
+function listenForUnreadMessages(userId) {
+  const unreadQuery = query(
+    collection(db, "messages"),
+    where("receiverId", "==", userId),
+    where("read", "==", false)
+  );
+
+  onSnapshot(unreadQuery, (snapshot) => {
+    const count = snapshot.size;
+
+    if (count > 0) {
+      unreadBadge.textContent = count > 9 ? "9+" : String(count);
+      unreadBadge.classList.add("has-unread");
+    } else {
+      unreadBadge.classList.remove("has-unread");
+    }
+  });
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loginBtn.style.display = "none";
+    registerBtn.style.display = "none";
+    dashboardBtn.style.display = "inline-block";
+    messagesBtn.style.display = "inline-block";
+    listenForUnreadMessages(user.uid);
+  } else {
+    loginBtn.style.display = "inline-block";
+    registerBtn.style.display = "inline-block";
+    dashboardBtn.style.display = "none";
+    messagesBtn.style.display = "none";
+  }
+});
+
+loadProducts();
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
+</script>
+
+</body>
+</html>

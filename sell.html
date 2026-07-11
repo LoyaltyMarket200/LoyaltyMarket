@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell Product - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <a href="index.html" class="login-btn">Home</a>
+  <a href="dashboard.html" class="register-btn">Dashboard</a>
+</header>
+
+<section class="sell-section">
+  <div class="sell-card">
+    <h1>List Your Product</h1>
+    <p class="sell-subtitle">Post your item for buyers across Liberia.</p>
+
+    <form class="sell-form" id="sellForm">
+      <label>Product Title</label>
+      <input type="text" id="title" placeholder="Example: iPhone 13 Pro" required>
+
+      <label>Category</label>
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option>Phones</option>
+        <option>Electronics</option>
+        <option>Vehicles</option>
+        <option>Property</option>
+        <option>Fashion</option>
+        <option>Jobs</option>
+      </select>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label>Price USD</label>
+          <input type="number" id="priceUsd" placeholder="550" required>
+        </div>
+
+        <div class="form-col">
+          <label>Price L$</label>
+          <input type="number" id="priceLrd" placeholder="104500" required>
+        </div>
+      </div>
+
+      <label>Condition</label>
+      <select id="condition" required>
+        <option value="">Select Condition</option>
+        <option>Brand New</option>
+        <option>Used</option>
+        <option>Foreign Used</option>
+      </select>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label>County</label>
+          <input type="text" id="county" placeholder="Montserrado" required>
+        </div>
+
+        <div class="form-col">
+          <label>City</label>
+          <input type="text" id="city" placeholder="Monrovia" required>
+        </div>
+      </div>
+
+      <label>Product Images (up to 4 links)</label>
+      <input type="url" id="imageUrl1" placeholder="Main image link (required)" required>
+      <input type="url" id="imageUrl2" placeholder="Second image link (optional)" style="margin-top:10px;">
+      <input type="url" id="imageUrl3" placeholder="Third image link (optional)" style="margin-top:10px;">
+      <input type="url" id="imageUrl4" placeholder="Fourth image link (optional)" style="margin-top:10px;">
+
+      <label>Description</label>
+      <textarea id="description" rows="5" placeholder="Describe your product..." required></textarea>
+
+      <label>Phone Number</label>
+      <input type="tel" id="phone" placeholder="0881471694" required>
+
+      <button type="submit" class="post-btn">Post Product</button>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+  } else {
+    alert("Please login before posting a product.");
+    window.location.href = "login.html";
+  }
+});
+
+const sellForm = document.getElementById("sellForm");
+
+sellForm.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  if (!currentUser) {
+    alert("You must login first.");
+    return;
+  }
+
+  const images = [
+    document.getElementById("imageUrl1").value.trim(),
+    document.getElementById("imageUrl2").value.trim(),
+    document.getElementById("imageUrl3").value.trim(),
+    document.getElementById("imageUrl4").value.trim()
+  ].filter((url) => url !== "");
+
+  const product = {
+    title: document.getElementById("title").value.trim(),
+    category: document.getElementById("category").value,
+    priceUsd: document.getElementById("priceUsd").value,
+    priceLrd: document.getElementById("priceLrd").value,
+    condition: document.getElementById("condition").value,
+    county: document.getElementById("county").value.trim(),
+    city: document.getElementById("city").value.trim(),
+    imageUrl: images[0] || "",
+    images: images,
+    description: document.getElementById("description").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    sellerId: currentUser.uid,
+    sellerEmail: currentUser.email,
+    status: "active",
+    createdAt: serverTimestamp()
+  };
+
+  try {
+    await addDoc(collection(db, "products"), product);
+    alert("Product posted successfully!");
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    alert(error.message);
+  }
+});
+</script>
+
+</body>
+</html>

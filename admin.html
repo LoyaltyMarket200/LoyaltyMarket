@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-wrap {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .admin-header h1 {
+      color: #111;
+      margin: 0;
+    }
+    .admin-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .admin-tab-btn {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      color: #333;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .admin-tab-btn.active {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+    }
+    .report-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .report-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .report-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #111;
+    }
+    .report-reason {
+      display: inline-block;
+      background: #fee2e2;
+      color: #b91c1c;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+    }
+    .report-status {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: capitalize;
+    }
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .status-reviewed {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .status-dismissed {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .report-details {
+      margin-top: 10px;
+      color: #444;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .report-meta {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #888;
+    }
+    .report-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .report-actions button, .report-actions a {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-view {
+      background: #f3f4f6;
+      color: #333;
+      border: 1px solid #d1d5db !important;
+    }
+    .btn-reviewed {
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn-dismiss {
+      background: #6b7280;
+      color: #fff;
+    }
+    .empty-state {
+      text-align: center;
+      color: #888;
+      padding: 40px 0;
+    }
+    .not-authorized {
+      max-width: 500px;
+      margin: 80px auto;
+      text-align: center;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <input
+    type="text"
+    class="search-box"
+    placeholder="Search Products, Cars, Phones..."
+  >
+
+  <div class="nav-buttons">
+    <a href="index.html" class="login-btn">Home</a>
+    <a href="dashboard.html" class="register-btn">Dashboard</a>
+  </div>
+</header>
+
+<div id="notAuthorizedBox" class="not-authorized" style="display:none;">
+  <h2>Access Restricted</h2>
+  <p>This page is only available to LoyaltyMarket administrators.</p>
+  <a href="index.html">Go back home</a>
+</div>
+
+<main class="admin-wrap" id="adminMain" style="display:none;">
+
+  <div class="admin-header">
+    <h1>🚩 Reported Listings</h1>
+    <button id="refreshBtn" class="admin-tab-btn">🔄 Refresh</button>
+  </div>
+
+  <div class="admin-tabs">
+    <button class="admin-tab-btn active" data-filter="all">All</button>
+    <button class="admin-tab-btn" data-filter="pending">Pending</button>
+    <button class="admin-tab-btn" data-filter="reviewed">Reviewed</button>
+    <button class="admin-tab-btn" data-filter="dismissed">Dismissed</button>
+  </div>
+
+  <div id="reportsContainer">
+    <p class="empty-state">Loading reports...</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { db, auth } from "./firebase.js";
+
+import {
+  collection,
+  query,
+  orderBy,
+  getDocs,
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+// Only these emails can access the admin dashboard.
+const ADMIN_EMAILS = ["princeteah200@gmail.com"];
+
+const notAuthorizedBox = document.getElementById("notAuthorizedBox");
+const adminMain = document.getElementById("adminMain");
+const reportsContainer = document.getElementById("reportsContainer");
+const refreshBtn = document.getElementById("refreshBtn");
+const tabButtons = document.querySelectorAll(".admin-tab-btn[data-filter]");
+
+let allReports = [];
+let currentFilter = "all";
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function formatDate(timestamp) {
+  if (!timestamp || !timestamp.toDate) {
+    return "Unknown date";
+  }
+  return timestamp.toDate().toLocaleString();
+}
+
+function renderReports() {
+  const filtered =
+    currentFilter === "all"
+      ? allReports
+      : allReports.filter((r) => r.status === currentFilter);
+
+  if (filtered.length === 0) {
+    reportsContainer.innerHTML =
+      '<p class="empty-state">No reports found for this filter.</p>';
+    return;
+  }
+
+  reportsContainer.innerHTML = filtered
+    .map((r) => {
+      const statusClass = "status-" + (r.status || "pending");
+
+      return `
+        <div class="report-card" data-id="${r.id}">
+          <div class="report-top">
+            <div>
+              <span class="report-title">${safeText(r.productTitle || "Untitled Listing")}</span>
+              <span class="report-reason">${safeText(r.reason || "N/A")}</span>
+            </div>
+            <span class="report-status ${statusClass}">${safeText(r.status || "pending")}</span>
+          </div>
+
+          <div class="report-details">
+            ${r.details ? safeText(r.details) : "<em>No additional details provided.</em>"}
+          </div>
+
+          <div class="report-meta">
+            Reported: ${formatDate(r.createdAt)} &nbsp;|&nbsp;
+            Reporter ID: ${safeText(r.reporterId)} &nbsp;|&nbsp;
+            Seller ID: ${safeText(r.sellerId)}
+          </div>
+
+          <div class="report-actions">
+            <a class="btn-view" href="product-detail.html?id=${encodeURIComponent(r.productId)}" target="_blank">View Listing</a>
+            <button class="btn-reviewed" data-action="reviewed" data-id="${r.id}">Mark Reviewed</button>
+            <button class="btn-dismiss" data-action="dismissed" data-id="${r.id}">Dismiss</button>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  document.querySelectorAll(".report-actions button").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const reportId = btn.getAttribute("data-id");
+      const newStatus = btn.getAttribute("data-action");
+      await updateReportStatus(reportId, newStatus);
+    });
+  });
+}
+
+async function updateReportStatus(reportId, newStatus) {
+  try {
+    await updateDoc(doc(db, "reports", reportId), {
+      status: newStatus
+    });
+
+    const report = allReports.find((r) => r.id === reportId);
+    if (report) {
+      report.status = newStatus;
+    }
+
+    renderReports();
+  } catch (error) {
+    alert("Failed to update report: " + error.message);
+  }
+}
+
+async function loadReports() {
+  reportsContainer.innerHTML = '<p class="empty-state">Loading reports...</p>';
+
+  try {
+    const reportsQuery = query(
+      collection(db, "reports"),
+      orderBy("createdAt", "desc")
+    );
+
+    const snapshot = await getDocs(reportsQuery);
+
+    allReports = snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
+
+    renderReports();
+  } catch (error) {
+    reportsContainer.innerHTML =
+      '<p class="empty-state">Error loading reports: ' +
+      safeText(error.message) +
+      "</p>";
+  }
+}
+
+tabButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    tabButtons.forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.getAttribute("data-filter");
+    renderReports();
+  });
+});
+
+refreshBtn.addEventListener("click", loadReports);
+
+onAuthStateChanged(auth, (user) => {
+  if (user && ADMIN_EMAILS.includes(user.email)) {
+    notAuthorizedBox.style.display = "none";
+    adminMain.style.display = "block";
+    loadReports();
+  } else {
+    notAuthorizedBox.style.display = "block";
+    adminMain.style.display = "none";
+  }
+});
+</script>
+
+</body>
+</html>

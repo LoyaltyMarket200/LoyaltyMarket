@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <a href="index.html" class="login-btn">Home</a>
+  <a href="login.html" class="register-btn">Login</a>
+</header>
+
+<section class="auth-section">
+  <div class="auth-card">
+    <h1>Create Account</h1>
+    <p class="auth-subtitle">Join LoyaltyMarket and start buying or selling in Liberia.</p>
+
+    <form class="auth-form" id="registerForm">
+      <label>Full Name</label>
+      <input type="text" id="name" placeholder="Enter your full name" required>
+
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="you@example.com" required>
+
+      <label>Phone Number</label>
+      <input type="tel" id="phone" placeholder="0770000000" required>
+
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Create a password" required>
+
+      <label class="terms-check">
+        <input type="checkbox" required>
+        I agree to the LoyaltyMarket terms.
+      </label>
+
+      <button type="submit" class="auth-btn">Create Account</button>
+    </form>
+
+    <p class="auth-switch">
+      Already Have An Account? <a href="login.html">Login Here</a>
+    </p>
+  </div>
+</section>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+  import { auth, db } from "./firebase.js";
+  import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  const registerForm = document.getElementById("registerForm");
+
+  registerForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        name: name,
+        email: email,
+        phone: phone,
+        verified: false,
+        createdAt: serverTimestamp()
+      });
+
+      alert("Account Created Successfully!");
+      window.location.href = "login.html";
+    } catch (error) {
+      alert(error.message);
+    }
+  });
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
+</script>
+
+</body>
+</html>

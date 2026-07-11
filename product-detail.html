@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+  <style>
+    .report-btn {
+      background: #fff;
+      border: 1px solid #dc2626;
+      color: #dc2626;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .report-btn:hover {
+      background: #dc2626;
+      color: #fff;
+    }
+    .heart-btn.is-saved {
+      background: #dc2626;
+      color: #fff;
+      border-color: #dc2626;
+    }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.modal-open {
+      display: flex;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    .modal-box h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: #111;
+    }
+    .modal-box label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      margin-top: 14px;
+      font-size: 14px;
+      color: #333;
+    }
+    .modal-box select,
+    .modal-box textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    .modal-box textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .modal-cancel-btn {
+      flex: 1;
+      background: #f3f4f6;
+      color: #333;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .modal-submit-btn {
+      flex: 1;
+      background: #dc2626;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .modal-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .nav-messages-link {
+      position: relative;
+    }
+    .unread-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+    .unread-badge.has-unread {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <input
+    type="text"
+    class="search-box"
+    placeholder="Search Products, Cars, Phones..."
+  >
+
+  <div class="nav-buttons">
+    <a href="index.html" class="login-btn">Home</a>
+    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link">
+      My Messages
+      <span id="unreadBadge" class="unread-badge">0</span>
+    </a>
+    <a href="dashboard.html" class="register-btn">Dashboard</a>
+    <a href="sell.html" class="sell-btn">Sell Product</a>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <a href="index.html">Home</a> &gt;
+  <span id="breadcrumbCategory">Product</span> &gt;
+  <span id="breadcrumbTitle">Loading...</span>
+</div>
+
+<main class="product-detail">
+
+  <section class="product-detail-left">
+    <div class="main-image">
+      <img id="productImage" src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop" alt="Product image">
+    </div>
+    <div class="thumbnail-strip" id="thumbnailStrip"></div>
+  </section>
+
+  <section class="product-detail-right">
+    <span class="badge">Available</span>
+    <h1 id="productTitle">Loading product...</h1>
+    <p class="detail-price" id="productPrice">US$0 | L$0</p>
+    <p class="detail-location" id="productLocation">📍 Liberia</p>
+    <p class="detail-condition" id="productCondition">Condition: Not listed</p>
+
+    <div class="detail-actions">
+      <a id="contactSellerBtn" class="contact-btn" href="#">Contact Seller</a>
+      <button id="saveBtn" class="heart-btn" type="button">♡ Save</button>
+    </div>
+
+    <button id="reportBtn" class="report-btn" type="button">🚩 Report this listing</button>
+
+    <div class="seller-card">
+      <div class="seller-avatar">👤</div>
+      <div class="seller-info">
+        <h4>Seller Information</h4>
+        <p><a id="sellerNameLink" href="#" style="color:#2563eb; text-decoration:none; font-weight:600;">Loading...</a></p>
+        <p id="sellerEmail">Loading...</p>
+        <p id="sellerPhone">Phone not listed</p>
+      </div>
+    </div>
+
+    <div class="product-description">
+      <h3>Description</h3>
+      <p id="productDescription">Loading description...</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="modal-overlay" id="reportModalOverlay">
+  <div class="modal-box">
+    <h3>Report this Listing</h3>
+    <label for="reportReason">Reason</label>
+    <select id="reportReason">
+      <option value="">Select a reason</option>
+      <option value="Scam">Scam</option>
+      <option value="Fake item">Fake item</option>
+      <option value="Wrong price">Wrong price</option>
+      <option value="Prohibited item">Prohibited item</option>
+      <option value="Other">Other</option>
+    </select>
+    <label for="reportDetails">Additional details (optional)</label>
+    <textarea id="reportDetails" placeholder="Tell us more about the issue..."></textarea>
+    <div class="modal-actions">
+      <button type="button" class="modal-cancel-btn" id="reportCancelBtn">Cancel</button>
+      <button type="button" class="modal-submit-btn" id="reportSubmitBtn">Submit Report</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { db, auth } from "./firebase.js";
+import {
+  doc, getDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, query, where, onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+const productTitle = document.getElementById("productTitle");
+const productPrice = document.getElementById("productPrice");
+const productLocation = document.getElementById("productLocation");
+const productCondition = document.getElementById("productCondition");
+const productDescription = document.getElementById("productDescription");
+const productImage = document.getElementById("productImage");
+const thumbnailStrip = document.getElementById("thumbnailStrip");
+const sellerEmail = document.getElementById("sellerEmail");
+const sellerNameLink = document.getElementById("sellerNameLink");
+const sellerPhone = document.getElementById("sellerPhone");
+const contactSellerBtn = document.getElementById("contactSellerBtn");
+const breadcrumbCategory = document.getElementById("breadcrumbCategory");
+const breadcrumbTitle = document.getElementById("breadcrumbTitle");
+
+const reportBtn = document.getElementById("reportBtn");
+const reportModalOverlay = document.getElementById("reportModalOverlay");
+const reportReason = document.getElementById("reportReason");
+const reportDetails = document.getElementById("reportDetails");
+const reportCancelBtn = document.getElementById("reportCancelBtn");
+const reportSubmitBtn = document.getElementById("reportSubmitBtn");
+const unreadBadge = document.getElementById("unreadBadge");
+const saveBtn = document.getElementById("saveBtn");
+
+let currentUser = null;
+let loadedProductTitle = "";
+let loadedSellerId = "";
+let isSaved = false;
+
+function listenForUnreadMessages(userId) {
+  const unreadQuery = query(collection(db, "messages"), where("receiverId", "==", userId), where("read", "==", false));
+  onSnapshot(unreadQuery, (snapshot) => {
+    const count = snapshot.size;
+    if (count > 0) {
+      unreadBadge.textContent = count > 9 ? "9+" : String(count);
+      unreadBadge.classList.add("has-unread");
+    } else {
+      unreadBadge.classList.remove("has-unread");
+    }
+  });
+}
+
+function updateSaveButtonUI() {
+  if (isSaved) {
+    saveBtn.textContent = "♥ Saved";
+    saveBtn.classList.add("is-saved");
+  } else {
+    saveBtn.textContent = "♡ Save";
+    saveBtn.classList.remove("is-saved");
+  }
+}
+
+async function checkIfSaved() {
+  if (!currentUser || !productId) return;
+  try {
+    const wishlistRef = doc(db, "wishlists", currentUser.uid, "items", productId);
+    const wishlistSnapshot = await getDoc(wishlistRef);
+    isSaved = wishlistSnapshot.exists();
+    updateSaveButtonUI();
+  } catch (error) {
+    console.error("Could not check wishlist status:", error.message);
+  }
+}
+
+async function toggleSave() {
+  if (!currentUser) {
+    alert("Please log in to save products.");
+    window.location.href = "login.html";
+    return;
+  }
+  if (!productId) return;
+
+  saveBtn.disabled = true;
+  try {
+    const wishlistRef = doc(db, "wishlists", currentUser.uid, "items", productId);
+    if (isSaved) {
+      await deleteDoc(wishlistRef);
+      isSaved = false;
+    } else {
+      await setDoc(wishlistRef, {
+        productId: productId,
+        title: loadedProductTitle,
+        sellerId: loadedSellerId,
+        savedAt: serverTimestamp()
+      });
+      isSaved = true;
+    }
+    updateSaveButtonUI();
+  } catch (error) {
+    alert("Could not update your wishlist: " + error.message);
+  } finally {
+    saveBtn.disabled = false;
+  }
+}
+
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if (user) {
+    listenForUnreadMessages(user.uid);
+    checkIfSaved();
+  }
+});
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function renderThumbnails(images, title) {
+  thumbnailStrip.innerHTML = "";
+  if (!images || images.length < 2) return;
+
+  images.forEach((imageUrl, index) => {
+    const thumb = document.createElement("img");
+    thumb.src = imageUrl;
+    thumb.alt = `${title} - photo ${index + 1}`;
+    thumb.className = "thumbnail";
+    if (index === 0) thumb.classList.add("thumbnail-active");
+
+    thumb.addEventListener("click", () => {
+      productImage.src = imageUrl;
+      document.querySelectorAll(".thumbnail").forEach((el) => el.classList.remove("thumbnail-active"));
+      thumb.classList.add("thumbnail-active");
+    });
+
+    thumbnailStrip.appendChild(thumb);
+  });
+}
+
+async function loadProduct() {
+  if (!productId) {
+    productTitle.textContent = "Product not found";
+    productDescription.textContent = "No product ID was provided.";
+    return;
+  }
+
+  try {
+    const productRef = doc(db, "products", productId);
+    const productSnapshot = await getDoc(productRef);
+
+    if (!productSnapshot.exists()) {
+      productTitle.textContent = "Product not found";
+      productDescription.textContent = "This product may have been removed or does not exist.";
+      return;
+    }
+
+    const product = productSnapshot.data();
+    const title = product.title || "Untitled Product";
+    const category = product.category || "Product";
+    const priceUsd = product.priceUsd || "0";
+    const priceLrd = product.priceLrd || "0";
+    const city = product.city || "";
+    const county = product.county || "Liberia";
+    const condition = product.condition || "Not listed";
+    const description = product.description || "No description was provided.";
+    const fallbackImage = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop";
+    const images = product.images && product.images.length > 0 ? product.images : [product.imageUrl || fallbackImage];
+    const email = product.sellerEmail || "Seller email not available";
+    const phone = product.phone || "";
+    const sellerId = product.sellerId || "";
+
+    loadedProductTitle = title;
+    loadedSellerId = sellerId;
+
+    productTitle.textContent = title;
+    productPrice.textContent = `US$${priceUsd} | L$${priceLrd}`;
+    productLocation.textContent = `📍 ${city}, ${county}`;
+    productCondition.textContent = `Condition: ${condition}`;
+    productDescription.textContent = description;
+    productImage.src = images[0];
+    productImage.alt = title;
+
+    renderThumbnails(images, title);
+
+    sellerEmail.textContent = email;
+    sellerNameLink.textContent = "View Seller Profile";
+    sellerNameLink.href = sellerId ? "seller-profile.html?id=" + sellerId : "#";
+    sellerPhone.textContent = phone ? `📞 ${phone}` : "Phone not listed";
+
+    breadcrumbCategory.textContent = category;
+    breadcrumbTitle.textContent = title;
+    document.title = `${title} - LoyaltyMarket`;
+
+    contactSellerBtn.href = "chat.html?product=" + encodeURIComponent(productId) + "&seller=" + encodeURIComponent(sellerId);
+
+    if (currentUser) checkIfSaved();
+
+  } catch (error) {
+    productTitle.textContent = "Unable to load product";
+    productDescription.textContent = error.message;
+  }
+}
+
+function openReportModal() {
+  if (!currentUser) {
+    alert("Please log in to report a listing.");
+    window.location.href = "login.html";
+    return;
+  }
+  if (currentUser.uid === loadedSellerId) {
+    alert("You can't report your own listing.");
+    return;
+  }
+  reportReason.value = "";
+  reportDetails.value = "";
+  reportModalOverlay.classList.add("modal-open");
+}
+
+function closeReportModal() {
+  reportModalOverlay.classList.remove("modal-open");
+}
+
+async function submitReport() {
+  if (!currentUser) {
+    alert("Please log in to report a listing.");
+    return;
+  }
+  if (currentUser.uid === loadedSellerId) {
+    alert("You can't report your own listing.");
+    closeReportModal();
+    return;
+  }
+
+  const reason = reportReason.value;
+  const details = reportDetails.value.trim();
+
+  if (!reason) {
+    alert("Please select a reason for the report.");
+    return;
+  }
+
+  reportSubmitBtn.disabled = true;
+  reportSubmitBtn.textContent = "Submitting...";
+
+  try {
+    await addDoc(collection(db, "reports"), {
+      productId: productId,
+      productTitle: loadedProductTitle,
+      sellerId: loadedSellerId,
+      reporterId: currentUser.uid,
+      reason: reason,
+      details: details,
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
+
+    alert("Thank you. Your report has been submitted and will be reviewed.");
+    closeReportModal();
+
+  } catch (error) {
+    alert("Something went wrong submitting your report: " + error.message);
+  } finally {
+    reportSubmitBtn.disabled = false;
+    reportSubmitBtn.textContent = "Submit Report";
+  }
+}
+
+reportBtn.addEventListener("click", openReportModal);
+reportCancelBtn.addEventListener("click", closeReportModal);
+reportSubmitBtn.addEventListener("click", submitReport);
+saveBtn.addEventListener("click", toggleSave);
+
+reportModalOverlay.addEventListener("click", (event) => {
+  if (event.target === reportModalOverlay) closeReportModal();
+});
+
+loadProduct();
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
+</script>
+
+</body>
+</html>

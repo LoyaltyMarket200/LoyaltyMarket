@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .chat-wrap {
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 0 16px;
+    }
+    .chat-product-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+    .chat-product-card img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .chat-product-info h4 {
+      margin: 0 0 4px 0;
+      font-size: 15px;
+      color: #111;
+    }
+    .chat-product-info p {
+      margin: 0;
+      font-size: 13px;
+      color: #059669;
+      font-weight: 600;
+    }
+    .chat-product-card a {
+      margin-left: auto;
+      font-size: 13px;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .chat-box {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      height: 420px;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-bubble {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    .chat-bubble-mine {
+      align-self: flex-end;
+      background: #2563eb;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-bubble-theirs {
+      align-self: flex-start;
+      background: #f3f4f6;
+      color: #111;
+      border-bottom-left-radius: 4px;
+    }
+    .chat-bubble-time {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 4px;
+      display: block;
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .chat-input-row input {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    .chat-send-btn {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .chat-send-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .chat-empty-state {
+      text-align: center;
+      color: #888;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+  </div>
+
+  <input
+    type="text"
+    class="search-box"
+    placeholder="Search Products, Cars, Phones..."
+  >
+
+  <div class="nav-buttons">
+    <a href="index.html" class="login-btn">Home</a>
+    <a href="messages.html" class="register-btn">My Messages</a>
+    <a href="dashboard.html" class="register-btn">Dashboard</a>
+  </div>
+</header>
+
+<div class="chat-wrap">
+
+  <a id="backToProductLink" href="#" style="display:inline-block; margin-bottom:12px; color:#2563eb; text-decoration:none; font-size:14px;">
+    ← Back to messages
+  </a>
+
+  <div class="chat-product-card" id="chatProductCard">
+    <img id="chatProductImage" src="" alt="">
+    <div class="chat-product-info">
+      <h4 id="chatProductTitle">Loading...</h4>
+      <p id="chatProductPrice"></p>
+    </div>
+    <a id="chatProductLink" href="#">View Listing</a>
+  </div>
+
+  <div class="chat-box" id="chatBox">
+    <p class="chat-empty-state">Loading conversation...</p>
+  </div>
+
+  <div class="chat-input-row">
+    <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
+    <button class="chat-send-btn" id="sendBtn">Send</button>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { db, auth } from "./firebase.js";
+
+import {
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  updateDoc,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("product");
+const sellerId = params.get("seller");
+
+const chatBox = document.getElementById("chatBox");
+const messageInput = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+const chatProductImage = document.getElementById("chatProductImage");
+const chatProductTitle = document.getElementById("chatProductTitle");
+const chatProductPrice = document.getElementById("chatProductPrice");
+const chatProductLink = document.getElementById("chatProductLink");
+const backToProductLink = document.getElementById("backToProductLink");
+
+let currentUser = null;
+let chatId = null;
+let otherUserId = null;
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function buildChatId(productId, userA, userB) {
+  const sortedUsers = [userA, userB].sort();
+  return `${productId}_${sortedUsers[0]}_${sortedUsers[1]}`;
+}
+
+function formatTime(timestamp) {
+  if (!timestamp || !timestamp.toDate) {
+    return "";
+  }
+  return timestamp.toDate().toLocaleString([], {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function renderMessages(messages) {
+  if (messages.length === 0) {
+    chatBox.innerHTML = '<p class="chat-empty-state">Say hello to start the conversation.</p>';
+    return;
+  }
+
+  chatBox.innerHTML = messages
+    .map((message) => {
+      const isMine = message.senderId === currentUser.uid;
+      return `
+        <div class="chat-bubble ${isMine ? "chat-bubble-mine" : "chat-bubble-theirs"}">
+          ${safeText(message.text)}
+          <span class="chat-bubble-time">${formatTime(message.createdAt)}</span>
+        </div>
+      `;
+    })
+    .join("");
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+async function markMessagesAsRead(snapshotDocs) {
+  const unreadDocs = snapshotDocs.filter((docSnap) => {
+    const data = docSnap.data();
+    return data.receiverId === currentUser.uid && data.read === false;
+  });
+
+  for (const docSnap of unreadDocs) {
+    try {
+      await updateDoc(docSnap.ref, { read: true });
+    } catch (error) {
+      // Marking as read is a nice-to-have; a failed update here
+      // shouldn't interrupt the rest of the chat experience.
+    }
+  }
+}
+
+async function loadProductInfo() {
+  try {
+    const productSnap = await getDoc(doc(db, "products", productId));
+
+    if (!productSnap.exists()) {
+      chatProductTitle.textContent = "Listing not found";
+      return;
+    }
+
+    const product = productSnap.data();
+
+    chatProductImage.src =
+      product.imageUrl ||
+      (product.images && product.images[0]) ||
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop";
+
+    chatProductTitle.textContent = product.title || "Untitled Product";
+    chatProductPrice.textContent = `US$${product.priceUsd || "0"} | L$${product.priceLrd || "0"}`;
+    chatProductLink.href = "product-detail.html?id=" + encodeURIComponent(productId);
+
+  } catch (error) {
+    chatProductTitle.textContent = "Could not load listing";
+  }
+}
+
+function listenForMessages() {
+  const messagesQuery = query(
+    collection(db, "messages"),
+    where("chatId", "==", chatId),
+    orderBy("createdAt", "asc")
+  );
+
+  onSnapshot(messagesQuery, (snapshot) => {
+    const messages = snapshot.docs.map((docSnap) => docSnap.data());
+    renderMessages(messages);
+    markMessagesAsRead(snapshot.docs);
+  }, (error) => {
+    chatBox.innerHTML = `<p class="chat-empty-state">Could not load messages: ${safeText(error.message)}</p>`;
+  });
+}
+
+async function sendMessage() {
+  const text = messageInput.value.trim();
+
+  if (!text) {
+    return;
+  }
+
+  sendBtn.disabled = true;
+
+  try {
+    await addDoc(collection(db, "messages"), {
+      chatId: chatId,
+      productId: productId,
+      senderId: currentUser.uid,
+      receiverId: otherUserId,
+      text: text,
+      read: false,
+      createdAt: serverTimestamp()
+    });
+
+    messageInput.value = "";
+
+  } catch (error) {
+    alert("Could not send message: " + error.message);
+  } finally {
+    sendBtn.disabled = false;
+    messageInput.focus();
+  }
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  if (!productId || !sellerId) {
+    chatBox.innerHTML = '<p class="chat-empty-state">This chat link is missing information. Please go back and try again.</p>';
+    return;
+  }
+
+  currentUser = user;
+  backToProductLink.href = "messages.html";
+
+  loadProductInfo();
+
+  if (currentUser.uid === sellerId) {
+    chatBox.innerHTML = '<p class="chat-empty-state">You cannot message yourself about your own listing.</p>';
+    messageInput.disabled = true;
+    sendBtn.disabled = true;
+    return;
+  }
+
+  otherUserId = sellerId;
+  chatId = buildChatId(productId, currentUser.uid, sellerId);
+
+  listenForMessages();
+});
+
+sendBtn.addEventListener("click", sendMessage);
+
+messageInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
+</script>
+
+</body>
+</html>
