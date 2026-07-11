@@ -36,9 +36,33 @@
       background: #d97706;
       color: #fff;
     }
-    .feature-btn:disabled {
+    .feature-btn:disabled,
+    .sold-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+    }
+    .sold-btn {
+      background: #fff;
+      border: 1px solid #059669;
+      color: #059669;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .sold-btn:hover {
+      background: #059669;
+      color: #fff;
+    }
+    .sold-btn.is-sold {
+      background: #6b7280;
+      border-color: #6b7280;
+      color: #fff;
+    }
+    .status-badge.sold {
+      background: #e5e7eb;
+      color: #374151;
     }
     .nav-messages-link {
       position: relative;
@@ -223,6 +247,7 @@ async function loadMyListings() {
       const product = productDoc.data();
       const productId = productDoc.id;
       const isFeatured = product.featured === true;
+      const isSold = product.status === "sold";
 
       const image =
         product.imageUrl ||
@@ -243,7 +268,7 @@ async function loadMyListings() {
         <div class="dashboard-listing-info">
           <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">⭐ Featured</span>' : ""}</h4>
           <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
-          <span class="status-badge active">${safeText(product.status || "active")}</span>
+          <span class="status-badge ${isSold ? "sold" : "active"}">${isSold ? "sold" : "active"}</span>
         </div>
 
         <div class="dashboard-listing-actions">
@@ -251,6 +276,9 @@ async function loadMyListings() {
           <button class="delete-btn" data-id="${productId}">Delete</button>
           <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}">
             ${isFeatured ? "★ Unfeature" : "☆ Feature this listing"}
+          </button>
+          <button class="sold-btn ${isSold ? "is-sold" : ""}" data-id="${productId}" data-sold="${isSold}">
+            ${isSold ? "↺ Mark as Active" : "✔ Mark as Sold"}
           </button>
         </div>
       `;
@@ -297,6 +325,27 @@ async function loadMyListings() {
           loadMyListings();
         } catch (error) {
           alert("Could not update featured status: " + error.message);
+          button.disabled = false;
+        }
+      });
+    });
+
+    document.querySelectorAll(".sold-btn").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const productId = button.getAttribute("data-id");
+        const isCurrentlySold = button.getAttribute("data-sold") === "true";
+        const newStatus = isCurrentlySold ? "active" : "sold";
+
+        button.disabled = true;
+        button.textContent = "Updating...";
+
+        try {
+          await updateDoc(doc(db, "products", productId), {
+            status: newStatus
+          });
+          loadMyListings();
+        } catch (error) {
+          alert("Could not update listing status: " + error.message);
           button.disabled = false;
         }
       });
