@@ -306,6 +306,7 @@ function listenForMessages() {
   const messagesQuery = query(
     collection(db, "messages"),
     where("chatId", "==", chatId),
+    where("participants", "array-contains", currentUser.uid),
     orderBy("createdAt", "asc")
   );
 
@@ -333,6 +334,7 @@ async function sendMessage() {
       productId: productId,
       senderId: currentUser.uid,
       receiverId: otherUserId,
+      participants: [currentUser.uid, otherUserId],
       text: text,
       read: false,
       createdAt: serverTimestamp()
