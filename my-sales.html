@@ -3,143 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Sales - LoyaltyMarket</title>
+  <title>Dashboard - LoyaltyMarket</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1e3a8a">
   <style>
-    .orders-wrap {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 0 16px;
-    }
-    .orders-header h1 {
-      margin: 0 0 4px 0;
-    }
-    .orders-header p {
-      color: #6b7280;
-      margin: 0 0 20px 0;
-    }
-    .orders-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .orders-tab {
-      background: #fff;
-      border: 1px solid #d1d5db;
-      padding: 8px 16px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      color: #374151;
-    }
-    .orders-tab.active {
-      background: #2563eb;
-      color: #fff;
-      border-color: #2563eb;
-    }
-    .order-card {
-      display: flex;
-      gap: 14px;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 14px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .order-card img {
-      width: 72px;
-      height: 72px;
-      object-fit: cover;
-      border-radius: 8px;
-      flex-shrink: 0;
-    }
-    .order-info {
-      flex: 1;
-      min-width: 180px;
-    }
-    .order-info h4 {
-      margin: 0 0 4px 0;
-      font-size: 15px;
-      color: #111;
-    }
-    .order-info p {
-      margin: 0 0 4px 0;
-      font-size: 13px;
-      color: #059669;
-      font-weight: 600;
-    }
-    .order-buyer {
-      font-size: 12px;
-      color: #6b7280;
-    }
-    .order-date {
-      font-size: 12px;
-      color: #9ca3af;
-    }
-    .order-status {
-      font-size: 12px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 999px;
-      text-transform: capitalize;
-      white-space: nowrap;
-    }
-    .order-status.pending {
+    .featured-badge {
+      display: inline-block;
       background: #fef3c7;
       color: #92400e;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 6px;
     }
-    .order-status.confirmed {
-      background: #dbeafe;
-      color: #1e40af;
-    }
-    .order-status.completed {
-      background: #d1fae5;
-      color: #065f46;
-    }
-    .order-status.cancelled {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-    .order-actions {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .order-action-btn {
-      border: none;
+    .feature-btn {
+      background: #fff;
+      border: 1px solid #d97706;
+      color: #d97706;
       padding: 6px 12px;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
     }
-    .order-action-btn:disabled {
+    .feature-btn:hover {
+      background: #d97706;
+      color: #fff;
+    }
+    .feature-btn.is-featured {
+      background: #d97706;
+      color: #fff;
+    }
+    .feature-btn:disabled,
+    .sold-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
-    .confirm-btn {
-      background: #2563eb;
-      color: #fff;
+    .sold-btn {
+      background: #fff;
+      border: 1px solid #059669;
+      color: #059669;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .complete-btn {
+    .sold-btn:hover {
       background: #059669;
       color: #fff;
     }
-    .cancel-btn {
-      background: #fff;
-      border: 1px solid #dc2626;
-      color: #dc2626;
+    .sold-btn.is-sold {
+      background: #6b7280;
+      border-color: #6b7280;
+      color: #fff;
     }
-    .orders-empty {
-      text-align: center;
-      color: #888;
-      margin-top: 60px;
+    .status-badge.sold {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .nav-messages-link {
+      position: relative;
+    }
+    .unread-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+    .unread-badge.has-unread {
+      display: flex;
+    }
+    .dashboard-listing-image a {
+      display: block;
+    }
+    .dashboard-listing-image img {
+      cursor: pointer;
+    }
+    .dashboard-listing-info h4 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .dashboard-listing-info h4 a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -153,30 +111,47 @@
   <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
 
   <a href="index.html" class="login-btn">Home</a>
-  <a href="messages.html" class="register-btn">My Messages</a>
-  <a href="dashboard.html" class="register-btn">Dashboard</a>
+  <a href="messages.html" class="register-btn nav-messages-link">
+    My Messages
+    <span id="unreadBadge" class="unread-badge">0</span>
+  </a>
+  <a href="sell.html" class="sell-btn">Sell Product</a>
+  <button id="logoutBtn" class="register-btn">Logout</button>
 </header>
 
-<div class="orders-wrap">
+<section class="dashboard-section">
 
-  <div class="orders-header">
-    <h1>💰 My Sales</h1>
-    <p>Orders buyers have placed on your listings.</p>
-  </div>
+  <aside class="dashboard-sidebar">
+    <div class="dashboard-profile">
+      <div class="dashboard-avatar">👤</div>
+      <h3 id="userName">Loading...</h3>
+      <p id="verifiedBadge"></p>
+      <p class="member-since" id="memberSince"></p>
+    </div>
 
-  <div class="orders-tabs">
-    <button class="orders-tab active" data-filter="all">All</button>
-    <button class="orders-tab" data-filter="pending">Pending</button>
-    <button class="orders-tab" data-filter="confirmed">Confirmed</button>
-    <button class="orders-tab" data-filter="completed">Completed</button>
-    <button class="orders-tab" data-filter="cancelled">Cancelled</button>
-  </div>
+    <nav class="dashboard-nav">
+      <a href="dashboard.html" class="dashboard-nav-link active">📋 My Listings</a>
+      <a href="wishlist.html" class="dashboard-nav-link">❤️ My Wishlist</a>
+      <a href="sell.html" class="dashboard-nav-link">➕ Post New Listing</a>
+      <a href="my-sales.html" class="dashboard-nav-link">💰 My Sales</a>
+      <a href="account-setting.html" class="dashboard-nav-link">⚙️ Account Settings</a>
+    </nav>
+  </aside>
 
-  <div id="ordersList">
-    <p>Loading your sales...</p>
-  </div>
+  <main class="dashboard-main">
+    <h1>My Dashboard</h1>
+    <p class="dashboard-subtitle">Manage your LoyaltyMarket account and listings.</p>
 
-</div>
+    <div class="dashboard-listings" id="dashboardListings">
+      <p>Loading your listings...</p>
+    </div>
+
+    <p class="empty-hint">
+      Want to sell more? <a href="sell.html">Post another item</a>.
+    </p>
+  </main>
+
+</section>
 
 <footer class="footer">
   <h2>🇱🇷 LoyaltyMarket</h2>
@@ -185,24 +160,28 @@
 </footer>
 
 <script type="module">
-import { db, auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import {
   collection,
   query,
   where,
-  orderBy,
-  onSnapshot,
+  getDocs,
+  deleteDoc,
   doc,
-  updateDoc
+  getDoc,
+  updateDoc,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-const ordersList = document.getElementById("ordersList");
-const tabs = document.querySelectorAll(".orders-tab");
+const unreadBadge = document.getElementById("unreadBadge");
+const userName = document.getElementById("userName");
+const verifiedBadge = document.getElementById("verifiedBadge");
+const memberSince = document.getElementById("memberSince");
+const logoutBtn = document.getElementById("logoutBtn");
+const dashboardListings = document.getElementById("dashboardListings");
 
 let currentUser = null;
-let allOrders = [];
-let activeFilter = "all";
 
 function safeText(value) {
   return String(value || "")
@@ -213,126 +192,205 @@ function safeText(value) {
     .replaceAll("'", "&#039;");
 }
 
-function formatDate(timestamp) {
-  if (!timestamp || !timestamp.toDate) {
-    return "";
+async function loadUserProfile() {
+  try {
+    const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+
+      userName.textContent = userData.name || currentUser.email;
+
+      if (userData.verified === true) {
+        verifiedBadge.textContent = "⭐ Verified Seller";
+      } else {
+        verifiedBadge.textContent = "Unverified Seller";
+      }
+
+      if (userData.createdAt && userData.createdAt.seconds) {
+        const date = new Date(userData.createdAt.seconds * 1000);
+        const year = date.getFullYear();
+        memberSince.textContent = "Member since " + year;
+      } else {
+        memberSince.textContent = "Member";
+      }
+    } else {
+      userName.textContent = currentUser.email;
+      verifiedBadge.textContent = "Unverified Seller";
+      memberSince.textContent = "Member";
+    }
+  } catch (error) {
+    userName.textContent = currentUser.email;
   }
-  return timestamp.toDate().toLocaleString([], {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  });
 }
 
-function actionButtonsFor(order) {
-  const status = order.status || "pending";
-  const buttons = [];
+async function loadMyListings() {
+  dashboardListings.innerHTML = "<p>Loading your listings...</p>";
 
-  if (status === "pending") {
-    buttons.push(`<button class="order-action-btn confirm-btn" data-id="${order.id}" data-status="confirmed">Confirm</button>`);
-    buttons.push(`<button class="order-action-btn cancel-btn" data-id="${order.id}" data-status="cancelled">Cancel</button>`);
-  } else if (status === "confirmed") {
-    buttons.push(`<button class="order-action-btn complete-btn" data-id="${order.id}" data-status="completed">Mark Completed</button>`);
-    buttons.push(`<button class="order-action-btn cancel-btn" data-id="${order.id}" data-status="cancelled">Cancel</button>`);
-  }
+  try {
+    const myProductsQuery = query(
+      collection(db, "products"),
+      where("sellerId", "==", currentUser.uid)
+    );
 
-  return buttons.join("");
-}
+    const snapshot = await getDocs(myProductsQuery);
 
-function renderOrders() {
-  const filtered = activeFilter === "all"
-    ? allOrders
-    : allOrders.filter((order) => (order.status || "pending") === activeFilter);
+    if (snapshot.empty) {
+      dashboardListings.innerHTML = `
+        <p>You haven't posted any products yet.</p>
+      `;
+      return;
+    }
 
-  if (filtered.length === 0) {
-    ordersList.innerHTML = `
-      <div class="orders-empty">
-        <p>No sales found.</p>
-      </div>
-    `;
-    return;
-  }
+    dashboardListings.innerHTML = "";
 
-  ordersList.innerHTML = filtered
-    .map((order) => {
-      const status = order.status || "pending";
+    snapshot.forEach((productDoc) => {
+      const product = productDoc.data();
+      const productId = productDoc.id;
+      const isFeatured = product.featured === true;
+      const isSold = product.status === "sold";
+
       const image =
-        order.productImage ||
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop";
+        product.imageUrl ||
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=200&fit=crop";
 
-      return `
-        <div class="order-card">
-          <img src="${safeText(image)}" alt="${safeText(order.productTitle || "Product")}">
-          <div class="order-info">
-            <h4>${safeText(order.productTitle || "Untitled Product")}</h4>
-            <p>US$${safeText(order.priceUsd || "0")} | L$${safeText(order.priceLrd || "0")}</p>
-            <span class="order-buyer">Buyer: ${safeText(order.buyerEmail || "Unknown")}</span><br>
-            <span class="order-date">${formatDate(order.createdAt)}</span>
-          </div>
-          <span class="order-status ${safeText(status)}">${safeText(status)}</span>
-          <div class="order-actions">
-            ${actionButtonsFor(order)}
-          </div>
+      const detailUrl = "product-detail.html?id=" + encodeURIComponent(productId);
+
+      const card = document.createElement("div");
+      card.className = "dashboard-listing-card";
+
+      card.innerHTML = `
+        <div class="dashboard-listing-image">
+          <a href="${detailUrl}">
+            <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
+          </a>
+        </div>
+
+        <div class="dashboard-listing-info">
+          <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">⭐ Featured</span>' : ""}</h4>
+          <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
+          <span class="status-badge ${isSold ? "sold" : "active"}">${isSold ? "sold" : "active"}</span>
+        </div>
+
+        <div class="dashboard-listing-actions">
+          <button class="edit-btn" data-id="${productId}">Edit</button>
+          <button class="delete-btn" data-id="${productId}">Delete</button>
+          <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}">
+            ${isFeatured ? "★ Unfeature" : "☆ Feature this listing"}
+          </button>
+          <button class="sold-btn ${isSold ? "is-sold" : ""}" data-id="${productId}" data-sold="${isSold}">
+            ${isSold ? "↺ Mark as Active" : "✔ Mark as Sold"}
+          </button>
         </div>
       `;
-    })
-    .join("");
 
-  document.querySelectorAll(".order-action-btn").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const orderId = button.getAttribute("data-id");
-      const newStatus = button.getAttribute("data-status");
-
-      const actionLabel = button.textContent;
-      button.disabled = true;
-      button.textContent = "Updating...";
-
-      try {
-        await updateDoc(doc(db, "orders", orderId), {
-          status: newStatus
-        });
-      } catch (error) {
-        alert("Could not update order: " + error.message);
-        button.disabled = false;
-        button.textContent = actionLabel;
-      }
+      dashboardListings.appendChild(card);
     });
-  });
+
+    document.querySelectorAll(".edit-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        const productId = button.getAttribute("data-id");
+        window.location.href = "edit-product.html?id=" + encodeURIComponent(productId);
+      });
+    });
+
+    document.querySelectorAll(".delete-btn").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const productId = button.getAttribute("data-id");
+        const confirmDelete = confirm("Are you sure you want to delete this listing? This cannot be undone.");
+
+        if (!confirmDelete) return;
+
+        try {
+          await deleteDoc(doc(db, "products", productId));
+          loadMyListings();
+        } catch (error) {
+          alert("Could not delete listing: " + error.message);
+        }
+      });
+    });
+
+    document.querySelectorAll(".feature-btn").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const productId = button.getAttribute("data-id");
+        const isCurrentlyFeatured = button.getAttribute("data-featured") === "true";
+        const newFeaturedValue = !isCurrentlyFeatured;
+
+        button.disabled = true;
+        button.textContent = "Updating...";
+
+        try {
+          await updateDoc(doc(db, "products", productId), {
+            featured: newFeaturedValue
+          });
+          loadMyListings();
+        } catch (error) {
+          alert("Could not update featured status: " + error.message);
+          button.disabled = false;
+        }
+      });
+    });
+
+    document.querySelectorAll(".sold-btn").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const productId = button.getAttribute("data-id");
+        const isCurrentlySold = button.getAttribute("data-sold") === "true";
+        const newStatus = isCurrentlySold ? "active" : "sold";
+
+        button.disabled = true;
+        button.textContent = "Updating...";
+
+        try {
+          await updateDoc(doc(db, "products", productId), {
+            status: newStatus
+          });
+          loadMyListings();
+        } catch (error) {
+          alert("Could not update listing status: " + error.message);
+          button.disabled = false;
+        }
+      });
+    });
+
+  } catch (error) {
+    dashboardListings.innerHTML = `<p>Could not load your listings: ${safeText(error.message)}</p>`;
+  }
 }
 
-function listenForSales() {
-  const salesQuery = query(
-    collection(db, "orders"),
-    where("sellerId", "==", currentUser.uid),
-    orderBy("createdAt", "desc")
+function listenForUnreadMessages() {
+  const unreadQuery = query(
+    collection(db, "messages"),
+    where("receiverId", "==", currentUser.uid),
+    where("read", "==", false)
   );
 
-  onSnapshot(salesQuery, (snapshot) => {
-    allOrders = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
-    renderOrders();
-  }, (error) => {
-    ordersList.innerHTML = `<p>Could not load sales: ${safeText(error.message)}</p>`;
+  onSnapshot(unreadQuery, (snapshot) => {
+    const count = snapshot.size;
+
+    if (count > 0) {
+      unreadBadge.textContent = count > 9 ? "9+" : String(count);
+      unreadBadge.classList.add("has-unread");
+    } else {
+      unreadBadge.classList.remove("has-unread");
+    }
   });
 }
 
-tabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    tabs.forEach((t) => t.classList.remove("active"));
-    tab.classList.add("active");
-    activeFilter = tab.getAttribute("data-filter");
-    renderOrders();
-  });
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    loadUserProfile();
+    loadMyListings();
+    listenForUnreadMessages();
+  } else {
+    window.location.href = "login.html";
+  }
 });
 
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
-  currentUser = user;
-  listenForSales();
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
+  alert("Logged out successfully!");
+  window.location.href = "login.html";
 });
 </script>
 
