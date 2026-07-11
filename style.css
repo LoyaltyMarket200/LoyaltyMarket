@@ -1461,4 +1461,68 @@ body {
   .product-card .product-image {
     height: 210px;
   }
+}/* ==================================================
+   STEP 3 — WIDER JIJI-STYLE HOMEPAGE LAYOUT
+================================================== */
+
+.browse-layout {
+  width: min(1450px, 96%);
+  max-width: none;
+  margin: 30px auto 60px;
+  padding: 0;
+  gap: 22px;
+}
+
+.category-sidebar {
+  width: 225px;
+}
+
+.browse-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.browse-main .product-grid {
+  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+  gap: 18px;
+}
+
+.why-choose {
+  width: min(1450px, 96%);
+  margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (min-width: 1250px) {
+  .browse-main .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1550px) {
+  .browse-main .product-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .browse-layout {
+    width: 94%;
+    flex-direction: column;
+  }
+
+  .category-sidebar {
+    width: 100%;
+  }
+
+  .browse-main .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .browse-main .product-grid {
+    grid-template-columns: 1fr;
+  }
 }
