@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fashion - LoyaltyMarket</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
   <style>
     .badge-featured {
       background: #d97706 !important;
@@ -391,6 +393,14 @@ onAuthStateChanged(auth, (user) => {
     listenForUnreadMessages(user.uid);
   }
 });
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
 </script>
 
 </body>
