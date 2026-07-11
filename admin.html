@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#1e3a8a">
   <style>
     .admin-wrap {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 30px auto;
       padding: 0 20px;
     }
@@ -46,6 +46,61 @@
       color: #fff;
       border-color: #2563eb;
     }
+
+    .admin-section-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .admin-section-tab-btn {
+      background: none;
+      border: none;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #64748b;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -1px;
+    }
+    .admin-section-tab-btn.active {
+      color: #2563eb;
+      border-bottom-color: #2563eb;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .stat-card-label {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 8px;
+    }
+    .stat-card-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #111;
+    }
+    .stat-card-icon {
+      font-size: 20px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
     .report-card {
       background: #fff;
       border: 1px solid #e5e7eb;
@@ -177,20 +232,73 @@
 <main class="admin-wrap" id="adminMain" style="display:none;">
 
   <div class="admin-header">
-    <h1>🚩 Reported Listings</h1>
+    <h1>⚙️ Admin Control Center</h1>
     <button id="refreshBtn" class="admin-tab-btn">🔄 Refresh</button>
   </div>
 
-  <div class="admin-tabs">
-    <button class="admin-tab-btn active" data-filter="all">All</button>
-    <button class="admin-tab-btn" data-filter="pending">Pending</button>
-    <button class="admin-tab-btn" data-filter="reviewed">Reviewed</button>
-    <button class="admin-tab-btn" data-filter="dismissed">Dismissed</button>
+  <div class="admin-section-tabs">
+    <button class="admin-section-tab-btn active" data-section="overview">Dashboard Overview</button>
+    <button class="admin-section-tab-btn" data-section="reports">Reported Listings</button>
   </div>
 
-  <div id="reportsContainer">
-    <p class="empty-state">Loading reports...</p>
-  </div>
+  <section id="overviewSection">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-card-icon">👥</span>
+        <div class="stat-card-label">Total Users</div>
+        <div class="stat-card-value" id="statTotalUsers">—</div>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-card-icon">🆕</span>
+        <div class="stat-card-label">New Users Today</div>
+        <div class="stat-card-value" id="statNewUsersToday">—</div>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-card-icon">⭐</span>
+        <div class="stat-card-label">Verified Sellers</div>
+        <div class="stat-card-value" id="statVerifiedSellers">—</div>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-card-icon">📋</span>
+        <div class="stat-card-label">Total Listings</div>
+        <div class="stat-card-value" id="statTotalListings">—</div>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-card-icon">📈</span>
+        <div class="stat-card-label">New Listings Today</div>
+        <div class="stat-card-value" id="statNewListingsToday">—</div>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-card-icon">🚩</span>
+        <div class="stat-card-label">Total Reports</div>
+        <div class="stat-card-value" id="statTotalReports">—</div>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-card-icon">⏳</span>
+        <div class="stat-card-label">Pending Reports</div>
+        <div class="stat-card-value" id="statPendingReports">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reportsSection" style="display:none;">
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" data-filter="all">All</button>
+      <button class="admin-tab-btn" data-filter="pending">Pending</button>
+      <button class="admin-tab-btn" data-filter="reviewed">Reviewed</button>
+      <button class="admin-tab-btn" data-filter="dismissed">Dismissed</button>
+    </div>
+
+    <div id="reportsContainer">
+      <p class="empty-state">Loading reports...</p>
+    </div>
+  </section>
 
 </main>
 
@@ -207,9 +315,12 @@ import {
   collection,
   query,
   orderBy,
+  where,
   getDocs,
+  getCountFromServer,
   doc,
-  updateDoc
+  updateDoc,
+  Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 import {
@@ -224,9 +335,13 @@ const adminMain = document.getElementById("adminMain");
 const reportsContainer = document.getElementById("reportsContainer");
 const refreshBtn = document.getElementById("refreshBtn");
 const tabButtons = document.querySelectorAll(".admin-tab-btn[data-filter]");
+const sectionTabButtons = document.querySelectorAll(".admin-section-tab-btn");
+const overviewSection = document.getElementById("overviewSection");
+const reportsSection = document.getElementById("reportsSection");
 
 let allReports = [];
 let currentFilter = "all";
+let currentSection = "overview";
 
 function safeText(value) {
   return String(value || "")
@@ -242,6 +357,81 @@ function formatDate(timestamp) {
     return "Unknown date";
   }
   return timestamp.toDate().toLocaleString();
+}
+
+function getStartOfToday() {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  return Timestamp.fromDate(now);
+}
+
+async function loadOverviewStats() {
+  const startOfToday = getStartOfToday();
+
+  try {
+    const totalUsersSnap = await getCountFromServer(collection(db, "users"));
+    document.getElementById("statTotalUsers").textContent = totalUsersSnap.data().count;
+  } catch (error) {
+    document.getElementById("statTotalUsers").textContent = "—";
+  }
+
+  try {
+    const newUsersQuery = query(
+      collection(db, "users"),
+      where("createdAt", ">=", startOfToday)
+    );
+    const newUsersSnap = await getCountFromServer(newUsersQuery);
+    document.getElementById("statNewUsersToday").textContent = newUsersSnap.data().count;
+  } catch (error) {
+    document.getElementById("statNewUsersToday").textContent = "—";
+  }
+
+  try {
+    const verifiedQuery = query(
+      collection(db, "users"),
+      where("verified", "==", true)
+    );
+    const verifiedSnap = await getCountFromServer(verifiedQuery);
+    document.getElementById("statVerifiedSellers").textContent = verifiedSnap.data().count;
+  } catch (error) {
+    document.getElementById("statVerifiedSellers").textContent = "—";
+  }
+
+  try {
+    const totalListingsSnap = await getCountFromServer(collection(db, "products"));
+    document.getElementById("statTotalListings").textContent = totalListingsSnap.data().count;
+  } catch (error) {
+    document.getElementById("statTotalListings").textContent = "—";
+  }
+
+  try {
+    const newListingsQuery = query(
+      collection(db, "products"),
+      where("createdAt", ">=", startOfToday)
+    );
+    const newListingsSnap = await getCountFromServer(newListingsQuery);
+    document.getElementById("statNewListingsToday").textContent = newListingsSnap.data().count;
+  } catch (error) {
+    document.getElementById("statNewListingsToday").textContent = "—";
+  }
+
+  try {
+    const totalReportsSnap = await getCountFromServer(collection(db, "reports"));
+    document.getElementById("statTotalReports").textContent = totalReportsSnap.data().count;
+  } catch (error) {
+    document.getElementById("statTotalReports").textContent = "—";
+  }
+
+  try {
+    const pendingReportsQuery = query(
+      collection(db, "reports"),
+      where("status", "==", "pending")
+    );
+    const pendingReportsSnap = await getCountFromServer(pendingReportsQuery);
+    document.getElementById("statPendingReports").textContent = pendingReportsSnap.data().count;
+  } catch (error) {
+    document.getElementById("statPendingReports").textContent = "—";
+  }
 }
 
 function renderReports() {
@@ -341,6 +531,33 @@ async function loadReports() {
   }
 }
 
+function loadCurrentSectionData() {
+  if (currentSection === "overview") {
+    loadOverviewStats();
+  } else {
+    loadReports();
+  }
+}
+
+sectionTabButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    sectionTabButtons.forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    currentSection = btn.getAttribute("data-section");
+
+    if (currentSection === "overview") {
+      overviewSection.style.display = "block";
+      reportsSection.style.display = "none";
+      loadOverviewStats();
+    } else {
+      overviewSection.style.display = "none";
+      reportsSection.style.display = "block";
+      loadReports();
+    }
+  });
+});
+
 tabButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     tabButtons.forEach((b) => b.classList.remove("active"));
@@ -350,13 +567,13 @@ tabButtons.forEach((btn) => {
   });
 });
 
-refreshBtn.addEventListener("click", loadReports);
+refreshBtn.addEventListener("click", loadCurrentSectionData);
 
 onAuthStateChanged(auth, (user) => {
   if (user && ADMIN_EMAILS.includes(user.email)) {
     notAuthorizedBox.style.display = "none";
     adminMain.style.display = "block";
-    loadReports();
+    loadOverviewStats();
   } else {
     notAuthorizedBox.style.display = "block";
     adminMain.style.display = "none";
