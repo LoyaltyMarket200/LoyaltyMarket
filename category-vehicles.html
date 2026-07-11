@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vehicles - LoyaltyMarket</title>
+  <title>Property - LoyaltyMarket</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
   <style>
     .badge-featured {
       background: #d97706 !important;
@@ -45,7 +47,7 @@
     type="text"
     class="search-box"
     id="searchInput"
-    placeholder="Search Vehicles..."
+    placeholder="Search Property..."
   >
 
   <div class="nav-buttons">
@@ -60,7 +62,7 @@
 </header>
 
 <section class="search-header">
-  <h2>🚗 Vehicles</h2>
+  <h2>🏠 Property</h2>
   <p class="results-count" id="resultsCount">Loading products...</p>
 </section>
 
@@ -109,8 +111,8 @@
     </button>
   </aside>
 
-  <main class="search-results" id="vehiclesGrid">
-    <p>Loading Vehicles products...</p>
+  <main class="search-results" id="propertyGrid">
+    <p>Loading Property products...</p>
   </main>
 
 </section>
@@ -136,7 +138,7 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-const vehiclesGrid = document.getElementById("vehiclesGrid");
+const propertyGrid = document.getElementById("propertyGrid");
 const resultsCount = document.getElementById("resultsCount");
 const searchInput = document.getElementById("searchInput");
 const countyFilter = document.getElementById("countyFilter");
@@ -145,7 +147,7 @@ const conditionFilter = document.getElementById("conditionFilter");
 const applyFiltersBtn = document.getElementById("applyFiltersBtn");
 const clearFiltersBtn = document.getElementById("clearFiltersBtn");
 
-let allVehicles = [];
+let allProperty = [];
 
 function safeText(value) {
   return String(value || "")
@@ -157,7 +159,7 @@ function safeText(value) {
 }
 
 function displayProducts(products) {
-  vehiclesGrid.innerHTML = "";
+  propertyGrid.innerHTML = "";
 
   const numberOfProducts = products.length;
 
@@ -167,18 +169,18 @@ function displayProducts(products) {
       : `Showing ${numberOfProducts} products`;
 
   if (numberOfProducts === 0) {
-    vehiclesGrid.innerHTML = `
+    propertyGrid.innerHTML = `
       <div style="background:white; padding:30px; border-radius:14px;">
-        <h3>No Vehicles Found</h3>
+        <h3>No Property Found</h3>
         <p style="margin-top:8px; color:#64748b;">
-          Try changing your filters or post the first Vehicles product.
+          Try changing your filters or post the first Property listing.
         </p>
         <a
           href="sell.html"
           class="sell-btn"
           style="display:inline-block; margin-top:18px; text-decoration:none;"
         >
-          Sell a Vehicle
+          List Property
         </a>
       </div>
     `;
@@ -188,7 +190,7 @@ function displayProducts(products) {
   products.forEach((product) => {
     const image =
       product.imageUrl ||
-      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=500&h=350&fit=crop";
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=500&h=350&fit=crop";
 
     const isFeatured = product.featured === true;
 
@@ -216,7 +218,7 @@ function displayProducts(products) {
         <div class="product-image">
           <img
             src="${safeText(image)}"
-            alt="${safeText(product.title || "Vehicle")}"
+            alt="${safeText(product.title || "Property")}"
           >
         </div>
 
@@ -239,7 +241,7 @@ function displayProducts(products) {
       </div>
     `;
 
-    vehiclesGrid.appendChild(productLink);
+    propertyGrid.appendChild(productLink);
   });
 }
 
@@ -249,7 +251,7 @@ function applyFilters() {
   const selectedPrice = priceFilter.value;
   const selectedCondition = conditionFilter.value;
 
-  const filteredProducts = allVehicles.filter((product) => {
+  const filteredProducts = allProperty.filter((product) => {
     const title = String(product.title || "").toLowerCase();
     const description = String(product.description || "").toLowerCase();
     const county = String(product.county || "");
@@ -296,27 +298,27 @@ function applyFilters() {
   displayProducts(filteredProducts);
 }
 
-async function loadVehicles() {
-  vehiclesGrid.innerHTML = "<p>Loading Vehicles products...</p>";
+async function loadProperty() {
+  propertyGrid.innerHTML = "<p>Loading Property products...</p>";
 
   try {
-    const vehiclesQuery = query(
+    const propertyQuery = query(
       collection(db, "products"),
-      where("category", "==", "Vehicles")
+      where("category", "==", "Property")
     );
 
-    const snapshot = await getDocs(vehiclesQuery);
+    const snapshot = await getDocs(propertyQuery);
 
-    allVehicles = [];
+    allProperty = [];
 
     snapshot.forEach((productDocument) => {
-      allVehicles.push({
+      allProperty.push({
         id: productDocument.id,
         ...productDocument.data()
       });
     });
 
-    allVehicles.sort((firstProduct, secondProduct) => {
+    allProperty.sort((firstProduct, secondProduct) => {
       const firstTime =
         firstProduct.createdAt?.seconds || 0;
 
@@ -326,22 +328,22 @@ async function loadVehicles() {
       return secondTime - firstTime;
     });
 
-    allVehicles.sort((firstProduct, secondProduct) => {
+    allProperty.sort((firstProduct, secondProduct) => {
       const firstFeatured = firstProduct.featured === true ? 1 : 0;
       const secondFeatured = secondProduct.featured === true ? 1 : 0;
       return secondFeatured - firstFeatured;
     });
 
-    displayProducts(allVehicles);
+    displayProducts(allProperty);
 
   } catch (error) {
     console.error(error);
 
     resultsCount.textContent = "Unable to load products";
 
-    vehiclesGrid.innerHTML = `
+    propertyGrid.innerHTML = `
       <div style="background:white; padding:30px; border-radius:14px;">
-        <h3>Could Not Load Vehicles</h3>
+        <h3>Could Not Load Property</h3>
         <p style="margin-top:8px; color:#64748b;">
           ${safeText(error.message)}
         </p>
@@ -360,10 +362,10 @@ clearFiltersBtn.addEventListener("click", function() {
   priceFilter.value = "";
   conditionFilter.value = "";
 
-  displayProducts(allVehicles);
+  displayProducts(allProperty);
 });
 
-loadVehicles();
+loadProperty();
 
 const unreadBadge = document.getElementById("unreadBadge");
 
@@ -391,6 +393,14 @@ onAuthStateChanged(auth, (user) => {
     listenForUnreadMessages(user.uid);
   }
 });
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
 </script>
 
 </body>
