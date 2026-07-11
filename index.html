@@ -116,6 +116,12 @@
       margin-top: 0;
     }
 
+    .results-count-line {
+      color: #64748b;
+      font-size: 14px;
+      margin: -8px 0 16px 0;
+    }
+
     @media (max-width: 800px) {
       .browse-layout {
         flex-direction: column;
@@ -133,7 +139,7 @@
     <h2>🇱🇷 LoyaltyMarket</h2>
   </div>
 
-  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
+  <input type="text" class="search-box" id="searchInput" placeholder="Search Products, Cars, Phones...">
 
   <div class="nav-buttons">
     <a href="login.html" id="loginBtn" class="login-btn">Login</a>
@@ -159,41 +165,41 @@
 </section>
 
 <section class="filters">
-  <select>
-    <option>Select County</option>
-    <option>Montserrado</option>
-    <option>Margibi</option>
-    <option>Grand Bassa</option>
-    <option>Nimba</option>
-    <option>Bong</option>
+  <select id="countyFilter">
+    <option value="">Select County</option>
+    <option value="Montserrado">Montserrado</option>
+    <option value="Margibi">Margibi</option>
+    <option value="Grand Bassa">Grand Bassa</option>
+    <option value="Nimba">Nimba</option>
+    <option value="Bong">Bong</option>
   </select>
 
-  <select>
-    <option>Select Category</option>
-    <option>Phones</option>
-    <option>Electronics</option>
-    <option>Vehicles</option>
-    <option>Property</option>
-    <option>Fashion</option>
-    <option>Jobs</option>
+  <select id="categoryFilter">
+    <option value="">Select Category</option>
+    <option value="Phones">Phones</option>
+    <option value="Electronics">Electronics</option>
+    <option value="Vehicles">Vehicles</option>
+    <option value="Property">Property</option>
+    <option value="Fashion">Fashion</option>
+    <option value="Jobs">Jobs</option>
   </select>
 
-  <select>
-    <option>Price Range</option>
-    <option>Under US$100</option>
-    <option>Under US$500</option>
-    <option>Under US$1,000</option>
-    <option>Over US$1,000</option>
+  <select id="priceFilter">
+    <option value="">Price Range</option>
+    <option value="100">Under US$100</option>
+    <option value="500">Under US$500</option>
+    <option value="1000">Under US$1,000</option>
+    <option value="over1000">Over US$1,000</option>
   </select>
 
-  <select>
-    <option>Condition</option>
-    <option>Brand New</option>
-    <option>Used</option>
-    <option>Foreign Used</option>
+  <select id="conditionFilter">
+    <option value="">Condition</option>
+    <option value="Brand New">Brand New</option>
+    <option value="Used">Used</option>
+    <option value="Foreign Used">Foreign Used</option>
   </select>
 
-  <button class="search-btn">Search</button>
+  <button class="search-btn" id="applyFiltersBtn">Search</button>
 </section>
 
 <div class="browse-layout" id="products">
@@ -242,6 +248,7 @@
 
   <main class="browse-main">
     <h2>Latest Products</h2>
+    <p class="results-count-line" id="resultsCountLine"></p>
     <div class="product-grid" id="productGrid">
       <p>Loading products...</p>
     </div>
@@ -280,6 +287,8 @@ import { db, auth } from "./firebase.js";
 import {
   collection,
   getDocs,
+  doc,
+  getDoc,
   query,
   orderBy,
   where,
@@ -289,12 +298,167 @@ import {
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 const productGrid = document.getElementById("productGrid");
+const resultsCountLine = document.getElementById("resultsCountLine");
 const loginBtn = document.getElementById("loginBtn");
 const registerBtn = document.getElementById("registerBtn");
 const dashboardBtn = document.getElementById("dashboardBtn");
 const messagesBtn = document.getElementById("messagesBtn");
 const unreadBadge = document.getElementById("unreadBadge");
 const categoryCountEls = document.querySelectorAll(".category-sidebar-count");
+
+const searchInput = document.getElementById("searchInput");
+const countyFilter = document.getElementById("countyFilter");
+const categoryFilter = document.getElementById("categoryFilter");
+const priceFilter = document.getElementById("priceFilter");
+const conditionFilter = document.getElementById("conditionFilter");
+const applyFiltersBtn = document.getElementById("applyFiltersBtn");
+
+let allProducts = [];
+const sellerNameCache = {};
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+async function getSellerName(sellerId) {
+  if (!sellerId) {
+    return "";
+  }
+
+  if (sellerNameCache[sellerId] !== undefined) {
+    return sellerNameCache[sellerId];
+  }
+
+  try {
+    const sellerDoc = await getDoc(doc(db, "users", sellerId));
+    const name = sellerDoc.exists() ? (sellerDoc.data().name || "") : "";
+    sellerNameCache[sellerId] = name;
+    return name;
+  } catch (error) {
+    sellerNameCache[sellerId] = "";
+    return "";
+  }
+}
+
+function renderProducts(products) {
+  productGrid.innerHTML = "";
+
+  const count = products.length;
+  resultsCountLine.textContent =
+    count === 1 ? "Showing 1 product" : `Showing ${count} products`;
+
+  if (count === 0) {
+    productGrid.innerHTML = `
+      <div style="background:white; padding:30px; border-radius:14px;">
+        <h3>No products found</h3>
+        <p style="margin-top:8px; color:#64748b;">
+          Try adjusting your search or filters.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  products.forEach(({ id, data: product }) => {
+    const image = product.imageUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+    const title = product.title || "Untitled Product";
+    const priceUsd = product.priceUsd || "0";
+    const priceLrd = product.priceLrd || "0";
+    const city = product.city || "Liberia";
+    const county = product.county || "";
+    const condition = product.condition || "Used";
+    const isFeatured = product.featured === true;
+
+    const productCard = document.createElement("a");
+    productCard.href = "product-detail.html?id=" + id;
+    productCard.style.textDecoration = "none";
+    productCard.style.color = "inherit";
+
+    productCard.innerHTML = `
+      <div class="product-card">
+        <span class="badge ${isFeatured ? "badge-featured" : ""}">${isFeatured ? "⭐ Featured" : "New"}</span>
+        <button class="heart" type="button">♡</button>
+        <div class="product-image">
+          <img src="${safeText(image)}" alt="${safeText(title)}">
+        </div>
+        <h3>${safeText(title)}</h3>
+        <p class="price">US$${safeText(priceUsd)} | L$${safeText(priceLrd)}</p>
+        <p class="location">📍 ${safeText(city)}, ${safeText(county)}</p>
+        <p class="condition">${safeText(condition)}</p>
+      </div>
+    `;
+
+    productGrid.appendChild(productCard);
+  });
+}
+
+async function applyFiltersAndSearch() {
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  const selectedCounty = countyFilter.value;
+  const selectedCategory = categoryFilter.value;
+  const selectedPrice = priceFilter.value;
+  const selectedCondition = conditionFilter.value;
+
+  const matchResults = [];
+
+  for (const item of allProducts) {
+    const product = item.data;
+
+    const title = String(product.title || "").toLowerCase();
+    const description = String(product.description || "").toLowerCase();
+    const county = String(product.county || "");
+    const city = String(product.city || "").toLowerCase();
+    const category = String(product.category || "");
+    const condition = String(product.condition || "");
+    const price = Number(product.priceUsd || 0);
+
+    let matchesSearch = true;
+
+    if (searchTerm) {
+      const sellerName = (await getSellerName(product.sellerId)).toLowerCase();
+
+      matchesSearch =
+        title.includes(searchTerm) ||
+        description.includes(searchTerm) ||
+        county.toLowerCase().includes(searchTerm) ||
+        city.includes(searchTerm) ||
+        category.toLowerCase().includes(searchTerm) ||
+        sellerName.includes(searchTerm);
+    }
+
+    const matchesCounty = !selectedCounty || county === selectedCounty;
+    const matchesCategory = !selectedCategory || category === selectedCategory;
+    const matchesCondition = !selectedCondition || condition === selectedCondition;
+
+    let matchesPrice = true;
+    if (selectedPrice === "100") {
+      matchesPrice = price < 100;
+    } else if (selectedPrice === "500") {
+      matchesPrice = price < 500;
+    } else if (selectedPrice === "1000") {
+      matchesPrice = price < 1000;
+    } else if (selectedPrice === "over1000") {
+      matchesPrice = price >= 1000;
+    }
+
+    if (matchesSearch && matchesCounty && matchesCategory && matchesCondition && matchesPrice) {
+      matchResults.push(item);
+    }
+  }
+
+  matchResults.sort((a, b) => {
+    const aFeatured = a.data.featured === true ? 1 : 0;
+    const bFeatured = b.data.featured === true ? 1 : 0;
+    return bFeatured - aFeatured;
+  });
+
+  renderProducts(matchResults);
+}
 
 async function loadProducts() {
   productGrid.innerHTML = "<p>Loading products...</p>";
@@ -303,55 +467,18 @@ async function loadProducts() {
     const productsQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
     const snapshot = await getDocs(productsQuery);
 
-    productGrid.innerHTML = "";
-
-    if (snapshot.empty) {
-      productGrid.innerHTML = "<p>No products posted yet. Be the first to sell on LoyaltyMarket.</p>";
-      return;
-    }
-
-    const allProducts = snapshot.docs.map((docSnap) => ({
+    allProducts = snapshot.docs.map((docSnap) => ({
       id: docSnap.id,
       data: docSnap.data()
     }));
 
-    allProducts.sort((a, b) => {
-      const aFeatured = a.data.featured === true ? 1 : 0;
-      const bFeatured = b.data.featured === true ? 1 : 0;
-      return bFeatured - aFeatured;
-    });
+    if (allProducts.length === 0) {
+      productGrid.innerHTML = "<p>No products posted yet. Be the first to sell on LoyaltyMarket.</p>";
+      resultsCountLine.textContent = "";
+      return;
+    }
 
-    allProducts.forEach(({ id, data: product }) => {
-      const image = product.imageUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
-      const title = product.title || "Untitled Product";
-      const priceUsd = product.priceUsd || "0";
-      const priceLrd = product.priceLrd || "0";
-      const city = product.city || "Liberia";
-      const county = product.county || "";
-      const condition = product.condition || "Used";
-      const isFeatured = product.featured === true;
-
-      const productCard = document.createElement("a");
-      productCard.href = "product-detail.html?id=" + id;
-      productCard.style.textDecoration = "none";
-      productCard.style.color = "inherit";
-
-      productCard.innerHTML = `
-        <div class="product-card">
-          <span class="badge ${isFeatured ? "badge-featured" : ""}">${isFeatured ? "⭐ Featured" : "New"}</span>
-          <button class="heart" type="button">♡</button>
-          <div class="product-image">
-            <img src="${image}" alt="${title}">
-          </div>
-          <h3>${title}</h3>
-          <p class="price">US$${priceUsd} | L$${priceLrd}</p>
-          <p class="location">📍 ${city}, ${county}</p>
-          <p class="condition">${condition}</p>
-        </div>
-      `;
-
-      productGrid.appendChild(productCard);
-    });
+    await applyFiltersAndSearch();
 
   } catch (error) {
     productGrid.innerHTML = "<p>Could not load products. Please try again.</p>";
@@ -410,6 +537,22 @@ onAuthStateChanged(auth, (user) => {
     dashboardBtn.style.display = "none";
     messagesBtn.style.display = "none";
   }
+});
+
+let searchDebounceTimer = null;
+searchInput.addEventListener("input", () => {
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(applyFiltersAndSearch, 250);
+});
+
+countyFilter.addEventListener("change", applyFiltersAndSearch);
+categoryFilter.addEventListener("change", applyFiltersAndSearch);
+priceFilter.addEventListener("change", applyFiltersAndSearch);
+conditionFilter.addEventListener("change", applyFiltersAndSearch);
+
+applyFiltersBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+  applyFiltersAndSearch();
 });
 
 loadProducts();
