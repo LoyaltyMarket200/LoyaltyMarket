@@ -210,6 +210,7 @@ const backToProductLink = document.getElementById("backToProductLink");
 let currentUser = null;
 let chatId = null;
 let otherUserId = null;
+let productTitle = "your listing";
 
 function safeText(value) {
   return String(value || "")
@@ -294,6 +295,8 @@ async function loadProductInfo() {
     chatProductPrice.textContent = `US$${product.priceUsd || "0"} | L$${product.priceLrd || "0"}`;
     chatProductLink.href = "product-detail.html?id=" + encodeURIComponent(productId);
 
+    productTitle = product.title || "your listing";
+
   } catch (error) {
     chatProductTitle.textContent = "Could not load listing";
   }
@@ -334,6 +337,21 @@ async function sendMessage() {
       read: false,
       createdAt: serverTimestamp()
     });
+
+    try {
+      await addDoc(collection(db, "notifications"), {
+        userId: otherUserId,
+        type: "message",
+        title: "New message about " + productTitle,
+        body: text.length > 60 ? text.slice(0, 60) + "..." : text,
+        link: "messages.html",
+        read: false,
+        createdAt: serverTimestamp()
+      });
+    } catch (notifyError) {
+      // Notification is a nice-to-have; don't block the message
+      // from sending if the notification write fails.
+    }
 
     messageInput.value = "";
 
