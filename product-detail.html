@@ -385,6 +385,21 @@ async function buyNow() {
       createdAt: serverTimestamp()
     });
 
+    try {
+      await addDoc(collection(db, "notifications"), {
+        userId: loadedSellerId,
+        type: "order",
+        title: "New order for " + loadedProductTitle,
+        body: "A buyer placed an order for US$" + loadedPriceUsd,
+        link: "my-sales.html",
+        read: false,
+        createdAt: serverTimestamp()
+      });
+    } catch (notifyError) {
+      // Notification is a nice-to-have; don't block the order
+      // from being placed if the notification write fails.
+    }
+
     alert("Order placed! You can track it in My Orders.");
     window.location.href = "orders.html";
 
