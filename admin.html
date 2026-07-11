@@ -2,592 +2,1326 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>Admin Dashboard - LoyaltyMarket</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
+
   <meta name="theme-color" content="#1e3a8a">
+
   <style>
-    .admin-wrap {
-      max-width: 1100px;
-      margin: 30px auto;
-      padding: 0 20px;
+    * {
+      box-sizing: border-box;
     }
+
+    body {
+      margin: 0;
+      background: #f8fafc;
+      color: #111827;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .admin-wrap {
+      width: min(1150px, calc(100% - 30px));
+      margin: 30px auto;
+    }
+
     .admin-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      justify-content: space-between;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 15px;
+      margin-bottom: 22px;
     }
+
     .admin-header h1 {
-      color: #111;
       margin: 0;
+      color: #111827;
+      font-size: clamp(24px, 4vw, 34px);
     }
-    .admin-tabs {
-      display: flex;
-      gap: 10px;
+
+    .admin-header p {
+      margin: 6px 0 0;
+      color: #64748b;
+    }
+
+    .status-box {
+      width: min(600px, calc(100% - 30px));
+      margin: 70px auto;
+      padding: 30px;
+      border: 1px solid #dbe2ea;
+      border-radius: 14px;
+      background: #ffffff;
+      text-align: center;
+      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    .status-box h2 {
+      margin-top: 0;
+    }
+
+    .status-box a {
+      color: #2563eb;
+      font-weight: 700;
+    }
+
+    .error-box {
+      display: none;
       margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .admin-tab-btn {
-      background: #f3f4f6;
-      border: 1px solid #d1d5db;
-      color: #333;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    .admin-tab-btn.active {
-      background: #2563eb;
-      color: #fff;
-      border-color: #2563eb;
+      padding: 14px 16px;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      background: #fef2f2;
+      color: #b91c1c;
+      line-height: 1.5;
     }
 
     .admin-section-tabs {
       display: flex;
       gap: 8px;
-      margin-bottom: 24px;
-      border-bottom: 1px solid #e5e7eb;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+      border-bottom: 1px solid #e2e8f0;
     }
+
     .admin-section-tab-btn {
-      background: none;
-      border: none;
       padding: 12px 18px;
-      font-weight: 600;
-      font-size: 14px;
-      color: #64748b;
-      cursor: pointer;
+      border: none;
       border-bottom: 3px solid transparent;
-      margin-bottom: -1px;
+      background: transparent;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
     }
+
     .admin-section-tab-btn.active {
       color: #2563eb;
       border-bottom-color: #2563eb;
     }
 
+    .admin-tab-btn {
+      padding: 9px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .admin-tab-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .admin-tab-btn.active {
+      border-color: #2563eb;
+      background: #2563eb;
+      color: white;
+    }
+
+    .refresh-btn {
+      padding: 10px 17px;
+      border: none;
+      border-radius: 9px;
+      background: #2563eb;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .refresh-btn:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 16px;
       margin-bottom: 30px;
     }
+
     .stat-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
-    .stat-card-label {
-      font-size: 13px;
-      color: #64748b;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      margin-bottom: 8px;
-    }
-    .stat-card-value {
-      font-size: 32px;
-      font-weight: 800;
-      color: #111;
-    }
-    .stat-card-icon {
-      font-size: 20px;
-      margin-bottom: 10px;
-      display: block;
+      padding: 21px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
     }
 
-    .report-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    .stat-card-icon {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 24px;
     }
+
+    .stat-card-label {
+      margin-bottom: 8px;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .stat-card-value {
+      color: #111827;
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .admin-tabs {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .user-search-box {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .user-search-box:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .user-card,
+    .report-card {
+      margin-bottom: 15px;
+      padding: 18px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 2px 7px rgba(15, 23, 42, 0.05);
+    }
+
+    .user-top,
     .report-top {
       display: flex;
-      justify-content: space-between;
       align-items: flex-start;
+      justify-content: space-between;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
+
+    .user-name,
     .report-title {
-      font-weight: 700;
-      font-size: 16px;
-      color: #111;
+      color: #111827;
+      font-size: 17px;
+      font-weight: 800;
     }
+
+    .user-email {
+      margin-top: 4px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .user-meta,
+    .report-meta {
+      margin-top: 12px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .report-details {
+      margin-top: 13px;
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .user-badge,
+    .report-status,
     .report-reason {
       display: inline-block;
-      background: #fee2e2;
-      color: #b91c1c;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-left: 8px;
-    }
-    .report-status {
-      display: inline-block;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
+      margin: 3px 0 3px 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
       text-transform: capitalize;
     }
+
+    .badge-verified {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-unverified {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .badge-suspended {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .report-reason {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
     .status-pending {
       background: #fef3c7;
       color: #92400e;
     }
+
     .status-reviewed {
       background: #dbeafe;
       color: #1e40af;
     }
+
     .status-dismissed {
-      background: #e5e7eb;
-      color: #374151;
+      background: #e2e8f0;
+      color: #475569;
     }
-    .report-details {
-      margin-top: 10px;
-      color: #444;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-    .report-meta {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #888;
-    }
+
+    .user-actions,
     .report-actions {
-      margin-top: 14px;
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      margin-top: 15px;
     }
-    .report-actions button, .report-actions a {
-      padding: 8px 14px;
+
+    .user-actions button,
+    .report-actions button,
+    .report-actions a {
+      display: inline-block;
+      padding: 8px 13px;
+      border: none;
       border-radius: 8px;
       font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
+      font-weight: 700;
       text-decoration: none;
-      display: inline-block;
+      cursor: pointer;
     }
-    .btn-view {
-      background: #f3f4f6;
-      color: #333;
-      border: 1px solid #d1d5db !important;
+
+    .btn-view,
+    .btn-reset {
+      border: 1px solid #cbd5e1 !important;
+      background: #f8fafc;
+      color: #334155;
     }
-    .btn-reviewed {
+
+    .btn-reviewed,
+    .btn-verify {
       background: #2563eb;
-      color: #fff;
+      color: white;
     }
-    .btn-dismiss {
-      background: #6b7280;
-      color: #fff;
+
+    .btn-dismiss,
+    .btn-unverify {
+      background: #64748b;
+      color: white;
     }
+
+    .btn-suspend {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-unsuspend {
+      background: #059669;
+      color: white;
+    }
+
     .empty-state {
+      padding: 45px 15px;
+      color: #64748b;
       text-align: center;
-      color: #888;
-      padding: 40px 0;
     }
-    .not-authorized {
-      max-width: 500px;
-      margin: 80px auto;
-      text-align: center;
-      color: #444;
+
+    .loading-text {
+      animation: pulse 1.1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from {
+        opacity: 0.45;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .search-row {
+        grid-template-columns: 1fr;
+      }
+
+      .navbar {
+        gap: 10px;
+      }
+
+      .admin-wrap {
+        width: min(100% - 18px, 1150px);
+        margin-top: 20px;
+      }
+
+      .admin-section-tab-btn {
+        flex: 1;
+        min-width: 130px;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<header class="navbar">
-  <div class="logo">
-    <h2>🇱🇷 LoyaltyMarket</h2>
+  <header class="navbar">
+    <a href="index.html" class="logo" style="text-decoration:none;">
+      <h2>🇱🇷 LoyaltyMarket</h2>
+    </a>
+
+    <input
+      type="text"
+      class="search-box"
+      placeholder="Search Products, Cars, Phones..."
+    >
+
+    <div class="nav-buttons">
+      <a href="index.html" class="login-btn">Home</a>
+      <a href="dashboard.html" class="register-btn">Dashboard</a>
+    </div>
+  </header>
+
+  <div id="loadingBox" class="status-box">
+    <h2>Loading Admin Dashboard</h2>
+    <p class="loading-text">Checking your administrator access...</p>
   </div>
 
-  <input
-    type="text"
-    class="search-box"
-    placeholder="Search Products, Cars, Phones..."
+  <div
+    id="notAuthorizedBox"
+    class="status-box"
+    style="display:none;"
   >
-
-  <div class="nav-buttons">
-    <a href="index.html" class="login-btn">Home</a>
-    <a href="dashboard.html" class="register-btn">Dashboard</a>
-  </div>
-</header>
-
-<div id="notAuthorizedBox" class="not-authorized" style="display:none;">
-  <h2>Access Restricted</h2>
-  <p>This page is only available to LoyaltyMarket administrators.</p>
-  <a href="index.html">Go back home</a>
-</div>
-
-<main class="admin-wrap" id="adminMain" style="display:none;">
-
-  <div class="admin-header">
-    <h1>⚙️ Admin Control Center</h1>
-    <button id="refreshBtn" class="admin-tab-btn">🔄 Refresh</button>
+    <h2>Access Restricted</h2>
+    <p>
+      This page is only available to authorized LoyaltyMarket administrators.
+    </p>
+    <a href="index.html">Return To Homepage</a>
   </div>
 
-  <div class="admin-section-tabs">
-    <button class="admin-section-tab-btn active" data-section="overview">Dashboard Overview</button>
-    <button class="admin-section-tab-btn" data-section="reports">Reported Listings</button>
-  </div>
+  <main
+    class="admin-wrap"
+    id="adminMain"
+    style="display:none;"
+  >
+    <div id="adminErrorBox" class="error-box"></div>
 
-  <section id="overviewSection">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <span class="stat-card-icon">👥</span>
-        <div class="stat-card-label">Total Users</div>
-        <div class="stat-card-value" id="statTotalUsers">—</div>
+    <div class="admin-header">
+      <div>
+        <h1>⚙️ Admin Control Center</h1>
+        <p id="adminWelcomeText">Manage LoyaltyMarket users and reports.</p>
       </div>
 
-      <div class="stat-card">
-        <span class="stat-card-icon">🆕</span>
-        <div class="stat-card-label">New Users Today</div>
-        <div class="stat-card-value" id="statNewUsersToday">—</div>
-      </div>
-
-      <div class="stat-card">
-        <span class="stat-card-icon">⭐</span>
-        <div class="stat-card-label">Verified Sellers</div>
-        <div class="stat-card-value" id="statVerifiedSellers">—</div>
-      </div>
-
-      <div class="stat-card">
-        <span class="stat-card-icon">📋</span>
-        <div class="stat-card-label">Total Listings</div>
-        <div class="stat-card-value" id="statTotalListings">—</div>
-      </div>
-
-      <div class="stat-card">
-        <span class="stat-card-icon">📈</span>
-        <div class="stat-card-label">New Listings Today</div>
-        <div class="stat-card-value" id="statNewListingsToday">—</div>
-      </div>
-
-      <div class="stat-card">
-        <span class="stat-card-icon">🚩</span>
-        <div class="stat-card-label">Total Reports</div>
-        <div class="stat-card-value" id="statTotalReports">—</div>
-      </div>
-
-      <div class="stat-card">
-        <span class="stat-card-icon">⏳</span>
-        <div class="stat-card-label">Pending Reports</div>
-        <div class="stat-card-value" id="statPendingReports">—</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="reportsSection" style="display:none;">
-    <div class="admin-tabs">
-      <button class="admin-tab-btn active" data-filter="all">All</button>
-      <button class="admin-tab-btn" data-filter="pending">Pending</button>
-      <button class="admin-tab-btn" data-filter="reviewed">Reviewed</button>
-      <button class="admin-tab-btn" data-filter="dismissed">Dismissed</button>
+      <button id="refreshBtn" class="refresh-btn">
+        🔄 Refresh Data
+      </button>
     </div>
 
-    <div id="reportsContainer">
-      <p class="empty-state">Loading reports...</p>
+    <div class="admin-section-tabs">
+      <button
+        class="admin-section-tab-btn active"
+        data-section="overview"
+      >
+        Dashboard Overview
+      </button>
+
+      <button
+        class="admin-section-tab-btn"
+        data-section="users"
+      >
+        User Management
+      </button>
+
+      <button
+        class="admin-section-tab-btn"
+        data-section="reports"
+      >
+        Reported Listings
+      </button>
     </div>
-  </section>
 
-</main>
-
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
-
-<script type="module">
-import { db, auth } from "./firebase.js";
-
-import {
-  collection,
-  query,
-  orderBy,
-  where,
-  getDocs,
-  getCountFromServer,
-  doc,
-  updateDoc,
-  Timestamp
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-import {
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-// Only these emails can access the admin dashboard.
-const ADMIN_EMAILS = ["princeteah200@gmail.com"];
-
-const notAuthorizedBox = document.getElementById("notAuthorizedBox");
-const adminMain = document.getElementById("adminMain");
-const reportsContainer = document.getElementById("reportsContainer");
-const refreshBtn = document.getElementById("refreshBtn");
-const tabButtons = document.querySelectorAll(".admin-tab-btn[data-filter]");
-const sectionTabButtons = document.querySelectorAll(".admin-section-tab-btn");
-const overviewSection = document.getElementById("overviewSection");
-const reportsSection = document.getElementById("reportsSection");
-
-let allReports = [];
-let currentFilter = "all";
-let currentSection = "overview";
-
-function safeText(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function formatDate(timestamp) {
-  if (!timestamp || !timestamp.toDate) {
-    return "Unknown date";
-  }
-  return timestamp.toDate().toLocaleString();
-}
-
-function getStartOfToday() {
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
-  return Timestamp.fromDate(now);
-}
-
-async function loadOverviewStats() {
-  const startOfToday = getStartOfToday();
-
-  try {
-    const totalUsersSnap = await getCountFromServer(collection(db, "users"));
-    document.getElementById("statTotalUsers").textContent = totalUsersSnap.data().count;
-  } catch (error) {
-    document.getElementById("statTotalUsers").textContent = "—";
-  }
-
-  try {
-    const newUsersQuery = query(
-      collection(db, "users"),
-      where("createdAt", ">=", startOfToday)
-    );
-    const newUsersSnap = await getCountFromServer(newUsersQuery);
-    document.getElementById("statNewUsersToday").textContent = newUsersSnap.data().count;
-  } catch (error) {
-    document.getElementById("statNewUsersToday").textContent = "—";
-  }
-
-  try {
-    const verifiedQuery = query(
-      collection(db, "users"),
-      where("verified", "==", true)
-    );
-    const verifiedSnap = await getCountFromServer(verifiedQuery);
-    document.getElementById("statVerifiedSellers").textContent = verifiedSnap.data().count;
-  } catch (error) {
-    document.getElementById("statVerifiedSellers").textContent = "—";
-  }
-
-  try {
-    const totalListingsSnap = await getCountFromServer(collection(db, "products"));
-    document.getElementById("statTotalListings").textContent = totalListingsSnap.data().count;
-  } catch (error) {
-    document.getElementById("statTotalListings").textContent = "—";
-  }
-
-  try {
-    const newListingsQuery = query(
-      collection(db, "products"),
-      where("createdAt", ">=", startOfToday)
-    );
-    const newListingsSnap = await getCountFromServer(newListingsQuery);
-    document.getElementById("statNewListingsToday").textContent = newListingsSnap.data().count;
-  } catch (error) {
-    document.getElementById("statNewListingsToday").textContent = "—";
-  }
-
-  try {
-    const totalReportsSnap = await getCountFromServer(collection(db, "reports"));
-    document.getElementById("statTotalReports").textContent = totalReportsSnap.data().count;
-  } catch (error) {
-    document.getElementById("statTotalReports").textContent = "—";
-  }
-
-  try {
-    const pendingReportsQuery = query(
-      collection(db, "reports"),
-      where("status", "==", "pending")
-    );
-    const pendingReportsSnap = await getCountFromServer(pendingReportsQuery);
-    document.getElementById("statPendingReports").textContent = pendingReportsSnap.data().count;
-  } catch (error) {
-    document.getElementById("statPendingReports").textContent = "—";
-  }
-}
-
-function renderReports() {
-  const filtered =
-    currentFilter === "all"
-      ? allReports
-      : allReports.filter((r) => r.status === currentFilter);
-
-  if (filtered.length === 0) {
-    reportsContainer.innerHTML =
-      '<p class="empty-state">No reports found for this filter.</p>';
-    return;
-  }
-
-  reportsContainer.innerHTML = filtered
-    .map((r) => {
-      const statusClass = "status-" + (r.status || "pending");
-
-      return `
-        <div class="report-card" data-id="${r.id}">
-          <div class="report-top">
-            <div>
-              <span class="report-title">${safeText(r.productTitle || "Untitled Listing")}</span>
-              <span class="report-reason">${safeText(r.reason || "N/A")}</span>
-            </div>
-            <span class="report-status ${statusClass}">${safeText(r.status || "pending")}</span>
-          </div>
-
-          <div class="report-details">
-            ${r.details ? safeText(r.details) : "<em>No additional details provided.</em>"}
-          </div>
-
-          <div class="report-meta">
-            Reported: ${formatDate(r.createdAt)} &nbsp;|&nbsp;
-            Reporter ID: ${safeText(r.reporterId)} &nbsp;|&nbsp;
-            Seller ID: ${safeText(r.sellerId)}
-          </div>
-
-          <div class="report-actions">
-            <a class="btn-view" href="product-detail.html?id=${encodeURIComponent(r.productId)}" target="_blank">View Listing</a>
-            <button class="btn-reviewed" data-action="reviewed" data-id="${r.id}">Mark Reviewed</button>
-            <button class="btn-dismiss" data-action="dismissed" data-id="${r.id}">Dismiss</button>
-          </div>
+    <section id="overviewSection">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-card-icon">👥</span>
+          <div class="stat-card-label">Total Users</div>
+          <div class="stat-card-value" id="statTotalUsers">—</div>
         </div>
-      `;
-    })
-    .join("");
 
-  document.querySelectorAll(".report-actions button").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const reportId = btn.getAttribute("data-id");
-      const newStatus = btn.getAttribute("data-action");
-      await updateReportStatus(reportId, newStatus);
-    });
-  });
-}
+        <div class="stat-card">
+          <span class="stat-card-icon">🆕</span>
+          <div class="stat-card-label">New Users Today</div>
+          <div class="stat-card-value" id="statNewUsersToday">—</div>
+        </div>
 
-async function updateReportStatus(reportId, newStatus) {
-  try {
-    await updateDoc(doc(db, "reports", reportId), {
-      status: newStatus
-    });
+        <div class="stat-card">
+          <span class="stat-card-icon">⭐</span>
+          <div class="stat-card-label">Verified Sellers</div>
+          <div class="stat-card-value" id="statVerifiedSellers">—</div>
+        </div>
 
-    const report = allReports.find((r) => r.id === reportId);
-    if (report) {
-      report.status = newStatus;
-    }
+        <div class="stat-card">
+          <span class="stat-card-icon">📋</span>
+          <div class="stat-card-label">Total Listings</div>
+          <div class="stat-card-value" id="statTotalListings">—</div>
+        </div>
 
-    renderReports();
-  } catch (error) {
-    alert("Failed to update report: " + error.message);
-  }
-}
+        <div class="stat-card">
+          <span class="stat-card-icon">📈</span>
+          <div class="stat-card-label">New Listings Today</div>
+          <div class="stat-card-value" id="statNewListingsToday">—</div>
+        </div>
 
-async function loadReports() {
-  reportsContainer.innerHTML = '<p class="empty-state">Loading reports...</p>';
+        <div class="stat-card">
+          <span class="stat-card-icon">🚩</span>
+          <div class="stat-card-label">Total Reports</div>
+          <div class="stat-card-value" id="statTotalReports">—</div>
+        </div>
 
-  try {
-    const reportsQuery = query(
-      collection(db, "reports"),
-      orderBy("createdAt", "desc")
+        <div class="stat-card">
+          <span class="stat-card-icon">⏳</span>
+          <div class="stat-card-label">Pending Reports</div>
+          <div class="stat-card-value" id="statPendingReports">—</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="usersSection" style="display:none;">
+      <div class="search-row">
+        <input
+          type="text"
+          id="userSearchInput"
+          class="user-search-box"
+          placeholder="Search users by name or email..."
+        >
+
+        <button id="clearUserSearchBtn" class="admin-tab-btn">
+          Clear
+        </button>
+      </div>
+
+      <div id="usersContainer">
+        <p class="empty-state">Loading users...</p>
+      </div>
+    </section>
+
+    <section id="reportsSection" style="display:none;">
+      <div class="admin-tabs">
+        <button
+          class="admin-tab-btn active"
+          data-filter="all"
+        >
+          All
+        </button>
+
+        <button
+          class="admin-tab-btn"
+          data-filter="pending"
+        >
+          Pending
+        </button>
+
+        <button
+          class="admin-tab-btn"
+          data-filter="reviewed"
+        >
+          Reviewed
+        </button>
+
+        <button
+          class="admin-tab-btn"
+          data-filter="dismissed"
+        >
+          Dismissed
+        </button>
+      </div>
+
+      <div id="reportsContainer">
+        <p class="empty-state">Loading reports...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <h2>🇱🇷 LoyaltyMarket</h2>
+    <p>Buy And Sell Products Across Liberia.</p>
+    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+
+    import {
+      collection,
+      doc,
+      getDocs,
+      updateDoc,
+      Timestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    import {
+      onAuthStateChanged,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    console.log("LoyaltyMarket admin module started.");
+
+    const ADMIN_EMAILS = [
+      "princeteah200@gmail.com"
+    ];
+
+    const loadingBox = document.getElementById("loadingBox");
+    const notAuthorizedBox = document.getElementById("notAuthorizedBox");
+    const adminMain = document.getElementById("adminMain");
+    const adminErrorBox = document.getElementById("adminErrorBox");
+    const adminWelcomeText = document.getElementById("adminWelcomeText");
+
+    const overviewSection = document.getElementById("overviewSection");
+    const usersSection = document.getElementById("usersSection");
+    const reportsSection = document.getElementById("reportsSection");
+
+    const usersContainer = document.getElementById("usersContainer");
+    const reportsContainer = document.getElementById("reportsContainer");
+    const userSearchInput = document.getElementById("userSearchInput");
+    const clearUserSearchBtn = document.getElementById("clearUserSearchBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+
+    const sectionButtons = document.querySelectorAll(
+      ".admin-section-tab-btn"
     );
 
-    const snapshot = await getDocs(reportsQuery);
+    const reportFilterButtons = document.querySelectorAll(
+      ".admin-tab-btn[data-filter]"
+    );
 
-    allReports = snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...docSnap.data()
-    }));
+    let allUsers = [];
+    let allReports = [];
+    let currentReportFilter = "all";
 
-    renderReports();
-  } catch (error) {
-    reportsContainer.innerHTML =
-      '<p class="empty-state">Error loading reports: ' +
-      safeText(error.message) +
-      "</p>";
-  }
-}
+    window.addEventListener("error", (event) => {
+      console.error("Admin page error:", event.error || event.message);
+    });
 
-function loadCurrentSectionData() {
-  if (currentSection === "overview") {
-    loadOverviewStats();
-  } else {
-    loadReports();
-  }
-}
+    window.addEventListener("unhandledrejection", (event) => {
+      console.error("Admin promise error:", event.reason);
+    });
 
-sectionTabButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    sectionTabButtons.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    currentSection = btn.getAttribute("data-section");
-
-    if (currentSection === "overview") {
-      overviewSection.style.display = "block";
-      reportsSection.style.display = "none";
-      loadOverviewStats();
-    } else {
-      overviewSection.style.display = "none";
-      reportsSection.style.display = "block";
-      loadReports();
+    function safeText(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
-  });
-});
 
-tabButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    tabButtons.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentFilter = btn.getAttribute("data-filter");
-    renderReports();
-  });
-});
+    function showError(message) {
+      adminErrorBox.textContent = message;
+      adminErrorBox.style.display = "block";
+    }
 
-refreshBtn.addEventListener("click", loadCurrentSectionData);
+    function clearError() {
+      adminErrorBox.textContent = "";
+      adminErrorBox.style.display = "none";
+    }
 
-onAuthStateChanged(auth, (user) => {
-  if (user && ADMIN_EMAILS.includes(user.email)) {
-    notAuthorizedBox.style.display = "none";
-    adminMain.style.display = "block";
-    loadOverviewStats();
-  } else {
-    notAuthorizedBox.style.display = "block";
-    adminMain.style.display = "none";
-  }
-});
-</script>
+    function formatDate(timestamp) {
+      if (!timestamp) {
+        return "Unknown date";
+      }
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
-</script>
+      try {
+        if (typeof timestamp.toDate === "function") {
+          return timestamp.toDate().toLocaleString();
+        }
+
+        const date = new Date(timestamp);
+
+        if (Number.isNaN(date.getTime())) {
+          return "Unknown date";
+        }
+
+        return date.toLocaleString();
+      } catch (error) {
+        return "Unknown date";
+      }
+    }
+
+    function timestampToMilliseconds(timestamp) {
+      if (!timestamp) {
+        return 0;
+      }
+
+      try {
+        if (typeof timestamp.toMillis === "function") {
+          return timestamp.toMillis();
+        }
+
+        if (typeof timestamp.toDate === "function") {
+          return timestamp.toDate().getTime();
+        }
+
+        const date = new Date(timestamp);
+        return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+      } catch (error) {
+        return 0;
+      }
+    }
+
+    function wasCreatedToday(timestamp) {
+      const milliseconds = timestampToMilliseconds(timestamp);
+
+      if (!milliseconds) {
+        return false;
+      }
+
+      const createdDate = new Date(milliseconds);
+      const today = new Date();
+
+      return (
+        createdDate.getFullYear() === today.getFullYear() &&
+        createdDate.getMonth() === today.getMonth() &&
+        createdDate.getDate() === today.getDate()
+      );
+    }
+
+    function showSection(sectionName) {
+      overviewSection.style.display =
+        sectionName === "overview" ? "block" : "none";
+
+      usersSection.style.display =
+        sectionName === "users" ? "block" : "none";
+
+      reportsSection.style.display =
+        sectionName === "reports" ? "block" : "none";
+
+      sectionButtons.forEach((button) => {
+        button.classList.toggle(
+          "active",
+          button.dataset.section === sectionName
+        );
+      });
+    }
+
+    sectionButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        showSection(button.dataset.section);
+      });
+    });
+
+    function updateStatistics(products) {
+      const verifiedUsers = allUsers.filter(
+        (user) => user.verified === true
+      );
+
+      const newUsersToday = allUsers.filter(
+        (user) => wasCreatedToday(user.createdAt)
+      );
+
+      const newListingsToday = products.filter(
+        (product) => wasCreatedToday(product.createdAt)
+      );
+
+      const pendingReports = allReports.filter(
+        (report) => (report.status || "pending") === "pending"
+      );
+
+      document.getElementById("statTotalUsers").textContent =
+        allUsers.length;
+
+      document.getElementById("statNewUsersToday").textContent =
+        newUsersToday.length;
+
+      document.getElementById("statVerifiedSellers").textContent =
+        verifiedUsers.length;
+
+      document.getElementById("statTotalListings").textContent =
+        products.length;
+
+      document.getElementById("statNewListingsToday").textContent =
+        newListingsToday.length;
+
+      document.getElementById("statTotalReports").textContent =
+        allReports.length;
+
+      document.getElementById("statPendingReports").textContent =
+        pendingReports.length;
+    }
+
+    async function loadAllData() {
+      clearError();
+      refreshBtn.disabled = true;
+      refreshBtn.textContent = "Refreshing...";
+
+      try {
+        const [
+          usersSnapshot,
+          productsSnapshot,
+          reportsSnapshot
+        ] = await Promise.all([
+          getDocs(collection(db, "users")),
+          getDocs(collection(db, "products")),
+          getDocs(collection(db, "reports"))
+        ]);
+
+        allUsers = usersSnapshot.docs.map((documentSnapshot) => ({
+          id: documentSnapshot.id,
+          ...documentSnapshot.data()
+        }));
+
+        const products = productsSnapshot.docs.map(
+          (documentSnapshot) => ({
+            id: documentSnapshot.id,
+            ...documentSnapshot.data()
+          })
+        );
+
+        allReports = reportsSnapshot.docs.map(
+          (documentSnapshot) => ({
+            id: documentSnapshot.id,
+            status: "pending",
+            ...documentSnapshot.data()
+          })
+        );
+
+        allUsers.sort(
+          (firstUser, secondUser) =>
+            timestampToMilliseconds(secondUser.createdAt) -
+            timestampToMilliseconds(firstUser.createdAt)
+        );
+
+        allReports.sort(
+          (firstReport, secondReport) =>
+            timestampToMilliseconds(secondReport.createdAt) -
+            timestampToMilliseconds(firstReport.createdAt)
+        );
+
+        updateStatistics(products);
+        renderUsers();
+        renderReports();
+      } catch (error) {
+        console.error("Could not load admin data:", error);
+
+        showError(
+          "The admin dashboard opened, but some Firebase data could not load. " +
+          error.message
+        );
+
+        usersContainer.innerHTML =
+          '<p class="empty-state">Unable to load users.</p>';
+
+        reportsContainer.innerHTML =
+          '<p class="empty-state">Unable to load reports.</p>';
+      } finally {
+        refreshBtn.disabled = false;
+        refreshBtn.textContent = "🔄 Refresh Data";
+      }
+    }
+
+    function renderUsers() {
+      const searchText = userSearchInput.value
+        .trim()
+        .toLowerCase();
+
+      const filteredUsers = allUsers.filter((user) => {
+        const name = String(user.name || "").toLowerCase();
+        const email = String(user.email || "").toLowerCase();
+
+        return (
+          searchText === "" ||
+          name.includes(searchText) ||
+          email.includes(searchText)
+        );
+      });
+
+      if (filteredUsers.length === 0) {
+        usersContainer.innerHTML =
+          '<p class="empty-state">No matching users were found.</p>';
+
+        return;
+      }
+
+      usersContainer.innerHTML = filteredUsers
+        .map((user) => {
+          const isVerified = user.verified === true;
+          const isSuspended = user.suspended === true;
+
+          return `
+            <article class="user-card">
+              <div class="user-top">
+                <div>
+                  <div class="user-name">
+                    ${safeText(user.name || "Unnamed User")}
+
+                    <span class="user-badge ${
+                      isVerified
+                        ? "badge-verified"
+                        : "badge-unverified"
+                    }">
+                      ${isVerified ? "Verified" : "Unverified"}
+                    </span>
+
+                    ${
+                      isSuspended
+                        ? '<span class="user-badge badge-suspended">Suspended</span>'
+                        : ""
+                    }
+                  </div>
+
+                  <div class="user-email">
+                    ${safeText(user.email || "No email available")}
+                  </div>
+                </div>
+              </div>
+
+              <div class="user-meta">
+                Joined: ${formatDate(user.createdAt)}
+                <br>
+                User ID: ${safeText(user.id)}
+              </div>
+
+              <div class="user-actions">
+                <button
+                  class="${
+                    isVerified
+                      ? "btn-unverify"
+                      : "btn-verify"
+                  }"
+                  data-user-id="${safeText(user.id)}"
+                  data-user-action="${
+                    isVerified
+                      ? "unverify"
+                      : "verify"
+                  }"
+                >
+                  ${
+                    isVerified
+                      ? "Remove Verification"
+                      : "Verify Seller"
+                  }
+                </button>
+
+                <button
+                  class="${
+                    isSuspended
+                      ? "btn-unsuspend"
+                      : "btn-suspend"
+                  }"
+                  data-user-id="${safeText(user.id)}"
+                  data-user-action="${
+                    isSuspended
+                      ? "unsuspend"
+                      : "suspend"
+                  }"
+                >
+                  ${
+                    isSuspended
+                      ? "Unsuspend User"
+                      : "Suspend User"
+                  }
+                </button>
+
+                <button
+                  class="btn-reset"
+                  data-user-id="${safeText(user.id)}"
+                  data-user-action="reset"
+                >
+                  Send Password Reset
+                </button>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+
+      document.querySelectorAll("[data-user-action]")
+        .forEach((button) => {
+          button.addEventListener("click", async () => {
+            const userId = button.dataset.userId;
+            const action = button.dataset.userAction;
+
+            await handleUserAction(userId, action);
+          });
+        });
+    }
+
+    async function handleUserAction(userId, action) {
+      const selectedUser = allUsers.find(
+        (user) => user.id === userId
+      );
+
+      if (!selectedUser) {
+        alert("The selected user could not be found.");
+        return;
+      }
+
+      try {
+        if (action === "verify") {
+          await updateUser(userId, {
+            verified: true
+          });
+        }
+
+        if (action === "unverify") {
+          await updateUser(userId, {
+            verified: false
+          });
+        }
+
+        if (action === "suspend") {
+          const confirmed = confirm(
+            `Suspend ${selectedUser.name || selectedUser.email || "this user"}?`
+          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          await updateUser(userId, {
+            suspended: true
+          });
+        }
+
+        if (action === "unsuspend") {
+          await updateUser(userId, {
+            suspended: false
+          });
+        }
+
+        if (action === "reset") {
+          await sendPasswordReset(selectedUser.email);
+        }
+      } catch (error) {
+        console.error("User action failed:", error);
+        alert("The action failed: " + error.message);
+      }
+    }
+
+    async function updateUser(userId, changes) {
+      await updateDoc(
+        doc(db, "users", userId),
+        changes
+      );
+
+      const localUser = allUsers.find(
+        (user) => user.id === userId
+      );
+
+      if (localUser) {
+        Object.assign(localUser, changes);
+      }
+
+      renderUsers();
+
+      const productsSnapshot = await getDocs(
+        collection(db, "products")
+      );
+
+      const products = productsSnapshot.docs.map(
+        (documentSnapshot) => ({
+          id: documentSnapshot.id,
+          ...documentSnapshot.data()
+        })
+      );
+
+      updateStatistics(products);
+    }
+
+    async function sendPasswordReset(email) {
+      if (!email) {
+        alert("This user does not have an email address.");
+        return;
+      }
+
+      const confirmed = confirm(
+        `Send a password-reset email to ${email}?`
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      await sendPasswordResetEmail(auth, email);
+
+      alert(
+        "Password-reset email sent successfully to " +
+        email
+      );
+    }
+
+    userSearchInput.addEventListener(
+      "input",
+      renderUsers
+    );
+
+    clearUserSearchBtn.addEventListener("click", () => {
+      userSearchInput.value = "";
+      renderUsers();
+      userSearchInput.focus();
+    });
+
+    function renderReports() {
+      const filteredReports =
+        currentReportFilter === "all"
+          ? allReports
+          : allReports.filter(
+              (report) =>
+                (report.status || "pending") ===
+                currentReportFilter
+            );
+
+      if (filteredReports.length === 0) {
+        reportsContainer.innerHTML =
+          '<p class="empty-state">No reports were found for this filter.</p>';
+
+        return;
+      }
+
+      reportsContainer.innerHTML = filteredReports
+        .map((report) => {
+          const reportStatus =
+            report.status || "pending";
+
+          const statusClass =
+            "status-" + reportStatus;
+
+          const productLink = report.productId
+            ? `product-detail.html?id=${encodeURIComponent(
+                report.productId
+              )}`
+            : "index.html";
+
+          return `
+            <article class="report-card">
+              <div class="report-top">
+                <div>
+                  <span class="report-title">
+                    ${safeText(
+                      report.productTitle ||
+                      report.listingTitle ||
+                      "Untitled Listing"
+                    )}
+                  </span>
+
+                  <span class="report-reason">
+                    ${safeText(
+                      report.reason || "Unspecified"
+                    )}
+                  </span>
+                </div>
+
+                <span class="report-status ${statusClass}">
+                  ${safeText(reportStatus)}
+                </span>
+              </div>
+
+              <div class="report-details">
+                ${
+                  report.details
+                    ? safeText(report.details)
+                    : "<em>No additional details were provided.</em>"
+                }
+              </div>
+
+              <div class="report-meta">
+                Reported: ${formatDate(report.createdAt)}
+                <br>
+                Reporter ID: ${safeText(
+                  report.reporterId || "Unknown"
+                )}
+                <br>
+                Seller ID: ${safeText(
+                  report.sellerId || "Unknown"
+                )}
+              </div>
+
+              <div class="report-actions">
+                <a
+                  class="btn-view"
+                  href="${productLink}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Listing
+                </a>
+
+                <button
+                  class="btn-reviewed"
+                  data-report-id="${safeText(report.id)}"
+                  data-report-status="reviewed"
+                >
+                  Mark Reviewed
+                </button>
+
+                <button
+                  class="btn-dismiss"
+                  data-report-id="${safeText(report.id)}"
+                  data-report-status="dismissed"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+
+      document.querySelectorAll("[data-report-status]")
+        .forEach((button) => {
+          button.addEventListener("click", async () => {
+            await updateReportStatus(
+              button.dataset.reportId,
+              button.dataset.reportStatus
+            );
+          });
+        });
+    }
+
+    async function updateReportStatus(
+      reportId,
+      newStatus
+    ) {
+      try {
+        await updateDoc(
+          doc(db, "reports", reportId),
+          {
+            status: newStatus,
+            reviewedAt: Timestamp.now()
+          }
+        );
+
+        const localReport = allReports.find(
+          (report) => report.id === reportId
+        );
+
+        if (localReport) {
+          localReport.status = newStatus;
+          localReport.reviewedAt = Timestamp.now();
+        }
+
+        renderReports();
+
+        const productsSnapshot = await getDocs(
+          collection(db, "products")
+        );
+
+        const products = productsSnapshot.docs.map(
+          (documentSnapshot) => ({
+            id: documentSnapshot.id,
+            ...documentSnapshot.data()
+          })
+        );
+
+        updateStatistics(products);
+      } catch (error) {
+        console.error("Could not update report:", error);
+        alert(
+          "The report could not be updated: " +
+          error.message
+        );
+      }
+    }
+
+    reportFilterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        currentReportFilter = button.dataset.filter;
+
+        reportFilterButtons.forEach(
+          (filterButton) => {
+            filterButton.classList.toggle(
+              "active",
+              filterButton === button
+            );
+          }
+        );
+
+        renderReports();
+      });
+    });
+
+    refreshBtn.addEventListener(
+      "click",
+      loadAllData
+    );
+
+    onAuthStateChanged(auth, async (user) => {
+      console.log("Admin authentication checked:", user);
+
+      loadingBox.style.display = "none";
+
+      const userEmail = user?.email
+        ?.trim()
+        .toLowerCase();
+
+      const isAdministrator =
+        Boolean(userEmail) &&
+        ADMIN_EMAILS.includes(userEmail);
+
+      if (!isAdministrator) {
+        adminMain.style.display = "none";
+        notAuthorizedBox.style.display = "block";
+        return;
+      }
+
+      notAuthorizedBox.style.display = "none";
+      adminMain.style.display = "block";
+
+      adminWelcomeText.textContent =
+        `Logged in as ${user.email}`;
+
+      await loadAllData();
+    });
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("service-worker.js")
+          .then(() => {
+            console.log("Service worker registered.");
+          })
+          .catch((error) => {
+            console.error(
+              "Service worker registration failed:",
+              error
+            );
+          });
+      });
+    }
+  </script>
 
 </body>
 </html>
