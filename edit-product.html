@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Product - LoyaltyMarket</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
 </head>
 <body>
 
@@ -173,6 +175,14 @@ document.getElementById("editForm").addEventListener("submit", async (event) => 
     alert("Could not save changes: " + error.message);
   }
 });
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
 </script>
 
 </body>
