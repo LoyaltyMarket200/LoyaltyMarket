@@ -38,7 +38,8 @@
     }
     .feature-btn:disabled,
     .sold-btn:disabled,
-    .duplicate-btn:disabled {
+    .duplicate-btn:disabled,
+    .archive-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
@@ -75,9 +76,54 @@
       background: #2563eb;
       color: #fff;
     }
+    .archive-btn {
+      background: #fff;
+      border: 1px solid #7c3aed;
+      color: #7c3aed;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .archive-btn:hover {
+      background: #7c3aed;
+      color: #fff;
+    }
+    .archive-btn.is-archived {
+      background: #7c3aed;
+      color: #fff;
+    }
     .status-badge.sold {
       background: #e5e7eb;
       color: #374151;
+    }
+    .status-badge.archived {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+    .dashboard-listing-card.is-archived-card {
+      opacity: 0.7;
+    }
+    .archive-filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .archive-filter-btn {
+      background: #fff;
+      border: 1px solid #d1d5db;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #374151;
+    }
+    .archive-filter-btn.active {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
     }
     .nav-messages-link {
       position: relative;
@@ -157,6 +203,12 @@
     <h1>My Dashboard</h1>
     <p class="dashboard-subtitle">Manage your LoyaltyMarket account and listings.</p>
 
+    <div class="archive-filter-row">
+      <button class="archive-filter-btn active" data-filter="all">All</button>
+      <button class="archive-filter-btn" data-filter="active">Active</button>
+      <button class="archive-filter-btn" data-filter="archived">Archived</button>
+    </div>
+
     <div class="dashboard-listings" id="dashboardListings">
       <p>Loading your listings...</p>
     </div>
@@ -197,8 +249,11 @@ const verifiedBadge = document.getElementById("verifiedBadge");
 const memberSince = document.getElementById("memberSince");
 const logoutBtn = document.getElementById("logoutBtn");
 const dashboardListings = document.getElementById("dashboardListings");
+const archiveFilterButtons = document.querySelectorAll(".archive-filter-btn");
 
 let currentUser = null;
+let allMyProducts = [];
+let currentArchiveFilter = "all";
 
 function safeText(value) {
   return String(value || "")
@@ -241,6 +296,226 @@ async function loadUserProfile() {
   }
 }
 
+function renderListings() {
+  let productsToShow = allMyProducts;
+
+  if (currentArchiveFilter === "active") {
+    productsToShow = allMyProducts.filter((product) => product.status !== "archived");
+  } else if (currentArchiveFilter === "archived") {
+    productsToShow = allMyProducts.filter((product) => product.status === "archived");
+  }
+
+  if (productsToShow.length === 0) {
+    dashboardListings.innerHTML = currentArchiveFilter === "archived"
+      ? "<p>No archived listings.</p>"
+      : "<p>You haven't posted any products yet.</p>";
+    return;
+  }
+
+  dashboardListings.innerHTML = "";
+
+  productsToShow.forEach((product) => {
+    const productId = product.id;
+    const isFeatured = product.featured === true;
+    const isSold = product.status === "sold";
+    const isArchived = product.status === "archived";
+
+    const image =
+      product.imageUrl ||
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=200&fit=crop";
+
+    const detailUrl = "product-detail.html?id=" + encodeURIComponent(productId);
+
+    let statusLabel = "active";
+    let statusClass = "active";
+    if (isSold) {
+      statusLabel = "sold";
+      statusClass = "sold";
+    } else if (isArchived) {
+      statusLabel = "archived";
+      statusClass = "archived";
+    }
+
+    const card = document.createElement("div");
+    card.className = "dashboard-listing-card" + (isArchived ? " is-archived-card" : "");
+
+    card.innerHTML = `
+      <div class="dashboard-listing-image">
+        <a href="${detailUrl}">
+          <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
+        </a>
+      </div>
+
+      <div class="dashboard-listing-info">
+        <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">⭐ Featured</span>' : ""}</h4>
+        <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
+        <span class="status-badge ${statusClass}">${statusLabel}</span>
+      </div>
+
+      <div class="dashboard-listing-actions">
+        <button class="edit-btn" data-id="${productId}">Edit</button>
+        <button class="duplicate-btn" data-id="${productId}">📋 Duplicate</button>
+        <button class="delete-btn" data-id="${productId}">Delete</button>
+        <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}">
+          ${isFeatured ? "★ Unfeature" : "☆ Feature this listing"}
+        </button>
+        <button class="sold-btn ${isSold ? "is-sold" : ""}" data-id="${productId}" data-sold="${isSold}">
+          ${isSold ? "↺ Mark as Active" : "✔ Mark as Sold"}
+        </button>
+        <button class="archive-btn ${isArchived ? "is-archived" : ""}" data-id="${productId}" data-archived="${isArchived}">
+          ${isArchived ? "↺ Unarchive" : "🗄 Archive"}
+        </button>
+      </div>
+    `;
+
+    dashboardListings.appendChild(card);
+  });
+
+  attachListingButtonListeners();
+}
+
+function attachListingButtonListeners() {
+  document.querySelectorAll(".edit-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.getAttribute("data-id");
+      window.location.href = "edit-product.html?id=" + encodeURIComponent(productId);
+    });
+  });
+
+  document.querySelectorAll(".delete-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+      const confirmDelete = confirm("Are you sure you want to delete this listing? This cannot be undone.");
+
+      if (!confirmDelete) return;
+
+      try {
+        await deleteDoc(doc(db, "products", productId));
+        loadMyListings();
+      } catch (error) {
+        alert("Could not delete listing: " + error.message);
+      }
+    });
+  });
+
+  document.querySelectorAll(".feature-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+      const isCurrentlyFeatured = button.getAttribute("data-featured") === "true";
+      const newFeaturedValue = !isCurrentlyFeatured;
+
+      button.disabled = true;
+      button.textContent = "Updating...";
+
+      try {
+        await updateDoc(doc(db, "products", productId), {
+          featured: newFeaturedValue
+        });
+        loadMyListings();
+      } catch (error) {
+        alert("Could not update featured status: " + error.message);
+        button.disabled = false;
+      }
+    });
+  });
+
+  document.querySelectorAll(".sold-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+      const isCurrentlySold = button.getAttribute("data-sold") === "true";
+      const newStatus = isCurrentlySold ? "active" : "sold";
+
+      button.disabled = true;
+      button.textContent = "Updating...";
+
+      try {
+        await updateDoc(doc(db, "products", productId), {
+          status: newStatus
+        });
+        loadMyListings();
+      } catch (error) {
+        alert("Could not update listing status: " + error.message);
+        button.disabled = false;
+      }
+    });
+  });
+
+  document.querySelectorAll(".duplicate-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+
+      const confirmDuplicate = confirm("Create a copy of this listing? You'll be able to edit it before it's fully live.");
+      if (!confirmDuplicate) return;
+
+      button.disabled = true;
+      button.textContent = "Duplicating...";
+
+      try {
+        const originalRef = doc(db, "products", productId);
+        const originalSnap = await getDoc(originalRef);
+
+        if (!originalSnap.exists()) {
+          alert("Could not find the original listing.");
+          button.disabled = false;
+          button.textContent = "📋 Duplicate";
+          return;
+        }
+
+        const originalData = originalSnap.data();
+
+        const duplicateData = {
+          title: (originalData.title || "Untitled Product") + " (Copy)",
+          category: originalData.category || "",
+          priceUsd: originalData.priceUsd || "0",
+          priceLrd: originalData.priceLrd || "0",
+          condition: originalData.condition || "",
+          county: originalData.county || "",
+          city: originalData.city || "",
+          imageUrl: originalData.imageUrl || "",
+          images: originalData.images || [],
+          description: originalData.description || "",
+          phone: originalData.phone || "",
+          sellerId: currentUser.uid,
+          sellerEmail: currentUser.email,
+          status: "active",
+          featured: false,
+          createdAt: serverTimestamp()
+        };
+
+        const newDocRef = await addDoc(collection(db, "products"), duplicateData);
+
+        window.location.href = "edit-product.html?id=" + encodeURIComponent(newDocRef.id);
+
+      } catch (error) {
+        alert("Could not duplicate listing: " + error.message);
+        button.disabled = false;
+        button.textContent = "📋 Duplicate";
+      }
+    });
+  });
+
+  document.querySelectorAll(".archive-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+      const isCurrentlyArchived = button.getAttribute("data-archived") === "true";
+      const newStatus = isCurrentlyArchived ? "active" : "archived";
+
+      button.disabled = true;
+      button.textContent = isCurrentlyArchived ? "Unarchiving..." : "Archiving...";
+
+      try {
+        await updateDoc(doc(db, "products", productId), {
+          status: newStatus
+        });
+        loadMyListings();
+      } catch (error) {
+        alert("Could not update archive status: " + error.message);
+        button.disabled = false;
+      }
+    });
+  });
+}
+
 async function loadMyListings() {
   dashboardListings.innerHTML = "<p>Loading your listings...</p>";
 
@@ -252,182 +527,26 @@ async function loadMyListings() {
 
     const snapshot = await getDocs(myProductsQuery);
 
-    if (snapshot.empty) {
-      dashboardListings.innerHTML = `
-        <p>You haven't posted any products yet.</p>
-      `;
-      return;
-    }
-
-    dashboardListings.innerHTML = "";
-
+    allMyProducts = [];
     snapshot.forEach((productDoc) => {
-      const product = productDoc.data();
-      const productId = productDoc.id;
-      const isFeatured = product.featured === true;
-      const isSold = product.status === "sold";
-
-      const image =
-        product.imageUrl ||
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=200&fit=crop";
-
-      const detailUrl = "product-detail.html?id=" + encodeURIComponent(productId);
-
-      const card = document.createElement("div");
-      card.className = "dashboard-listing-card";
-
-      card.innerHTML = `
-        <div class="dashboard-listing-image">
-          <a href="${detailUrl}">
-            <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
-          </a>
-        </div>
-
-        <div class="dashboard-listing-info">
-          <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">⭐ Featured</span>' : ""}</h4>
-          <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
-          <span class="status-badge ${isSold ? "sold" : "active"}">${isSold ? "sold" : "active"}</span>
-        </div>
-
-        <div class="dashboard-listing-actions">
-          <button class="edit-btn" data-id="${productId}">Edit</button>
-          <button class="duplicate-btn" data-id="${productId}">📋 Duplicate</button>
-          <button class="delete-btn" data-id="${productId}">Delete</button>
-          <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}">
-            ${isFeatured ? "★ Unfeature" : "☆ Feature this listing"}
-          </button>
-          <button class="sold-btn ${isSold ? "is-sold" : ""}" data-id="${productId}" data-sold="${isSold}">
-            ${isSold ? "↺ Mark as Active" : "✔ Mark as Sold"}
-          </button>
-        </div>
-      `;
-
-      dashboardListings.appendChild(card);
+      allMyProducts.push({ id: productDoc.id, ...productDoc.data() });
     });
 
-    document.querySelectorAll(".edit-btn").forEach((button) => {
-      button.addEventListener("click", () => {
-        const productId = button.getAttribute("data-id");
-        window.location.href = "edit-product.html?id=" + encodeURIComponent(productId);
-      });
-    });
-
-    document.querySelectorAll(".delete-btn").forEach((button) => {
-      button.addEventListener("click", async () => {
-        const productId = button.getAttribute("data-id");
-        const confirmDelete = confirm("Are you sure you want to delete this listing? This cannot be undone.");
-
-        if (!confirmDelete) return;
-
-        try {
-          await deleteDoc(doc(db, "products", productId));
-          loadMyListings();
-        } catch (error) {
-          alert("Could not delete listing: " + error.message);
-        }
-      });
-    });
-
-    document.querySelectorAll(".feature-btn").forEach((button) => {
-      button.addEventListener("click", async () => {
-        const productId = button.getAttribute("data-id");
-        const isCurrentlyFeatured = button.getAttribute("data-featured") === "true";
-        const newFeaturedValue = !isCurrentlyFeatured;
-
-        button.disabled = true;
-        button.textContent = "Updating...";
-
-        try {
-          await updateDoc(doc(db, "products", productId), {
-            featured: newFeaturedValue
-          });
-          loadMyListings();
-        } catch (error) {
-          alert("Could not update featured status: " + error.message);
-          button.disabled = false;
-        }
-      });
-    });
-
-    document.querySelectorAll(".sold-btn").forEach((button) => {
-      button.addEventListener("click", async () => {
-        const productId = button.getAttribute("data-id");
-        const isCurrentlySold = button.getAttribute("data-sold") === "true";
-        const newStatus = isCurrentlySold ? "active" : "sold";
-
-        button.disabled = true;
-        button.textContent = "Updating...";
-
-        try {
-          await updateDoc(doc(db, "products", productId), {
-            status: newStatus
-          });
-          loadMyListings();
-        } catch (error) {
-          alert("Could not update listing status: " + error.message);
-          button.disabled = false;
-        }
-      });
-    });
-
-    document.querySelectorAll(".duplicate-btn").forEach((button) => {
-      button.addEventListener("click", async () => {
-        const productId = button.getAttribute("data-id");
-
-        const confirmDuplicate = confirm("Create a copy of this listing? You'll be able to edit it before it's fully live.");
-        if (!confirmDuplicate) return;
-
-        button.disabled = true;
-        button.textContent = "Duplicating...";
-
-        try {
-          const originalRef = doc(db, "products", productId);
-          const originalSnap = await getDoc(originalRef);
-
-          if (!originalSnap.exists()) {
-            alert("Could not find the original listing.");
-            button.disabled = false;
-            button.textContent = "📋 Duplicate";
-            return;
-          }
-
-          const originalData = originalSnap.data();
-
-          const duplicateData = {
-            title: (originalData.title || "Untitled Product") + " (Copy)",
-            category: originalData.category || "",
-            priceUsd: originalData.priceUsd || "0",
-            priceLrd: originalData.priceLrd || "0",
-            condition: originalData.condition || "",
-            county: originalData.county || "",
-            city: originalData.city || "",
-            imageUrl: originalData.imageUrl || "",
-            images: originalData.images || [],
-            description: originalData.description || "",
-            phone: originalData.phone || "",
-            sellerId: currentUser.uid,
-            sellerEmail: currentUser.email,
-            status: "active",
-            featured: false,
-            createdAt: serverTimestamp()
-          };
-
-          const newDocRef = await addDoc(collection(db, "products"), duplicateData);
-
-          window.location.href = "edit-product.html?id=" + encodeURIComponent(newDocRef.id);
-
-        } catch (error) {
-          alert("Could not duplicate listing: " + error.message);
-          button.disabled = false;
-          button.textContent = "📋 Duplicate";
-        }
-      });
-    });
+    renderListings();
 
   } catch (error) {
     dashboardListings.innerHTML = `<p>Could not load your listings: ${safeText(error.message)}</p>`;
   }
 }
+
+archiveFilterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    archiveFilterButtons.forEach((b) => b.classList.remove("active"));
+    button.classList.add("active");
+    currentArchiveFilter = button.getAttribute("data-filter");
+    renderListings();
+  });
+});
 
 function listenForUnreadMessages() {
   const unreadQuery = query(
