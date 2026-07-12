@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Property - LoyaltyMarket</title>
+  <title>Vehicles - LoyaltyMarket</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1e3a8a">
@@ -251,7 +251,9 @@ function applyFilters() {
   const selectedPrice = priceFilter.value;
   const selectedCondition = conditionFilter.value;
 
-  const filteredProducts = allProperty.filter((product) => {
+const filteredProducts = allProperty.filter((product) => {
+    if (product.status === "archived") return false;
+    if (product.status === "archived") return false;
     const title = String(product.title || "").toLowerCase();
     const description = String(product.description || "").toLowerCase();
     const county = String(product.county || "");
