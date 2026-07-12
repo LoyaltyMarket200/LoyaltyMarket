@@ -195,6 +195,18 @@ if (!productId) {
   window.location.href = "dashboard.html";
 }
 
+// Helper: return the first defined, non-empty value among several
+// possible field names. Used so old-format and new-format listings
+// both populate the form correctly.
+function firstDefined(...values) {
+  for (const value of values) {
+    if (value !== undefined && value !== null && value !== "") {
+      return value;
+    }
+  }
+  return "";
+}
+
 function updateImagePreviews() {
   imagePreviewRow.innerHTML = "";
 
@@ -246,14 +258,34 @@ async function loadProduct() {
 
     titleInput.value = product.title || "";
     categoryInput.value = product.category || "";
-    priceUsdInput.value = product.priceUsd || "";
-    priceLrdInput.value = product.priceLrd || "";
+
+    // Backward-compatible price fields: new listings use priceUsd/priceLrd,
+    // older listings used priceUSD/priceL$ (or priceLRD in some cases).
+    priceUsdInput.value = firstDefined(
+      product.priceUsd,
+      product.priceUSD
+    );
+
+    priceLrdInput.value = firstDefined(
+      product.priceLrd,
+      product.priceLRD,
+      product["priceL$"]
+    );
+
     conditionInput.value = product.condition || "";
     countyInput.value = product.county || "";
     cityInput.value = product.city || "";
     descriptionInput.value = product.description || "";
-    phoneInput.value = product.phone || "";
 
+    // Backward-compatible phone field: new listings use phone,
+    // older listings used phoneNumber.
+    phoneInput.value = firstDefined(
+      product.phone,
+      product.phoneNumber
+    );
+
+    // Backward-compatible images: new listings use images[],
+    // older listings used a single imageUrl string.
     const existingImages = product.images && product.images.length > 0
       ? product.images
       : (product.imageUrl ? [product.imageUrl] : []);
@@ -317,18 +349,35 @@ document.getElementById("editForm").addEventListener("submit", async (event) => 
     .map((input) => input.value.trim())
     .filter((url) => url !== "");
 
+  const priceUsdValue = priceUsdInput.value;
+  const priceLrdValue = priceLrdInput.value;
+  const phoneValue = phoneInput.value.trim();
+
+  // Save BOTH new-format and old-format field names on every update,
+  // so any older page or tool still reading the legacy field names
+  // keeps working, while new pages use the new field names.
   const updatedProduct = {
     title: titleInput.value.trim(),
     category: categoryInput.value,
-    priceUsd: priceUsdInput.value,
-    priceLrd: priceLrdInput.value,
+
+    priceUsd: priceUsdValue,
+    priceUSD: priceUsdValue,
+
+    priceLrd: priceLrdValue,
+    priceLRD: priceLrdValue,
+    "priceL$": priceLrdValue,
+
     condition: conditionInput.value,
     county: countyInput.value.trim(),
     city: cityInput.value.trim(),
+
     imageUrl: images[0] || "",
     images: images,
+
     description: descriptionInput.value.trim(),
-    phone: phoneInput.value.trim()
+
+    phone: phoneValue,
+    phoneNumber: phoneValue
   };
 
   saveBtn.disabled = true;
