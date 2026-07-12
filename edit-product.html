@@ -7,6 +7,64 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1e3a8a">
+  <style>
+    .image-preview-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    .image-preview-box {
+      width: 70px;
+      height: 70px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #d1d5db;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .image-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .image-preview-box.empty {
+      color: #9ca3af;
+      font-size: 11px;
+      text-align: center;
+    }
+    .field-error {
+      color: #dc2626;
+      font-size: 12px;
+      margin-top: -8px;
+      margin-bottom: 10px;
+      display: none;
+    }
+    .field-error.show {
+      display: block;
+    }
+    .save-btn-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .cancel-link {
+      color: #6b7280;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .cancel-link:hover {
+      text-decoration: underline;
+    }
+    .post-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
 
@@ -27,6 +85,7 @@
     <form class="sell-form" id="editForm">
       <label>Product Title</label>
       <input type="text" id="title" required>
+      <p class="field-error" id="titleError">Title cannot be empty.</p>
 
       <label>Category</label>
       <select id="category" required>
@@ -42,14 +101,15 @@
       <div class="form-row">
         <div class="form-col">
           <label>Price USD</label>
-          <input type="number" id="priceUsd" required>
+          <input type="number" id="priceUsd" min="0" required>
         </div>
 
         <div class="form-col">
           <label>Price L$</label>
-          <input type="number" id="priceLrd" required>
+          <input type="number" id="priceLrd" min="0" required>
         </div>
       </div>
+      <p class="field-error" id="priceError">Prices must be 0 or greater.</p>
 
       <label>Condition</label>
       <select id="condition" required>
@@ -71,8 +131,13 @@
         </div>
       </div>
 
-      <label>Product Image URL</label>
-      <input type="url" id="imageUrl">
+      <label>Product Images (up to 4 links)</label>
+      <input type="url" id="imageUrl1" placeholder="Main image link (required)" required>
+      <input type="url" id="imageUrl2" placeholder="Second image link (optional)" style="margin-top:10px;">
+      <input type="url" id="imageUrl3" placeholder="Third image link (optional)" style="margin-top:10px;">
+      <input type="url" id="imageUrl4" placeholder="Fourth image link (optional)" style="margin-top:10px;">
+
+      <div class="image-preview-row" id="imagePreviewRow"></div>
 
       <label>Description</label>
       <textarea id="description" rows="5" required></textarea>
@@ -80,7 +145,10 @@
       <label>Phone Number</label>
       <input type="tel" id="phone" required>
 
-      <button type="submit" class="post-btn">Save Changes</button>
+      <div class="save-btn-row">
+        <button type="submit" class="post-btn" id="saveBtn">Save Changes</button>
+        <a href="dashboard.html" class="cancel-link">Cancel</a>
+      </div>
     </form>
   </div>
 </section>
@@ -99,12 +167,63 @@ import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
+const titleInput = document.getElementById("title");
+const categoryInput = document.getElementById("category");
+const priceUsdInput = document.getElementById("priceUsd");
+const priceLrdInput = document.getElementById("priceLrd");
+const conditionInput = document.getElementById("condition");
+const countyInput = document.getElementById("county");
+const cityInput = document.getElementById("city");
+const descriptionInput = document.getElementById("description");
+const phoneInput = document.getElementById("phone");
+const saveBtn = document.getElementById("saveBtn");
+const titleError = document.getElementById("titleError");
+const priceError = document.getElementById("priceError");
+const imagePreviewRow = document.getElementById("imagePreviewRow");
+
+const imageInputs = [
+  document.getElementById("imageUrl1"),
+  document.getElementById("imageUrl2"),
+  document.getElementById("imageUrl3"),
+  document.getElementById("imageUrl4")
+];
+
 let currentUser = null;
 
 if (!productId) {
   alert("No product selected to edit.");
   window.location.href = "dashboard.html";
 }
+
+function updateImagePreviews() {
+  imagePreviewRow.innerHTML = "";
+
+  imageInputs.forEach((input) => {
+    const url = input.value.trim();
+    const box = document.createElement("div");
+    box.className = "image-preview-box";
+
+    if (url) {
+      const img = document.createElement("img");
+      img.src = url;
+      img.alt = "Preview";
+      img.onerror = () => {
+        box.classList.add("empty");
+        box.textContent = "Broken link";
+      };
+      box.appendChild(img);
+    } else {
+      box.classList.add("empty");
+      box.textContent = "No image";
+    }
+
+    imagePreviewRow.appendChild(box);
+  });
+}
+
+imageInputs.forEach((input) => {
+  input.addEventListener("input", updateImagePreviews);
+});
 
 async function loadProduct() {
   try {
@@ -125,16 +244,25 @@ async function loadProduct() {
       return;
     }
 
-    document.getElementById("title").value = product.title || "";
-    document.getElementById("category").value = product.category || "";
-    document.getElementById("priceUsd").value = product.priceUsd || "";
-    document.getElementById("priceLrd").value = product.priceLrd || "";
-    document.getElementById("condition").value = product.condition || "";
-    document.getElementById("county").value = product.county || "";
-    document.getElementById("city").value = product.city || "";
-    document.getElementById("imageUrl").value = product.imageUrl || "";
-    document.getElementById("description").value = product.description || "";
-    document.getElementById("phone").value = product.phone || "";
+    titleInput.value = product.title || "";
+    categoryInput.value = product.category || "";
+    priceUsdInput.value = product.priceUsd || "";
+    priceLrdInput.value = product.priceLrd || "";
+    conditionInput.value = product.condition || "";
+    countyInput.value = product.county || "";
+    cityInput.value = product.city || "";
+    descriptionInput.value = product.description || "";
+    phoneInput.value = product.phone || "";
+
+    const existingImages = product.images && product.images.length > 0
+      ? product.images
+      : (product.imageUrl ? [product.imageUrl] : []);
+
+    imageInputs.forEach((input, index) => {
+      input.value = existingImages[index] || "";
+    });
+
+    updateImagePreviews();
 
   } catch (error) {
     alert("Could not load product: " + error.message);
@@ -151,21 +279,60 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+function validateForm() {
+  let isValid = true;
+
+  titleError.classList.remove("show");
+  priceError.classList.remove("show");
+
+  if (!titleInput.value.trim()) {
+    titleError.classList.add("show");
+    isValid = false;
+  }
+
+  const priceUsd = Number(priceUsdInput.value);
+  const priceLrd = Number(priceLrdInput.value);
+
+  if (isNaN(priceUsd) || priceUsd < 0 || isNaN(priceLrd) || priceLrd < 0) {
+    priceError.classList.add("show");
+    isValid = false;
+  }
+
+  if (!imageInputs[0].value.trim()) {
+    isValid = false;
+    alert("Please provide at least one product image link.");
+  }
+
+  return isValid;
+}
+
 document.getElementById("editForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
+  if (!validateForm()) {
+    return;
+  }
+
+  const images = imageInputs
+    .map((input) => input.value.trim())
+    .filter((url) => url !== "");
+
   const updatedProduct = {
-    title: document.getElementById("title").value.trim(),
-    category: document.getElementById("category").value,
-    priceUsd: document.getElementById("priceUsd").value,
-    priceLrd: document.getElementById("priceLrd").value,
-    condition: document.getElementById("condition").value,
-    county: document.getElementById("county").value.trim(),
-    city: document.getElementById("city").value.trim(),
-    imageUrl: document.getElementById("imageUrl").value.trim(),
-    description: document.getElementById("description").value.trim(),
-    phone: document.getElementById("phone").value.trim()
+    title: titleInput.value.trim(),
+    category: categoryInput.value,
+    priceUsd: priceUsdInput.value,
+    priceLrd: priceLrdInput.value,
+    condition: conditionInput.value,
+    county: countyInput.value.trim(),
+    city: cityInput.value.trim(),
+    imageUrl: images[0] || "",
+    images: images,
+    description: descriptionInput.value.trim(),
+    phone: phoneInput.value.trim()
   };
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Saving...";
 
   try {
     await updateDoc(doc(db, "products", productId), updatedProduct);
@@ -173,6 +340,8 @@ document.getElementById("editForm").addEventListener("submit", async (event) => 
     window.location.href = "dashboard.html";
   } catch (error) {
     alert("Could not save changes: " + error.message);
+    saveBtn.disabled = false;
+    saveBtn.textContent = "Save Changes";
   }
 });
 </script>
