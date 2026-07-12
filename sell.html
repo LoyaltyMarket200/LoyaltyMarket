@@ -83,7 +83,7 @@
       <label>Phone Number</label>
       <input type="tel" id="phone" placeholder="0881471694" required>
 
-      <button type="submit" class="post-btn">Post Product</button>
+      <button type="submit" class="post-btn" id="postBtn">Post Product</button>
     </form>
   </div>
 </section>
@@ -97,7 +97,15 @@
 <script type="module">
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  where,
+  getDocs,
+  Timestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 let currentUser = null;
 
@@ -111,6 +119,102 @@ onAuthStateChanged(auth, (user) => {
 });
 
 const sellForm = document.getElementById("sellForm");
+const postBtn = document.getElementById("postBtn");
+
+// ================= RULE-BASED SCAM DETECTION =================
+// No external AI API is used here. Instead, listings are checked
+// against a set of simple, free rules. If any rule trips, the
+// listing is saved with status "pending_review" instead of
+// "active", along with the specific reasons, so an admin can
+// review it in the Admin Dashboard before it goes live.
+
+// Rough "this price is suspiciously low for this category" floors,
+// in US dollars. These are intentionally conservative — the goal
+// is to catch obvious too-good-to-be-true listings, not to reject
+// normal cheap items.
+const CATEGORY_PRICE_FLOORS = {
+  Phones: 15,
+  Electronics: 10,
+  Vehicles: 300,
+  Property: 500,
+  Fashion: 1,
+  Jobs: 0
+};
+
+// Keywords/phrases commonly used in scam or off-platform-payment
+// listings. Checked against the title and description, case
+// insensitive.
+const SUSPICIOUS_KEYWORDS = [
+  "wire transfer",
+  "western union",
+  "send deposit",
+  "send a deposit",
+  "pay deposit first",
+  "urgent sale",
+  "no returns",
+  "no refunds",
+  "cash only no meet",
+  "moneygram",
+  "gift card"
+];
+
+function checkPriceTooLow(category, priceUsd) {
+  const floor = CATEGORY_PRICE_FLOORS[category];
+  if (floor === undefined) return false;
+  const price = Number(priceUsd);
+  if (!Number.isFinite(price)) return false;
+  return price > 0 && price < floor;
+}
+
+function checkSuspiciousKeywords(title, description) {
+  const combinedText = `${title} ${description}`.toLowerCase();
+  return SUSPICIOUS_KEYWORDS.some((keyword) => combinedText.includes(keyword));
+}
+
+function checkMissingImage(images) {
+  return images.length === 0;
+}
+
+async function checkTooManyRecentListings(sellerId) {
+  try {
+    const oneHourAgo = Timestamp.fromMillis(Date.now() - 60 * 60 * 1000);
+    const recentQuery = query(
+      collection(db, "products"),
+      where("sellerId", "==", sellerId),
+      where("createdAt", ">=", oneHourAgo)
+    );
+    const snapshot = await getDocs(recentQuery);
+    return snapshot.size >= 3;
+  } catch (error) {
+    // If this check fails for any reason (e.g. missing index),
+    // don't block the listing over it — just skip this rule.
+    console.error("Could not check recent listing count:", error);
+    return false;
+  }
+}
+
+async function runScamChecks({ title, description, category, priceUsd, images, sellerId }) {
+  const reasons = [];
+
+  if (checkPriceTooLow(category, priceUsd)) {
+    reasons.push("Price is unusually low for this category.");
+  }
+
+  if (checkSuspiciousKeywords(title, description)) {
+    reasons.push("Listing text contains language commonly used in scams.");
+  }
+
+  if (checkMissingImage(images)) {
+    reasons.push("No product image was provided.");
+  }
+
+  if (await checkTooManyRecentListings(sellerId)) {
+    reasons.push("Seller has posted several listings within the last hour.");
+  }
+
+  return reasons;
+}
+// ================= END SCAM DETECTION =================
 
 sellForm.addEventListener("submit", async function(event) {
   event.preventDefault();
@@ -127,30 +231,63 @@ sellForm.addEventListener("submit", async function(event) {
     document.getElementById("imageUrl4").value.trim()
   ].filter((url) => url !== "");
 
+  const title = document.getElementById("title").value.trim();
+  const category = document.getElementById("category").value;
+  const priceUsd = document.getElementById("priceUsd").value;
+  const priceLrd = document.getElementById("priceLrd").value;
+  const description = document.getElementById("description").value.trim();
+
+  postBtn.disabled = true;
+  postBtn.textContent = "Checking listing...";
+
+  const flagReasons = await runScamChecks({
+    title,
+    description,
+    category,
+    priceUsd,
+    images,
+    sellerId: currentUser.uid
+  });
+
+  const isFlagged = flagReasons.length > 0;
+
   const product = {
-    title: document.getElementById("title").value.trim(),
-    category: document.getElementById("category").value,
-    priceUsd: document.getElementById("priceUsd").value,
-    priceLrd: document.getElementById("priceLrd").value,
+    title: title,
+    category: category,
+    priceUsd: priceUsd,
+    priceLrd: priceLrd,
     condition: document.getElementById("condition").value,
     county: document.getElementById("county").value.trim(),
     city: document.getElementById("city").value.trim(),
     imageUrl: images[0] || "",
     images: images,
-    description: document.getElementById("description").value.trim(),
+    description: description,
     phone: document.getElementById("phone").value.trim(),
     sellerId: currentUser.uid,
     sellerEmail: currentUser.email,
-    status: "active",
+    status: isFlagged ? "pending_review" : "active",
+    flagged: isFlagged,
+    flagReasons: flagReasons,
     createdAt: serverTimestamp()
   };
 
+  postBtn.textContent = "Posting...";
+
   try {
     await addDoc(collection(db, "products"), product);
-    alert("Product posted successfully!");
+
+    if (isFlagged) {
+      alert("Your listing was submitted, but it needs a quick admin review before it goes live. This usually happens for things like unusually low prices or missing photos. You'll see it in your dashboard once approved.");
+    } else {
+      alert("Product posted successfully!");
+    }
+
     window.location.href = "dashboard.html";
   } catch (error) {
     alert(error.message);
+  } finally {
+    postBtn.disabled = false;
+    postBtn.textContent = "Post Product";
   }
 });
 </script>
