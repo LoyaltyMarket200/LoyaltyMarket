@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LoyaltyMarket - Liberia's Marketplace</title>
+  <title>Electronics - LoyaltyMarket</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1e3a8a">
@@ -34,102 +34,6 @@
     .unread-badge.has-unread {
       display: flex;
     }
-
-    .browse-layout {
-      display: flex;
-      gap: 24px;
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px;
-      align-items: flex-start;
-    }
-
-    .category-sidebar {
-      width: 240px;
-      flex-shrink: 0;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .category-sidebar h3 {
-      margin: 0;
-      padding: 16px 18px;
-      font-size: 15px;
-      color: #111;
-      background: #f8fafc;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .category-sidebar-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .category-sidebar-list li {
-      border-bottom: 1px solid #f1f5f9;
-    }
-
-    .category-sidebar-list li:last-child {
-      border-bottom: none;
-    }
-
-    .category-sidebar-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 18px;
-      text-decoration: none;
-      color: #333;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .category-sidebar-link:hover {
-      background: #f8fafc;
-      color: #2563eb;
-    }
-
-    .category-sidebar-icon {
-      margin-right: 8px;
-    }
-
-    .category-sidebar-count {
-      background: #f1f5f9;
-      color: #64748b;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 2px 9px;
-      border-radius: 999px;
-      min-width: 22px;
-      text-align: center;
-    }
-
-    .browse-main {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .browse-main h2 {
-      margin-top: 0;
-    }
-
-    .results-count-line {
-      color: #64748b;
-      font-size: 14px;
-      margin: -8px 0 16px 0;
-    }
-
-    @media (max-width: 800px) {
-      .browse-layout {
-        flex-direction: column;
-      }
-      .category-sidebar {
-        width: 100%;
-      }
-    }
   </style>
 </head>
 <body>
@@ -139,182 +43,111 @@
     <h2>🇱🇷 LoyaltyMarket</h2>
   </div>
 
-  <input type="text" class="search-box" id="searchInput" placeholder="Search Products, Cars, Phones...">
+  <input
+    type="text"
+    class="search-box"
+    id="searchInput"
+    placeholder="Search Electronics..."
+  >
 
   <div class="nav-buttons">
-    <a href="login.html" id="loginBtn" class="login-btn">Login</a>
-    <a href="register.html" id="registerBtn" class="register-btn">Register</a>
-    <a href="dashboard.html" id="dashboardBtn" class="register-btn" style="display:none;">Dashboard</a>
-    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link" style="display:none;">
+    <a href="index.html" class="login-btn">Home</a>
+    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link">
       My Messages
       <span id="unreadBadge" class="unread-badge">0</span>
     </a>
+    <a href="dashboard.html" class="register-btn">Dashboard</a>
     <a href="sell.html" class="sell-btn">Sell Product</a>
   </div>
 </header>
 
-<section class="hero">
-  <h4>🇱🇷 Liberia's Marketplace</h4>
-  <h1>Buy & Sell Anything In Liberia</h1>
-  <p>Find Phones, Vehicles, Property, Fashion, Electronics, Jobs And Much More.</p>
-
-  <div class="hero-buttons">
-    <a href="#products" class="shop-btn">Start Shopping</a>
-    <a href="sell.html" class="sell-btn2">Sell Product</a>
-  </div>
+<section class="search-header">
+  <h2>💻 Electronics</h2>
+  <p class="results-count" id="resultsCount">Loading products...</p>
 </section>
 
-<section class="filters">
-  <select id="countyFilter">
-    <option value="">Select County</option>
-    <option value="Montserrado">Montserrado</option>
-    <option value="Margibi">Margibi</option>
-    <option value="Grand Bassa">Grand Bassa</option>
-    <option value="Nimba">Nimba</option>
-    <option value="Bong">Bong</option>
-  </select>
+<section class="search-layout">
 
-  <select id="categoryFilter">
-    <option value="">Select Category</option>
-    <option value="Phones">Phones</option>
-    <option value="Electronics">Electronics</option>
-    <option value="Vehicles">Vehicles</option>
-    <option value="Property">Property</option>
-    <option value="Fashion">Fashion</option>
-    <option value="Jobs">Jobs</option>
-  </select>
+  <aside class="search-filters">
+    <h3>Filter Results</h3>
 
-  <select id="priceFilter">
-    <option value="">Price Range</option>
-    <option value="100">Under US$100</option>
-    <option value="500">Under US$500</option>
-    <option value="1000">Under US$1,000</option>
-    <option value="over1000">Over US$1,000</option>
-  </select>
+    <label for="countyFilter">County</label>
+    <select id="countyFilter">
+      <option value="">All Counties</option>
+      <option value="Montserrado">Montserrado</option>
+      <option value="Margibi">Margibi</option>
+      <option value="Grand Bassa">Grand Bassa</option>
+      <option value="Nimba">Nimba</option>
+      <option value="Bong">Bong</option>
+    </select>
 
-  <select id="conditionFilter">
-    <option value="">Condition</option>
-    <option value="Brand New">Brand New</option>
-    <option value="Used">Used</option>
-    <option value="Foreign Used">Foreign Used</option>
-  </select>
+    <label for="priceFilter">Price Range</label>
+    <select id="priceFilter">
+      <option value="">Any Price</option>
+      <option value="100">Under US$100</option>
+      <option value="500">Under US$500</option>
+      <option value="1000">Under US$1,000</option>
+      <option value="over1000">Over US$1,000</option>
+    </select>
 
-  <button class="search-btn" id="applyFiltersBtn">Search</button>
-</section>
+    <label for="conditionFilter">Condition</label>
+    <select id="conditionFilter">
+      <option value="">Any Condition</option>
+      <option value="Brand New">Brand New</option>
+      <option value="Used">Used</option>
+      <option value="Foreign Used">Foreign Used</option>
+    </select>
 
-<div class="browse-layout" id="products">
+    <button class="apply-filters-btn" id="applyFiltersBtn">
+      Apply Filters
+    </button>
 
-  <aside class="category-sidebar">
-    <h3>Browse Categories</h3>
-    <ul class="category-sidebar-list">
-      <li>
-        <a href="category-phones.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">📱</span>Phones</span>
-          <span class="category-sidebar-count" data-category="Phones">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-electronics.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">💻</span>Electronics</span>
-          <span class="category-sidebar-count" data-category="Electronics">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-vehicles.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">🚗</span>Vehicles</span>
-          <span class="category-sidebar-count" data-category="Vehicles">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-property.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">🏠</span>Property</span>
-          <span class="category-sidebar-count" data-category="Property">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-fashion.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">👕</span>Fashion</span>
-          <span class="category-sidebar-count" data-category="Fashion">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-jobs.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">💼</span>Jobs</span>
-          <span class="category-sidebar-count" data-category="Jobs">0</span>
-        </a>
-      </li>
-    </ul>
+    <button
+      class="apply-filters-btn"
+      id="clearFiltersBtn"
+      style="margin-top:10px; background:#64748b;"
+    >
+      Clear Filters
+    </button>
   </aside>
 
-  <main class="browse-main">
-    <h2>Latest Products</h2>
-    <p class="results-count-line" id="resultsCountLine"></p>
-    <div class="product-grid" id="productGrid">
-      <p>Loading products...</p>
-    </div>
+  <main class="search-results" id="electronicsGrid">
+    <p>Loading Electronics products...</p>
   </main>
 
-</div>
-
-<section class="why-choose">
-  <h2>Why Choose LoyaltyMarket?</h2>
-  <div class="why-grid">
-    <div class="why-card">
-      <h3>Built For Liberia</h3>
-      <p>A marketplace designed for buyers and sellers across Liberia.</p>
-    </div>
-
-    <div class="why-card">
-      <h3>USD & L$ Prices</h3>
-      <p>We show prices in both US Dollars and Liberian Dollars.</p>
-    </div>
-
-    <div class="why-card">
-      <h3>Trusted Sellers</h3>
-      <p>We support verified sellers, ratings, and safer transactions.</p>
-    </div>
-  </div>
 </section>
 
 <footer class="footer">
   <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy and sell products, cars, phones, and more. Discover Products Across Liberia.</p>
+  <p>Buy And Sell Products Across Liberia.</p>
   <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
 </footer>
 
 <script type="module">
 import { db, auth } from "./firebase.js";
+
 import {
   collection,
   getDocs,
-  doc,
-  getDoc,
   query,
-  orderBy,
   where,
-  onSnapshot,
-  getCountFromServer
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-const productGrid = document.getElementById("productGrid");
-const resultsCountLine = document.getElementById("resultsCountLine");
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
-const dashboardBtn = document.getElementById("dashboardBtn");
-const messagesBtn = document.getElementById("messagesBtn");
-const unreadBadge = document.getElementById("unreadBadge");
-const categoryCountEls = document.querySelectorAll(".category-sidebar-count");
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
+const electronicsGrid = document.getElementById("electronicsGrid");
+const resultsCount = document.getElementById("resultsCount");
 const searchInput = document.getElementById("searchInput");
 const countyFilter = document.getElementById("countyFilter");
-const categoryFilter = document.getElementById("categoryFilter");
 const priceFilter = document.getElementById("priceFilter");
 const conditionFilter = document.getElementById("conditionFilter");
 const applyFiltersBtn = document.getElementById("applyFiltersBtn");
+const clearFiltersBtn = document.getElementById("clearFiltersBtn");
 
-let allProducts = [];
-const sellerNameCache = {};
+let allElectronics = [];
 
 function safeText(value) {
   return String(value || "")
@@ -325,187 +158,218 @@ function safeText(value) {
     .replaceAll("'", "&#039;");
 }
 
-async function getSellerName(sellerId) {
-  if (!sellerId) {
-    return "";
-  }
+function displayProducts(products) {
+  electronicsGrid.innerHTML = "";
 
-  if (sellerNameCache[sellerId] !== undefined) {
-    return sellerNameCache[sellerId];
-  }
+  const numberOfProducts = products.length;
 
-  try {
-    const sellerDoc = await getDoc(doc(db, "users", sellerId));
-    const name = sellerDoc.exists() ? (sellerDoc.data().name || "") : "";
-    sellerNameCache[sellerId] = name;
-    return name;
-  } catch (error) {
-    sellerNameCache[sellerId] = "";
-    return "";
-  }
-}
+  resultsCount.textContent =
+    numberOfProducts === 1
+      ? "Showing 1 product"
+      : `Showing ${numberOfProducts} products`;
 
-function renderProducts(products) {
-  productGrid.innerHTML = "";
-
-  const count = products.length;
-  resultsCountLine.textContent =
-    count === 1 ? "Showing 1 product" : `Showing ${count} products`;
-
-  if (count === 0) {
-    productGrid.innerHTML = `
+  if (numberOfProducts === 0) {
+    electronicsGrid.innerHTML = `
       <div style="background:white; padding:30px; border-radius:14px;">
-        <h3>No products found</h3>
+        <h3>No Electronics Found</h3>
         <p style="margin-top:8px; color:#64748b;">
-          Try adjusting your search or filters.
+          Try changing your filters or post the first Electronics product.
         </p>
+        <a
+          href="sell.html"
+          class="sell-btn"
+          style="display:inline-block; margin-top:18px; text-decoration:none;"
+        >
+          Sell Electronics
+        </a>
       </div>
     `;
     return;
   }
 
-  products.forEach(({ id, data: product }) => {
-    const image = product.imageUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
-    const title = product.title || "Untitled Product";
-    const priceUsd = product.priceUsd || "0";
-    const priceLrd = product.priceLrd || "0";
-    const city = product.city || "Liberia";
-    const county = product.county || "";
-    const condition = product.condition || "Used";
+  products.forEach((product) => {
+    const image =
+      product.imageUrl ||
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=350&fit=crop";
+
     const isFeatured = product.featured === true;
 
-    const productCard = document.createElement("a");
-    productCard.href = "product-detail.html?id=" + id;
-    productCard.style.textDecoration = "none";
-    productCard.style.color = "inherit";
+    const productLink = document.createElement("a");
 
-    productCard.innerHTML = `
+    productLink.href =
+      "product-detail.html?id=" + encodeURIComponent(product.id);
+
+    productLink.style.textDecoration = "none";
+    productLink.style.color = "inherit";
+
+    productLink.innerHTML = `
       <div class="product-card">
         <span class="badge ${isFeatured ? "badge-featured" : ""}">${isFeatured ? "⭐ Featured" : "New"}</span>
-        <button class="heart" type="button">♡</button>
+
+        <button
+          class="heart"
+          type="button"
+          aria-label="Save product"
+          onclick="event.preventDefault(); event.stopPropagation();"
+        >
+          ♡
+        </button>
+
         <div class="product-image">
-          <img src="${safeText(image)}" alt="${safeText(title)}">
+          <img
+            src="${safeText(image)}"
+            alt="${safeText(product.title || "Electronics product")}"
+          >
         </div>
-        <h3>${safeText(title)}</h3>
-        <p class="price">US$${safeText(priceUsd)} | L$${safeText(priceLrd)}</p>
-        <p class="location">📍 ${safeText(city)}, ${safeText(county)}</p>
-        <p class="condition">${safeText(condition)}</p>
+
+        <h3>${safeText(product.title || "Untitled Product")}</h3>
+
+        <p class="price">
+          US$${safeText(product.priceUsd || "0")}
+          |
+          L$${safeText(product.priceLrd || "0")}
+        </p>
+
+        <p class="location">
+          📍 ${safeText(product.city || "")},
+          ${safeText(product.county || "Liberia")}
+        </p>
+
+        <p class="condition">
+          ${safeText(product.condition || "Not listed")}
+        </p>
       </div>
     `;
 
-    productGrid.appendChild(productCard);
+    electronicsGrid.appendChild(productLink);
   });
 }
 
-async function applyFiltersAndSearch() {
+function applyFilters() {
   const searchTerm = searchInput.value.trim().toLowerCase();
   const selectedCounty = countyFilter.value;
-  const selectedCategory = categoryFilter.value;
   const selectedPrice = priceFilter.value;
   const selectedCondition = conditionFilter.value;
 
-  const matchResults = [];
-
-  for (const item of allProducts) {
-    const product = item.data;
+  const filteredProducts = allElectronics.filter((product) => {
+    if (product.status === "archived") return false;
 
     const title = String(product.title || "").toLowerCase();
     const description = String(product.description || "").toLowerCase();
     const county = String(product.county || "");
-    const city = String(product.city || "").toLowerCase();
-    const category = String(product.category || "");
     const condition = String(product.condition || "");
     const price = Number(product.priceUsd || 0);
 
-    let matchesSearch = true;
+    const matchesSearch =
+      !searchTerm ||
+      title.includes(searchTerm) ||
+      description.includes(searchTerm);
 
-    if (searchTerm) {
-      const sellerName = (await getSellerName(product.sellerId)).toLowerCase();
+    const matchesCounty =
+      !selectedCounty || county === selectedCounty;
 
-      matchesSearch =
-        title.includes(searchTerm) ||
-        description.includes(searchTerm) ||
-        county.toLowerCase().includes(searchTerm) ||
-        city.includes(searchTerm) ||
-        category.toLowerCase().includes(searchTerm) ||
-        sellerName.includes(searchTerm);
-    }
-
-    const matchesCounty = !selectedCounty || county === selectedCounty;
-    const matchesCategory = !selectedCategory || category === selectedCategory;
-    const matchesCondition = !selectedCondition || condition === selectedCondition;
+    const matchesCondition =
+      !selectedCondition || condition === selectedCondition;
 
     let matchesPrice = true;
+
     if (selectedPrice === "100") {
       matchesPrice = price < 100;
-    } else if (selectedPrice === "500") {
+    }
+
+    if (selectedPrice === "500") {
       matchesPrice = price < 500;
-    } else if (selectedPrice === "1000") {
+    }
+
+    if (selectedPrice === "1000") {
       matchesPrice = price < 1000;
-    } else if (selectedPrice === "over1000") {
+    }
+
+    if (selectedPrice === "over1000") {
       matchesPrice = price >= 1000;
     }
 
-    if (matchesSearch && matchesCounty && matchesCategory && matchesCondition && matchesPrice) {
-      matchResults.push(item);
-    }
-  }
-
-  matchResults.sort((a, b) => {
-    const aFeatured = a.data.featured === true ? 1 : 0;
-    const bFeatured = b.data.featured === true ? 1 : 0;
-    return bFeatured - aFeatured;
+    return (
+      matchesSearch &&
+      matchesCounty &&
+      matchesCondition &&
+      matchesPrice
+    );
   });
 
-  renderProducts(matchResults);
+  displayProducts(filteredProducts);
 }
 
-async function loadProducts() {
-  productGrid.innerHTML = "<p>Loading products...</p>";
+async function loadElectronics() {
+  electronicsGrid.innerHTML = "<p>Loading Electronics products...</p>";
 
   try {
-    const productsQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
-    const snapshot = await getDocs(productsQuery);
+    const electronicsQuery = query(
+      collection(db, "products"),
+      where("category", "==", "Electronics")
+    );
 
-    allProducts = snapshot.docs
-      .map((docSnap) => ({
-        id: docSnap.id,
-        data: docSnap.data()
-      }))
-      .filter((item) => item.data.archived !== true);
+    const snapshot = await getDocs(electronicsQuery);
 
-    if (allProducts.length === 0) {
-      productGrid.innerHTML = "<p>No products posted yet. Be the first to sell on LoyaltyMarket.</p>";
-      resultsCountLine.textContent = "";
-      return;
-    }
+    allElectronics = [];
 
-    await applyFiltersAndSearch();
+    snapshot.forEach((productDocument) => {
+      allElectronics.push({
+        id: productDocument.id,
+        ...productDocument.data()
+      });
+    });
+
+    allElectronics.sort((firstProduct, secondProduct) => {
+      const firstTime =
+        firstProduct.createdAt?.seconds || 0;
+
+      const secondTime =
+        secondProduct.createdAt?.seconds || 0;
+
+      return secondTime - firstTime;
+    });
+
+    allElectronics.sort((firstProduct, secondProduct) => {
+      const firstFeatured = firstProduct.featured === true ? 1 : 0;
+      const secondFeatured = secondProduct.featured === true ? 1 : 0;
+      return secondFeatured - firstFeatured;
+    });
+
+    displayProducts(allElectronics.filter((product) => product.status !== "archived"));
 
   } catch (error) {
-    productGrid.innerHTML = "<p>Could not load products. Please try again.</p>";
-    alert(error.message);
+    console.error(error);
+
+    resultsCount.textContent = "Unable to load products";
+
+    electronicsGrid.innerHTML = `
+      <div style="background:white; padding:30px; border-radius:14px;">
+        <h3>Could Not Load Electronics</h3>
+        <p style="margin-top:8px; color:#64748b;">
+          ${safeText(error.message)}
+        </p>
+      </div>
+    `;
   }
 }
 
-async function loadCategoryCounts() {
-  for (const countEl of categoryCountEls) {
-    const categoryName = countEl.getAttribute("data-category");
+applyFiltersBtn.addEventListener("click", applyFilters);
 
-    try {
-      const categoryQuery = query(
-        collection(db, "products"),
-        where("category", "==", categoryName)
-      );
+searchInput.addEventListener("input", applyFilters);
 
-      const countSnapshot = await getCountFromServer(categoryQuery);
-      countEl.textContent = countSnapshot.data().count;
+clearFiltersBtn.addEventListener("click", function() {
+  searchInput.value = "";
+  countyFilter.value = "";
+  priceFilter.value = "";
+  conditionFilter.value = "";
 
-    } catch (error) {
-      countEl.textContent = "0";
-    }
-  }
-}
+  displayProducts(allElectronics.filter((product) => product.status !== "archived"));
+});
+
+loadElectronics();
+
+const unreadBadge = document.getElementById("unreadBadge");
 
 function listenForUnreadMessages(userId) {
   const unreadQuery = query(
@@ -528,37 +392,9 @@ function listenForUnreadMessages(userId) {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    loginBtn.style.display = "none";
-    registerBtn.style.display = "none";
-    dashboardBtn.style.display = "inline-block";
-    messagesBtn.style.display = "inline-block";
     listenForUnreadMessages(user.uid);
-  } else {
-    loginBtn.style.display = "inline-block";
-    registerBtn.style.display = "inline-block";
-    dashboardBtn.style.display = "none";
-    messagesBtn.style.display = "none";
   }
 });
-
-let searchDebounceTimer = null;
-searchInput.addEventListener("input", () => {
-  clearTimeout(searchDebounceTimer);
-  searchDebounceTimer = setTimeout(applyFiltersAndSearch, 250);
-});
-
-countyFilter.addEventListener("change", applyFiltersAndSearch);
-categoryFilter.addEventListener("change", applyFiltersAndSearch);
-priceFilter.addEventListener("change", applyFiltersAndSearch);
-conditionFilter.addEventListener("change", applyFiltersAndSearch);
-
-applyFiltersBtn.addEventListener("click", (event) => {
-  event.preventDefault();
-  applyFiltersAndSearch();
-});
-
-loadProducts();
-loadCategoryCounts();
 </script>
 
 <script>
