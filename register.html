@@ -8,6 +8,82 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
+  <style>
+    .account-type-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .account-type-option {
+      display: block;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .account-type-option:hover {
+      border-color: #2563eb;
+    }
+    .account-type-option.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+    .account-type-option input {
+      display: none;
+    }
+    .account-type-icon {
+      font-size: 22px;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .account-type-label {
+      font-weight: 700;
+      font-size: 14px;
+      color: #111827;
+    }
+    .account-type-desc {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 3px;
+    }
+    #businessFieldsSection {
+      display: none;
+      margin-top: 6px;
+      padding-top: 14px;
+      border-top: 1px solid #e5e7eb;
+    }
+    #businessFieldsSection.open {
+      display: block;
+    }
+    .business-section-title {
+      font-weight: 700;
+      color: #111827;
+      font-size: 15px;
+      margin: 0 0 4px;
+    }
+    .business-section-subtitle {
+      color: #64748b;
+      font-size: 13px;
+      margin: 0 0 12px;
+    }
+    .field-error {
+      color: #dc2626;
+      font-size: 12px;
+      margin-top: -8px;
+      margin-bottom: 10px;
+      display: none;
+    }
+    .field-error.show {
+      display: block;
+    }
+    .auth-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
 
@@ -25,6 +101,24 @@
     <p class="auth-subtitle">Join LoyaltyMarket and start buying or selling in Liberia.</p>
 
     <form class="auth-form" id="registerForm">
+
+      <label>Account Type</label>
+      <div class="account-type-row">
+        <label class="account-type-option selected" id="personalOption">
+          <input type="radio" name="accountType" value="personal" checked>
+          <span class="account-type-icon">👤</span>
+          <span class="account-type-label">Personal</span>
+          <span class="account-type-desc">Buy and sell as an individual</span>
+        </label>
+
+        <label class="account-type-option" id="businessOption">
+          <input type="radio" name="accountType" value="business">
+          <span class="account-type-icon">🏢</span>
+          <span class="account-type-label">Business</span>
+          <span class="account-type-desc">Sell as a registered business</span>
+        </label>
+      </div>
+
       <label>Full Name</label>
       <input type="text" id="name" placeholder="Enter your full name" required>
 
@@ -37,12 +131,61 @@
       <label>Password</label>
       <input type="password" id="password" placeholder="Create a password" required>
 
+      <div id="businessFieldsSection">
+        <p class="business-section-title">🏢 Business Details</p>
+        <p class="business-section-subtitle">These details will appear on your public business storefront.</p>
+
+        <label>Business Name</label>
+        <input type="text" id="businessName" placeholder="Example: Monrovia Electronics Ltd">
+        <p class="field-error" id="businessNameError">Business name is required.</p>
+
+        <label>Business Category</label>
+        <select id="businessCategory">
+          <option value="">Select Category</option>
+          <option>Phones</option>
+          <option>Electronics</option>
+          <option>Vehicles</option>
+          <option>Property</option>
+          <option>Fashion</option>
+          <option>Jobs</option>
+          <option>Other</option>
+        </select>
+        <p class="field-error" id="businessCategoryError">Please select a business category.</p>
+
+        <label>Business Phone</label>
+        <input type="tel" id="businessPhone" placeholder="0881471694">
+        <p class="field-error" id="businessPhoneError">Business phone is required.</p>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label>County</label>
+            <input type="text" id="businessCounty" placeholder="Montserrado">
+          </div>
+
+          <div class="form-col">
+            <label>City</label>
+            <input type="text" id="businessCity" placeholder="Monrovia">
+          </div>
+        </div>
+        <p class="field-error" id="businessLocationError">County and city are required.</p>
+
+        <label>Business Description</label>
+        <textarea id="businessDescription" rows="4" placeholder="Tell buyers about your business..."></textarea>
+        <p class="field-error" id="businessDescriptionError">Please add a short business description.</p>
+
+        <label>Business Logo URL</label>
+        <input type="url" id="businessLogoUrl" placeholder="https://example.com/logo.png (optional for now)">
+
+        <label>Business Registration Number (optional)</label>
+        <input type="text" id="businessRegistrationNumber" placeholder="Optional">
+      </div>
+
       <label class="terms-check">
         <input type="checkbox" required>
         I agree to the LoyaltyMarket terms.
       </label>
 
-      <button type="submit" class="auth-btn">Create Account</button>
+      <button type="submit" class="auth-btn" id="registerBtn">Create Account</button>
     </form>
 
     <p class="auth-switch">
@@ -63,31 +206,155 @@
   import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
   const registerForm = document.getElementById("registerForm");
+  const registerBtn = document.getElementById("registerBtn");
+
+  const personalOption = document.getElementById("personalOption");
+  const businessOption = document.getElementById("businessOption");
+  const accountTypeInputs = document.querySelectorAll('input[name="accountType"]');
+  const businessFieldsSection = document.getElementById("businessFieldsSection");
+
+  const businessNameInput = document.getElementById("businessName");
+  const businessCategoryInput = document.getElementById("businessCategory");
+  const businessPhoneInput = document.getElementById("businessPhone");
+  const businessCountyInput = document.getElementById("businessCounty");
+  const businessCityInput = document.getElementById("businessCity");
+  const businessDescriptionInput = document.getElementById("businessDescription");
+  const businessLogoUrlInput = document.getElementById("businessLogoUrl");
+  const businessRegistrationNumberInput = document.getElementById("businessRegistrationNumber");
+
+  const businessNameError = document.getElementById("businessNameError");
+  const businessCategoryError = document.getElementById("businessCategoryError");
+  const businessPhoneError = document.getElementById("businessPhoneError");
+  const businessLocationError = document.getElementById("businessLocationError");
+  const businessDescriptionError = document.getElementById("businessDescriptionError");
+
+  function getSelectedAccountType() {
+    const checked = document.querySelector('input[name="accountType"]:checked');
+    return checked ? checked.value : "personal";
+  }
+
+  function updateAccountTypeUI() {
+    const selectedType = getSelectedAccountType();
+    const isBusiness = selectedType === "business";
+
+    personalOption.classList.toggle("selected", !isBusiness);
+    businessOption.classList.toggle("selected", isBusiness);
+    businessFieldsSection.classList.toggle("open", isBusiness);
+
+    // Only require business fields (via HTML validation) when the
+    // Business account type is actually selected, so Personal
+    // registration is completely unaffected.
+    businessNameInput.required = isBusiness;
+    businessCategoryInput.required = isBusiness;
+    businessPhoneInput.required = isBusiness;
+    businessCountyInput.required = isBusiness;
+    businessCityInput.required = isBusiness;
+    businessDescriptionInput.required = isBusiness;
+  }
+
+  accountTypeInputs.forEach((input) => {
+    input.addEventListener("change", updateAccountTypeUI);
+  });
+
+  updateAccountTypeUI();
+
+  function clearBusinessErrors() {
+    [
+      businessNameError,
+      businessCategoryError,
+      businessPhoneError,
+      businessLocationError,
+      businessDescriptionError
+    ].forEach((el) => el.classList.remove("show"));
+  }
+
+  function validateBusinessFields() {
+    clearBusinessErrors();
+    let isValid = true;
+
+    if (!businessNameInput.value.trim()) {
+      businessNameError.classList.add("show");
+      isValid = false;
+    }
+
+    if (!businessCategoryInput.value) {
+      businessCategoryError.classList.add("show");
+      isValid = false;
+    }
+
+    if (!businessPhoneInput.value.trim()) {
+      businessPhoneError.classList.add("show");
+      isValid = false;
+    }
+
+    if (!businessCountyInput.value.trim() || !businessCityInput.value.trim()) {
+      businessLocationError.classList.add("show");
+      isValid = false;
+    }
+
+    if (!businessDescriptionInput.value.trim()) {
+      businessDescriptionError.classList.add("show");
+      isValid = false;
+    }
+
+    return isValid;
+  }
 
   registerForm.addEventListener("submit", async function(event) {
     event.preventDefault();
+
+    const accountType = getSelectedAccountType();
+    const isBusiness = accountType === "business";
+
+    if (isBusiness && !validateBusinessFields()) {
+      return;
+    }
 
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value.trim();
 
+    registerBtn.disabled = true;
+    registerBtn.textContent = "Creating Account...";
+
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      await setDoc(doc(db, "users", user.uid), {
+      // Personal accounts keep exactly the same shape as before, so
+      // nothing about existing personal-account behavior changes.
+      const userDocument = {
+        accountType: "personal",
         name: name,
         email: email,
         phone: phone,
         verified: false,
         createdAt: serverTimestamp()
-      });
+      };
+
+      if (isBusiness) {
+        userDocument.accountType = "business";
+        userDocument.businessName = businessNameInput.value.trim();
+        userDocument.businessCategory = businessCategoryInput.value;
+        userDocument.businessPhone = businessPhoneInput.value.trim();
+        userDocument.businessCounty = businessCountyInput.value.trim();
+        userDocument.businessCity = businessCityInput.value.trim();
+        userDocument.businessDescription = businessDescriptionInput.value.trim();
+        userDocument.businessLogoUrl = businessLogoUrlInput.value.trim();
+        userDocument.businessRegistrationNumber = businessRegistrationNumberInput.value.trim();
+        userDocument.businessVerified = false;
+      }
+
+      await setDoc(doc(db, "users", user.uid), userDocument);
 
       alert("Account Created Successfully!");
       window.location.href = "login.html";
     } catch (error) {
       alert(error.message);
+    } finally {
+      registerBtn.disabled = false;
+      registerBtn.textContent = "Create Account";
     }
   });
 </script>
