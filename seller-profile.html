@@ -7,6 +7,104 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1e3a8a">
+  <style>
+    .seller-profile-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      max-width: 640px;
+      margin: 30px auto 20px auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .seller-profile-avatar {
+      font-size: 48px;
+      width: 88px;
+      height: 88px;
+      line-height: 88px;
+      border-radius: 50%;
+      background: #eff6ff;
+      margin: 0 auto 14px auto;
+    }
+    .seller-profile-card h1 {
+      margin: 0 0 6px 0;
+      font-size: 24px;
+    }
+    #sellerVerified {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+      background: #fef3c7;
+      color: #92400e;
+      margin-bottom: 4px;
+    }
+    .member-since {
+      color: #64748b;
+      font-size: 14px;
+      margin: 4px 0 0 0;
+    }
+    .seller-stats-row {
+      display: flex;
+      gap: 14px;
+      max-width: 640px;
+      margin: 0 auto 30px auto;
+      padding: 0 20px;
+    }
+    .seller-stat-box {
+      flex: 1;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px 10px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .seller-stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+    .seller-stat-label {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    .message-seller-btn {
+      display: inline-block;
+      margin-top: 16px;
+      background: #2563eb;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .message-seller-btn:hover {
+      background: #1d4ed8;
+    }
+    .seller-listings-section,
+    .seller-reviews-section {
+      max-width: 1000px;
+      margin: 0 auto 30px auto;
+      padding: 0 20px;
+    }
+    .seller-listings-section h2,
+    .seller-reviews-section h2 {
+      margin-bottom: 14px;
+    }
+    .listing-featured-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 6px;
+    }
+  </style>
 </head>
 <body>
 
@@ -27,7 +125,22 @@
     <h1 id="sellerName">Loading...</h1>
     <p id="sellerVerified"></p>
     <p class="member-since" id="sellerMemberSince"></p>
-    <p class="seller-listing-count" id="sellerListingCount"></p>
+    <a href="#" class="message-seller-btn" id="messageSellerBtn" style="display:none;">💬 Message Seller</a>
+  </div>
+
+  <div class="seller-stats-row">
+    <div class="seller-stat-box">
+      <div class="seller-stat-value" id="statListingCount">-</div>
+      <div class="seller-stat-label">Active Listings</div>
+    </div>
+    <div class="seller-stat-box">
+      <div class="seller-stat-value" id="statAverageRating">-</div>
+      <div class="seller-stat-label">Average Rating</div>
+    </div>
+    <div class="seller-stat-box">
+      <div class="seller-stat-value" id="statReviewCount">-</div>
+      <div class="seller-stat-label">Reviews</div>
+    </div>
   </div>
 
   <div class="seller-listings-section">
@@ -102,7 +215,6 @@ const sellerId = params.get("id");
 const sellerName = document.getElementById("sellerName");
 const sellerVerified = document.getElementById("sellerVerified");
 const sellerMemberSince = document.getElementById("sellerMemberSince");
-const sellerListingCount = document.getElementById("sellerListingCount");
 const sellerListingsGrid = document.getElementById("sellerListingsGrid");
 const averageRating = document.getElementById("averageRating");
 const reviewFormCard = document.getElementById("reviewFormCard");
@@ -110,9 +222,15 @@ const reviewForm = document.getElementById("reviewForm");
 const loginToReviewMsg = document.getElementById("loginToReviewMsg");
 const ownProfileMsg = document.getElementById("ownProfileMsg");
 const reviewsList = document.getElementById("reviewsList");
+const messageSellerBtn = document.getElementById("messageSellerBtn");
+
+const statListingCount = document.getElementById("statListingCount");
+const statAverageRating = document.getElementById("statAverageRating");
+const statReviewCount = document.getElementById("statReviewCount");
 
 let currentUser = null;
 let currentUserName = "";
+let isOwnProfile = false;
 
 function safeText(value) {
   return String(value || "")
@@ -180,10 +298,17 @@ async function loadSellerListings() {
 
     const snapshot = await getDocs(listingsQuery);
 
-    sellerListingCount.textContent =
-      snapshot.size === 1
-        ? "1 active listing"
-        : `${snapshot.size} active listings`;
+    statListingCount.textContent = snapshot.size;
+
+    if (!snapshot.empty && !isOwnProfile) {
+      const firstListingId = snapshot.docs[0].id;
+      messageSellerBtn.href =
+        "chat.html?product=" + encodeURIComponent(firstListingId) +
+        "&seller=" + encodeURIComponent(sellerId);
+      messageSellerBtn.style.display = "inline-block";
+    } else {
+      messageSellerBtn.style.display = "none";
+    }
 
     if (snapshot.empty) {
       sellerListingsGrid.innerHTML = "<p>This seller has no active listings right now.</p>";
@@ -194,6 +319,7 @@ async function loadSellerListings() {
 
     snapshot.forEach((productDoc) => {
       const product = productDoc.data();
+      const isFeatured = product.featured === true;
 
       const image =
         product.imageUrl ||
@@ -209,7 +335,7 @@ async function loadSellerListings() {
           <div class="product-image">
             <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
           </div>
-          <h3>${safeText(product.title || "Untitled Product")}</h3>
+          <h3>${safeText(product.title || "Untitled Product")}${isFeatured ? '<span class="listing-featured-badge">⭐ Featured</span>' : ""}</h3>
           <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
           <p class="location">📍 ${safeText(product.city || "")}, ${safeText(product.county || "Liberia")}</p>
         </div>
@@ -235,6 +361,8 @@ async function loadReviews() {
 
     if (snapshot.empty) {
       averageRating.textContent = "";
+      statAverageRating.textContent = "—";
+      statReviewCount.textContent = "0";
       reviewsList.innerHTML = "<p>No reviews yet. Be the first to review this seller.</p>";
       return;
     }
@@ -273,6 +401,8 @@ async function loadReviews() {
 
     const avg = (totalStars / reviewCount).toFixed(1);
     averageRating.textContent = `(${avg} ⭐ from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
+    statAverageRating.textContent = avg + " ⭐";
+    statReviewCount.textContent = reviewCount;
 
   } catch (error) {
     reviewsList.innerHTML = `<p>Could not load reviews: ${safeText(error.message)}</p>`;
@@ -291,16 +421,19 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     if (user.uid === sellerId) {
+      isOwnProfile = true;
       ownProfileMsg.style.display = "block";
       reviewFormCard.style.display = "none";
       loginToReviewMsg.style.display = "none";
     } else {
+      isOwnProfile = false;
       reviewFormCard.style.display = "block";
       loginToReviewMsg.style.display = "none";
       ownProfileMsg.style.display = "none";
     }
   } else {
     currentUser = null;
+    isOwnProfile = false;
     reviewFormCard.style.display = "none";
     loginToReviewMsg.style.display = "block";
     ownProfileMsg.style.display = "none";
