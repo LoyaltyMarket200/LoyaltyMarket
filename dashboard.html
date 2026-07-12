@@ -292,13 +292,85 @@
       margin-top: 14px;
       text-align: center;
     }
+
+    .boost-payment-screen {
+      display: none;
+    }
+    .boost-payment-screen.open {
+      display: block;
+    }
+    .boost-payment-amount {
+      background: #fdf2f8;
+      border: 2px solid #db2777;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .boost-payment-amount-label {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+    .boost-payment-amount-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: #db2777;
+    }
+    .boost-payment-method {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .boost-payment-method-name {
+      font-weight: 700;
+      font-size: 14px;
+      color: #111;
+      margin-bottom: 4px;
+    }
+    .boost-payment-method-number {
+      font-size: 18px;
+      font-weight: 800;
+      color: #059669;
+      letter-spacing: 0.5px;
+    }
+    .boost-payment-steps {
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: #f8fafc;
+      border-radius: 10px;
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .boost-payment-steps ol {
+      margin: 6px 0 0 18px;
+      padding: 0;
+    }
+    .boost-payment-done-btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #059669;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
 <header class="navbar">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <div class="logo">
+    <a href="index.html" class="logo-link">
+      <img src="icons/icon-512.png" alt="LoyaltyMarket">
+      <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+    </a>
+  </div>
 
   <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
 
@@ -353,38 +425,73 @@
 
 <div class="boost-modal-overlay" id="boostModalOverlay">
   <div class="boost-modal">
-    <h3>🚀 Boost This Listing</h3>
-    <p class="boost-modal-subtitle">Boosted listings appear higher in search results and get a featured badge.</p>
 
-    <form id="boostForm">
-      <label class="boost-plan-option" data-plan="3day">
-        <input type="radio" name="boostPlan" value="3day">
-        <span class="boost-plan-title">3-Day Boost</span>
-        <span class="boost-plan-price">US$5</span>
-        <p class="boost-plan-desc">Great for a quick sale push.</p>
-      </label>
+    <div id="boostPlanScreen">
+      <h3>🚀 Boost This Listing</h3>
+      <p class="boost-modal-subtitle">Boosted listings appear higher in search results and get a featured badge.</p>
 
-      <label class="boost-plan-option" data-plan="7day">
-        <input type="radio" name="boostPlan" value="7day">
-        <span class="boost-plan-title">7-Day Boost</span>
-        <span class="boost-plan-price">US$10</span>
-        <p class="boost-plan-desc">Most popular — a full week of visibility.</p>
-      </label>
+      <form id="boostForm">
+        <label class="boost-plan-option" data-plan="3day">
+          <input type="radio" name="boostPlan" value="3day">
+          <span class="boost-plan-title">3-Day Boost</span>
+          <span class="boost-plan-price">US$5</span>
+          <p class="boost-plan-desc">Great for a quick sale push.</p>
+        </label>
 
-      <label class="boost-plan-option" data-plan="14day">
-        <input type="radio" name="boostPlan" value="14day">
-        <span class="boost-plan-title">14-Day Boost</span>
-        <span class="boost-plan-price">US$18</span>
-        <p class="boost-plan-desc">Best value for high-priced items.</p>
-      </label>
+        <label class="boost-plan-option" data-plan="7day">
+          <input type="radio" name="boostPlan" value="7day">
+          <span class="boost-plan-title">7-Day Boost</span>
+          <span class="boost-plan-price">US$10</span>
+          <p class="boost-plan-desc">Most popular — a full week of visibility.</p>
+        </label>
 
-      <div class="boost-modal-actions">
-        <button type="button" class="boost-cancel-btn" id="boostCancelBtn">Cancel</button>
-        <button type="submit" class="boost-submit-btn" id="boostSubmitBtn" disabled>Submit Boost Request</button>
+        <label class="boost-plan-option" data-plan="14day">
+          <input type="radio" name="boostPlan" value="14day">
+          <span class="boost-plan-title">14-Day Boost</span>
+          <span class="boost-plan-price">US$18</span>
+          <p class="boost-plan-desc">Best value for high-priced items.</p>
+        </label>
+
+        <div class="boost-modal-actions">
+          <button type="button" class="boost-cancel-btn" id="boostCancelBtn">Cancel</button>
+          <button type="submit" class="boost-submit-btn" id="boostSubmitBtn" disabled>Submit Boost Request</button>
+        </div>
+      </form>
+
+      <p class="boost-modal-note">Next, you'll see payment instructions to complete your boost.</p>
+    </div>
+
+    <div class="boost-payment-screen" id="boostPaymentScreen">
+      <h3>💳 Complete Your Payment</h3>
+      <p class="boost-modal-subtitle">Your boost request has been submitted. Send payment to activate it.</p>
+
+      <div class="boost-payment-amount">
+        <div class="boost-payment-amount-label">Amount to pay</div>
+        <div class="boost-payment-amount-value" id="boostPaymentAmountValue">US$0</div>
       </div>
-    </form>
 
-    <p class="boost-modal-note">Payment isn't connected yet. Submitting marks this listing as boost pending for admin review.</p>
+      <div class="boost-payment-method">
+        <div class="boost-payment-method-name">📱 MTN Mobile Money</div>
+        <div class="boost-payment-method-number">+231 88 147 1694</div>
+      </div>
+
+      <div class="boost-payment-method">
+        <div class="boost-payment-method-name">🟠 Orange Money</div>
+        <div class="boost-payment-method-number">+231 77 002 5588</div>
+      </div>
+
+      <div class="boost-payment-steps">
+        <strong>How to activate your boost:</strong>
+        <ol>
+          <li>Send the exact amount above to either number</li>
+          <li>Your listing will show "⏳ Boost Pending" until payment is confirmed</li>
+          <li>Once confirmed by an admin, your listing becomes boosted within 24 hours</li>
+        </ol>
+      </div>
+
+      <button class="boost-payment-done-btn" id="boostPaymentDoneBtn">Done</button>
+    </div>
+
   </div>
 </div>
 
@@ -420,10 +527,14 @@ const dashboardListings = document.getElementById("dashboardListings");
 const archiveFilterButtons = document.querySelectorAll(".archive-filter-btn");
 
 const boostModalOverlay = document.getElementById("boostModalOverlay");
+const boostPlanScreen = document.getElementById("boostPlanScreen");
+const boostPaymentScreen = document.getElementById("boostPaymentScreen");
 const boostForm = document.getElementById("boostForm");
 const boostCancelBtn = document.getElementById("boostCancelBtn");
 const boostSubmitBtn = document.getElementById("boostSubmitBtn");
 const boostPlanOptions = document.querySelectorAll(".boost-plan-option");
+const boostPaymentAmountValue = document.getElementById("boostPaymentAmountValue");
+const boostPaymentDoneBtn = document.getElementById("boostPaymentDoneBtn");
 
 let currentUser = null;
 let allMyProducts = [];
@@ -571,115 +682,4 @@ function renderListings() {
     dashboardListings.appendChild(card);
   });
 
-  attachListingButtonListeners();
-}
-
-function openBoostModal(productId) {
-  boostTargetProductId = productId;
-  boostForm.reset();
-  boostPlanOptions.forEach((option) => option.classList.remove("selected"));
-  boostSubmitBtn.disabled = true;
-  boostModalOverlay.classList.add("open");
-}
-
-function closeBoostModal() {
-  boostModalOverlay.classList.remove("open");
-  boostTargetProductId = null;
-}
-
-boostPlanOptions.forEach((option) => {
-  option.addEventListener("click", () => {
-    boostPlanOptions.forEach((o) => o.classList.remove("selected"));
-    option.classList.add("selected");
-    const radio = option.querySelector("input[type=radio]");
-    radio.checked = true;
-    boostSubmitBtn.disabled = false;
-  });
-});
-
-boostCancelBtn.addEventListener("click", closeBoostModal);
-
-boostModalOverlay.addEventListener("click", (event) => {
-  if (event.target === boostModalOverlay) {
-    closeBoostModal();
-  }
-});
-
-boostForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const selectedPlan = boostForm.querySelector("input[name=boostPlan]:checked");
-
-  if (!selectedPlan || !boostTargetProductId) {
-    return;
-  }
-
-  const planKey = selectedPlan.value;
-  const planInfo = boostPlanDetails[planKey];
-
-  boostSubmitBtn.disabled = true;
-  boostSubmitBtn.textContent = "Submitting...";
-
-  try {
-    await updateDoc(doc(db, "products", boostTargetProductId), {
-      boostStatus: "pending",
-      boostPlan: planKey,
-      boostPlanLabel: planInfo.label,
-      boostPrice: planInfo.price,
-      boostDurationDays: planInfo.days,
-      boostRequestedAt: serverTimestamp()
-    });
-
-    alert("Boost request submitted! It will be reviewed and activated once payment is confirmed.");
-    closeBoostModal();
-    loadMyListings();
-
-  } catch (error) {
-    alert("Could not submit boost request: " + error.message);
-  } finally {
-    boostSubmitBtn.disabled = false;
-    boostSubmitBtn.textContent = "Submit Boost Request";
-  }
-});
-
-function attachListingButtonListeners() {
-  document.querySelectorAll(".edit-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      const productId = button.getAttribute("data-id");
-      window.location.href = "edit-product.html?id=" + encodeURIComponent(productId);
-    });
-  });
-
-  document.querySelectorAll(".delete-btn").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const productId = button.getAttribute("data-id");
-      const confirmDelete = confirm("Are you sure you want to delete this listing? This cannot be undone.");
-
-      if (!confirmDelete) return;
-
-      try {
-        await deleteDoc(doc(db, "products", productId));
-        loadMyListings();
-      } catch (error) {
-        alert("Could not delete listing: " + error.message);
-      }
-    });
-  });
-
-  document.querySelectorAll(".feature-btn").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const productId = button.getAttribute("data-id");
-      const isCurrentlyFeatured = button.getAttribute("data-featured") === "true";
-      const newFeaturedValue = !isCurrentlyFeatured;
-
-      button.disabled = true;
-      button.textContent = "Updating...";
-
-      try {
-        await updateDoc(doc(db, "products", productId), {
-          featured: newFeaturedValue
-        });
-        loadMyListings();
-      } catch (error) {
-        alert("Could not update featured status: " + error.message);
-        button.disabled =
+  attachListingButtonLis
