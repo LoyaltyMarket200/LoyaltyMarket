@@ -404,6 +404,204 @@
       }
     }
 
+    /* ===== New Analytics Dashboard styles ===== */
+
+    .analytics-section-title {
+      margin: 34px 0 14px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .analytics-section-title:first-of-type {
+      margin-top: 6px;
+    }
+
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .activity-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+      overflow: hidden;
+    }
+
+    .activity-card-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      font-weight: 800;
+      font-size: 14px;
+      color: #111827;
+      background: #f8fafc;
+    }
+
+    .activity-list {
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .activity-row {
+      padding: 11px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    .activity-row:last-child {
+      border-bottom: none;
+    }
+
+    .activity-row-title {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .activity-row-meta {
+      color: #94a3b8;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .breakdown-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+      padding: 18px;
+    }
+
+    .breakdown-card-title {
+      font-weight: 800;
+      font-size: 14px;
+      color: #111827;
+      margin-bottom: 14px;
+    }
+
+    .bar-row {
+      margin-bottom: 12px;
+    }
+
+    .bar-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .bar-row-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #334155;
+      margin-bottom: 5px;
+    }
+
+    .bar-row-label strong {
+      color: #111827;
+    }
+
+    .bar-track {
+      height: 9px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #2563eb;
+      transition: width 0.4s ease;
+    }
+
+    .bar-fill.color-green { background: #059669; }
+    .bar-fill.color-amber { background: #d97706; }
+    .bar-fill.color-red { background: #dc2626; }
+    .bar-fill.color-purple { background: #7c3aed; }
+    .bar-fill.color-pink { background: #db2777; }
+
+    .week-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 140px;
+      padding-top: 10px;
+    }
+
+    .week-chart-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
+    .week-chart-bar {
+      width: 100%;
+      max-width: 34px;
+      border-radius: 6px 6px 0 0;
+      background: #2563eb;
+      transition: height 0.4s ease;
+      min-height: 3px;
+    }
+
+    .week-chart-value {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 4px;
+    }
+
+    .week-chart-label {
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .quick-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      background: white;
+      color: #111827;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+    }
+
+    .quick-action-btn:hover {
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+
+    .quick-action-btn-icon {
+      font-size: 20px;
+    }
+
     @media (max-width: 700px) {
       .search-row {
         grid-template-columns: 1fr;
@@ -512,6 +710,7 @@
     </div>
 
     <section id="overviewSection">
+
       <div class="stats-grid">
         <div class="stat-card">
           <span class="stat-card-icon">👥</span>
@@ -560,7 +759,151 @@
           <div class="stat-card-label">Pending Boosts</div>
           <div class="stat-card-value" id="statPendingBoosts">—</div>
         </div>
+
+        <!-- New analytics stat cards -->
+        <div class="stat-card">
+          <span class="stat-card-icon">✅</span>
+          <div class="stat-card-label">Active Listings</div>
+          <div class="stat-card-value" id="statActiveListings">—</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-icon">🗄️</span>
+          <div class="stat-card-label">Archived Listings</div>
+          <div class="stat-card-value" id="statArchivedListings">—</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-icon">💰</span>
+          <div class="stat-card-label">Sold Listings</div>
+          <div class="stat-card-value" id="statSoldListings">—</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-icon">🌟</span>
+          <div class="stat-card-label">Featured Listings</div>
+          <div class="stat-card-value" id="statFeaturedListings">—</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-icon">🧾</span>
+          <div class="stat-card-label">Total Orders</div>
+          <div class="stat-card-value" id="statTotalOrders">—</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-icon">✔️</span>
+          <div class="stat-card-label">Completed Sales</div>
+          <div class="stat-card-value" id="statCompletedOrders">—</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-icon">🚀</span>
+          <div class="stat-card-label">Active Boosted Listings</div>
+          <div class="stat-card-value" id="statActiveBoosts">—</div>
+        </div>
       </div>
+
+      <!-- Quick Actions -->
+      <div class="analytics-section-title">Quick Actions</div>
+      <div class="quick-actions-grid">
+        <button class="quick-action-btn" type="button" data-goto-section="users">
+          <span class="quick-action-btn-icon">👥</span>
+          Manage Users
+        </button>
+
+        <button class="quick-action-btn" type="button" data-goto-section="reports">
+          <span class="quick-action-btn-icon">🚩</span>
+          View Reports
+        </button>
+
+        <button class="quick-action-btn" type="button" data-goto-section="boosts">
+          <span class="quick-action-btn-icon">🚀</span>
+          View Boost Requests
+        </button>
+
+        <a class="quick-action-btn" href="dashboard.html">
+          <span class="quick-action-btn-icon">📋</span>
+          Manage Listings
+        </a>
+
+        <a class="quick-action-btn" href="account-setting.html">
+          <span class="quick-action-btn-icon">⚙️</span>
+          Marketplace Settings
+        </a>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="analytics-section-title">Recent Activity</div>
+      <div class="activity-grid">
+        <div class="activity-card">
+          <div class="activity-card-header">🆕 New Users</div>
+          <div class="activity-list" id="recentUsersList">
+            <p class="empty-state">Loading...</p>
+          </div>
+        </div>
+
+        <div class="activity-card">
+          <div class="activity-card-header">📋 New Listings</div>
+          <div class="activity-list" id="recentListingsList">
+            <p class="empty-state">Loading...</p>
+          </div>
+        </div>
+
+        <div class="activity-card">
+          <div class="activity-card-header">🧾 New Orders</div>
+          <div class="activity-list" id="recentOrdersList">
+            <p class="empty-state">Loading...</p>
+          </div>
+        </div>
+
+        <div class="activity-card">
+          <div class="activity-card-header">🚀 New Boost Requests</div>
+          <div class="activity-list" id="recentBoostsList">
+            <p class="empty-state">Loading...</p>
+          </div>
+        </div>
+
+        <div class="activity-card">
+          <div class="activity-card-header">🚩 Recent Reports</div>
+          <div class="activity-list" id="recentReportsList">
+            <p class="empty-state">Loading...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Breakdown -->
+      <div class="analytics-section-title">Analytics Breakdown</div>
+      <div class="breakdown-grid">
+        <div class="breakdown-card">
+          <div class="breakdown-card-title">Listings By Category</div>
+          <div id="categoryBreakdown">
+            <p class="empty-state">Loading...</p>
+          </div>
+        </div>
+
+        <div class="breakdown-card">
+          <div class="breakdown-card-title">Orders By Status</div>
+          <div id="orderStatusBreakdown">
+            <p class="empty-state">Loading...</p>
+          </div>
+        </div>
+
+        <div class="breakdown-card">
+          <div class="breakdown-card-title">New Users — Last 7 Days</div>
+          <div id="usersWeekChart">
+            <p class="empty-state">Loading...</p>
+          </div>
+        </div>
+
+        <div class="breakdown-card">
+          <div class="breakdown-card-title">Orders — Last 7 Days</div>
+          <div id="ordersWeekChart">
+            <p class="empty-state">Loading...</p>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <section id="usersSection" style="display:none;">
@@ -713,9 +1056,23 @@
       ".admin-tab-btn[data-boost-filter]"
     );
 
+    // New analytics DOM references
+    const recentUsersList = document.getElementById("recentUsersList");
+    const recentListingsList = document.getElementById("recentListingsList");
+    const recentOrdersList = document.getElementById("recentOrdersList");
+    const recentBoostsList = document.getElementById("recentBoostsList");
+    const recentReportsList = document.getElementById("recentReportsList");
+    const categoryBreakdown = document.getElementById("categoryBreakdown");
+    const orderStatusBreakdown = document.getElementById("orderStatusBreakdown");
+    const usersWeekChart = document.getElementById("usersWeekChart");
+    const ordersWeekChart = document.getElementById("ordersWeekChart");
+    const quickActionButtons = document.querySelectorAll("[data-goto-section]");
+
     let allUsers = [];
     let allReports = [];
     let allBoostProducts = [];
+    let allProductsCache = [];
+    let allOrdersCache = [];
     let currentReportFilter = "all";
     let currentBoostFilter = "pending";
 
@@ -833,7 +1190,17 @@
       });
     });
 
-    function updateStatistics(products) {
+    // Quick Action buttons that jump to a section tab
+    quickActionButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const target = button.getAttribute("data-goto-section");
+        if (target) {
+          showSection(target);
+        }
+      });
+    });
+
+    function updateStatistics(products, orders) {
       const verifiedUsers = allUsers.filter(
         (user) => user.verified === true
       );
@@ -852,6 +1219,30 @@
 
       const pendingBoosts = products.filter(
         (product) => product.boostStatus === "pending"
+      );
+
+      const activeBoosts = products.filter(
+        (product) => product.boostStatus === "active"
+      );
+
+      const activeListings = products.filter(
+        (product) => (product.status || "active") === "active"
+      );
+
+      const archivedListings = products.filter(
+        (product) => product.status === "archived"
+      );
+
+      const soldListings = products.filter(
+        (product) => product.status === "sold"
+      );
+
+      const featuredListings = products.filter(
+        (product) => product.featured === true
+      );
+
+      const completedOrders = orders.filter(
+        (order) => order.status === "completed"
       );
 
       document.getElementById("statTotalUsers").textContent =
@@ -877,6 +1268,221 @@
 
       document.getElementById("statPendingBoosts").textContent =
         pendingBoosts.length;
+
+      document.getElementById("statActiveListings").textContent =
+        activeListings.length;
+
+      document.getElementById("statArchivedListings").textContent =
+        archivedListings.length;
+
+      document.getElementById("statSoldListings").textContent =
+        soldListings.length;
+
+      document.getElementById("statFeaturedListings").textContent =
+        featuredListings.length;
+
+      document.getElementById("statTotalOrders").textContent =
+        orders.length;
+
+      document.getElementById("statCompletedOrders").textContent =
+        completedOrders.length;
+
+      document.getElementById("statActiveBoosts").textContent =
+        activeBoosts.length;
+    }
+
+    function renderRecentActivity(products, orders) {
+      // Recent Users
+      const sortedUsers = [...allUsers].sort(
+        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
+      ).slice(0, 6);
+
+      recentUsersList.innerHTML = sortedUsers.length
+        ? sortedUsers.map((user) => `
+            <div class="activity-row">
+              <div class="activity-row-title">${safeText(user.name || user.email || "Unnamed User")}</div>
+              <div class="activity-row-meta">${formatDate(user.createdAt)}</div>
+            </div>
+          `).join("")
+        : '<p class="empty-state">No users yet.</p>';
+
+      // Recent Listings
+      const sortedProducts = [...products].sort(
+        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
+      ).slice(0, 6);
+
+      recentListingsList.innerHTML = sortedProducts.length
+        ? sortedProducts.map((product) => `
+            <div class="activity-row">
+              <div class="activity-row-title">${safeText(product.title || "Untitled Product")}</div>
+              <div class="activity-row-meta">${safeText(product.category || "Uncategorized")} • ${formatDate(product.createdAt)}</div>
+            </div>
+          `).join("")
+        : '<p class="empty-state">No listings yet.</p>';
+
+      // Recent Orders
+      const sortedOrders = [...orders].sort(
+        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
+      ).slice(0, 6);
+
+      recentOrdersList.innerHTML = sortedOrders.length
+        ? sortedOrders.map((order) => `
+            <div class="activity-row">
+              <div class="activity-row-title">${safeText(order.productTitle || "Order")} — ${safeText(order.status || "pending")}</div>
+              <div class="activity-row-meta">${formatDate(order.createdAt)}</div>
+            </div>
+          `).join("")
+        : '<p class="empty-state">No orders yet.</p>';
+
+      // Recent Boost Requests
+      const sortedBoosts = [...allBoostProducts].sort(
+        (a, b) => timestampToMilliseconds(b.boostRequestedAt) - timestampToMilliseconds(a.boostRequestedAt)
+      ).slice(0, 6);
+
+      recentBoostsList.innerHTML = sortedBoosts.length
+        ? sortedBoosts.map((product) => `
+            <div class="activity-row">
+              <div class="activity-row-title">${safeText(product.title || "Untitled Listing")} — ${safeText(product.boostStatus || "pending")}</div>
+              <div class="activity-row-meta">${safeText(product.boostPlanLabel || product.boostPlan || "")} • ${formatDate(product.boostRequestedAt)}</div>
+            </div>
+          `).join("")
+        : '<p class="empty-state">No boost requests yet.</p>';
+
+      // Recent Reports
+      const sortedReports = [...allReports].sort(
+        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
+      ).slice(0, 6);
+
+      recentReportsList.innerHTML = sortedReports.length
+        ? sortedReports.map((report) => `
+            <div class="activity-row">
+              <div class="activity-row-title">${safeText(report.productTitle || report.listingTitle || "Untitled Listing")} — ${safeText(report.reason || "Unspecified")}</div>
+              <div class="activity-row-meta">${formatDate(report.createdAt)}</div>
+            </div>
+          `).join("")
+        : '<p class="empty-state">No reports yet.</p>';
+    }
+
+    function renderBreakdowns(products, orders) {
+      // Listings by category
+      const categoryCounts = {};
+      products.forEach((product) => {
+        const category = product.category || "Uncategorized";
+        categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+      });
+
+      const categoryEntries = Object.entries(categoryCounts).sort(
+        (a, b) => b[1] - a[1]
+      );
+
+      const categoryColors = ["", "color-green", "color-amber", "color-purple", "color-pink", "color-red"];
+      const maxCategoryCount = categoryEntries.length
+        ? Math.max(...categoryEntries.map((entry) => entry[1]))
+        : 0;
+
+      categoryBreakdown.innerHTML = categoryEntries.length
+        ? categoryEntries.map(([category, count], index) => {
+            const percent = maxCategoryCount ? Math.round((count / maxCategoryCount) * 100) : 0;
+            const colorClass = categoryColors[index % categoryColors.length];
+            return `
+              <div class="bar-row">
+                <div class="bar-row-label">
+                  <span>${safeText(category)}</span>
+                  <strong>${count}</strong>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill ${colorClass}" style="width:${percent}%;"></div>
+                </div>
+              </div>
+            `;
+          }).join("")
+        : '<p class="empty-state">No listings yet.</p>';
+
+      // Orders by status
+      const statusCounts = {};
+      orders.forEach((order) => {
+        const status = order.status || "pending";
+        statusCounts[status] = (statusCounts[status] || 0) + 1;
+      });
+
+      const statusColorMap = {
+        pending: "color-amber",
+        confirmed: "",
+        completed: "color-green",
+        cancelled: "color-red"
+      };
+
+      const statusEntries = Object.entries(statusCounts).sort(
+        (a, b) => b[1] - a[1]
+      );
+
+      const maxStatusCount = statusEntries.length
+        ? Math.max(...statusEntries.map((entry) => entry[1]))
+        : 0;
+
+      orderStatusBreakdown.innerHTML = statusEntries.length
+        ? statusEntries.map(([status, count]) => {
+            const percent = maxStatusCount ? Math.round((count / maxStatusCount) * 100) : 0;
+            const colorClass = statusColorMap[status] || "";
+            return `
+              <div class="bar-row">
+                <div class="bar-row-label">
+                  <span style="text-transform:capitalize;">${safeText(status)}</span>
+                  <strong>${count}</strong>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill ${colorClass}" style="width:${percent}%;"></div>
+                </div>
+              </div>
+            `;
+          }).join("")
+        : '<p class="empty-state">No orders yet.</p>';
+    }
+
+    function buildLast7Days() {
+      const days = [];
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        date.setDate(date.getDate() - i);
+        days.push(date);
+      }
+      return days;
+    }
+
+    function renderWeekChart(container, items, dateField) {
+      const days = buildLast7Days();
+
+      const counts = days.map((day) => {
+        const nextDay = new Date(day);
+        nextDay.setDate(nextDay.getDate() + 1);
+
+        return items.filter((item) => {
+          const ms = timestampToMilliseconds(item[dateField]);
+          if (!ms) return false;
+          return ms >= day.getTime() && ms < nextDay.getTime();
+        }).length;
+      });
+
+      const maxCount = Math.max(...counts, 1);
+      const dayLabels = days.map((day) =>
+        day.toLocaleDateString(undefined, { weekday: "short" })
+      );
+
+      container.innerHTML = `
+        <div class="week-chart">
+          ${counts.map((count, index) => {
+            const heightPercent = Math.round((count / maxCount) * 100);
+            return `
+              <div class="week-chart-col">
+                <div class="week-chart-value">${count}</div>
+                <div class="week-chart-bar" style="height:${Math.max(heightPercent, 4)}%;"></div>
+                <div class="week-chart-label">${safeText(dayLabels[index])}</div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
     }
 
     async function loadAllData() {
@@ -888,11 +1494,16 @@
         const [
           usersSnapshot,
           productsSnapshot,
-          reportsSnapshot
+          reportsSnapshot,
+          ordersSnapshot
         ] = await Promise.all([
           getDocs(collection(db, "users")),
           getDocs(collection(db, "products")),
-          getDocs(collection(db, "reports"))
+          getDocs(collection(db, "reports")),
+          getDocs(collection(db, "orders")).catch((error) => {
+            console.error("Could not load orders:", error);
+            return { docs: [] };
+          })
         ]);
 
         allUsers = usersSnapshot.docs.map((documentSnapshot) => ({
@@ -906,6 +1517,16 @@
             ...documentSnapshot.data()
           })
         );
+
+        const orders = ordersSnapshot.docs.map(
+          (documentSnapshot) => ({
+            id: documentSnapshot.id,
+            ...documentSnapshot.data()
+          })
+        );
+
+        allProductsCache = products;
+        allOrdersCache = orders;
 
         allBoostProducts = products.filter(
           (product) => Boolean(product.boostStatus)
@@ -937,10 +1558,14 @@
             timestampToMilliseconds(firstReport.createdAt)
         );
 
-        updateStatistics(products);
+        updateStatistics(products, orders);
         renderUsers();
         renderReports();
         renderBoosts();
+        renderRecentActivity(products, orders);
+        renderBreakdowns(products, orders);
+        renderWeekChart(usersWeekChart, allUsers, "createdAt");
+        renderWeekChart(ordersWeekChart, orders, "createdAt");
       } catch (error) {
         console.error("Could not load admin data:", error);
 
@@ -957,6 +1582,27 @@
 
         boostsContainer.innerHTML =
           '<p class="empty-state">Unable to load boost requests.</p>';
+
+        recentUsersList.innerHTML =
+          '<p class="empty-state">Unable to load recent users.</p>';
+
+        recentListingsList.innerHTML =
+          '<p class="empty-state">Unable to load recent listings.</p>';
+
+        recentOrdersList.innerHTML =
+          '<p class="empty-state">Unable to load recent orders.</p>';
+
+        recentBoostsList.innerHTML =
+          '<p class="empty-state">Unable to load recent boost requests.</p>';
+
+        recentReportsList.innerHTML =
+          '<p class="empty-state">Unable to load recent reports.</p>';
+
+        categoryBreakdown.innerHTML =
+          '<p class="empty-state">Unable to load breakdown.</p>';
+
+        orderStatusBreakdown.innerHTML =
+          '<p class="empty-state">Unable to load breakdown.</p>';
       } finally {
         refreshBtn.disabled = false;
         refreshBtn.textContent = "🔄 Refresh Data";
@@ -1157,19 +1803,8 @@
       }
 
       renderUsers();
-
-      const productsSnapshot = await getDocs(
-        collection(db, "products")
-      );
-
-      const products = productsSnapshot.docs.map(
-        (documentSnapshot) => ({
-          id: documentSnapshot.id,
-          ...documentSnapshot.data()
-        })
-      );
-
-      updateStatistics(products);
+      updateStatistics(allProductsCache, allOrdersCache);
+      renderRecentActivity(allProductsCache, allOrdersCache);
     }
 
     async function sendPasswordReset(email) {
@@ -1345,19 +1980,8 @@
         }
 
         renderReports();
-
-        const productsSnapshot = await getDocs(
-          collection(db, "products")
-        );
-
-        const products = productsSnapshot.docs.map(
-          (documentSnapshot) => ({
-            id: documentSnapshot.id,
-            ...documentSnapshot.data()
-          })
-        );
-
-        updateStatistics(products);
+        updateStatistics(allProductsCache, allOrdersCache);
+        renderRecentActivity(allProductsCache, allOrdersCache);
       } catch (error) {
         console.error("Could not update report:", error);
         alert(
@@ -1548,7 +2172,10 @@
           })
         );
 
-        updateStatistics(products);
+        allProductsCache = products;
+        updateStatistics(products, allOrdersCache);
+        renderRecentActivity(products, allOrdersCache);
+        renderBreakdowns(products, allOrdersCache);
       } catch (error) {
         console.error("Boost action failed:", error);
         alert("The action failed: " + error.message);
