@@ -144,6 +144,28 @@
     .unread-badge.has-unread {
       display: flex;
     }
+    .unavailable-box {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      text-align: center;
+    }
+    .unavailable-box h2 {
+      margin-top: 0;
+      color: #111827;
+    }
+    .unavailable-box p {
+      color: #64748b;
+      line-height: 1.6;
+    }
+    .unavailable-box a {
+      color: #2563eb;
+      font-weight: 700;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -175,7 +197,13 @@
   <span id="breadcrumbTitle">Loading...</span>
 </div>
 
-<main class="product-detail">
+<div id="unavailableBox" class="unavailable-box" style="display:none;">
+  <h2>This listing is not available</h2>
+  <p id="unavailableMessage">This listing may still be under review or is no longer available.</p>
+  <a href="index.html">Return to homepage</a>
+</div>
+
+<main class="product-detail" id="productDetailMain">
 
   <section class="product-detail-left">
     <div class="main-image">
@@ -277,8 +305,19 @@ const reportSubmitBtn = document.getElementById("reportSubmitBtn");
 const unreadBadge = document.getElementById("unreadBadge");
 const saveBtn = document.getElementById("saveBtn");
 const buyNowBtn = document.getElementById("buyNowBtn");
+const productDetailMain = document.getElementById("productDetailMain");
+const unavailableBox = document.getElementById("unavailableBox");
+const unavailableMessage = document.getElementById("unavailableMessage");
+
+// Listings with these statuses are hidden from public viewing.
+// A seller can still view their own pending/rejected listing (e.g.
+// to check on it), and an admin can always view any listing (needed
+// for the admin "View Listing" links on Pending Review / Reports).
+const HIDDEN_STATUSES = ["pending_review", "rejected", "archived"];
+const ADMIN_EMAILS = ["princeteah200@gmail.com"];
 
 let currentUser = null;
+let authReady = false;
 let loadedProductTitle = "";
 let loadedSellerId = "";
 let loadedPriceUsd = "0";
@@ -450,14 +489,6 @@ async function buyNow() {
   }
 }
 
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-  if (user) {
-    listenForUnreadMessages(user.uid);
-    checkIfSaved();
-  }
-});
-
 function safeText(value) {
   return String(value || "")
     .replaceAll("&", "&amp;")
@@ -491,10 +522,17 @@ function renderThumbnails(images, title) {
   });
 }
 
+function showUnavailable(message) {
+  productDetailMain.style.display = "none";
+  unavailableBox.style.display = "block";
+  unavailableMessage.textContent = message;
+  breadcrumbTitle.textContent = "Unavailable";
+  document.title = "Listing Unavailable - LoyaltyMarket";
+}
+
 async function loadProduct() {
   if (!productId) {
-    productTitle.textContent = "Product not found";
-    productDescription.textContent = "No product ID was provided.";
+    showUnavailable("No product ID was provided.");
     return;
   }
 
@@ -503,12 +541,22 @@ async function loadProduct() {
     const productSnapshot = await getDoc(productRef);
 
     if (!productSnapshot.exists()) {
-      productTitle.textContent = "Product not found";
-      productDescription.textContent = "This product may have been removed or does not exist.";
+      showUnavailable("This product may have been removed or does not exist.");
       return;
     }
 
     const product = productSnapshot.data();
+    const sellerId = product.sellerId || "";
+
+    const viewerEmail = currentUser?.email?.trim().toLowerCase() || "";
+    const isOwner = Boolean(currentUser) && currentUser.uid === sellerId;
+    const isAdmin = Boolean(viewerEmail) && ADMIN_EMAILS.includes(viewerEmail);
+
+    if (HIDDEN_STATUSES.includes(product.status) && !isOwner && !isAdmin) {
+      showUnavailable("This listing is currently under review or is no longer available.");
+      return;
+    }
+
     const title = product.title || "Untitled Product";
     const category = product.category || "Product";
     const priceUsd = product.priceUsd || "0";
@@ -520,7 +568,6 @@ async function loadProduct() {
     const images = resolveProductImages(product);
     const email = product.sellerEmail || "Seller email not available";
     const phone = product.phone || "";
-    const sellerId = product.sellerId || "";
 
     loadedProductTitle = title;
     loadedSellerId = sellerId;
@@ -642,7 +689,25 @@ reportModalOverlay.addEventListener("click", (event) => {
   if (event.target === reportModalOverlay) closeReportModal();
 });
 
-loadProduct();
+// Wait for Firebase Auth to resolve (even if the visitor is logged
+// out) before loading the product, so the owner/admin visibility
+// check above has the correct currentUser to compare against.
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if (user) {
+    listenForUnreadMessages(user.uid);
+  }
+
+  if (!authReady) {
+    authReady = true;
+    loadProduct();
+  } else {
+    // Auth state changed again after the initial load (e.g. the
+    // visitor logged in) — just refresh the saved/wishlist state,
+    // no need to reload the whole product.
+    if (currentUser) checkIfSaved();
+  }
+});
 </script>
 
 <script>
