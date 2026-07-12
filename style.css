@@ -1669,4 +1669,44 @@ body {
   .auth-card {
     padding: 20px;
   }
+}/* ================= MOBILE RESPONSIVENESS ================= */
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+
+  .navbar .search-box {
+    width: 100% !important;
+  }
+
+  .navbar .nav-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .navbar .nav-buttons a,
+  .navbar .nav-buttons button {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 28px; }
+  .hero p { font-size: 16px; }
+  .categories, .products, .featured-products, .why, .why-choose {
+    padding: 35px 5%;
+  }
+  .product-image { height: 140px; }
+  .dashboard-listings, .search-results, .seller-listings-grid {
+    grid-template-columns: 1fr;
+  }
+  .settings-card, .sell-card, .auth-card { padding: 20px; }
 }
