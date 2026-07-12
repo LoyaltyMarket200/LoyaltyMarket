@@ -419,6 +419,8 @@ function applyFilters() {
   const selectedCondition = conditionFilter.value;
 
   const filteredProducts = allProducts.filter((product) => {
+    if (product.status === "archived") return false;
+
     const title = String(product.title || "").toLowerCase();
     const description = String(product.description || "").toLowerCase();
     const category = String(product.category || "");
@@ -480,7 +482,7 @@ function loadRecentlyViewed() {
 
     const viewedProducts = viewedIds
       .map((id) => allProducts.find((product) => product.id === id))
-      .filter((product) => product !== undefined)
+      .filter((product) => product !== undefined && product.status !== "archived")
       .slice(0, 10);
 
     if (viewedProducts.length === 0) return;
@@ -564,7 +566,7 @@ clearFiltersBtn.addEventListener("click", function() {
   conditionFilter.value = "";
   sortSelect.value = "newest";
 
-  displayProducts(sortProducts(allProducts));
+  displayProducts(sortProducts(allProducts.filter((product) => product.status !== "archived")));
 });
 
 loadMoreBtn.addEventListener("click", function() {
@@ -577,15 +579,9 @@ loadAllProducts();
 const unreadBadge = document.getElementById("unreadBadge");
 
 function listenForUnreadMessages(userId) {
-  const unreadQuery = query(
-    collection(db, "messages"),
-    where("receiverId", "==", userId),
-    where("read", "==", false)
-  );
-
+  const unreadQuery = query(collection(db, "messages"), where("receiverId", "==", userId), where("read", "==", false));
   onSnapshot(unreadQuery, (snapshot) => {
     const count = snapshot.size;
-
     if (count > 0) {
       unreadBadge.textContent = count > 9 ? "9+" : String(count);
       unreadBadge.classList.add("has-unread");
