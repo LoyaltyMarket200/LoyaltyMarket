@@ -304,6 +304,16 @@
       color: #475569;
     }
 
+    .status-active {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-rejected {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
     .user-actions,
     .report-actions {
       display: flex;
@@ -352,6 +362,26 @@
     .btn-unsuspend {
       background: #059669;
       color: white;
+    }
+
+    .btn-confirm-boost {
+      background: #059669;
+      color: white;
+    }
+
+    .btn-reject-boost {
+      background: #dc2626;
+      color: white;
+    }
+
+    .boost-payment-info {
+      margin-top: 13px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
     .empty-state {
@@ -471,6 +501,13 @@
       >
         Reported Listings
       </button>
+
+      <button
+        class="admin-section-tab-btn"
+        data-section="boosts"
+      >
+        Boost Requests
+      </button>
     </div>
 
     <section id="overviewSection">
@@ -515,6 +552,12 @@
           <span class="stat-card-icon">⏳</span>
           <div class="stat-card-label">Pending Reports</div>
           <div class="stat-card-value" id="statPendingReports">—</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-icon">🚀</span>
+          <div class="stat-card-label">Pending Boosts</div>
+          <div class="stat-card-value" id="statPendingBoosts">—</div>
         </div>
       </div>
     </section>
@@ -573,6 +616,42 @@
         <p class="empty-state">Loading reports...</p>
       </div>
     </section>
+
+    <section id="boostsSection" style="display:none;">
+      <div class="admin-tabs">
+        <button
+          class="admin-tab-btn active"
+          data-boost-filter="pending"
+        >
+          Pending
+        </button>
+
+        <button
+          class="admin-tab-btn"
+          data-boost-filter="active"
+        >
+          Active
+        </button>
+
+        <button
+          class="admin-tab-btn"
+          data-boost-filter="rejected"
+        >
+          Rejected
+        </button>
+
+        <button
+          class="admin-tab-btn"
+          data-boost-filter="all"
+        >
+          All
+        </button>
+      </div>
+
+      <div id="boostsContainer">
+        <p class="empty-state">Loading boost requests...</p>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -612,9 +691,11 @@
     const overviewSection = document.getElementById("overviewSection");
     const usersSection = document.getElementById("usersSection");
     const reportsSection = document.getElementById("reportsSection");
+    const boostsSection = document.getElementById("boostsSection");
 
     const usersContainer = document.getElementById("usersContainer");
     const reportsContainer = document.getElementById("reportsContainer");
+    const boostsContainer = document.getElementById("boostsContainer");
     const userSearchInput = document.getElementById("userSearchInput");
     const clearUserSearchBtn = document.getElementById("clearUserSearchBtn");
     const refreshBtn = document.getElementById("refreshBtn");
@@ -627,9 +708,15 @@
       ".admin-tab-btn[data-filter]"
     );
 
+    const boostFilterButtons = document.querySelectorAll(
+      ".admin-tab-btn[data-boost-filter]"
+    );
+
     let allUsers = [];
     let allReports = [];
+    let allBoostProducts = [];
     let currentReportFilter = "all";
+    let currentBoostFilter = "pending";
 
     window.addEventListener("error", (event) => {
       console.error("Admin page error:", event.error || event.message);
@@ -728,6 +815,9 @@
       reportsSection.style.display =
         sectionName === "reports" ? "block" : "none";
 
+      boostsSection.style.display =
+        sectionName === "boosts" ? "block" : "none";
+
       sectionButtons.forEach((button) => {
         button.classList.toggle(
           "active",
@@ -759,6 +849,10 @@
         (report) => (report.status || "pending") === "pending"
       );
 
+      const pendingBoosts = products.filter(
+        (product) => product.boostStatus === "pending"
+      );
+
       document.getElementById("statTotalUsers").textContent =
         allUsers.length;
 
@@ -779,6 +873,9 @@
 
       document.getElementById("statPendingReports").textContent =
         pendingReports.length;
+
+      document.getElementById("statPendingBoosts").textContent =
+        pendingBoosts.length;
     }
 
     async function loadAllData() {
@@ -809,6 +906,16 @@
           })
         );
 
+        allBoostProducts = products.filter(
+          (product) => Boolean(product.boostStatus)
+        );
+
+        allBoostProducts.sort(
+          (firstProduct, secondProduct) =>
+            timestampToMilliseconds(secondProduct.boostRequestedAt) -
+            timestampToMilliseconds(firstProduct.boostRequestedAt)
+        );
+
         allReports = reportsSnapshot.docs.map(
           (documentSnapshot) => ({
             id: documentSnapshot.id,
@@ -832,6 +939,7 @@
         updateStatistics(products);
         renderUsers();
         renderReports();
+        renderBoosts();
       } catch (error) {
         console.error("Could not load admin data:", error);
 
@@ -845,6 +953,9 @@
 
         reportsContainer.innerHTML =
           '<p class="empty-state">Unable to load reports.</p>';
+
+        boostsContainer.innerHTML =
+          '<p class="empty-state">Unable to load boost requests.</p>';
       } finally {
         refreshBtn.disabled = false;
         refreshBtn.textContent = "🔄 Refresh Data";
@@ -1269,6 +1380,194 @@
         );
 
         renderReports();
+      });
+    });
+
+    function renderBoosts() {
+      const filteredBoosts =
+        currentBoostFilter === "all"
+          ? allBoostProducts
+          : allBoostProducts.filter(
+              (product) =>
+                product.boostStatus === currentBoostFilter
+            );
+
+      if (filteredBoosts.length === 0) {
+        boostsContainer.innerHTML =
+          '<p class="empty-state">No boost requests were found for this filter.</p>';
+
+        return;
+      }
+
+      boostsContainer.innerHTML = filteredBoosts
+        .map((product) => {
+          const boostStatus = product.boostStatus || "pending";
+          const statusClass = "status-" + boostStatus;
+          const isPending = boostStatus === "pending";
+
+          const productLink = `product-detail.html?id=${encodeURIComponent(product.id)}`;
+
+          return `
+            <article class="report-card">
+              <div class="report-top">
+                <div>
+                  <span class="report-title">
+                    ${safeText(product.title || "Untitled Listing")}
+                  </span>
+
+                  <span class="report-reason">
+                    ${safeText(product.boostPlanLabel || product.boostPlan || "Unknown plan")}
+                  </span>
+                </div>
+
+                <span class="report-status ${statusClass}">
+                  ${safeText(boostStatus)}
+                </span>
+              </div>
+
+              <div class="boost-payment-info">
+                Amount due: <strong>${safeText(product.boostPrice || "Unknown")}</strong>
+                <br>
+                Duration: ${safeText(product.boostDurationDays || "?")} days
+              </div>
+
+              <div class="report-meta">
+                Requested: ${formatDate(product.boostRequestedAt)}
+                <br>
+                Seller ID: ${safeText(product.sellerId || "Unknown")}
+                <br>
+                Seller Email: ${safeText(product.sellerEmail || "Unknown")}
+              </div>
+
+              <div class="report-actions">
+                <a
+                  class="btn-view"
+                  href="${productLink}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Listing
+                </a>
+
+                ${
+                  isPending
+                    ? `
+                      <button
+                        class="btn-confirm-boost"
+                        data-boost-id="${safeText(product.id)}"
+                        data-boost-action="activate"
+                      >
+                        Confirm Payment &amp; Activate
+                      </button>
+
+                      <button
+                        class="btn-reject-boost"
+                        data-boost-id="${safeText(product.id)}"
+                        data-boost-action="reject"
+                      >
+                        Reject
+                      </button>
+                    `
+                    : ""
+                }
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+
+      document.querySelectorAll("[data-boost-action]")
+        .forEach((button) => {
+          button.addEventListener("click", async () => {
+            await handleBoostAction(
+              button.dataset.boostId,
+              button.dataset.boostAction
+            );
+          });
+        });
+    }
+
+    async function handleBoostAction(productId, action) {
+      const selectedProduct = allBoostProducts.find(
+        (product) => product.id === productId
+      );
+
+      if (!selectedProduct) {
+        alert("The selected boost request could not be found.");
+        return;
+      }
+
+      try {
+        if (action === "activate") {
+          const confirmed = confirm(
+            `Confirm that payment of ${selectedProduct.boostPrice || "the boost fee"} was received for "${selectedProduct.title || "this listing"}"?`
+          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          await updateDoc(doc(db, "products", productId), {
+            boostStatus: "active",
+            featured: true,
+            boostActivatedAt: Timestamp.now()
+          });
+
+          selectedProduct.boostStatus = "active";
+          selectedProduct.featured = true;
+        }
+
+        if (action === "reject") {
+          const confirmed = confirm(
+            `Reject this boost request for "${selectedProduct.title || "this listing"}"? This cannot be undone.`
+          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          await updateDoc(doc(db, "products", productId), {
+            boostStatus: "rejected",
+            boostRejectedAt: Timestamp.now()
+          });
+
+          selectedProduct.boostStatus = "rejected";
+        }
+
+        renderBoosts();
+
+        const productsSnapshot = await getDocs(
+          collection(db, "products")
+        );
+
+        const products = productsSnapshot.docs.map(
+          (documentSnapshot) => ({
+            id: documentSnapshot.id,
+            ...documentSnapshot.data()
+          })
+        );
+
+        updateStatistics(products);
+      } catch (error) {
+        console.error("Boost action failed:", error);
+        alert("The action failed: " + error.message);
+      }
+    }
+
+    boostFilterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        currentBoostFilter = button.dataset.boostFilter;
+
+        boostFilterButtons.forEach(
+          (filterButton) => {
+            filterButton.classList.toggle(
+              "active",
+              filterButton === button
+            );
+          }
+        );
+
+        renderBoosts();
       });
     });
 
