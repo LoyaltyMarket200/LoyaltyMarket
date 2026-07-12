@@ -18,6 +18,16 @@
       border-radius: 20px;
       margin-left: 6px;
     }
+    .boost-pending-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 6px;
+    }
     .feature-btn {
       background: #fff;
       border: 1px solid #d97706;
@@ -39,7 +49,8 @@
     .feature-btn:disabled,
     .sold-btn:disabled,
     .duplicate-btn:disabled,
-    .archive-btn:disabled {
+    .archive-btn:disabled,
+    .boost-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
@@ -93,6 +104,25 @@
     .archive-btn.is-archived {
       background: #7c3aed;
       color: #fff;
+    }
+    .boost-btn {
+      background: #fff;
+      border: 1px solid #db2777;
+      color: #db2777;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .boost-btn:hover {
+      background: #db2777;
+      color: #fff;
+    }
+    .boost-btn.is-pending {
+      background: #fdf2f8;
+      border-color: #db2777;
+      color: #db2777;
     }
     .status-badge.sold {
       background: #e5e7eb;
@@ -160,6 +190,107 @@
     .dashboard-listing-info h4 a:hover {
       text-decoration: underline;
     }
+
+    .boost-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .boost-modal-overlay.open {
+      display: flex;
+    }
+    .boost-modal {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px;
+      max-width: 420px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .boost-modal h3 {
+      margin-top: 0;
+      margin-bottom: 4px;
+    }
+    .boost-modal-subtitle {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .boost-plan-option {
+      display: block;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .boost-plan-option:hover {
+      border-color: #db2777;
+    }
+    .boost-plan-option.selected {
+      border-color: #db2777;
+      background: #fdf2f8;
+    }
+    .boost-plan-option input {
+      margin-right: 10px;
+    }
+    .boost-plan-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: #111;
+    }
+    .boost-plan-price {
+      font-weight: 700;
+      color: #db2777;
+      float: right;
+    }
+    .boost-plan-desc {
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 4px;
+      margin-left: 24px;
+    }
+    .boost-modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .boost-modal-actions button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+    }
+    .boost-submit-btn {
+      background: #db2777;
+      color: #fff;
+    }
+    .boost-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .boost-cancel-btn {
+      background: #f1f5f9;
+      color: #374151;
+    }
+    .boost-modal-note {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 14px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -220,6 +351,43 @@
 
 </section>
 
+<div class="boost-modal-overlay" id="boostModalOverlay">
+  <div class="boost-modal">
+    <h3>🚀 Boost This Listing</h3>
+    <p class="boost-modal-subtitle">Boosted listings appear higher in search results and get a featured badge.</p>
+
+    <form id="boostForm">
+      <label class="boost-plan-option" data-plan="3day">
+        <input type="radio" name="boostPlan" value="3day">
+        <span class="boost-plan-title">3-Day Boost</span>
+        <span class="boost-plan-price">US$5</span>
+        <p class="boost-plan-desc">Great for a quick sale push.</p>
+      </label>
+
+      <label class="boost-plan-option" data-plan="7day">
+        <input type="radio" name="boostPlan" value="7day">
+        <span class="boost-plan-title">7-Day Boost</span>
+        <span class="boost-plan-price">US$10</span>
+        <p class="boost-plan-desc">Most popular — a full week of visibility.</p>
+      </label>
+
+      <label class="boost-plan-option" data-plan="14day">
+        <input type="radio" name="boostPlan" value="14day">
+        <span class="boost-plan-title">14-Day Boost</span>
+        <span class="boost-plan-price">US$18</span>
+        <p class="boost-plan-desc">Best value for high-priced items.</p>
+      </label>
+
+      <div class="boost-modal-actions">
+        <button type="button" class="boost-cancel-btn" id="boostCancelBtn">Cancel</button>
+        <button type="submit" class="boost-submit-btn" id="boostSubmitBtn" disabled>Submit Boost Request</button>
+      </div>
+    </form>
+
+    <p class="boost-modal-note">Payment isn't connected yet. Submitting marks this listing as boost pending for admin review.</p>
+  </div>
+</div>
+
 <footer class="footer">
   <h2>🇱🇷 LoyaltyMarket</h2>
   <p>Buy And Sell Products Across Liberia.</p>
@@ -251,9 +419,22 @@ const logoutBtn = document.getElementById("logoutBtn");
 const dashboardListings = document.getElementById("dashboardListings");
 const archiveFilterButtons = document.querySelectorAll(".archive-filter-btn");
 
+const boostModalOverlay = document.getElementById("boostModalOverlay");
+const boostForm = document.getElementById("boostForm");
+const boostCancelBtn = document.getElementById("boostCancelBtn");
+const boostSubmitBtn = document.getElementById("boostSubmitBtn");
+const boostPlanOptions = document.querySelectorAll(".boost-plan-option");
+
 let currentUser = null;
 let allMyProducts = [];
 let currentArchiveFilter = "all";
+let boostTargetProductId = null;
+
+const boostPlanDetails = {
+  "3day": { label: "3-Day Boost", price: "US$5", days: 3 },
+  "7day": { label: "7-Day Boost", price: "US$10", days: 7 },
+  "14day": { label: "14-Day Boost", price: "US$18", days: 14 }
+};
 
 function safeText(value) {
   return String(value || "")
@@ -319,6 +500,8 @@ function renderListings() {
     const isFeatured = product.featured === true;
     const isSold = product.status === "sold";
     const isArchived = product.status === "archived";
+    const isBoostPending = product.boostStatus === "pending";
+    const isBoostActive = product.boostStatus === "active";
 
     const image =
       product.imageUrl ||
@@ -336,6 +519,20 @@ function renderListings() {
       statusClass = "archived";
     }
 
+    let boostBadgeHtml = "";
+    if (isBoostPending) {
+      boostBadgeHtml = '<span class="boost-pending-badge">⏳ Boost Pending</span>';
+    } else if (isBoostActive) {
+      boostBadgeHtml = '<span class="boost-pending-badge">🚀 Boosted</span>';
+    }
+
+    let boostButtonLabel = "🚀 Boost";
+    if (isBoostPending) {
+      boostButtonLabel = "⏳ Boost Pending";
+    } else if (isBoostActive) {
+      boostButtonLabel = "🚀 Boost Active";
+    }
+
     const card = document.createElement("div");
     card.className = "dashboard-listing-card" + (isArchived ? " is-archived-card" : "");
 
@@ -347,7 +544,7 @@ function renderListings() {
       </div>
 
       <div class="dashboard-listing-info">
-        <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">⭐ Featured</span>' : ""}</h4>
+        <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">⭐ Featured</span>' : ""}${boostBadgeHtml}</h4>
         <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
         <span class="status-badge ${statusClass}">${statusLabel}</span>
       </div>
@@ -365,6 +562,9 @@ function renderListings() {
         <button class="archive-btn ${isArchived ? "is-archived" : ""}" data-id="${productId}" data-archived="${isArchived}">
           ${isArchived ? "↺ Unarchive" : "🗄 Archive"}
         </button>
+        <button class="boost-btn ${isBoostPending || isBoostActive ? "is-pending" : ""}" data-id="${productId}" ${isBoostPending || isBoostActive ? "disabled" : ""}>
+          ${boostButtonLabel}
+        </button>
       </div>
     `;
 
@@ -373,6 +573,74 @@ function renderListings() {
 
   attachListingButtonListeners();
 }
+
+function openBoostModal(productId) {
+  boostTargetProductId = productId;
+  boostForm.reset();
+  boostPlanOptions.forEach((option) => option.classList.remove("selected"));
+  boostSubmitBtn.disabled = true;
+  boostModalOverlay.classList.add("open");
+}
+
+function closeBoostModal() {
+  boostModalOverlay.classList.remove("open");
+  boostTargetProductId = null;
+}
+
+boostPlanOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    boostPlanOptions.forEach((o) => o.classList.remove("selected"));
+    option.classList.add("selected");
+    const radio = option.querySelector("input[type=radio]");
+    radio.checked = true;
+    boostSubmitBtn.disabled = false;
+  });
+});
+
+boostCancelBtn.addEventListener("click", closeBoostModal);
+
+boostModalOverlay.addEventListener("click", (event) => {
+  if (event.target === boostModalOverlay) {
+    closeBoostModal();
+  }
+});
+
+boostForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const selectedPlan = boostForm.querySelector("input[name=boostPlan]:checked");
+
+  if (!selectedPlan || !boostTargetProductId) {
+    return;
+  }
+
+  const planKey = selectedPlan.value;
+  const planInfo = boostPlanDetails[planKey];
+
+  boostSubmitBtn.disabled = true;
+  boostSubmitBtn.textContent = "Submitting...";
+
+  try {
+    await updateDoc(doc(db, "products", boostTargetProductId), {
+      boostStatus: "pending",
+      boostPlan: planKey,
+      boostPlanLabel: planInfo.label,
+      boostPrice: planInfo.price,
+      boostDurationDays: planInfo.days,
+      boostRequestedAt: serverTimestamp()
+    });
+
+    alert("Boost request submitted! It will be reviewed and activated once payment is confirmed.");
+    closeBoostModal();
+    loadMyListings();
+
+  } catch (error) {
+    alert("Could not submit boost request: " + error.message);
+  } finally {
+    boostSubmitBtn.disabled = false;
+    boostSubmitBtn.textContent = "Submit Boost Request";
+  }
+});
 
 function attachListingButtonListeners() {
   document.querySelectorAll(".edit-btn").forEach((button) => {
@@ -414,184 +682,4 @@ function attachListingButtonListeners() {
         loadMyListings();
       } catch (error) {
         alert("Could not update featured status: " + error.message);
-        button.disabled = false;
-      }
-    });
-  });
-
-  document.querySelectorAll(".sold-btn").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const productId = button.getAttribute("data-id");
-      const isCurrentlySold = button.getAttribute("data-sold") === "true";
-      const newStatus = isCurrentlySold ? "active" : "sold";
-
-      button.disabled = true;
-      button.textContent = "Updating...";
-
-      try {
-        await updateDoc(doc(db, "products", productId), {
-          status: newStatus
-        });
-        loadMyListings();
-      } catch (error) {
-        alert("Could not update listing status: " + error.message);
-        button.disabled = false;
-      }
-    });
-  });
-
-  document.querySelectorAll(".duplicate-btn").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const productId = button.getAttribute("data-id");
-
-      const confirmDuplicate = confirm("Create a copy of this listing? You'll be able to edit it before it's fully live.");
-      if (!confirmDuplicate) return;
-
-      button.disabled = true;
-      button.textContent = "Duplicating...";
-
-      try {
-        const originalRef = doc(db, "products", productId);
-        const originalSnap = await getDoc(originalRef);
-
-        if (!originalSnap.exists()) {
-          alert("Could not find the original listing.");
-          button.disabled = false;
-          button.textContent = "📋 Duplicate";
-          return;
-        }
-
-        const originalData = originalSnap.data();
-
-        const duplicateData = {
-          title: (originalData.title || "Untitled Product") + " (Copy)",
-          category: originalData.category || "",
-          priceUsd: originalData.priceUsd || "0",
-          priceLrd: originalData.priceLrd || "0",
-          condition: originalData.condition || "",
-          county: originalData.county || "",
-          city: originalData.city || "",
-          imageUrl: originalData.imageUrl || "",
-          images: originalData.images || [],
-          description: originalData.description || "",
-          phone: originalData.phone || "",
-          sellerId: currentUser.uid,
-          sellerEmail: currentUser.email,
-          status: "active",
-          featured: false,
-          createdAt: serverTimestamp()
-        };
-
-        const newDocRef = await addDoc(collection(db, "products"), duplicateData);
-
-        window.location.href = "edit-product.html?id=" + encodeURIComponent(newDocRef.id);
-
-      } catch (error) {
-        alert("Could not duplicate listing: " + error.message);
-        button.disabled = false;
-        button.textContent = "📋 Duplicate";
-      }
-    });
-  });
-
-  document.querySelectorAll(".archive-btn").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const productId = button.getAttribute("data-id");
-      const isCurrentlyArchived = button.getAttribute("data-archived") === "true";
-      const newStatus = isCurrentlyArchived ? "active" : "archived";
-
-      button.disabled = true;
-      button.textContent = isCurrentlyArchived ? "Unarchiving..." : "Archiving...";
-
-      try {
-        await updateDoc(doc(db, "products", productId), {
-          status: newStatus
-        });
-        loadMyListings();
-      } catch (error) {
-        alert("Could not update archive status: " + error.message);
-        button.disabled = false;
-      }
-    });
-  });
-}
-
-async function loadMyListings() {
-  dashboardListings.innerHTML = "<p>Loading your listings...</p>";
-
-  try {
-    const myProductsQuery = query(
-      collection(db, "products"),
-      where("sellerId", "==", currentUser.uid)
-    );
-
-    const snapshot = await getDocs(myProductsQuery);
-
-    allMyProducts = [];
-    snapshot.forEach((productDoc) => {
-      allMyProducts.push({ id: productDoc.id, ...productDoc.data() });
-    });
-
-    renderListings();
-
-  } catch (error) {
-    dashboardListings.innerHTML = `<p>Could not load your listings: ${safeText(error.message)}</p>`;
-  }
-}
-
-archiveFilterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    archiveFilterButtons.forEach((b) => b.classList.remove("active"));
-    button.classList.add("active");
-    currentArchiveFilter = button.getAttribute("data-filter");
-    renderListings();
-  });
-});
-
-function listenForUnreadMessages() {
-  const unreadQuery = query(
-    collection(db, "messages"),
-    where("receiverId", "==", currentUser.uid),
-    where("read", "==", false)
-  );
-
-  onSnapshot(unreadQuery, (snapshot) => {
-    const count = snapshot.size;
-
-    if (count > 0) {
-      unreadBadge.textContent = count > 9 ? "9+" : String(count);
-      unreadBadge.classList.add("has-unread");
-    } else {
-      unreadBadge.classList.remove("has-unread");
-    }
-  });
-}
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-    loadUserProfile();
-    loadMyListings();
-    listenForUnreadMessages();
-  } else {
-    window.location.href = "login.html";
-  }
-});
-
-logoutBtn.addEventListener("click", async () => {
-  await signOut(auth);
-  alert("Logged out successfully!");
-  window.location.href = "login.html";
-});
-</script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
-</script>
-
-</body>
-</html>
+        button.disabled =
