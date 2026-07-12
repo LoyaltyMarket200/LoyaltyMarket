@@ -286,6 +286,7 @@
     .status-dismissed { background: #e2e8f0; color: #475569; }
     .status-active { background: #dcfce7; color: #166534; }
     .status-rejected { background: #fee2e2; color: #b91c1c; }
+    .status-pending_review { background: #fef3c7; color: #92400e; }
 
     .user-actions,
     .report-actions {
@@ -322,10 +323,12 @@
     .btn-unverify { background: #64748b; color: white; }
 
     .btn-suspend,
-    .btn-reject-boost { background: #dc2626; color: white; }
+    .btn-reject-boost,
+    .btn-reject-review { background: #dc2626; color: white; }
 
     .btn-unsuspend,
-    .btn-confirm-boost { background: #059669; color: white; }
+    .btn-confirm-boost,
+    .btn-approve-review { background: #059669; color: white; }
 
     .boost-payment-info {
       margin-top: 13px;
@@ -335,6 +338,21 @@
       color: #1e40af;
       font-size: 13px;
       line-height: 1.6;
+    }
+
+    .flag-reasons-box {
+      margin-top: 13px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .flag-reasons-box ul {
+      margin: 6px 0 0 18px;
+      padding: 0;
     }
 
     .empty-state {
@@ -731,6 +749,10 @@
         Reported Listings
       </button>
 
+      <button class="admin-section-tab-btn" data-section="pendingReview">
+        Pending Review
+      </button>
+
       <button class="admin-section-tab-btn" data-section="boosts">
         Boost Requests
       </button>
@@ -747,6 +769,7 @@
         <div class="stat-card"><span class="stat-card-icon">⭐</span><div class="stat-card-label">Verified Sellers</div><div class="stat-card-value" id="statVerifiedSellers">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">📋</span><div class="stat-card-label">Total Listings</div><div class="stat-card-value" id="statTotalListings">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">📈</span><div class="stat-card-label">New Listings Today</div><div class="stat-card-value" id="statNewListingsToday">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">🛡️</span><div class="stat-card-label">Pending Review</div><div class="stat-card-value" id="statPendingScamReview">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">🚩</span><div class="stat-card-label">Total Reports</div><div class="stat-card-value" id="statTotalReports">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">⏳</span><div class="stat-card-label">Pending Reports</div><div class="stat-card-value" id="statPendingReports">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">🚀</span><div class="stat-card-label">Pending Boosts</div><div class="stat-card-value" id="statPendingBoosts">—</div></div>
@@ -763,6 +786,7 @@
       <div class="quick-actions-grid">
         <button class="quick-action-btn" type="button" data-goto-section="users">👥 Manage Users</button>
         <button class="quick-action-btn" type="button" data-goto-section="reports">🚩 View Reports</button>
+        <button class="quick-action-btn" type="button" data-goto-section="pendingReview">🛡️ Pending Review</button>
         <button class="quick-action-btn" type="button" data-goto-section="boosts">🚀 View Boost Requests</button>
         <a class="quick-action-btn" href="dashboard.html">📋 Manage Listings</a>
         <button class="quick-action-btn" type="button" data-goto-section="settings">⚙️ Marketplace Settings</button>
@@ -807,6 +831,19 @@
 
       <div id="reportsContainer">
         <p class="empty-state">Loading reports...</p>
+      </div>
+    </section>
+
+    <section id="pendingReviewSection" style="display:none;">
+      <p style="color:#64748b; margin-top:0;">
+        These listings were automatically flagged by LoyaltyMarket's rule-based
+        scam checks (unusually low price, suspicious wording, missing photo, or
+        a burst of new listings from one seller) and are hidden from the public
+        marketplace until you approve or reject them.
+      </p>
+
+      <div id="pendingReviewContainer">
+        <p class="empty-state">Loading listings pending review...</p>
       </div>
     </section>
 
@@ -969,11 +1006,13 @@
     const overviewSection = document.getElementById("overviewSection");
     const usersSection = document.getElementById("usersSection");
     const reportsSection = document.getElementById("reportsSection");
+    const pendingReviewSection = document.getElementById("pendingReviewSection");
     const boostsSection = document.getElementById("boostsSection");
     const settingsSection = document.getElementById("settingsSection");
 
     const usersContainer = document.getElementById("usersContainer");
     const reportsContainer = document.getElementById("reportsContainer");
+    const pendingReviewContainer = document.getElementById("pendingReviewContainer");
     const boostsContainer = document.getElementById("boostsContainer");
     const userSearchInput = document.getElementById("userSearchInput");
     const clearUserSearchBtn = document.getElementById("clearUserSearchBtn");
@@ -1093,6 +1132,7 @@
       overviewSection.style.display = sectionName === "overview" ? "block" : "none";
       usersSection.style.display = sectionName === "users" ? "block" : "none";
       reportsSection.style.display = sectionName === "reports" ? "block" : "none";
+      pendingReviewSection.style.display = sectionName === "pendingReview" ? "block" : "none";
       boostsSection.style.display = sectionName === "boosts" ? "block" : "none";
       settingsSection.style.display = sectionName === "settings" ? "block" : "none";
 
@@ -1128,6 +1168,7 @@
       const activeListings = products.filter((product) => (product.status || "active") === "active");
       const archivedListings = products.filter((product) => product.status === "archived");
       const soldListings = products.filter((product) => product.status === "sold");
+      const pendingScamReview = products.filter((product) => product.status === "pending_review");
       const featuredListings = products.filter((product) => product.featured === true);
       const completedOrders = orders.filter((order) => order.status === "completed");
 
@@ -1136,6 +1177,7 @@
       document.getElementById("statVerifiedSellers").textContent = verifiedUsers.length;
       document.getElementById("statTotalListings").textContent = products.length;
       document.getElementById("statNewListingsToday").textContent = newListingsToday.length;
+      document.getElementById("statPendingScamReview").textContent = pendingScamReview.length;
       document.getElementById("statTotalReports").textContent = allReports.length;
       document.getElementById("statPendingReports").textContent = pendingReports.length;
       document.getElementById("statPendingBoosts").textContent = pendingBoosts.length;
@@ -1368,6 +1410,7 @@
         updateStatistics(allProductsCache, allOrdersCache);
         renderUsers();
         renderReports();
+        renderPendingReview();
         renderBoosts();
         renderRecentActivity(allProductsCache, allOrdersCache);
         renderBreakdowns(allProductsCache, allOrdersCache);
@@ -1612,6 +1655,130 @@
         renderReports();
       });
     });
+
+    // ================= PENDING REVIEW (SCAM DETECTION) =================
+    // Shows listings that sell.html / edit-product.html's rule-based scam
+    // checks flagged with status "pending_review", along with the specific
+    // reasons they were flagged, so an admin can Approve (make it active
+    // again) or Reject (mark it rejected and keep it hidden).
+
+    function renderPendingReview() {
+      const pendingListings = allProductsCache.filter(
+        (product) => product.status === "pending_review"
+      );
+
+      if (pendingListings.length === 0) {
+        pendingReviewContainer.innerHTML =
+          '<p class="empty-state">No listings are currently pending review.</p>';
+        return;
+      }
+
+      const sortedPending = [...pendingListings].sort(
+        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
+      );
+
+      pendingReviewContainer.innerHTML = sortedPending.map((product) => {
+        const productLink = `product-detail.html?id=${encodeURIComponent(product.id)}`;
+        const reasons = Array.isArray(product.flagReasons) ? product.flagReasons : [];
+
+        return `
+          <article class="report-card">
+            <div class="report-top">
+              <div>
+                <span class="report-title">${safeText(product.title || "Untitled Listing")}</span>
+                <span class="report-reason">${safeText(product.category || "Uncategorized")}</span>
+              </div>
+
+              <span class="report-status status-pending_review">Pending Review</span>
+            </div>
+
+            <div class="report-details">
+              Price: US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}
+            </div>
+
+            ${reasons.length ? `
+              <div class="flag-reasons-box">
+                <strong>Flagged for:</strong>
+                <ul>
+                  ${reasons.map((reason) => `<li>${safeText(reason)}</li>`).join("")}
+                </ul>
+              </div>
+            ` : ""}
+
+            <div class="report-meta">
+              Submitted: ${formatDate(product.createdAt)}
+              <br>
+              Seller ID: ${safeText(product.sellerId || "Unknown")}
+              <br>
+              Seller Email: ${safeText(product.sellerEmail || "Unknown")}
+            </div>
+
+            <div class="report-actions">
+              <a class="btn-view" href="${productLink}" target="_blank" rel="noopener noreferrer">
+                View Listing
+              </a>
+
+              <button class="btn-approve-review" data-review-id="${safeText(product.id)}" data-review-action="approve">
+                Approve &amp; Publish
+              </button>
+
+              <button class="btn-reject-review" data-review-id="${safeText(product.id)}" data-review-action="reject">
+                Reject
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-review-action]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await handlePendingReviewAction(button.dataset.reviewId, button.dataset.reviewAction);
+        });
+      });
+    }
+
+    async function handlePendingReviewAction(productId, action) {
+      const product = allProductsCache.find((item) => item.id === productId);
+
+      if (!product) {
+        alert("The selected listing could not be found.");
+        return;
+      }
+
+      try {
+        if (action === "approve") {
+          if (!confirm(`Approve and publish "${product.title || "this listing"}"?`)) return;
+
+          await updateDoc(doc(db, "products", productId), {
+            status: "active",
+            flagged: false
+          });
+
+          product.status = "active";
+          product.flagged = false;
+        }
+
+        if (action === "reject") {
+          if (!confirm(`Reject "${product.title || "this listing"}"? It will stay hidden from buyers.`)) return;
+
+          await updateDoc(doc(db, "products", productId), {
+            status: "rejected",
+            flagged: false
+          });
+
+          product.status = "rejected";
+          product.flagged = false;
+        }
+
+        renderPendingReview();
+        updateStatistics(allProductsCache, allOrdersCache);
+        renderRecentActivity(allProductsCache, allOrdersCache);
+        renderBreakdowns(allProductsCache, allOrdersCache);
+      } catch (error) {
+        alert("The action failed: " + error.message);
+      }
+    }
+    // ================= END PENDING REVIEW =================
 
     function renderBoosts() {
       const filteredBoosts = currentBoostFilter === "all"
