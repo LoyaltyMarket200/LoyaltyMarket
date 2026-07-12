@@ -472,8 +472,7 @@ async function loadProducts() {
         id: docSnap.id,
         data: docSnap.data()
       }))
-      .filter((item) => item.data.archived !== true);
-
+     .filter((item) => item.data.status !== "archived");
     if (allProducts.length === 0) {
       productGrid.innerHTML = "<p>No products posted yet. Be the first to sell on LoyaltyMarket.</p>";
       resultsCountLine.textContent = "";
