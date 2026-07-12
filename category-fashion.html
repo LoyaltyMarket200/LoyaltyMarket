@@ -252,6 +252,8 @@ function applyFilters() {
   const selectedCondition = conditionFilter.value;
 
   const filteredProducts = allFashion.filter((product) => {
+    if (product.status === "archived") return false;
+
     const title = String(product.title || "").toLowerCase();
     const description = String(product.description || "").toLowerCase();
     const county = String(product.county || "");
@@ -334,7 +336,7 @@ async function loadFashion() {
       return secondFeatured - firstFeatured;
     });
 
-    displayProducts(allFashion);
+    displayProducts(allFashion.filter((product) => product.status !== "archived"));
 
   } catch (error) {
     console.error(error);
@@ -362,7 +364,7 @@ clearFiltersBtn.addEventListener("click", function() {
   priceFilter.value = "";
   conditionFilter.value = "";
 
-  displayProducts(allFashion);
+  displayProducts(allFashion.filter((product) => product.status !== "archived"));
 });
 
 loadFashion();
