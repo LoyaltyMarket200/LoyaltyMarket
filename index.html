@@ -6,6 +6,7 @@
   <title>LoyaltyMarket - Liberia's Marketplace</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
   <style>
     .badge-featured {
@@ -136,7 +137,7 @@
 
 <header class="navbar">
   <div class="logo">
-    <h2>🇱🇷 LoyaltyMarket</h2>
+    <img src="icons/icon-512.png" alt="LoyaltyMarket" style="height: 40px; vertical-align: middle;">
   </div>
 
   <input type="text" class="search-box" id="searchInput" placeholder="Search Products, Cars, Phones...">
@@ -472,7 +473,8 @@ async function loadProducts() {
         id: docSnap.id,
         data: docSnap.data()
       }))
-     .filter((item) => item.data.status !== "archived");
+      .filter((item) => item.data.status !== "archived");
+
     if (allProducts.length === 0) {
       productGrid.innerHTML = "<p>No products posted yet. Be the first to sell on LoyaltyMarket.</p>";
       resultsCountLine.textContent = "";
