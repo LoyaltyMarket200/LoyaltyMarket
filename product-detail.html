@@ -286,6 +286,45 @@ let loadedPriceLrd = "0";
 let loadedImage = "";
 let isSaved = false;
 
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop";
+
+// Works out the list of real image URLs for a product, no matter which
+// field name the listing was saved with (new listings use images[],
+// older listings may use imageUrl, imageURL, image, mainImage, photoUrl,
+// or photoURL). Falls back to a placeholder ONLY if none of these exist.
+function resolveProductImages(product) {
+  const collected = [];
+
+  if (Array.isArray(product.images)) {
+    product.images.forEach((url) => {
+      if (url && typeof url === "string" && url.trim() !== "") {
+        collected.push(url.trim());
+      }
+    });
+  }
+
+  const legacyFields = [
+    product.imageUrl,
+    product.imageURL,
+    product.image,
+    product.mainImage,
+    product.photoUrl,
+    product.photoURL
+  ];
+
+  legacyFields.forEach((url) => {
+    if (url && typeof url === "string" && url.trim() !== "" && !collected.includes(url.trim())) {
+      collected.push(url.trim());
+    }
+  });
+
+  if (collected.length === 0) {
+    return [FALLBACK_IMAGE];
+  }
+
+  return collected;
+}
+
 function listenForUnreadMessages(userId) {
   const unreadQuery = query(collection(db, "messages"), where("receiverId", "==", userId), where("read", "==", false));
   onSnapshot(unreadQuery, (snapshot) => {
@@ -430,6 +469,9 @@ function safeText(value) {
 
 function renderThumbnails(images, title) {
   thumbnailStrip.innerHTML = "";
+
+  // Don't show a thumbnail strip at all when there's only one real image
+  // (or we're only showing the fallback placeholder).
   if (!images || images.length < 2) return;
 
   images.forEach((imageUrl, index) => {
@@ -475,8 +517,7 @@ async function loadProduct() {
     const county = product.county || "Liberia";
     const condition = product.condition || "Not listed";
     const description = product.description || "No description was provided.";
-    const fallbackImage = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop";
-    const images = product.images && product.images.length > 0 ? product.images : [product.imageUrl || fallbackImage];
+    const images = resolveProductImages(product);
     const email = product.sellerEmail || "Seller email not available";
     const phone = product.phone || "";
     const sellerId = product.sellerId || "";
