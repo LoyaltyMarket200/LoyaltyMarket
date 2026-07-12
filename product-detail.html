@@ -510,6 +510,17 @@ async function loadProduct() {
 
     if (currentUser) checkIfSaved();
 
+    try {
+      const stored = localStorage.getItem("loyaltymarket_recently_viewed");
+      let viewedIds = stored ? JSON.parse(stored) : [];
+      viewedIds = viewedIds.filter((id) => id !== productId);
+      viewedIds.unshift(productId);
+      viewedIds = viewedIds.slice(0, 10);
+      localStorage.setItem("loyaltymarket_recently_viewed", JSON.stringify(viewedIds));
+    } catch (storageError) {
+      // Recently viewed tracking is a nice-to-have; fail silently.
+    }
+
   } catch (error) {
     productTitle.textContent = "Unable to load product";
     productDescription.textContent = error.message;
