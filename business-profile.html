@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Profile - LoyaltyMarket</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <meta name="theme-color" content="#1e3a8a">
+  <style>
+    .seller-profile-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      max-width: 640px;
+      margin: 30px auto 20px auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .seller-profile-avatar {
+      font-size: 48px;
+      width: 88px;
+      height: 88px;
+      line-height: 88px;
+      border-radius: 50%;
+      background: #eff6ff;
+      margin: 0 auto 14px auto;
+      overflow: hidden;
+    }
+    .seller-profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .seller-profile-card h1 {
+      margin: 0 0 6px 0;
+      font-size: 24px;
+    }
+    #sellerVerified {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+      background: #fef3c7;
+      color: #92400e;
+      margin-bottom: 4px;
+    }
+    #sellerVerified.verified {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .business-category-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+      background: #eff6ff;
+      color: #1e40af;
+      margin-left: 6px;
+    }
+    .member-since {
+      color: #64748b;
+      font-size: 14px;
+      margin: 4px 0 0 0;
+    }
+    .business-description {
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 14px auto 0;
+      max-width: 480px;
+    }
+    .business-contact-line {
+      color: #64748b;
+      font-size: 13px;
+      margin: 10px 0 0 0;
+    }
+    .seller-stats-row {
+      display: flex;
+      gap: 14px;
+      max-width: 640px;
+      margin: 0 auto 30px auto;
+      padding: 0 20px;
+    }
+    .seller-stat-box {
+      flex: 1;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px 10px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .seller-stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+    .seller-stat-label {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    .message-seller-btn {
+      display: inline-block;
+      margin-top: 16px;
+      background: #2563eb;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .message-seller-btn:hover {
+      background: #1d4ed8;
+    }
+    .seller-listings-section,
+    .seller-reviews-section {
+      max-width: 1000px;
+      margin: 0 auto 30px auto;
+      padding: 0 20px;
+    }
+    .seller-listings-section h2,
+    .seller-reviews-section h2 {
+      margin-bottom: 14px;
+    }
+    .listing-featured-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 6px;
+    }
+    .not-business-box {
+      max-width: 640px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .not-business-box a {
+      color: #2563eb;
+      font-weight: 700;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+
+  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
+
+  <a href="index.html" class="login-btn">Home</a>
+</header>
+
+<div id="notBusinessBox" class="not-business-box" style="display:none;">
+  <h2>This is not a business account</h2>
+  <p id="notBusinessMessage">This profile does not have a business storefront.</p>
+  <a id="notBusinessLink" href="index.html">Return to homepage</a>
+</div>
+
+<section class="seller-profile-section" id="businessProfileSection">
+
+  <div class="seller-profile-card">
+    <div class="seller-profile-avatar" id="businessAvatar">🏢</div>
+    <h1 id="businessName">Loading...</h1>
+    <p>
+      <span id="sellerVerified"></span>
+      <span class="business-category-badge" id="businessCategoryBadge" style="display:none;"></span>
+    </p>
+    <p class="member-since" id="sellerMemberSince"></p>
+    <p class="business-description" id="businessDescription"></p>
+    <p class="business-contact-line" id="businessLocationLine"></p>
+    <p class="business-contact-line" id="businessPhoneLine"></p>
+    <a href="#" class="message-seller-btn" id="messageSellerBtn" style="display:none;">💬 Message This Business</a>
+  </div>
+
+  <div class="seller-stats-row">
+    <div class="seller-stat-box">
+      <div class="seller-stat-value" id="statListingCount">-</div>
+      <div class="seller-stat-label">Active Listings</div>
+    </div>
+    <div class="seller-stat-box">
+      <div class="seller-stat-value" id="statAverageRating">-</div>
+      <div class="seller-stat-label">Average Rating</div>
+    </div>
+    <div class="seller-stat-box">
+      <div class="seller-stat-value" id="statReviewCount">-</div>
+      <div class="seller-stat-label">Reviews</div>
+    </div>
+  </div>
+
+  <div class="seller-listings-section">
+    <h2>Listings from this business</h2>
+    <div class="seller-listings-grid" id="sellerListingsGrid">
+      <p>Loading listings...</p>
+    </div>
+  </div>
+
+  <div class="seller-reviews-section">
+    <h2>Reviews <span id="averageRating"></span></h2>
+
+    <div class="review-form-card" id="reviewFormCard" style="display:none;">
+      <h3>Leave a Review</h3>
+      <form id="reviewForm">
+        <label>Rating</label>
+        <select id="reviewRating" required>
+          <option value="">Select rating</option>
+          <option value="5">⭐⭐⭐⭐⭐ (5) Excellent</option>
+          <option value="4">⭐⭐⭐⭐ (4) Good</option>
+          <option value="3">⭐⭐⭐ (3) Average</option>
+          <option value="2">⭐⭐ (2) Poor</option>
+          <option value="1">⭐ (1) Terrible</option>
+        </select>
+
+        <label>Comment</label>
+        <textarea id="reviewComment" rows="3" placeholder="Share your experience with this business..." required></textarea>
+
+        <button type="submit" class="post-btn">Submit Review</button>
+      </form>
+    </div>
+
+    <p id="loginToReviewMsg" style="display:none; color:#64748b;">
+      <a href="login.html" style="color:#2563eb; font-weight:600;">Login</a> to leave a review.
+    </p>
+
+    <p id="ownProfileMsg" style="display:none; color:#64748b;">
+      This is your own business profile — you can't review yourself.
+    </p>
+
+    <div class="reviews-list" id="reviewsList">
+      <p>Loading reviews...</p>
+    </div>
+  </div>
+
+</section>
+
+<footer class="footer">
+  <h2>🇱🇷 LoyaltyMarket</h2>
+  <p>Buy And Sell Products Across Liberia.</p>
+  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const params = new URLSearchParams(window.location.search);
+// Supports both business-profile.html?id=<uid> (viewing someone else's
+// storefront) and business-profile.html with no id (the logged-in
+// business owner viewing their own storefront via the dashboard link).
+let businessOwnerId = params.get("id");
+
+const businessProfileSection = document.getElementById("businessProfileSection");
+const notBusinessBox = document.getElementById("notBusinessBox");
+const notBusinessMessage = document.getElementById("notBusinessMessage");
+const notBusinessLink = document.getElementById("notBusinessLink");
+
+const businessAvatar = document.getElementById("businessAvatar");
+const businessNameEl = document.getElementById("businessName");
+const sellerVerified = document.getElementById("sellerVerified");
+const businessCategoryBadge = document.getElementById("businessCategoryBadge");
+const sellerMemberSince = document.getElementById("sellerMemberSince");
+const businessDescriptionEl = document.getElementById("businessDescription");
+const businessLocationLine = document.getElementById("businessLocationLine");
+const businessPhoneLine = document.getElementById("businessPhoneLine");
+const sellerListingsGrid = document.getElementById("sellerListingsGrid");
+const averageRating = document.getElementById("averageRating");
+const reviewFormCard = document.getElementById("reviewFormCard");
+const reviewForm = document.getElementById("reviewForm");
+const loginToReviewMsg = document.getElementById("loginToReviewMsg");
+const ownProfileMsg = document.getElementById("ownProfileMsg");
+const reviewsList = document.getElementById("reviewsList");
+const messageSellerBtn = document.getElementById("messageSellerBtn");
+
+const statListingCount = document.getElementById("statListingCount");
+const statAverageRating = document.getElementById("statAverageRating");
+const statReviewCount = document.getElementById("statReviewCount");
+
+let currentUser = null;
+let currentUserName = "";
+let isOwnProfile = false;
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function starsFor(rating) {
+  return "⭐".repeat(rating);
+}
+
+function showNotBusiness(message, linkId) {
+  businessProfileSection.style.display = "none";
+  notBusinessBox.style.display = "block";
+  notBusinessMessage.textContent = message;
+
+  if (linkId) {
+    notBusinessLink.textContent = "View this seller's regular profile";
+    notBusinessLink.href = "seller-profile.html?id=" + encodeURIComponent(linkId);
+  }
+}
+
+async function loadBusinessProfile() {
+  // If no id was given in the URL, fall back to the currently
+  // logged-in user (used by the "My Business Storefront" dashboard
+  // link, which doesn't pass an id).
+  if (!businessOwnerId) {
+    if (!currentUser) {
+      showNotBusiness("Please log in to view your business storefront.");
+      return;
+    }
+    businessOwnerId = currentUser.uid;
+  }
+
+  try {
+    const userDoc = await getDoc(doc(db, "users", businessOwnerId));
+
+    if (!userDoc.exists()) {
+      showNotBusiness("This business profile could not be found.");
+      return;
+    }
+
+    const userData = userDoc.data();
+    const accountType = userData.accountType || "personal";
+
+    if (accountType !== "business") {
+      showNotBusiness("This account is not registered as a business.", businessOwnerId);
+      return;
+    }
+
+    businessNameEl.textContent = userData.businessName || userData.name || "LoyaltyMarket Business";
+
+    if (userData.businessLogoUrl) {
+      businessAvatar.innerHTML = `<img src="${safeText(userData.businessLogoUrl)}" alt="${safeText(userData.businessName || "Business logo")}">`;
+    }
+
+    if (userData.businessVerified === true) {
+      sellerVerified.textContent = "✔ Verified Business";
+      sellerVerified.classList.add("verified");
+    } else {
+      sellerVerified.textContent = "Business Verification Pending";
+      sellerVerified.classList.remove("verified");
+    }
+
+    if (userData.businessCategory) {
+      businessCategoryBadge.textContent = userData.businessCategory;
+      businessCategoryBadge.style.display = "inline-block";
+    }
+
+    if (userData.createdAt && userData.createdAt.seconds) {
+      const date = new Date(userData.createdAt.seconds * 1000);
+      sellerMemberSince.textContent = "Business since " + date.getFullYear();
+    } else {
+      sellerMemberSince.textContent = "Business Account";
+    }
+
+    if (userData.businessDescription) {
+      businessDescriptionEl.textContent = userData.businessDescription;
+    }
+
+    const locationParts = [userData.businessCity, userData.businessCounty].filter(Boolean);
+    if (locationParts.length) {
+      businessLocationLine.textContent = "📍 " + locationParts.join(", ");
+    }
+
+    if (userData.businessPhone) {
+      businessPhoneLine.textContent = "📞 " + userData.businessPhone;
+    }
+
+    await loadBusinessListings();
+    await loadReviews();
+
+  } catch (error) {
+    businessNameEl.textContent = "Could not load business";
+    sellerListingsGrid.innerHTML = `<p>${safeText(error.message)}</p>`;
+  }
+}
+
+async function loadBusinessListings() {
+  try {
+    const listingsQuery = query(
+      collection(db, "products"),
+      where("sellerId", "==", businessOwnerId),
+      where("status", "==", "active")
+    );
+
+    const snapshot = await getDocs(listingsQuery);
+
+    statListingCount.textContent = snapshot.size;
+
+    if (!snapshot.empty && !isOwnProfile) {
+      const firstListingId = snapshot.docs[0].id;
+      messageSellerBtn.href =
+        "chat.html?product=" + encodeURIComponent(firstListingId) +
+        "&seller=" + encodeURIComponent(businessOwnerId);
+      messageSellerBtn.style.display = "inline-block";
+    } else {
+      messageSellerBtn.style.display = "none";
+    }
+
+    if (snapshot.empty) {
+      sellerListingsGrid.innerHTML = "<p>This business has no active listings right now.</p>";
+      return;
+    }
+
+    sellerListingsGrid.innerHTML = "";
+
+    snapshot.forEach((productDoc) => {
+      const product = productDoc.data();
+      const isFeatured = product.featured === true;
+
+      const image =
+        product.imageUrl ||
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+
+      const card = document.createElement("a");
+      card.href = "product-detail.html?id=" + productDoc.id;
+      card.style.textDecoration = "none";
+      card.style.color = "inherit";
+
+      card.innerHTML = `
+        <div class="product-card">
+          <div class="product-image">
+            <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
+          </div>
+          <h3>${safeText(product.title || "Untitled Product")}${isFeatured ? '<span class="listing-featured-badge">⭐ Featured</span>' : ""}</h3>
+          <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
+          <p class="location">📍 ${safeText(product.city || "")}, ${safeText(product.county || "Liberia")}</p>
+        </div>
+      `;
+
+      sellerListingsGrid.appendChild(card);
+    });
+
+  } catch (error) {
+    sellerListingsGrid.innerHTML = `<p>Could not load listings: ${safeText(error.message)}</p>`;
+  }
+}
+
+async function loadReviews() {
+  try {
+    const reviewsQuery = query(
+      collection(db, "reviews"),
+      where("sellerId", "==", businessOwnerId),
+      orderBy("createdAt", "desc")
+    );
+
+    const snapshot = await getDocs(reviewsQuery);
+
+    if (snapshot.empty) {
+      averageRating.textContent = "";
+      statAverageRating.textContent = "—";
+      statReviewCount.textContent = "0";
+      reviewsList.innerHTML = "<p>No reviews yet. Be the first to review this business.</p>";
+      return;
+    }
+
+    let totalStars = 0;
+    let reviewCount = 0;
+    reviewsList.innerHTML = "";
+
+    snapshot.forEach((reviewDoc) => {
+      const review = reviewDoc.data();
+      const rating = Number(review.rating) || 0;
+
+      totalStars += rating;
+      reviewCount++;
+
+      const reviewCard = document.createElement("div");
+      reviewCard.className = "review-card";
+
+      let dateText = "";
+      if (review.createdAt && review.createdAt.seconds) {
+        const date = new Date(review.createdAt.seconds * 1000);
+        dateText = date.toLocaleDateString();
+      }
+
+      reviewCard.innerHTML = `
+        <div class="review-header">
+          <strong>${safeText(review.reviewerName || "Anonymous Buyer")}</strong>
+          <span class="review-stars">${starsFor(rating)}</span>
+        </div>
+        <p class="review-comment">${safeText(review.comment || "")}</p>
+        <p class="review-date">${safeText(dateText)}</p>
+      `;
+
+      reviewsList.appendChild(reviewCard);
+    });
+
+    const avg = (totalStars / reviewCount).toFixed(1);
+    averageRating.textContent = `(${avg} ⭐ from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
+    statAverageRating.textContent = avg + " ⭐";
+    statReviewCount.textContent = reviewCount;
+
+  } catch (error) {
+    reviewsList.innerHTML = `<p>Could not load reviews: ${safeText(error.message)}</p>`;
+  }
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+
+    try {
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      currentUserName = userDoc.exists() ? (userDoc.data().name || user.email) : user.email;
+    } catch (error) {
+      currentUserName = user.email;
+    }
+
+    if (user.uid === (businessOwnerId || user.uid)) {
+      // Will be refined once businessOwnerId is finalized in
+      // loadBusinessProfile(); this initial check covers the
+      // "no id in URL, viewing own storefront" case.
+      isOwnProfile = !params.get("id") || user.uid === businessOwnerId;
+    }
+  } else {
+    currentUser = null;
+    isOwnProfile = false;
+  }
+
+  await loadBusinessProfile();
+
+  if (isOwnProfile) {
+    ownProfileMsg.style.display = "block";
+    reviewFormCard.style.display = "none";
+    loginToReviewMsg.style.display = "none";
+  } else if (currentUser) {
+    reviewFormCard.style.display = "block";
+    loginToReviewMsg.style.display = "none";
+    ownProfileMsg.style.display = "none";
+  } else {
+    reviewFormCard.style.display = "none";
+    loginToReviewMsg.style.display = "block";
+    ownProfileMsg.style.display = "none";
+  }
+});
+
+reviewForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  if (!currentUser) {
+    alert("You must be logged in to leave a review.");
+    return;
+  }
+
+  const rating = document.getElementById("reviewRating").value;
+  const comment = document.getElementById("reviewComment").value.trim();
+
+  if (!rating || !comment) {
+    alert("Please select a rating and write a comment.");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "reviews"), {
+      sellerId: businessOwnerId,
+      reviewerId: currentUser.uid,
+      reviewerName: currentUserName,
+      rating: Number(rating),
+      comment: comment,
+      createdAt: serverTimestamp()
+    });
+
+    alert("Review submitted successfully!");
+    reviewForm.reset();
+    loadReviews();
+
+  } catch (error) {
+    alert("Could not submit review: " + error.message);
+  }
+});
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
+</script>
+
+</body>
+</html>
