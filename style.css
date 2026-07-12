@@ -1617,4 +1617,56 @@ body {
 .logo-link .logo-text .lr-tag {
   color: #d97706;
   margin-right: 4px;
+}/* ================= MOBILE RESPONSIVENESS ================= */
+
+.navbar {
+  flex-wrap: wrap;
+}
+
+.nav-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .nav-buttons {
+    flex-direction: column;
+  }
+  .nav-buttons a,
+  .nav-buttons button {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 28px;
+  }
+  .hero p {
+    font-size: 16px;
+  }
+  .categories,
+  .products,
+  .featured-products,
+  .why,
+  .why-choose {
+    padding: 35px 5%;
+  }
+  .product-image {
+    height: 140px;
+  }
+  .dashboard-listings,
+  .search-results,
+  .seller-listings-grid {
+    grid-template-columns: 1fr;
+  }
+  .settings-card,
+  .sell-card,
+  .auth-card {
+    padding: 20px;
+  }
 }
