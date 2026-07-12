@@ -7,572 +7,71 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
   <style>
-    .badge-featured {
-      background: #d97706 !important;
-      color: #fff !important;
-    }
-    .nav-messages-link {
-      position: relative;
-    }
-    .unread-badge {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background: #dc2626;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      min-width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-    }
-    .unread-badge.has-unread {
-      display: flex;
-    }
-
-    .browse-layout {
-      display: flex;
-      gap: 24px;
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px;
-      align-items: flex-start;
-    }
-
-    .category-sidebar {
-      width: 240px;
-      flex-shrink: 0;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .category-sidebar h3 {
-      margin: 0;
-      padding: 16px 18px;
-      font-size: 15px;
-      color: #111;
-      background: #f8fafc;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .category-sidebar-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .category-sidebar-list li {
-      border-bottom: 1px solid #f1f5f9;
-    }
-
-    .category-sidebar-list li:last-child {
-      border-bottom: none;
-    }
-
-    .category-sidebar-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 18px;
-      text-decoration: none;
-      color: #333;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .category-sidebar-link:hover {
-      background: #f8fafc;
-      color: #2563eb;
-    }
-
-    .category-sidebar-icon {
-      margin-right: 8px;
-    }
-
-    .category-sidebar-count {
-      background: #f1f5f9;
-      color: #64748b;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 2px 9px;
-      border-radius: 999px;
-      min-width: 22px;
-      text-align: center;
-    }
-
-    .browse-main {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .browse-main h2 {
-      margin-top: 0;
-    }
-
-    .results-count-line {
-      color: #64748b;
-      font-size: 14px;
-      margin: -8px 0 16px 0;
-    }
-
-    @media (max-width: 800px) {
-      .browse-layout {
-        flex-direction: column;
-      }
-      .category-sidebar {
-        width: 100%;
-      }
-    }
+    .badge-featured{background:#d97706!important;color:#fff!important}.nav-messages-link{position:relative}.unread-badge{position:absolute;top:-8px;right:-8px;background:#dc2626;color:#fff;font-size:11px;font-weight:700;min-width:18px;height:18px;border-radius:999px;display:none;align-items:center;justify-content:center;padding:0 4px}.unread-badge.has-unread{display:flex}.browse-layout{display:flex;gap:24px;max-width:1200px;margin:30px auto;padding:0 20px;align-items:flex-start}.category-sidebar{width:240px;flex-shrink:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}.category-sidebar h3{margin:0;padding:16px 18px;font-size:15px;color:#111;background:#f8fafc;border-bottom:1px solid #e5e7eb}.category-sidebar-list{list-style:none;margin:0;padding:0}.category-sidebar-list li{border-bottom:1px solid #f1f5f9}.category-sidebar-list li:last-child{border-bottom:none}.category-sidebar-link{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;text-decoration:none;color:#333;font-size:14px;font-weight:500}.category-sidebar-link:hover{background:#f8fafc;color:#2563eb}.category-sidebar-icon{margin-right:8px}.category-sidebar-count{background:#f1f5f9;color:#64748b;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;min-width:22px;text-align:center}.browse-main{flex:1;min-width:0}.browse-main h2{margin-top:0}.results-count-line{color:#64748b;font-size:14px;margin:-8px 0 16px}.site-notice{display:none;max-width:1200px;margin:18px auto 0;padding:14px 18px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-weight:700}.maintenance-screen{display:none;min-height:70vh;align-items:center;justify-content:center;padding:40px 20px;text-align:center;background:#f8fafc}.maintenance-card{width:min(620px,100%);padding:36px;background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 12px 35px rgba(15,23,42,.1)}.maintenance-card h1{margin:0 0 14px;font-size:clamp(28px,5vw,44px)}.maintenance-card p{color:#64748b;line-height:1.7}.disabled-link{opacity:.55;pointer-events:none;cursor:not-allowed}.footer-support{margin-top:10px;font-size:13px;opacity:.9}@media(max-width:800px){.browse-layout{flex-direction:column}.category-sidebar{width:100%}}
   </style>
 </head>
 <body>
-
 <header class="navbar">
-  <div class="logo">
-    <a href="index.html" class="logo-link">
-      <img src="icons/icon-512.png" alt="LoyaltyMarket">
-      <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
-    </a>
-  </div>
-
+  <div class="logo"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="LoyaltyMarket"><span class="logo-text"><span class="lr-tag">LR</span><span data-marketplace-name>LoyaltyMarket</span></span></a></div>
   <input type="text" class="search-box" id="searchInput" placeholder="Search Products, Cars, Phones...">
-
   <div class="nav-buttons">
     <a href="login.html" id="loginBtn" class="login-btn">Login</a>
     <a href="register.html" id="registerBtn" class="register-btn">Register</a>
     <a href="dashboard.html" id="dashboardBtn" class="register-btn" style="display:none;">Dashboard</a>
-    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link" style="display:none;">
-      My Messages
-      <span id="unreadBadge" class="unread-badge">0</span>
-    </a>
-    <a href="sell.html" class="sell-btn">Sell Product</a>
+    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link" style="display:none;">My Messages<span id="unreadBadge" class="unread-badge">0</span></a>
+    <a href="sell.html" id="navSellBtn" class="sell-btn">Sell Product</a>
   </div>
 </header>
-
-<section class="hero">
-  <h4>🇱🇷 Liberia's Marketplace</h4>
-  <h1>Buy & Sell Anything In Liberia</h1>
-  <p>Find Phones, Vehicles, Property, Fashion, Electronics, Jobs And Much More.</p>
-
-  <div class="hero-buttons">
-    <a href="#products" class="shop-btn">Start Shopping</a>
-    <a href="sell.html" class="sell-btn2">Sell Product</a>
-  </div>
-</section>
-
+<div id="siteNotice" class="site-notice"></div>
+<section id="maintenanceScreen" class="maintenance-screen"><div class="maintenance-card"><h1>🛠️ <span data-marketplace-name>LoyaltyMarket</span> Is Under Maintenance</h1><p>We are making important improvements. Please check back shortly.</p><p id="maintenanceSupportText"></p></div></section>
+<div id="normalSiteContent">
+<section class="hero"><h4>🇱🇷 Liberia's Marketplace</h4><h1>Buy &amp; Sell Anything In Liberia</h1><p>Find Phones, Vehicles, Property, Fashion, Electronics, Jobs And Much More.</p><div class="hero-buttons"><a href="#products" class="shop-btn">Start Shopping</a><a href="sell.html" id="heroSellBtn" class="sell-btn2">Sell Product</a></div></section>
 <section class="filters">
-  <select id="countyFilter">
-    <option value="">Select County</option>
-    <option value="Montserrado">Montserrado</option>
-    <option value="Margibi">Margibi</option>
-    <option value="Grand Bassa">Grand Bassa</option>
-    <option value="Nimba">Nimba</option>
-    <option value="Bong">Bong</option>
-  </select>
-
-  <select id="categoryFilter">
-    <option value="">Select Category</option>
-    <option value="Phones">Phones</option>
-    <option value="Electronics">Electronics</option>
-    <option value="Vehicles">Vehicles</option>
-    <option value="Property">Property</option>
-    <option value="Fashion">Fashion</option>
-    <option value="Jobs">Jobs</option>
-  </select>
-
-  <select id="priceFilter">
-    <option value="">Price Range</option>
-    <option value="100">Under US$100</option>
-    <option value="500">Under US$500</option>
-    <option value="1000">Under US$1,000</option>
-    <option value="over1000">Over US$1,000</option>
-  </select>
-
-  <select id="conditionFilter">
-    <option value="">Condition</option>
-    <option value="Brand New">Brand New</option>
-    <option value="Used">Used</option>
-    <option value="Foreign Used">Foreign Used</option>
-  </select>
-
+  <select id="countyFilter"><option value="">Select County</option><option value="Montserrado">Montserrado</option><option value="Margibi">Margibi</option><option value="Grand Bassa">Grand Bassa</option><option value="Nimba">Nimba</option><option value="Bong">Bong</option></select>
+  <select id="categoryFilter"><option value="">Select Category</option><option value="Phones">Phones</option><option value="Electronics">Electronics</option><option value="Vehicles">Vehicles</option><option value="Property">Property</option><option value="Fashion">Fashion</option><option value="Jobs">Jobs</option></select>
+  <select id="priceFilter"><option value="">Price Range</option><option value="100">Under US$100</option><option value="500">Under US$500</option><option value="1000">Under US$1,000</option><option value="over1000">Over US$1,000</option></select>
+  <select id="conditionFilter"><option value="">Condition</option><option value="Brand New">Brand New</option><option value="Used">Used</option><option value="Foreign Used">Foreign Used</option></select>
   <button class="search-btn" id="applyFiltersBtn">Search</button>
 </section>
-
 <div class="browse-layout" id="products">
-
-  <aside class="category-sidebar">
-    <h3>Browse Categories</h3>
-    <ul class="category-sidebar-list">
-      <li>
-        <a href="category-phones.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">📱</span>Phones</span>
-          <span class="category-sidebar-count" data-category="Phones">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-electronics.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">💻</span>Electronics</span>
-          <span class="category-sidebar-count" data-category="Electronics">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-vehicles.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">🚗</span>Vehicles</span>
-          <span class="category-sidebar-count" data-category="Vehicles">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-property.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">🏠</span>Property</span>
-          <span class="category-sidebar-count" data-category="Property">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-fashion.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">👕</span>Fashion</span>
-          <span class="category-sidebar-count" data-category="Fashion">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="category-jobs.html" class="category-sidebar-link">
-          <span><span class="category-sidebar-icon">💼</span>Jobs</span>
-          <span class="category-sidebar-count" data-category="Jobs">0</span>
-        </a>
-      </li>
-    </ul>
-  </aside>
-
-  <main class="browse-main">
-    <h2>Latest Products</h2>
-    <p class="results-count-line" id="resultsCountLine"></p>
-    <div class="product-grid" id="productGrid">
-      <p>Loading products...</p>
-    </div>
-  </main>
-
+<aside class="category-sidebar"><h3>Browse Categories</h3><ul class="category-sidebar-list">
+<li><a href="category-phones.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">📱</span>Phones</span><span class="category-sidebar-count" data-category="Phones">0</span></a></li>
+<li><a href="category-electronics.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">💻</span>Electronics</span><span class="category-sidebar-count" data-category="Electronics">0</span></a></li>
+<li><a href="category-vehicles.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">🚗</span>Vehicles</span><span class="category-sidebar-count" data-category="Vehicles">0</span></a></li>
+<li><a href="category-property.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">🏠</span>Property</span><span class="category-sidebar-count" data-category="Property">0</span></a></li>
+<li><a href="category-fashion.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">👕</span>Fashion</span><span class="category-sidebar-count" data-category="Fashion">0</span></a></li>
+<li><a href="category-jobs.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">💼</span>Jobs</span><span class="category-sidebar-count" data-category="Jobs">0</span></a></li>
+</ul></aside>
+<main class="browse-main"><h2>Latest Products</h2><p class="results-count-line" id="resultsCountLine"></p><div class="product-grid" id="productGrid"><p>Loading products...</p></div></main>
 </div>
-
-<section class="why-choose">
-  <h2>Why Choose LoyaltyMarket?</h2>
-  <div class="why-grid">
-    <div class="why-card">
-      <h3>Built For Liberia</h3>
-      <p>A marketplace designed for buyers and sellers across Liberia.</p>
-    </div>
-
-    <div class="why-card">
-      <h3>USD & L$ Prices</h3>
-      <p>We show prices in both US Dollars and Liberian Dollars.</p>
-    </div>
-
-    <div class="why-card">
-      <h3>Trusted Sellers</h3>
-      <p>We support verified sellers, ratings, and safer transactions.</p>
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy and sell products, cars, phones, and more. Discover Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
-
+<section class="why-choose"><h2>Why Choose <span data-marketplace-name>LoyaltyMarket</span>?</h2><div class="why-grid"><div class="why-card"><h3>Built For Liberia</h3><p>A marketplace designed for buyers and sellers across Liberia.</p></div><div class="why-card"><h3>USD &amp; L$ Prices</h3><p>We show prices in both US Dollars and Liberian Dollars.</p></div><div class="why-card"><h3>Trusted Sellers</h3><p>We support verified sellers, ratings, and safer transactions.</p></div></div></section>
+</div>
+<footer class="footer"><h2>🇱🇷 <span data-marketplace-name>LoyaltyMarket</span></h2><p>Buy and sell products, cars, phones, and more. Discover Products Across Liberia.</p><p id="footerSupport" class="footer-support"></p><p>&copy; 2026 <span data-marketplace-name>LoyaltyMarket</span>. All Rights Reserved.</p></footer>
+<script src="script.js"></script>
 <script type="module">
 import { db, auth } from "./firebase.js";
-import {
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-  query,
-  orderBy,
-  where,
-  onSnapshot,
-  getCountFromServer
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { collection,getDocs,doc,getDoc,query,orderBy,where,onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-const productGrid = document.getElementById("productGrid");
-const resultsCountLine = document.getElementById("resultsCountLine");
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
-const dashboardBtn = document.getElementById("dashboardBtn");
-const messagesBtn = document.getElementById("messagesBtn");
-const unreadBadge = document.getElementById("unreadBadge");
-const categoryCountEls = document.querySelectorAll(".category-sidebar-count");
-
-const searchInput = document.getElementById("searchInput");
-const countyFilter = document.getElementById("countyFilter");
-const categoryFilter = document.getElementById("categoryFilter");
-const priceFilter = document.getElementById("priceFilter");
-const conditionFilter = document.getElementById("conditionFilter");
-const applyFiltersBtn = document.getElementById("applyFiltersBtn");
-
-let allProducts = [];
-const sellerNameCache = {};
-
-function safeText(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-async function getSellerName(sellerId) {
-  if (!sellerId) {
-    return "";
-  }
-
-  if (sellerNameCache[sellerId] !== undefined) {
-    return sellerNameCache[sellerId];
-  }
-
-  try {
-    const sellerDoc = await getDoc(doc(db, "users", sellerId));
-    const name = sellerDoc.exists() ? (sellerDoc.data().name || "") : "";
-    sellerNameCache[sellerId] = name;
-    return name;
-  } catch (error) {
-    sellerNameCache[sellerId] = "";
-    return "";
-  }
-}
-
-function renderProducts(products) {
-  productGrid.innerHTML = "";
-
-  const count = products.length;
-  resultsCountLine.textContent =
-    count === 1 ? "Showing 1 product" : `Showing ${count} products`;
-
-  if (count === 0) {
-    productGrid.innerHTML = `
-      <div style="background:white; padding:30px; border-radius:14px;">
-        <h3>No products found</h3>
-        <p style="margin-top:8px; color:#64748b;">
-          Try adjusting your search or filters.
-        </p>
-      </div>
-    `;
-    return;
-  }
-
-  products.forEach(({ id, data: product }) => {
-    const image = product.imageUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
-    const title = product.title || "Untitled Product";
-    const priceUsd = product.priceUsd || "0";
-    const priceLrd = product.priceLrd || "0";
-    const city = product.city || "Liberia";
-    const county = product.county || "";
-    const condition = product.condition || "Used";
-    const isFeatured = product.featured === true;
-
-    const productCard = document.createElement("a");
-    productCard.href = "product-detail.html?id=" + id;
-    productCard.style.textDecoration = "none";
-    productCard.style.color = "inherit";
-
-    productCard.innerHTML = `
-      <div class="product-card">
-        <span class="badge ${isFeatured ? "badge-featured" : ""}">${isFeatured ? "⭐ Featured" : "New"}</span>
-        <button class="heart" type="button">♡</button>
-        <div class="product-image">
-          <img src="${safeText(image)}" alt="${safeText(title)}">
-        </div>
-        <h3>${safeText(title)}</h3>
-        <p class="price">US$${safeText(priceUsd)} | L$${safeText(priceLrd)}</p>
-        <p class="location">📍 ${safeText(city)}, ${safeText(county)}</p>
-        <p class="condition">${safeText(condition)}</p>
-      </div>
-    `;
-
-    productGrid.appendChild(productCard);
-  });
-}
-
-async function applyFiltersAndSearch() {
-  const searchTerm = searchInput.value.trim().toLowerCase();
-  const selectedCounty = countyFilter.value;
-  const selectedCategory = categoryFilter.value;
-  const selectedPrice = priceFilter.value;
-  const selectedCondition = conditionFilter.value;
-
-  const matchResults = [];
-
-  for (const item of allProducts) {
-    const product = item.data;
-
-    const title = String(product.title || "").toLowerCase();
-    const description = String(product.description || "").toLowerCase();
-    const county = String(product.county || "");
-    const city = String(product.city || "").toLowerCase();
-    const category = String(product.category || "");
-    const condition = String(product.condition || "");
-    const price = Number(product.priceUsd || 0);
-
-    let matchesSearch = true;
-
-    if (searchTerm) {
-      const sellerName = (await getSellerName(product.sellerId)).toLowerCase();
-
-      matchesSearch =
-        title.includes(searchTerm) ||
-        description.includes(searchTerm) ||
-        county.toLowerCase().includes(searchTerm) ||
-        city.includes(searchTerm) ||
-        category.toLowerCase().includes(searchTerm) ||
-        sellerName.includes(searchTerm);
-    }
-
-    const matchesCounty = !selectedCounty || county === selectedCounty;
-    const matchesCategory = !selectedCategory || category === selectedCategory;
-    const matchesCondition = !selectedCondition || condition === selectedCondition;
-
-    let matchesPrice = true;
-    if (selectedPrice === "100") {
-      matchesPrice = price < 100;
-    } else if (selectedPrice === "500") {
-      matchesPrice = price < 500;
-    } else if (selectedPrice === "1000") {
-      matchesPrice = price < 1000;
-    } else if (selectedPrice === "over1000") {
-      matchesPrice = price >= 1000;
-    }
-
-    if (matchesSearch && matchesCounty && matchesCategory && matchesCondition && matchesPrice) {
-      matchResults.push(item);
-    }
-  }
-
-  matchResults.sort((a, b) => {
-    const aFeatured = a.data.featured === true ? 1 : 0;
-    const bFeatured = b.data.featured === true ? 1 : 0;
-    return bFeatured - aFeatured;
-  });
-
-  renderProducts(matchResults);
-}
-
-async function loadProducts() {
-  productGrid.innerHTML = "<p>Loading products...</p>";
-
-  try {
-    const productsQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
-    const snapshot = await getDocs(productsQuery);
-
-    allProducts = snapshot.docs
-      .map((docSnap) => ({
-        id: docSnap.id,
-        data: docSnap.data()
-      }))
-      .filter((item) => item.data.status !== "archived");
-
-    if (allProducts.length === 0) {
-      productGrid.innerHTML = "<p>No products posted yet. Be the first to sell on LoyaltyMarket.</p>";
-      resultsCountLine.textContent = "";
-      return;
-    }
-
-    await applyFiltersAndSearch();
-
-  } catch (error) {
-    productGrid.innerHTML = "<p>Could not load products. Please try again.</p>";
-    alert(error.message);
-  }
-}
-
-async function loadCategoryCounts() {
-  for (const countEl of categoryCountEls) {
-    const categoryName = countEl.getAttribute("data-category");
-
-    try {
-      const categoryQuery = query(
-        collection(db, "products"),
-        where("category", "==", categoryName)
-      );
-
-      const countSnapshot = await getCountFromServer(categoryQuery);
-      countEl.textContent = countSnapshot.data().count;
-
-    } catch (error) {
-      countEl.textContent = "0";
-    }
-  }
-}
-
-function listenForUnreadMessages(userId) {
-  const unreadQuery = query(
-    collection(db, "messages"),
-    where("receiverId", "==", userId),
-    where("read", "==", false)
-  );
-
-  onSnapshot(unreadQuery, (snapshot) => {
-    const count = snapshot.size;
-
-    if (count > 0) {
-      unreadBadge.textContent = count > 9 ? "9+" : String(count);
-      unreadBadge.classList.add("has-unread");
-    } else {
-      unreadBadge.classList.remove("has-unread");
-    }
-  });
-}
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    loginBtn.style.display = "none";
-    registerBtn.style.display = "none";
-    dashboardBtn.style.display = "inline-block";
-    messagesBtn.style.display = "inline-block";
-    listenForUnreadMessages(user.uid);
-  } else {
-    loginBtn.style.display = "inline-block";
-    registerBtn.style.display = "inline-block";
-    dashboardBtn.style.display = "none";
-    messagesBtn.style.display = "none";
-  }
-});
-
-let searchDebounceTimer = null;
-searchInput.addEventListener("input", () => {
-  clearTimeout(searchDebounceTimer);
-  searchDebounceTimer = setTimeout(applyFiltersAndSearch, 250);
-});
-
-countyFilter.addEventListener("change", applyFiltersAndSearch);
-categoryFilter.addEventListener("change", applyFiltersAndSearch);
-priceFilter.addEventListener("change", applyFiltersAndSearch);
-conditionFilter.addEventListener("change", applyFiltersAndSearch);
-
-applyFiltersBtn.addEventListener("click", (event) => {
-  event.preventDefault();
-  applyFiltersAndSearch();
-});
-
-loadProducts();
-loadCategoryCounts();
+const DEFAULT_SETTINGS={marketplaceName:"LoyaltyMarket",supportEmail:"princeteah200@gmail.com",supportPhone:"+231 88 147 1694",usdToLrdRate:180,allowNewListings:true,allowNewRegistrations:true,maintenanceMode:false};
+const productGrid=document.getElementById("productGrid"),resultsCountLine=document.getElementById("resultsCountLine"),loginBtn=document.getElementById("loginBtn"),registerBtn=document.getElementById("registerBtn"),dashboardBtn=document.getElementById("dashboardBtn"),messagesBtn=document.getElementById("messagesBtn"),unreadBadge=document.getElementById("unreadBadge"),categoryCountEls=document.querySelectorAll(".category-sidebar-count"),searchInput=document.getElementById("searchInput"),countyFilter=document.getElementById("countyFilter"),categoryFilter=document.getElementById("categoryFilter"),priceFilter=document.getElementById("priceFilter"),conditionFilter=document.getElementById("conditionFilter"),applyFiltersBtn=document.getElementById("applyFiltersBtn"),siteNotice=document.getElementById("siteNotice"),normalSiteContent=document.getElementById("normalSiteContent"),maintenanceScreen=document.getElementById("maintenanceScreen"),maintenanceSupportText=document.getElementById("maintenanceSupportText"),footerSupport=document.getElementById("footerSupport"),navSellBtn=document.getElementById("navSellBtn"),heroSellBtn=document.getElementById("heroSellBtn");
+let allProducts=[],marketplaceSettings={...DEFAULT_SETTINGS},unsubscribeUnreadMessages=null;const sellerNameCache={};
+function safeText(value){return String(value??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function formatMoney(value){const number=Number(value);return Number.isFinite(number)?number.toLocaleString(undefined,{maximumFractionDigits:2}):"0"}
+async function loadMarketplaceSettings(){try{const snapshot=await getDoc(doc(db,"settings","marketplace"));if(snapshot.exists())marketplaceSettings={...DEFAULT_SETTINGS,...snapshot.data()}}catch(error){console.error("Could not load marketplace settings:",error)}applyMarketplaceSettings()}
+function applyMarketplaceSettings(){const name=marketplaceSettings.marketplaceName||"LoyaltyMarket";document.title=`${name} - Liberia's Marketplace`;document.querySelectorAll("[data-marketplace-name]").forEach(el=>el.textContent=name);const support=[marketplaceSettings.supportEmail,marketplaceSettings.supportPhone].filter(Boolean);const supportText=support.length?`Support: ${support.join(" | ")}`:"";footerSupport.textContent=supportText;maintenanceSupportText.textContent=supportText;const listingsAllowed=marketplaceSettings.allowNewListings!==false;[navSellBtn,heroSellBtn].forEach(link=>{link.classList.toggle("disabled-link",!listingsAllowed);link.setAttribute("aria-disabled",String(!listingsAllowed))});siteNotice.textContent="New listings are temporarily paused by the marketplace administrator.";siteNotice.style.display=listingsAllowed?"none":"block";const registrationsAllowed=marketplaceSettings.allowNewRegistrations!==false;registerBtn.classList.toggle("disabled-link",!registrationsAllowed);registerBtn.style.display=registrationsAllowed?registerBtn.style.display:"none";const maintenance=marketplaceSettings.maintenanceMode===true;maintenanceScreen.style.display=maintenance?"flex":"none";normalSiteContent.style.display=maintenance?"none":"block";if(maintenance)siteNotice.style.display="none"}
+async function getSellerName(sellerId){if(!sellerId)return"";if(sellerNameCache[sellerId]!==undefined)return sellerNameCache[sellerId];try{const snapshot=await getDoc(doc(db,"users",sellerId));const name=snapshot.exists()?(snapshot.data().name||""):"";sellerNameCache[sellerId]=name;return name}catch{sellerNameCache[sellerId]="";return""}}
+function renderProducts(products){productGrid.innerHTML="";resultsCountLine.textContent=products.length===1?"Showing 1 product":`Showing ${products.length} products`;if(!products.length){productGrid.innerHTML='<div style="background:white;padding:30px;border-radius:14px"><h3>No products found</h3><p style="margin-top:8px;color:#64748b">Try adjusting your search or filters.</p></div>';return}const rate=Number(marketplaceSettings.usdToLrdRate)||180;products.forEach(({id,data:product})=>{const image=product.imageUrl||"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",title=product.title||"Untitled Product",priceUsd=Number(product.priceUsd||0),savedLrd=Number(product.priceLrd),priceLrd=Number.isFinite(savedLrd)&&savedLrd>0?savedLrd:Math.round(priceUsd*rate),city=product.city||"Liberia",county=product.county||"",condition=product.condition||"Used",featured=product.featured===true;const link=document.createElement("a");link.href="product-detail.html?id="+encodeURIComponent(id);link.style.textDecoration="none";link.style.color="inherit";link.innerHTML=`<div class="product-card"><span class="badge ${featured?"badge-featured":""}">${featured?"⭐ Featured":"New"}</span><button class="heart" type="button" data-product-id="${safeText(id)}">♡</button><div class="product-image"><img src="${safeText(image)}" alt="${safeText(title)}" loading="lazy"></div><h3>${safeText(title)}</h3><p class="price">US$${safeText(formatMoney(priceUsd))} | L$${safeText(formatMoney(priceLrd))}</p><p class="location">📍 ${safeText(city)}${county?`, ${safeText(county)}`:""}</p><p class="condition">${safeText(condition)}</p></div>`;productGrid.appendChild(link)});window.initWishlistButtons?.()}
+async function applyFiltersAndSearch(){const searchTerm=searchInput.value.trim().toLowerCase(),selectedCounty=countyFilter.value,selectedCategory=categoryFilter.value,selectedPrice=priceFilter.value,selectedCondition=conditionFilter.value,results=[];for(const item of allProducts){const product=item.data,title=String(product.title||"").toLowerCase(),description=String(product.description||"").toLowerCase(),county=String(product.county||""),city=String(product.city||"").toLowerCase(),category=String(product.category||""),condition=String(product.condition||""),price=Number(product.priceUsd||0);let matchesSearch=true;if(searchTerm){const sellerName=(await getSellerName(product.sellerId)).toLowerCase();matchesSearch=title.includes(searchTerm)||description.includes(searchTerm)||county.toLowerCase().includes(searchTerm)||city.includes(searchTerm)||category.toLowerCase().includes(searchTerm)||sellerName.includes(searchTerm)}const matchesCounty=!selectedCounty||county===selectedCounty,matchesCategory=!selectedCategory||category===selectedCategory,matchesCondition=!selectedCondition||condition===selectedCondition;let matchesPrice=true;if(selectedPrice==="100")matchesPrice=price<100;else if(selectedPrice==="500")matchesPrice=price<500;else if(selectedPrice==="1000")matchesPrice=price<1000;else if(selectedPrice==="over1000")matchesPrice=price>=1000;if(matchesSearch&&matchesCounty&&matchesCategory&&matchesCondition&&matchesPrice)results.push(item)}results.sort((a,b)=>(b.data.featured===true?1:0)-(a.data.featured===true?1:0));renderProducts(results)}
+async function loadProducts(){try{const snapshot=await getDocs(query(collection(db,"products"),orderBy("createdAt","desc")));allProducts=snapshot.docs.map(d=>({id:d.id,data:d.data()})).filter(item=>item.data.status!=="archived");await applyFiltersAndSearch();loadCategoryCounts()}catch(error){console.error(error);productGrid.innerHTML="<p>Could not load products. Please try again.</p>"}}
+function loadCategoryCounts(){const counts={Phones:0,Electronics:0,Vehicles:0,Property:0,Fashion:0,Jobs:0};allProducts.forEach(({data})=>{if(data.status!=="archived"&&Object.hasOwn(counts,data.category))counts[data.category]++});categoryCountEls.forEach(el=>el.textContent=String(counts[el.dataset.category]||0))}
+function listenForUnreadMessages(userId){unsubscribeUnreadMessages?.();const unreadQuery=query(collection(db,"messages"),where("receiverId","==",userId),where("read","==",false));unsubscribeUnreadMessages=onSnapshot(unreadQuery,snapshot=>{const count=snapshot.size;if(count){unreadBadge.textContent=count>9?"9+":String(count);unreadBadge.classList.add("has-unread")}else unreadBadge.classList.remove("has-unread")},error=>console.error(error))}
+onAuthStateChanged(auth,user=>{if(user){loginBtn.style.display="none";registerBtn.style.display="none";dashboardBtn.style.display="inline-block";messagesBtn.style.display="inline-block";listenForUnreadMessages(user.uid)}else{loginBtn.style.display="inline-block";registerBtn.style.display=marketplaceSettings.allowNewRegistrations===false?"none":"inline-block";dashboardBtn.style.display="none";messagesBtn.style.display="none";unreadBadge.classList.remove("has-unread");unsubscribeUnreadMessages?.();unsubscribeUnreadMessages=null}})
+let timer=null;searchInput.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(applyFiltersAndSearch,250)});[countyFilter,categoryFilter,priceFilter,conditionFilter].forEach(el=>el.addEventListener("change",applyFiltersAndSearch));applyFiltersBtn.addEventListener("click",event=>{event.preventDefault();applyFiltersAndSearch()});registerBtn.addEventListener("click",event=>{if(marketplaceSettings.allowNewRegistrations===false){event.preventDefault();alert("New registrations are temporarily paused.")}});[navSellBtn,heroSellBtn].forEach(link=>link.addEventListener("click",event=>{if(marketplaceSettings.allowNewListings===false){event.preventDefault();alert("New listings are temporarily paused.")}}));
+async function startHomepage(){await loadMarketplaceSettings();if(marketplaceSettings.maintenanceMode!==true)await loadProducts()}startHomepage();
 </script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
-</script>
-
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").then(()=>console.log("Service worker registered")).catch(error=>console.log("Service worker registration failed:",error))}</script>
 </body>
 </html>
