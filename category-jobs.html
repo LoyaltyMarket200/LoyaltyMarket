@@ -149,6 +149,12 @@ const clearFiltersBtn = document.getElementById("clearFiltersBtn");
 
 let allJobs = [];
 
+// Listings with these statuses are hidden from public browsing:
+// "archived" (seller archived it), "pending_review" (flagged by the
+// rule-based scam checks and awaiting admin approval), and
+// "rejected" (an admin reviewed it and rejected it).
+const HIDDEN_STATUSES = ["archived", "pending_review", "rejected"];
+
 function safeText(value) {
   return String(value || "")
     .replaceAll("&", "&amp;")
@@ -252,7 +258,7 @@ function applyFilters() {
   const selectedCondition = conditionFilter.value;
 
   const filteredProducts = allJobs.filter((product) => {
-    if (product.status === "archived") return false;
+    if (HIDDEN_STATUSES.includes(product.status)) return false;
 
     const title = String(product.title || "").toLowerCase();
     const description = String(product.description || "").toLowerCase();
@@ -336,7 +342,7 @@ async function loadJobs() {
       return secondFeatured - firstFeatured;
     });
 
-    displayProducts(allJobs.filter((product) => product.status !== "archived"));
+    displayProducts(allJobs.filter((product) => !HIDDEN_STATUSES.includes(product.status)));
 
   } catch (error) {
     console.error(error);
@@ -364,7 +370,7 @@ clearFiltersBtn.addEventListener("click", function() {
   priceFilter.value = "";
   conditionFilter.value = "";
 
-  displayProducts(allJobs.filter((product) => product.status !== "archived"));
+  displayProducts(allJobs.filter((product) => !HIDDEN_STATUSES.includes(product.status)));
 });
 
 loadJobs();
