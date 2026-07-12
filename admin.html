@@ -2,11 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Admin Dashboard - LoyaltyMarket</title>
 
@@ -17,9 +13,7 @@
   <meta name="theme-color" content="#1e3a8a">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -29,7 +23,7 @@
     }
 
     .admin-wrap {
-      width: min(1150px, calc(100% - 30px));
+      width: min(1180px, calc(100% - 30px));
       margin: 30px auto;
     }
 
@@ -64,24 +58,28 @@
       box-shadow: 0 5px 18px rgba(15, 23, 42, 0.08);
     }
 
-    .status-box h2 {
-      margin-top: 0;
-    }
+    .status-box h2 { margin-top: 0; }
+    .status-box a { color: #2563eb; font-weight: 700; }
 
-    .status-box a {
-      color: #2563eb;
-      font-weight: 700;
-    }
-
-    .error-box {
+    .error-box,
+    .success-box {
       display: none;
       margin-bottom: 20px;
       padding: 14px 16px;
-      border: 1px solid #fecaca;
       border-radius: 10px;
+      line-height: 1.5;
+    }
+
+    .error-box {
+      border: 1px solid #fecaca;
       background: #fef2f2;
       color: #b91c1c;
-      line-height: 1.5;
+    }
+
+    .success-box {
+      border: 1px solid #bbf7d0;
+      background: #f0fdf4;
+      color: #166534;
     }
 
     .admin-section-tabs {
@@ -119,9 +117,7 @@
       cursor: pointer;
     }
 
-    .admin-tab-btn:hover {
-      background: #e2e8f0;
-    }
+    .admin-tab-btn:hover { background: #e2e8f0; }
 
     .admin-tab-btn.active {
       border-color: #2563eb;
@@ -129,7 +125,8 @@
       color: white;
     }
 
-    .refresh-btn {
+    .refresh-btn,
+    .save-settings-btn {
       padding: 10px 17px;
       border: none;
       border-radius: 9px;
@@ -140,14 +137,20 @@
       cursor: pointer;
     }
 
-    .refresh-btn:disabled {
+    .save-settings-btn {
+      background: #059669;
+      min-width: 190px;
+    }
+
+    .refresh-btn:disabled,
+    .save-settings-btn:disabled {
       cursor: wait;
       opacity: 0.65;
     }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 16px;
       margin-bottom: 30px;
     }
@@ -195,16 +198,21 @@
       margin-bottom: 18px;
     }
 
-    .user-search-box {
+    .user-search-box,
+    .settings-input,
+    .settings-select {
       width: 100%;
       padding: 12px 14px;
       border: 1px solid #cbd5e1;
       border-radius: 9px;
       outline: none;
       font-size: 14px;
+      background: #fff;
     }
 
-    .user-search-box:focus {
+    .user-search-box:focus,
+    .settings-input:focus,
+    .settings-select:focus {
       border-color: #2563eb;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
@@ -269,50 +277,15 @@
       text-transform: capitalize;
     }
 
-    .badge-verified {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .badge-unverified {
-      background: #e2e8f0;
-      color: #475569;
-    }
-
-    .badge-suspended {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
-
-    .report-reason {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
-
-    .status-pending {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .status-reviewed {
-      background: #dbeafe;
-      color: #1e40af;
-    }
-
-    .status-dismissed {
-      background: #e2e8f0;
-      color: #475569;
-    }
-
-    .status-active {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .status-rejected {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
+    .badge-verified { background: #dcfce7; color: #166534; }
+    .badge-unverified { background: #e2e8f0; color: #475569; }
+    .badge-suspended { background: #fee2e2; color: #b91c1c; }
+    .report-reason { background: #fee2e2; color: #b91c1c; }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-reviewed { background: #dbeafe; color: #1e40af; }
+    .status-dismissed { background: #e2e8f0; color: #475569; }
+    .status-active { background: #dcfce7; color: #166534; }
+    .status-rejected { background: #fee2e2; color: #b91c1c; }
 
     .user-actions,
     .report-actions {
@@ -343,36 +316,16 @@
     }
 
     .btn-reviewed,
-    .btn-verify {
-      background: #2563eb;
-      color: white;
-    }
+    .btn-verify { background: #2563eb; color: white; }
 
     .btn-dismiss,
-    .btn-unverify {
-      background: #64748b;
-      color: white;
-    }
+    .btn-unverify { background: #64748b; color: white; }
 
-    .btn-suspend {
-      background: #dc2626;
-      color: white;
-    }
+    .btn-suspend,
+    .btn-reject-boost { background: #dc2626; color: white; }
 
-    .btn-unsuspend {
-      background: #059669;
-      color: white;
-    }
-
-    .btn-confirm-boost {
-      background: #059669;
-      color: white;
-    }
-
-    .btn-reject-boost {
-      background: #dc2626;
-      color: white;
-    }
+    .btn-unsuspend,
+    .btn-confirm-boost { background: #059669; color: white; }
 
     .boost-payment-info {
       margin-top: 13px;
@@ -390,21 +343,12 @@
       text-align: center;
     }
 
-    .loading-text {
-      animation: pulse 1.1s infinite alternate;
-    }
+    .loading-text { animation: pulse 1.1s infinite alternate; }
 
     @keyframes pulse {
-      from {
-        opacity: 0.45;
-      }
-
-      to {
-        opacity: 1;
-      }
+      from { opacity: 0.45; }
+      to { opacity: 1; }
     }
-
-    /* ===== New Analytics Dashboard styles ===== */
 
     .analytics-section-title {
       margin: 34px 0 14px;
@@ -413,24 +357,24 @@
       color: #111827;
     }
 
-    .analytics-section-title:first-of-type {
-      margin-top: 6px;
-    }
-
-    .activity-grid {
+    .activity-grid,
+    .breakdown-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 16px;
       margin-bottom: 10px;
     }
 
-    .activity-card {
+    .activity-card,
+    .breakdown-card {
       border: 1px solid #e2e8f0;
       border-radius: 14px;
       background: white;
       box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
       overflow: hidden;
     }
+
+    .breakdown-card { padding: 18px; }
 
     .activity-card-header {
       padding: 14px 16px;
@@ -454,9 +398,7 @@
       line-height: 1.5;
     }
 
-    .activity-row:last-child {
-      border-bottom: none;
-    }
+    .activity-row:last-child { border-bottom: none; }
 
     .activity-row-title {
       font-weight: 700;
@@ -469,21 +411,6 @@
       margin-top: 2px;
     }
 
-    .breakdown-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
-      margin-bottom: 10px;
-    }
-
-    .breakdown-card {
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      background: white;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
-      padding: 18px;
-    }
-
     .breakdown-card-title {
       font-weight: 800;
       font-size: 14px;
@@ -491,13 +418,7 @@
       margin-bottom: 14px;
     }
 
-    .bar-row {
-      margin-bottom: 12px;
-    }
-
-    .bar-row:last-child {
-      margin-bottom: 0;
-    }
+    .bar-row { margin-bottom: 12px; }
 
     .bar-row-label {
       display: flex;
@@ -505,10 +426,6 @@
       font-size: 12px;
       color: #334155;
       margin-bottom: 5px;
-    }
-
-    .bar-row-label strong {
-      color: #111827;
     }
 
     .bar-track {
@@ -522,7 +439,6 @@
       height: 100%;
       border-radius: 999px;
       background: #2563eb;
-      transition: width 0.4s ease;
     }
 
     .bar-fill.color-green { background: #059669; }
@@ -553,7 +469,6 @@
       max-width: 34px;
       border-radius: 6px 6px 0 0;
       background: #2563eb;
-      transition: height 0.4s ease;
       min-height: 3px;
     }
 
@@ -598,21 +513,153 @@
       color: #2563eb;
     }
 
-    .quick-action-btn-icon {
-      font-size: 20px;
+    /* Marketplace Settings */
+    .settings-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .settings-card {
+      padding: 22px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+    }
+
+    .settings-card h2,
+    .settings-card h3 {
+      margin-top: 0;
+      color: #111827;
+    }
+
+    .settings-card p {
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .settings-field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .settings-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .settings-field label {
+      color: #334155;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .settings-help {
+      color: #94a3b8;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .toggle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 13px;
+      margin-top: 10px;
+    }
+
+    .toggle-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 11px;
+      background: #f8fafc;
+    }
+
+    .toggle-card strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #111827;
+      font-size: 14px;
+    }
+
+    .toggle-card span {
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .switch {
+      position: relative;
+      width: 50px;
+      height: 28px;
+      flex: 0 0 auto;
+    }
+
+    .switch input {
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      left: 3px;
+      top: 3px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .18);
+      transition: .2s;
+    }
+
+    .switch input:checked + .slider {
+      background: #2563eb;
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(22px);
+    }
+
+    .settings-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
     }
 
     @media (max-width: 700px) {
-      .search-row {
+      .search-row,
+      .settings-grid {
         grid-template-columns: 1fr;
       }
 
-      .navbar {
-        gap: 10px;
-      }
+      .navbar { gap: 10px; }
 
       .admin-wrap {
-        width: min(100% - 18px, 1150px);
+        width: min(100% - 18px, 1180px);
         margin-top: 20px;
       }
 
@@ -620,17 +667,20 @@
         flex: 1;
         min-width: 130px;
       }
+
+      .settings-field.full {
+        grid-column: auto;
+      }
     }
   </style>
 </head>
 
 <body>
-
   <header class="navbar">
-   <a href="index.html" class="logo-link">
-    <img src="icons/icon-512.png" alt="LoyaltyMarket">
-    <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
-  </a>
+    <a href="index.html" class="logo-link">
+      <img src="icons/icon-512.png" alt="LoyaltyMarket">
+      <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+    </a>
 
     <input
       type="text"
@@ -649,24 +699,15 @@
     <p class="loading-text">Checking your administrator access...</p>
   </div>
 
-  <div
-    id="notAuthorizedBox"
-    class="status-box"
-    style="display:none;"
-  >
+  <div id="notAuthorizedBox" class="status-box" style="display:none;">
     <h2>Access Restricted</h2>
-    <p>
-      This page is only available to authorized LoyaltyMarket administrators.
-    </p>
+    <p>This page is only available to authorized LoyaltyMarket administrators.</p>
     <a href="index.html">Return To Homepage</a>
   </div>
 
-  <main
-    class="admin-wrap"
-    id="adminMain"
-    style="display:none;"
-  >
+  <main class="admin-wrap" id="adminMain" style="display:none;">
     <div id="adminErrorBox" class="error-box"></div>
+    <div id="adminSuccessBox" class="success-box"></div>
 
     <div class="admin-header">
       <div>
@@ -674,250 +715,81 @@
         <p id="adminWelcomeText">Manage LoyaltyMarket users and reports.</p>
       </div>
 
-      <button id="refreshBtn" class="refresh-btn">
-        🔄 Refresh Data
-      </button>
+      <button id="refreshBtn" class="refresh-btn">🔄 Refresh Data</button>
     </div>
 
     <div class="admin-section-tabs">
-      <button
-        class="admin-section-tab-btn active"
-        data-section="overview"
-      >
+      <button class="admin-section-tab-btn active" data-section="overview">
         Dashboard Overview
       </button>
 
-      <button
-        class="admin-section-tab-btn"
-        data-section="users"
-      >
+      <button class="admin-section-tab-btn" data-section="users">
         User Management
       </button>
 
-      <button
-        class="admin-section-tab-btn"
-        data-section="reports"
-      >
+      <button class="admin-section-tab-btn" data-section="reports">
         Reported Listings
       </button>
 
-      <button
-        class="admin-section-tab-btn"
-        data-section="boosts"
-      >
+      <button class="admin-section-tab-btn" data-section="boosts">
         Boost Requests
+      </button>
+
+      <button class="admin-section-tab-btn" data-section="settings">
+        Marketplace Settings
       </button>
     </div>
 
     <section id="overviewSection">
-
       <div class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-card-icon">👥</span>
-          <div class="stat-card-label">Total Users</div>
-          <div class="stat-card-value" id="statTotalUsers">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">🆕</span>
-          <div class="stat-card-label">New Users Today</div>
-          <div class="stat-card-value" id="statNewUsersToday">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">⭐</span>
-          <div class="stat-card-label">Verified Sellers</div>
-          <div class="stat-card-value" id="statVerifiedSellers">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">📋</span>
-          <div class="stat-card-label">Total Listings</div>
-          <div class="stat-card-value" id="statTotalListings">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">📈</span>
-          <div class="stat-card-label">New Listings Today</div>
-          <div class="stat-card-value" id="statNewListingsToday">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">🚩</span>
-          <div class="stat-card-label">Total Reports</div>
-          <div class="stat-card-value" id="statTotalReports">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">⏳</span>
-          <div class="stat-card-label">Pending Reports</div>
-          <div class="stat-card-value" id="statPendingReports">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">🚀</span>
-          <div class="stat-card-label">Pending Boosts</div>
-          <div class="stat-card-value" id="statPendingBoosts">—</div>
-        </div>
-
-        <!-- New analytics stat cards -->
-        <div class="stat-card">
-          <span class="stat-card-icon">✅</span>
-          <div class="stat-card-label">Active Listings</div>
-          <div class="stat-card-value" id="statActiveListings">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">🗄️</span>
-          <div class="stat-card-label">Archived Listings</div>
-          <div class="stat-card-value" id="statArchivedListings">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">💰</span>
-          <div class="stat-card-label">Sold Listings</div>
-          <div class="stat-card-value" id="statSoldListings">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">🌟</span>
-          <div class="stat-card-label">Featured Listings</div>
-          <div class="stat-card-value" id="statFeaturedListings">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">🧾</span>
-          <div class="stat-card-label">Total Orders</div>
-          <div class="stat-card-value" id="statTotalOrders">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">✔️</span>
-          <div class="stat-card-label">Completed Sales</div>
-          <div class="stat-card-value" id="statCompletedOrders">—</div>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-card-icon">🚀</span>
-          <div class="stat-card-label">Active Boosted Listings</div>
-          <div class="stat-card-value" id="statActiveBoosts">—</div>
-        </div>
+        <div class="stat-card"><span class="stat-card-icon">👥</span><div class="stat-card-label">Total Users</div><div class="stat-card-value" id="statTotalUsers">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">🆕</span><div class="stat-card-label">New Users Today</div><div class="stat-card-value" id="statNewUsersToday">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">⭐</span><div class="stat-card-label">Verified Sellers</div><div class="stat-card-value" id="statVerifiedSellers">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">📋</span><div class="stat-card-label">Total Listings</div><div class="stat-card-value" id="statTotalListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">📈</span><div class="stat-card-label">New Listings Today</div><div class="stat-card-value" id="statNewListingsToday">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">🚩</span><div class="stat-card-label">Total Reports</div><div class="stat-card-value" id="statTotalReports">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">⏳</span><div class="stat-card-label">Pending Reports</div><div class="stat-card-value" id="statPendingReports">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">🚀</span><div class="stat-card-label">Pending Boosts</div><div class="stat-card-value" id="statPendingBoosts">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">✅</span><div class="stat-card-label">Active Listings</div><div class="stat-card-value" id="statActiveListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">🗄️</span><div class="stat-card-label">Archived Listings</div><div class="stat-card-value" id="statArchivedListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">💰</span><div class="stat-card-label">Sold Listings</div><div class="stat-card-value" id="statSoldListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">🌟</span><div class="stat-card-label">Featured Listings</div><div class="stat-card-value" id="statFeaturedListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">🧾</span><div class="stat-card-label">Total Orders</div><div class="stat-card-value" id="statTotalOrders">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">✔️</span><div class="stat-card-label">Completed Sales</div><div class="stat-card-value" id="statCompletedOrders">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">🚀</span><div class="stat-card-label">Active Boosted Listings</div><div class="stat-card-value" id="statActiveBoosts">—</div></div>
       </div>
 
-      <!-- Quick Actions -->
       <div class="analytics-section-title">Quick Actions</div>
       <div class="quick-actions-grid">
-        <button class="quick-action-btn" type="button" data-goto-section="users">
-          <span class="quick-action-btn-icon">👥</span>
-          Manage Users
-        </button>
-
-        <button class="quick-action-btn" type="button" data-goto-section="reports">
-          <span class="quick-action-btn-icon">🚩</span>
-          View Reports
-        </button>
-
-        <button class="quick-action-btn" type="button" data-goto-section="boosts">
-          <span class="quick-action-btn-icon">🚀</span>
-          View Boost Requests
-        </button>
-
-        <a class="quick-action-btn" href="dashboard.html">
-          <span class="quick-action-btn-icon">📋</span>
-          Manage Listings
-        </a>
-
-        <a class="quick-action-btn" href="account-setting.html">
-          <span class="quick-action-btn-icon">⚙️</span>
-          Marketplace Settings
-        </a>
+        <button class="quick-action-btn" type="button" data-goto-section="users">👥 Manage Users</button>
+        <button class="quick-action-btn" type="button" data-goto-section="reports">🚩 View Reports</button>
+        <button class="quick-action-btn" type="button" data-goto-section="boosts">🚀 View Boost Requests</button>
+        <a class="quick-action-btn" href="dashboard.html">📋 Manage Listings</a>
+        <button class="quick-action-btn" type="button" data-goto-section="settings">⚙️ Marketplace Settings</button>
       </div>
 
-      <!-- Recent Activity -->
       <div class="analytics-section-title">Recent Activity</div>
       <div class="activity-grid">
-        <div class="activity-card">
-          <div class="activity-card-header">🆕 New Users</div>
-          <div class="activity-list" id="recentUsersList">
-            <p class="empty-state">Loading...</p>
-          </div>
-        </div>
-
-        <div class="activity-card">
-          <div class="activity-card-header">📋 New Listings</div>
-          <div class="activity-list" id="recentListingsList">
-            <p class="empty-state">Loading...</p>
-          </div>
-        </div>
-
-        <div class="activity-card">
-          <div class="activity-card-header">🧾 New Orders</div>
-          <div class="activity-list" id="recentOrdersList">
-            <p class="empty-state">Loading...</p>
-          </div>
-        </div>
-
-        <div class="activity-card">
-          <div class="activity-card-header">🚀 New Boost Requests</div>
-          <div class="activity-list" id="recentBoostsList">
-            <p class="empty-state">Loading...</p>
-          </div>
-        </div>
-
-        <div class="activity-card">
-          <div class="activity-card-header">🚩 Recent Reports</div>
-          <div class="activity-list" id="recentReportsList">
-            <p class="empty-state">Loading...</p>
-          </div>
-        </div>
+        <div class="activity-card"><div class="activity-card-header">🆕 New Users</div><div class="activity-list" id="recentUsersList"><p class="empty-state">Loading...</p></div></div>
+        <div class="activity-card"><div class="activity-card-header">📋 New Listings</div><div class="activity-list" id="recentListingsList"><p class="empty-state">Loading...</p></div></div>
+        <div class="activity-card"><div class="activity-card-header">🧾 New Orders</div><div class="activity-list" id="recentOrdersList"><p class="empty-state">Loading...</p></div></div>
+        <div class="activity-card"><div class="activity-card-header">🚀 New Boost Requests</div><div class="activity-list" id="recentBoostsList"><p class="empty-state">Loading...</p></div></div>
+        <div class="activity-card"><div class="activity-card-header">🚩 Recent Reports</div><div class="activity-list" id="recentReportsList"><p class="empty-state">Loading...</p></div></div>
       </div>
 
-      <!-- Analytics Breakdown -->
       <div class="analytics-section-title">Analytics Breakdown</div>
       <div class="breakdown-grid">
-        <div class="breakdown-card">
-          <div class="breakdown-card-title">Listings By Category</div>
-          <div id="categoryBreakdown">
-            <p class="empty-state">Loading...</p>
-          </div>
-        </div>
-
-        <div class="breakdown-card">
-          <div class="breakdown-card-title">Orders By Status</div>
-          <div id="orderStatusBreakdown">
-            <p class="empty-state">Loading...</p>
-          </div>
-        </div>
-
-        <div class="breakdown-card">
-          <div class="breakdown-card-title">New Users — Last 7 Days</div>
-          <div id="usersWeekChart">
-            <p class="empty-state">Loading...</p>
-          </div>
-        </div>
-
-        <div class="breakdown-card">
-          <div class="breakdown-card-title">Orders — Last 7 Days</div>
-          <div id="ordersWeekChart">
-            <p class="empty-state">Loading...</p>
-          </div>
-        </div>
+        <div class="breakdown-card"><div class="breakdown-card-title">Listings By Category</div><div id="categoryBreakdown"><p class="empty-state">Loading...</p></div></div>
+        <div class="breakdown-card"><div class="breakdown-card-title">Orders By Status</div><div id="orderStatusBreakdown"><p class="empty-state">Loading...</p></div></div>
+        <div class="breakdown-card"><div class="breakdown-card-title">New Users — Last 7 Days</div><div id="usersWeekChart"><p class="empty-state">Loading...</p></div></div>
+        <div class="breakdown-card"><div class="breakdown-card-title">Orders — Last 7 Days</div><div id="ordersWeekChart"><p class="empty-state">Loading...</p></div></div>
       </div>
-
     </section>
 
     <section id="usersSection" style="display:none;">
       <div class="search-row">
-        <input
-          type="text"
-          id="userSearchInput"
-          class="user-search-box"
-          placeholder="Search users by name or email..."
-        >
-
-        <button id="clearUserSearchBtn" class="admin-tab-btn">
-          Clear
-        </button>
+        <input type="text" id="userSearchInput" class="user-search-box" placeholder="Search users by name or email...">
+        <button id="clearUserSearchBtn" class="admin-tab-btn">Clear</button>
       </div>
 
       <div id="usersContainer">
@@ -927,33 +799,10 @@
 
     <section id="reportsSection" style="display:none;">
       <div class="admin-tabs">
-        <button
-          class="admin-tab-btn active"
-          data-filter="all"
-        >
-          All
-        </button>
-
-        <button
-          class="admin-tab-btn"
-          data-filter="pending"
-        >
-          Pending
-        </button>
-
-        <button
-          class="admin-tab-btn"
-          data-filter="reviewed"
-        >
-          Reviewed
-        </button>
-
-        <button
-          class="admin-tab-btn"
-          data-filter="dismissed"
-        >
-          Dismissed
-        </button>
+        <button class="admin-tab-btn active" data-filter="all">All</button>
+        <button class="admin-tab-btn" data-filter="pending">Pending</button>
+        <button class="admin-tab-btn" data-filter="reviewed">Reviewed</button>
+        <button class="admin-tab-btn" data-filter="dismissed">Dismissed</button>
       </div>
 
       <div id="reportsContainer">
@@ -963,37 +812,123 @@
 
     <section id="boostsSection" style="display:none;">
       <div class="admin-tabs">
-        <button
-          class="admin-tab-btn active"
-          data-boost-filter="pending"
-        >
-          Pending
-        </button>
-
-        <button
-          class="admin-tab-btn"
-          data-boost-filter="active"
-        >
-          Active
-        </button>
-
-        <button
-          class="admin-tab-btn"
-          data-boost-filter="rejected"
-        >
-          Rejected
-        </button>
-
-        <button
-          class="admin-tab-btn"
-          data-boost-filter="all"
-        >
-          All
-        </button>
+        <button class="admin-tab-btn active" data-boost-filter="pending">Pending</button>
+        <button class="admin-tab-btn" data-boost-filter="active">Active</button>
+        <button class="admin-tab-btn" data-boost-filter="rejected">Rejected</button>
+        <button class="admin-tab-btn" data-boost-filter="all">All</button>
       </div>
 
       <div id="boostsContainer">
         <p class="empty-state">Loading boost requests...</p>
+      </div>
+    </section>
+
+    <section id="settingsSection" style="display:none;">
+      <div class="settings-shell">
+        <div class="settings-card">
+          <h2>⚙️ Marketplace Settings</h2>
+          <p>
+            These values are saved in Firestore under
+            <strong>settings/marketplace</strong>.
+          </p>
+
+          <form id="marketplaceSettingsForm">
+            <div class="settings-grid">
+              <div class="settings-field">
+                <label for="settingMarketplaceName">Marketplace Name</label>
+                <input class="settings-input" id="settingMarketplaceName" type="text" required>
+              </div>
+
+              <div class="settings-field">
+                <label for="settingSupportEmail">Support Email</label>
+                <input class="settings-input" id="settingSupportEmail" type="email">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingSupportPhone">Support Phone</label>
+                <input class="settings-input" id="settingSupportPhone" type="tel">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingCommission">Default Commission (%)</label>
+                <input class="settings-input" id="settingCommission" type="number" min="0" max="100" step="0.1">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingMtnNumber">MTN Mobile Money Number</label>
+                <input class="settings-input" id="settingMtnNumber" type="tel">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingOrangeNumber">Orange Money Number</label>
+                <input class="settings-input" id="settingOrangeNumber" type="tel">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingBoost3">3-Day Boost Price (US$)</label>
+                <input class="settings-input" id="settingBoost3" type="number" min="0" step="0.01">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingBoost7">7-Day Boost Price (US$)</label>
+                <input class="settings-input" id="settingBoost7" type="number" min="0" step="0.01">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingBoost14">14-Day Boost Price (US$)</label>
+                <input class="settings-input" id="settingBoost14" type="number" min="0" step="0.01">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingCurrencyRate">USD to LRD Display Rate</label>
+                <input class="settings-input" id="settingCurrencyRate" type="number" min="0" step="0.01">
+                <div class="settings-help">Example: 180 means US$1 = L$180.</div>
+              </div>
+            </div>
+
+            <div class="toggle-grid">
+              <div class="toggle-card">
+                <div>
+                  <strong>Allow New Listings</strong>
+                  <span>Turn this off to pause new product submissions.</span>
+                </div>
+                <label class="switch">
+                  <input id="settingAllowListings" type="checkbox">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-card">
+                <div>
+                  <strong>Allow New Registrations</strong>
+                  <span>Turn this off to temporarily stop new accounts.</span>
+                </div>
+                <label class="switch">
+                  <input id="settingAllowRegistrations" type="checkbox">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="toggle-card">
+                <div>
+                  <strong>Maintenance Mode</strong>
+                  <span>Use this while performing important site updates.</span>
+                </div>
+                <label class="switch">
+                  <input id="settingMaintenanceMode" type="checkbox">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-actions">
+              <span id="settingsLastUpdated" class="settings-help"></span>
+              <button id="saveSettingsBtn" class="save-settings-btn" type="submit">
+                Save Marketplace Settings
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
   </main>
@@ -1010,7 +945,9 @@
     import {
       collection,
       doc,
+      getDoc,
       getDocs,
+      setDoc,
       updateDoc,
       Timestamp
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
@@ -1020,22 +957,20 @@
       sendPasswordResetEmail
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    console.log("LoyaltyMarket admin module started.");
-
-    const ADMIN_EMAILS = [
-      "princeteah200@gmail.com"
-    ];
+    const ADMIN_EMAILS = ["princeteah200@gmail.com"];
 
     const loadingBox = document.getElementById("loadingBox");
     const notAuthorizedBox = document.getElementById("notAuthorizedBox");
     const adminMain = document.getElementById("adminMain");
     const adminErrorBox = document.getElementById("adminErrorBox");
+    const adminSuccessBox = document.getElementById("adminSuccessBox");
     const adminWelcomeText = document.getElementById("adminWelcomeText");
 
     const overviewSection = document.getElementById("overviewSection");
     const usersSection = document.getElementById("usersSection");
     const reportsSection = document.getElementById("reportsSection");
     const boostsSection = document.getElementById("boostsSection");
+    const settingsSection = document.getElementById("settingsSection");
 
     const usersContainer = document.getElementById("usersContainer");
     const reportsContainer = document.getElementById("reportsContainer");
@@ -1044,19 +979,11 @@
     const clearUserSearchBtn = document.getElementById("clearUserSearchBtn");
     const refreshBtn = document.getElementById("refreshBtn");
 
-    const sectionButtons = document.querySelectorAll(
-      ".admin-section-tab-btn"
-    );
+    const sectionButtons = document.querySelectorAll(".admin-section-tab-btn");
+    const reportFilterButtons = document.querySelectorAll(".admin-tab-btn[data-filter]");
+    const boostFilterButtons = document.querySelectorAll(".admin-tab-btn[data-boost-filter]");
+    const quickActionButtons = document.querySelectorAll("[data-goto-section]");
 
-    const reportFilterButtons = document.querySelectorAll(
-      ".admin-tab-btn[data-filter]"
-    );
-
-    const boostFilterButtons = document.querySelectorAll(
-      ".admin-tab-btn[data-boost-filter]"
-    );
-
-    // New analytics DOM references
     const recentUsersList = document.getElementById("recentUsersList");
     const recentListingsList = document.getElementById("recentListingsList");
     const recentOrdersList = document.getElementById("recentOrdersList");
@@ -1066,7 +993,26 @@
     const orderStatusBreakdown = document.getElementById("orderStatusBreakdown");
     const usersWeekChart = document.getElementById("usersWeekChart");
     const ordersWeekChart = document.getElementById("ordersWeekChart");
-    const quickActionButtons = document.querySelectorAll("[data-goto-section]");
+
+    const marketplaceSettingsForm = document.getElementById("marketplaceSettingsForm");
+    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+    const settingsLastUpdated = document.getElementById("settingsLastUpdated");
+
+    const settingsInputs = {
+      marketplaceName: document.getElementById("settingMarketplaceName"),
+      supportEmail: document.getElementById("settingSupportEmail"),
+      supportPhone: document.getElementById("settingSupportPhone"),
+      commissionPercent: document.getElementById("settingCommission"),
+      mtnMobileMoney: document.getElementById("settingMtnNumber"),
+      orangeMoney: document.getElementById("settingOrangeNumber"),
+      boost3DayPrice: document.getElementById("settingBoost3"),
+      boost7DayPrice: document.getElementById("settingBoost7"),
+      boost14DayPrice: document.getElementById("settingBoost14"),
+      usdToLrdRate: document.getElementById("settingCurrencyRate"),
+      allowNewListings: document.getElementById("settingAllowListings"),
+      allowNewRegistrations: document.getElementById("settingAllowRegistrations"),
+      maintenanceMode: document.getElementById("settingMaintenanceMode")
+    };
 
     let allUsers = [];
     let allReports = [];
@@ -1075,14 +1021,7 @@
     let allOrdersCache = [];
     let currentReportFilter = "all";
     let currentBoostFilter = "pending";
-
-    window.addEventListener("error", (event) => {
-      console.error("Admin page error:", event.error || event.message);
-    });
-
-    window.addEventListener("unhandledrejection", (event) => {
-      console.error("Admin promise error:", event.reason);
-    });
+    let currentAdminUser = null;
 
     function safeText(value) {
       return String(value ?? "")
@@ -1096,62 +1035,49 @@
     function showError(message) {
       adminErrorBox.textContent = message;
       adminErrorBox.style.display = "block";
+      adminSuccessBox.style.display = "none";
     }
 
-    function clearError() {
+    function showSuccess(message) {
+      adminSuccessBox.textContent = message;
+      adminSuccessBox.style.display = "block";
+      adminErrorBox.style.display = "none";
+
+      window.setTimeout(() => {
+        adminSuccessBox.style.display = "none";
+      }, 5000);
+    }
+
+    function clearMessages() {
       adminErrorBox.textContent = "";
       adminErrorBox.style.display = "none";
-    }
-
-    function formatDate(timestamp) {
-      if (!timestamp) {
-        return "Unknown date";
-      }
-
-      try {
-        if (typeof timestamp.toDate === "function") {
-          return timestamp.toDate().toLocaleString();
-        }
-
-        const date = new Date(timestamp);
-
-        if (Number.isNaN(date.getTime())) {
-          return "Unknown date";
-        }
-
-        return date.toLocaleString();
-      } catch (error) {
-        return "Unknown date";
-      }
+      adminSuccessBox.textContent = "";
+      adminSuccessBox.style.display = "none";
     }
 
     function timestampToMilliseconds(timestamp) {
-      if (!timestamp) {
-        return 0;
-      }
+      if (!timestamp) return 0;
 
       try {
-        if (typeof timestamp.toMillis === "function") {
-          return timestamp.toMillis();
-        }
-
-        if (typeof timestamp.toDate === "function") {
-          return timestamp.toDate().getTime();
-        }
+        if (typeof timestamp.toMillis === "function") return timestamp.toMillis();
+        if (typeof timestamp.toDate === "function") return timestamp.toDate().getTime();
 
         const date = new Date(timestamp);
         return Number.isNaN(date.getTime()) ? 0 : date.getTime();
-      } catch (error) {
+      } catch {
         return 0;
       }
+    }
+
+    function formatDate(timestamp) {
+      const milliseconds = timestampToMilliseconds(timestamp);
+      if (!milliseconds) return "Unknown date";
+      return new Date(milliseconds).toLocaleString();
     }
 
     function wasCreatedToday(timestamp) {
       const milliseconds = timestampToMilliseconds(timestamp);
-
-      if (!milliseconds) {
-        return false;
-      }
+      if (!milliseconds) return false;
 
       const createdDate = new Date(milliseconds);
       const today = new Date();
@@ -1164,24 +1090,19 @@
     }
 
     function showSection(sectionName) {
-      overviewSection.style.display =
-        sectionName === "overview" ? "block" : "none";
-
-      usersSection.style.display =
-        sectionName === "users" ? "block" : "none";
-
-      reportsSection.style.display =
-        sectionName === "reports" ? "block" : "none";
-
-      boostsSection.style.display =
-        sectionName === "boosts" ? "block" : "none";
+      overviewSection.style.display = sectionName === "overview" ? "block" : "none";
+      usersSection.style.display = sectionName === "users" ? "block" : "none";
+      reportsSection.style.display = sectionName === "reports" ? "block" : "none";
+      boostsSection.style.display = sectionName === "boosts" ? "block" : "none";
+      settingsSection.style.display = sectionName === "settings" ? "block" : "none";
 
       sectionButtons.forEach((button) => {
-        button.classList.toggle(
-          "active",
-          button.dataset.section === sectionName
-        );
+        button.classList.toggle("active", button.dataset.section === sectionName);
       });
+
+      if (sectionName === "settings") {
+        loadMarketplaceSettings();
+      }
     }
 
     sectionButtons.forEach((button) => {
@@ -1190,112 +1111,47 @@
       });
     });
 
-    // Quick Action buttons that jump to a section tab
     quickActionButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const target = button.getAttribute("data-goto-section");
-        if (target) {
-          showSection(target);
-        }
+        if (target) showSection(target);
       });
     });
 
     function updateStatistics(products, orders) {
-      const verifiedUsers = allUsers.filter(
-        (user) => user.verified === true
-      );
+      const verifiedUsers = allUsers.filter((user) => user.verified === true);
+      const newUsersToday = allUsers.filter((user) => wasCreatedToday(user.createdAt));
+      const newListingsToday = products.filter((product) => wasCreatedToday(product.createdAt));
+      const pendingReports = allReports.filter((report) => (report.status || "pending") === "pending");
+      const pendingBoosts = products.filter((product) => product.boostStatus === "pending");
+      const activeBoosts = products.filter((product) => product.boostStatus === "active");
+      const activeListings = products.filter((product) => (product.status || "active") === "active");
+      const archivedListings = products.filter((product) => product.status === "archived");
+      const soldListings = products.filter((product) => product.status === "sold");
+      const featuredListings = products.filter((product) => product.featured === true);
+      const completedOrders = orders.filter((order) => order.status === "completed");
 
-      const newUsersToday = allUsers.filter(
-        (user) => wasCreatedToday(user.createdAt)
-      );
-
-      const newListingsToday = products.filter(
-        (product) => wasCreatedToday(product.createdAt)
-      );
-
-      const pendingReports = allReports.filter(
-        (report) => (report.status || "pending") === "pending"
-      );
-
-      const pendingBoosts = products.filter(
-        (product) => product.boostStatus === "pending"
-      );
-
-      const activeBoosts = products.filter(
-        (product) => product.boostStatus === "active"
-      );
-
-      const activeListings = products.filter(
-        (product) => (product.status || "active") === "active"
-      );
-
-      const archivedListings = products.filter(
-        (product) => product.status === "archived"
-      );
-
-      const soldListings = products.filter(
-        (product) => product.status === "sold"
-      );
-
-      const featuredListings = products.filter(
-        (product) => product.featured === true
-      );
-
-      const completedOrders = orders.filter(
-        (order) => order.status === "completed"
-      );
-
-      document.getElementById("statTotalUsers").textContent =
-        allUsers.length;
-
-      document.getElementById("statNewUsersToday").textContent =
-        newUsersToday.length;
-
-      document.getElementById("statVerifiedSellers").textContent =
-        verifiedUsers.length;
-
-      document.getElementById("statTotalListings").textContent =
-        products.length;
-
-      document.getElementById("statNewListingsToday").textContent =
-        newListingsToday.length;
-
-      document.getElementById("statTotalReports").textContent =
-        allReports.length;
-
-      document.getElementById("statPendingReports").textContent =
-        pendingReports.length;
-
-      document.getElementById("statPendingBoosts").textContent =
-        pendingBoosts.length;
-
-      document.getElementById("statActiveListings").textContent =
-        activeListings.length;
-
-      document.getElementById("statArchivedListings").textContent =
-        archivedListings.length;
-
-      document.getElementById("statSoldListings").textContent =
-        soldListings.length;
-
-      document.getElementById("statFeaturedListings").textContent =
-        featuredListings.length;
-
-      document.getElementById("statTotalOrders").textContent =
-        orders.length;
-
-      document.getElementById("statCompletedOrders").textContent =
-        completedOrders.length;
-
-      document.getElementById("statActiveBoosts").textContent =
-        activeBoosts.length;
+      document.getElementById("statTotalUsers").textContent = allUsers.length;
+      document.getElementById("statNewUsersToday").textContent = newUsersToday.length;
+      document.getElementById("statVerifiedSellers").textContent = verifiedUsers.length;
+      document.getElementById("statTotalListings").textContent = products.length;
+      document.getElementById("statNewListingsToday").textContent = newListingsToday.length;
+      document.getElementById("statTotalReports").textContent = allReports.length;
+      document.getElementById("statPendingReports").textContent = pendingReports.length;
+      document.getElementById("statPendingBoosts").textContent = pendingBoosts.length;
+      document.getElementById("statActiveListings").textContent = activeListings.length;
+      document.getElementById("statArchivedListings").textContent = archivedListings.length;
+      document.getElementById("statSoldListings").textContent = soldListings.length;
+      document.getElementById("statFeaturedListings").textContent = featuredListings.length;
+      document.getElementById("statTotalOrders").textContent = orders.length;
+      document.getElementById("statCompletedOrders").textContent = completedOrders.length;
+      document.getElementById("statActiveBoosts").textContent = activeBoosts.length;
     }
 
     function renderRecentActivity(products, orders) {
-      // Recent Users
-      const sortedUsers = [...allUsers].sort(
-        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
-      ).slice(0, 6);
+      const sortedUsers = [...allUsers]
+        .sort((a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt))
+        .slice(0, 6);
 
       recentUsersList.innerHTML = sortedUsers.length
         ? sortedUsers.map((user) => `
@@ -1306,10 +1162,9 @@
           `).join("")
         : '<p class="empty-state">No users yet.</p>';
 
-      // Recent Listings
-      const sortedProducts = [...products].sort(
-        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
-      ).slice(0, 6);
+      const sortedProducts = [...products]
+        .sort((a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt))
+        .slice(0, 6);
 
       recentListingsList.innerHTML = sortedProducts.length
         ? sortedProducts.map((product) => `
@@ -1320,10 +1175,9 @@
           `).join("")
         : '<p class="empty-state">No listings yet.</p>';
 
-      // Recent Orders
-      const sortedOrders = [...orders].sort(
-        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
-      ).slice(0, 6);
+      const sortedOrders = [...orders]
+        .sort((a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt))
+        .slice(0, 6);
 
       recentOrdersList.innerHTML = sortedOrders.length
         ? sortedOrders.map((order) => `
@@ -1334,10 +1188,9 @@
           `).join("")
         : '<p class="empty-state">No orders yet.</p>';
 
-      // Recent Boost Requests
-      const sortedBoosts = [...allBoostProducts].sort(
-        (a, b) => timestampToMilliseconds(b.boostRequestedAt) - timestampToMilliseconds(a.boostRequestedAt)
-      ).slice(0, 6);
+      const sortedBoosts = [...allBoostProducts]
+        .sort((a, b) => timestampToMilliseconds(b.boostRequestedAt) - timestampToMilliseconds(a.boostRequestedAt))
+        .slice(0, 6);
 
       recentBoostsList.innerHTML = sortedBoosts.length
         ? sortedBoosts.map((product) => `
@@ -1348,10 +1201,9 @@
           `).join("")
         : '<p class="empty-state">No boost requests yet.</p>';
 
-      // Recent Reports
-      const sortedReports = [...allReports].sort(
-        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
-      ).slice(0, 6);
+      const sortedReports = [...allReports]
+        .sort((a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt))
+        .slice(0, 6);
 
       recentReportsList.innerHTML = sortedReports.length
         ? sortedReports.map((report) => `
@@ -1364,17 +1216,14 @@
     }
 
     function renderBreakdowns(products, orders) {
-      // Listings by category
       const categoryCounts = {};
+
       products.forEach((product) => {
         const category = product.category || "Uncategorized";
         categoryCounts[category] = (categoryCounts[category] || 0) + 1;
       });
 
-      const categoryEntries = Object.entries(categoryCounts).sort(
-        (a, b) => b[1] - a[1]
-      );
-
+      const categoryEntries = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
       const categoryColors = ["", "color-green", "color-amber", "color-purple", "color-pink", "color-red"];
       const maxCategoryCount = categoryEntries.length
         ? Math.max(...categoryEntries.map((entry) => entry[1]))
@@ -1383,7 +1232,6 @@
       categoryBreakdown.innerHTML = categoryEntries.length
         ? categoryEntries.map(([category, count], index) => {
             const percent = maxCategoryCount ? Math.round((count / maxCategoryCount) * 100) : 0;
-            const colorClass = categoryColors[index % categoryColors.length];
             return `
               <div class="bar-row">
                 <div class="bar-row-label">
@@ -1391,19 +1239,24 @@
                   <strong>${count}</strong>
                 </div>
                 <div class="bar-track">
-                  <div class="bar-fill ${colorClass}" style="width:${percent}%;"></div>
+                  <div class="bar-fill ${categoryColors[index % categoryColors.length]}" style="width:${percent}%;"></div>
                 </div>
               </div>
             `;
           }).join("")
         : '<p class="empty-state">No listings yet.</p>';
 
-      // Orders by status
       const statusCounts = {};
+
       orders.forEach((order) => {
         const status = order.status || "pending";
         statusCounts[status] = (statusCounts[status] || 0) + 1;
       });
+
+      const statusEntries = Object.entries(statusCounts).sort((a, b) => b[1] - a[1]);
+      const maxStatusCount = statusEntries.length
+        ? Math.max(...statusEntries.map((entry) => entry[1]))
+        : 0;
 
       const statusColorMap = {
         pending: "color-amber",
@@ -1412,18 +1265,9 @@
         cancelled: "color-red"
       };
 
-      const statusEntries = Object.entries(statusCounts).sort(
-        (a, b) => b[1] - a[1]
-      );
-
-      const maxStatusCount = statusEntries.length
-        ? Math.max(...statusEntries.map((entry) => entry[1]))
-        : 0;
-
       orderStatusBreakdown.innerHTML = statusEntries.length
         ? statusEntries.map(([status, count]) => {
             const percent = maxStatusCount ? Math.round((count / maxStatusCount) * 100) : 0;
-            const colorClass = statusColorMap[status] || "";
             return `
               <div class="bar-row">
                 <div class="bar-row-label">
@@ -1431,7 +1275,7 @@
                   <strong>${count}</strong>
                 </div>
                 <div class="bar-track">
-                  <div class="bar-fill ${colorClass}" style="width:${percent}%;"></div>
+                  <div class="bar-fill ${statusColorMap[status] || ""}" style="width:${percent}%;"></div>
                 </div>
               </div>
             `;
@@ -1441,12 +1285,14 @@
 
     function buildLast7Days() {
       const days = [];
+
       for (let i = 6; i >= 0; i--) {
         const date = new Date();
         date.setHours(0, 0, 0, 0);
         date.setDate(date.getDate() - i);
         days.push(date);
       }
+
       return days;
     }
 
@@ -1458,26 +1304,24 @@
         nextDay.setDate(nextDay.getDate() + 1);
 
         return items.filter((item) => {
-          const ms = timestampToMilliseconds(item[dateField]);
-          if (!ms) return false;
-          return ms >= day.getTime() && ms < nextDay.getTime();
+          const milliseconds = timestampToMilliseconds(item[dateField]);
+          return milliseconds >= day.getTime() && milliseconds < nextDay.getTime();
         }).length;
       });
 
       const maxCount = Math.max(...counts, 1);
-      const dayLabels = days.map((day) =>
-        day.toLocaleDateString(undefined, { weekday: "short" })
-      );
 
       container.innerHTML = `
         <div class="week-chart">
           ${counts.map((count, index) => {
             const heightPercent = Math.round((count / maxCount) * 100);
+            const label = days[index].toLocaleDateString(undefined, { weekday: "short" });
+
             return `
               <div class="week-chart-col">
                 <div class="week-chart-value">${count}</div>
                 <div class="week-chart-bar" style="height:${Math.max(heightPercent, 4)}%;"></div>
-                <div class="week-chart-label">${safeText(dayLabels[index])}</div>
+                <div class="week-chart-label">${safeText(label)}</div>
               </div>
             `;
           }).join("")}
@@ -1486,123 +1330,51 @@
     }
 
     async function loadAllData() {
-      clearError();
+      clearMessages();
       refreshBtn.disabled = true;
       refreshBtn.textContent = "Refreshing...";
 
       try {
-        const [
-          usersSnapshot,
-          productsSnapshot,
-          reportsSnapshot,
-          ordersSnapshot
-        ] = await Promise.all([
+        const [usersSnapshot, productsSnapshot, reportsSnapshot, ordersSnapshot] = await Promise.all([
           getDocs(collection(db, "users")),
           getDocs(collection(db, "products")),
           getDocs(collection(db, "reports")),
-          getDocs(collection(db, "orders")).catch((error) => {
-            console.error("Could not load orders:", error);
-            return { docs: [] };
-          })
+          getDocs(collection(db, "orders")).catch(() => ({ docs: [] }))
         ]);
 
-        allUsers = usersSnapshot.docs.map((documentSnapshot) => ({
-          id: documentSnapshot.id,
-          ...documentSnapshot.data()
+        allUsers = usersSnapshot.docs.map((snapshot) => ({ id: snapshot.id, ...snapshot.data() }));
+        allProductsCache = productsSnapshot.docs.map((snapshot) => ({ id: snapshot.id, ...snapshot.data() }));
+        allOrdersCache = ordersSnapshot.docs.map((snapshot) => ({ id: snapshot.id, ...snapshot.data() }));
+        allReports = reportsSnapshot.docs.map((snapshot) => ({
+          id: snapshot.id,
+          status: "pending",
+          ...snapshot.data()
         }));
 
-        const products = productsSnapshot.docs.map(
-          (documentSnapshot) => ({
-            id: documentSnapshot.id,
-            ...documentSnapshot.data()
-          })
+        allBoostProducts = allProductsCache.filter((product) => Boolean(product.boostStatus));
+
+        allUsers.sort((a, b) =>
+          timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
         );
 
-        const orders = ordersSnapshot.docs.map(
-          (documentSnapshot) => ({
-            id: documentSnapshot.id,
-            ...documentSnapshot.data()
-          })
+        allReports.sort((a, b) =>
+          timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
         );
 
-        allProductsCache = products;
-        allOrdersCache = orders;
-
-        allBoostProducts = products.filter(
-          (product) => Boolean(product.boostStatus)
+        allBoostProducts.sort((a, b) =>
+          timestampToMilliseconds(b.boostRequestedAt) - timestampToMilliseconds(a.boostRequestedAt)
         );
 
-        allBoostProducts.sort(
-          (firstProduct, secondProduct) =>
-            timestampToMilliseconds(secondProduct.boostRequestedAt) -
-            timestampToMilliseconds(firstProduct.boostRequestedAt)
-        );
-
-        allReports = reportsSnapshot.docs.map(
-          (documentSnapshot) => ({
-            id: documentSnapshot.id,
-            status: "pending",
-            ...documentSnapshot.data()
-          })
-        );
-
-        allUsers.sort(
-          (firstUser, secondUser) =>
-            timestampToMilliseconds(secondUser.createdAt) -
-            timestampToMilliseconds(firstUser.createdAt)
-        );
-
-        allReports.sort(
-          (firstReport, secondReport) =>
-            timestampToMilliseconds(secondReport.createdAt) -
-            timestampToMilliseconds(firstReport.createdAt)
-        );
-
-        updateStatistics(products, orders);
+        updateStatistics(allProductsCache, allOrdersCache);
         renderUsers();
         renderReports();
         renderBoosts();
-        renderRecentActivity(products, orders);
-        renderBreakdowns(products, orders);
+        renderRecentActivity(allProductsCache, allOrdersCache);
+        renderBreakdowns(allProductsCache, allOrdersCache);
         renderWeekChart(usersWeekChart, allUsers, "createdAt");
-        renderWeekChart(ordersWeekChart, orders, "createdAt");
+        renderWeekChart(ordersWeekChart, allOrdersCache, "createdAt");
       } catch (error) {
-        console.error("Could not load admin data:", error);
-
-        showError(
-          "The admin dashboard opened, but some Firebase data could not load. " +
-          error.message
-        );
-
-        usersContainer.innerHTML =
-          '<p class="empty-state">Unable to load users.</p>';
-
-        reportsContainer.innerHTML =
-          '<p class="empty-state">Unable to load reports.</p>';
-
-        boostsContainer.innerHTML =
-          '<p class="empty-state">Unable to load boost requests.</p>';
-
-        recentUsersList.innerHTML =
-          '<p class="empty-state">Unable to load recent users.</p>';
-
-        recentListingsList.innerHTML =
-          '<p class="empty-state">Unable to load recent listings.</p>';
-
-        recentOrdersList.innerHTML =
-          '<p class="empty-state">Unable to load recent orders.</p>';
-
-        recentBoostsList.innerHTML =
-          '<p class="empty-state">Unable to load recent boost requests.</p>';
-
-        recentReportsList.innerHTML =
-          '<p class="empty-state">Unable to load recent reports.</p>';
-
-        categoryBreakdown.innerHTML =
-          '<p class="empty-state">Unable to load breakdown.</p>';
-
-        orderStatusBreakdown.innerHTML =
-          '<p class="empty-state">Unable to load breakdown.</p>';
+        showError("Some Firebase data could not load. " + error.message);
       } finally {
         refreshBtn.disabled = false;
         refreshBtn.textContent = "🔄 Refresh Data";
@@ -1610,136 +1382,83 @@
     }
 
     function renderUsers() {
-      const searchText = userSearchInput.value
-        .trim()
-        .toLowerCase();
+      const searchText = userSearchInput.value.trim().toLowerCase();
 
       const filteredUsers = allUsers.filter((user) => {
         const name = String(user.name || "").toLowerCase();
         const email = String(user.email || "").toLowerCase();
-
-        return (
-          searchText === "" ||
-          name.includes(searchText) ||
-          email.includes(searchText)
-        );
+        return searchText === "" || name.includes(searchText) || email.includes(searchText);
       });
 
       if (filteredUsers.length === 0) {
-        usersContainer.innerHTML =
-          '<p class="empty-state">No matching users were found.</p>';
-
+        usersContainer.innerHTML = '<p class="empty-state">No matching users were found.</p>';
         return;
       }
 
-      usersContainer.innerHTML = filteredUsers
-        .map((user) => {
-          const isVerified = user.verified === true;
-          const isSuspended = user.suspended === true;
+      usersContainer.innerHTML = filteredUsers.map((user) => {
+        const isVerified = user.verified === true;
+        const isSuspended = user.suspended === true;
 
-          return `
-            <article class="user-card">
-              <div class="user-top">
-                <div>
-                  <div class="user-name">
-                    ${safeText(user.name || "Unnamed User")}
-
-                    <span class="user-badge ${
-                      isVerified
-                        ? "badge-verified"
-                        : "badge-unverified"
-                    }">
-                      ${isVerified ? "Verified" : "Unverified"}
-                    </span>
-
-                    ${
-                      isSuspended
-                        ? '<span class="user-badge badge-suspended">Suspended</span>'
-                        : ""
-                    }
-                  </div>
-
-                  <div class="user-email">
-                    ${safeText(user.email || "No email available")}
-                  </div>
+        return `
+          <article class="user-card">
+            <div class="user-top">
+              <div>
+                <div class="user-name">
+                  ${safeText(user.name || "Unnamed User")}
+                  <span class="user-badge ${isVerified ? "badge-verified" : "badge-unverified"}">
+                    ${isVerified ? "Verified" : "Unverified"}
+                  </span>
+                  ${isSuspended ? '<span class="user-badge badge-suspended">Suspended</span>' : ""}
                 </div>
+
+                <div class="user-email">${safeText(user.email || "No email available")}</div>
               </div>
+            </div>
 
-              <div class="user-meta">
-                Joined: ${formatDate(user.createdAt)}
-                <br>
-                User ID: ${safeText(user.id)}
-              </div>
+            <div class="user-meta">
+              Joined: ${formatDate(user.createdAt)}
+              <br>
+              User ID: ${safeText(user.id)}
+            </div>
 
-              <div class="user-actions">
-                <button
-                  class="${
-                    isVerified
-                      ? "btn-unverify"
-                      : "btn-verify"
-                  }"
-                  data-user-id="${safeText(user.id)}"
-                  data-user-action="${
-                    isVerified
-                      ? "unverify"
-                      : "verify"
-                  }"
-                >
-                  ${
-                    isVerified
-                      ? "Remove Verification"
-                      : "Verify Seller"
-                  }
-                </button>
+            <div class="user-actions">
+              <button
+                class="${isVerified ? "btn-unverify" : "btn-verify"}"
+                data-user-id="${safeText(user.id)}"
+                data-user-action="${isVerified ? "unverify" : "verify"}"
+              >
+                ${isVerified ? "Remove Verification" : "Verify Seller"}
+              </button>
 
-                <button
-                  class="${
-                    isSuspended
-                      ? "btn-unsuspend"
-                      : "btn-suspend"
-                  }"
-                  data-user-id="${safeText(user.id)}"
-                  data-user-action="${
-                    isSuspended
-                      ? "unsuspend"
-                      : "suspend"
-                  }"
-                >
-                  ${
-                    isSuspended
-                      ? "Unsuspend User"
-                      : "Suspend User"
-                  }
-                </button>
+              <button
+                class="${isSuspended ? "btn-unsuspend" : "btn-suspend"}"
+                data-user-id="${safeText(user.id)}"
+                data-user-action="${isSuspended ? "unsuspend" : "suspend"}"
+              >
+                ${isSuspended ? "Unsuspend User" : "Suspend User"}
+              </button>
 
-                <button
-                  class="btn-reset"
-                  data-user-id="${safeText(user.id)}"
-                  data-user-action="reset"
-                >
-                  Send Password Reset
-                </button>
-              </div>
-            </article>
-          `;
-        })
-        .join("");
+              <button
+                class="btn-reset"
+                data-user-id="${safeText(user.id)}"
+                data-user-action="reset"
+              >
+                Send Password Reset
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
 
-      document.querySelectorAll("[data-user-action]")
-        .forEach((button) => {
-          button.addEventListener("click", async () => {
-            const userId = button.dataset.userId;
-            const action = button.dataset.userAction;
-
-            await handleUserAction(userId, action);
-          });
+      document.querySelectorAll("[data-user-action]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await handleUserAction(button.dataset.userId, button.dataset.userAction);
         });
+      });
     }
 
     async function handleUserAction(userId, action) {
-      const selectedUser = allUsers.find(
-        (user) => user.id === userId
-      );
+      const selectedUser = allUsers.find((user) => user.id === userId);
 
       if (!selectedUser) {
         alert("The selected user could not be found.");
@@ -1747,60 +1466,26 @@
       }
 
       try {
-        if (action === "verify") {
-          await updateUser(userId, {
-            verified: true
-          });
-        }
-
-        if (action === "unverify") {
-          await updateUser(userId, {
-            verified: false
-          });
-        }
+        if (action === "verify") await updateUser(userId, { verified: true });
+        if (action === "unverify") await updateUser(userId, { verified: false });
 
         if (action === "suspend") {
-          const confirmed = confirm(
-            `Suspend ${selectedUser.name || selectedUser.email || "this user"}?`
-          );
-
-          if (!confirmed) {
-            return;
-          }
-
-          await updateUser(userId, {
-            suspended: true
-          });
+          if (!confirm(`Suspend ${selectedUser.name || selectedUser.email || "this user"}?`)) return;
+          await updateUser(userId, { suspended: true });
         }
 
-        if (action === "unsuspend") {
-          await updateUser(userId, {
-            suspended: false
-          });
-        }
-
-        if (action === "reset") {
-          await sendPasswordReset(selectedUser.email);
-        }
+        if (action === "unsuspend") await updateUser(userId, { suspended: false });
+        if (action === "reset") await sendPasswordReset(selectedUser.email);
       } catch (error) {
-        console.error("User action failed:", error);
         alert("The action failed: " + error.message);
       }
     }
 
     async function updateUser(userId, changes) {
-      await updateDoc(
-        doc(db, "users", userId),
-        changes
-      );
+      await updateDoc(doc(db, "users", userId), changes);
 
-      const localUser = allUsers.find(
-        (user) => user.id === userId
-      );
-
-      if (localUser) {
-        Object.assign(localUser, changes);
-      }
+      const localUser = allUsers.find((user) => user.id === userId);
+      if (localUser) Object.assign(localUser, changes);
 
       renderUsers();
       updateStatistics(allProductsCache, allOrdersCache);
@@ -1813,26 +1498,13 @@
         return;
       }
 
-      const confirmed = confirm(
-        `Send a password-reset email to ${email}?`
-      );
-
-      if (!confirmed) {
-        return;
-      }
+      if (!confirm(`Send a password-reset email to ${email}?`)) return;
 
       await sendPasswordResetEmail(auth, email);
-
-      alert(
-        "Password-reset email sent successfully to " +
-        email
-      );
+      alert("Password-reset email sent successfully to " + email);
     }
 
-    userSearchInput.addEventListener(
-      "input",
-      renderUsers
-    );
+    userSearchInput.addEventListener("input", renderUsers);
 
     clearUserSearchBtn.addEventListener("click", () => {
       userSearchInput.value = "";
@@ -1841,153 +1513,91 @@
     });
 
     function renderReports() {
-      const filteredReports =
-        currentReportFilter === "all"
-          ? allReports
-          : allReports.filter(
-              (report) =>
-                (report.status || "pending") ===
-                currentReportFilter
-            );
+      const filteredReports = currentReportFilter === "all"
+        ? allReports
+        : allReports.filter((report) =>
+            (report.status || "pending") === currentReportFilter
+          );
 
       if (filteredReports.length === 0) {
         reportsContainer.innerHTML =
           '<p class="empty-state">No reports were found for this filter.</p>';
-
         return;
       }
 
-      reportsContainer.innerHTML = filteredReports
-        .map((report) => {
-          const reportStatus =
-            report.status || "pending";
+      reportsContainer.innerHTML = filteredReports.map((report) => {
+        const reportStatus = report.status || "pending";
+        const productLink = report.productId
+          ? `product-detail.html?id=${encodeURIComponent(report.productId)}`
+          : "index.html";
 
-          const statusClass =
-            "status-" + reportStatus;
-
-          const productLink = report.productId
-            ? `product-detail.html?id=${encodeURIComponent(
-                report.productId
-              )}`
-            : "index.html";
-
-          return `
-            <article class="report-card">
-              <div class="report-top">
-                <div>
-                  <span class="report-title">
-                    ${safeText(
-                      report.productTitle ||
-                      report.listingTitle ||
-                      "Untitled Listing"
-                    )}
-                  </span>
-
-                  <span class="report-reason">
-                    ${safeText(
-                      report.reason || "Unspecified"
-                    )}
-                  </span>
-                </div>
-
-                <span class="report-status ${statusClass}">
-                  ${safeText(reportStatus)}
+        return `
+          <article class="report-card">
+            <div class="report-top">
+              <div>
+                <span class="report-title">
+                  ${safeText(report.productTitle || report.listingTitle || "Untitled Listing")}
                 </span>
+
+                <span class="report-reason">${safeText(report.reason || "Unspecified")}</span>
               </div>
 
-              <div class="report-details">
-                ${
-                  report.details
-                    ? safeText(report.details)
-                    : "<em>No additional details were provided.</em>"
-                }
-              </div>
+              <span class="report-status status-${safeText(reportStatus)}">
+                ${safeText(reportStatus)}
+              </span>
+            </div>
 
-              <div class="report-meta">
-                Reported: ${formatDate(report.createdAt)}
-                <br>
-                Reporter ID: ${safeText(
-                  report.reporterId || "Unknown"
-                )}
-                <br>
-                Seller ID: ${safeText(
-                  report.sellerId || "Unknown"
-                )}
-              </div>
+            <div class="report-details">
+              ${report.details ? safeText(report.details) : "<em>No additional details were provided.</em>"}
+            </div>
 
-              <div class="report-actions">
-                <a
-                  class="btn-view"
-                  href="${productLink}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Listing
-                </a>
+            <div class="report-meta">
+              Reported: ${formatDate(report.createdAt)}
+              <br>
+              Reporter ID: ${safeText(report.reporterId || "Unknown")}
+              <br>
+              Seller ID: ${safeText(report.sellerId || "Unknown")}
+            </div>
 
-                <button
-                  class="btn-reviewed"
-                  data-report-id="${safeText(report.id)}"
-                  data-report-status="reviewed"
-                >
-                  Mark Reviewed
-                </button>
+            <div class="report-actions">
+              <a class="btn-view" href="${productLink}" target="_blank" rel="noopener noreferrer">
+                View Listing
+              </a>
 
-                <button
-                  class="btn-dismiss"
-                  data-report-id="${safeText(report.id)}"
-                  data-report-status="dismissed"
-                >
-                  Dismiss
-                </button>
-              </div>
-            </article>
-          `;
-        })
-        .join("");
+              <button class="btn-reviewed" data-report-id="${safeText(report.id)}" data-report-status="reviewed">
+                Mark Reviewed
+              </button>
 
-      document.querySelectorAll("[data-report-status]")
-        .forEach((button) => {
-          button.addEventListener("click", async () => {
-            await updateReportStatus(
-              button.dataset.reportId,
-              button.dataset.reportStatus
-            );
-          });
+              <button class="btn-dismiss" data-report-id="${safeText(report.id)}" data-report-status="dismissed">
+                Dismiss
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-report-status]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await updateReportStatus(button.dataset.reportId, button.dataset.reportStatus);
         });
+      });
     }
 
-    async function updateReportStatus(
-      reportId,
-      newStatus
-    ) {
+    async function updateReportStatus(reportId, newStatus) {
       try {
-        await updateDoc(
-          doc(db, "reports", reportId),
-          {
-            status: newStatus,
-            reviewedAt: Timestamp.now()
-          }
-        );
+        await updateDoc(doc(db, "reports", reportId), {
+          status: newStatus,
+          reviewedAt: Timestamp.now()
+        });
 
-        const localReport = allReports.find(
-          (report) => report.id === reportId
-        );
-
-        if (localReport) {
-          localReport.status = newStatus;
-          localReport.reviewedAt = Timestamp.now();
-        }
+        const report = allReports.find((item) => item.id === reportId);
+        if (report) report.status = newStatus;
 
         renderReports();
         updateStatistics(allProductsCache, allOrdersCache);
         renderRecentActivity(allProductsCache, allOrdersCache);
       } catch (error) {
-        console.error("Could not update report:", error);
-        alert(
-          "The report could not be updated: " +
-          error.message
-        );
+        alert("The report could not be updated: " + error.message);
       }
     }
 
@@ -1995,142 +1605,98 @@
       button.addEventListener("click", () => {
         currentReportFilter = button.dataset.filter;
 
-        reportFilterButtons.forEach(
-          (filterButton) => {
-            filterButton.classList.toggle(
-              "active",
-              filterButton === button
-            );
-          }
-        );
+        reportFilterButtons.forEach((filterButton) => {
+          filterButton.classList.toggle("active", filterButton === button);
+        });
 
         renderReports();
       });
     });
 
     function renderBoosts() {
-      const filteredBoosts =
-        currentBoostFilter === "all"
-          ? allBoostProducts
-          : allBoostProducts.filter(
-              (product) =>
-                product.boostStatus === currentBoostFilter
-            );
+      const filteredBoosts = currentBoostFilter === "all"
+        ? allBoostProducts
+        : allBoostProducts.filter((product) =>
+            product.boostStatus === currentBoostFilter
+          );
 
       if (filteredBoosts.length === 0) {
         boostsContainer.innerHTML =
           '<p class="empty-state">No boost requests were found for this filter.</p>';
-
         return;
       }
 
-      boostsContainer.innerHTML = filteredBoosts
-        .map((product) => {
-          const boostStatus = product.boostStatus || "pending";
-          const statusClass = "status-" + boostStatus;
-          const isPending = boostStatus === "pending";
+      boostsContainer.innerHTML = filteredBoosts.map((product) => {
+        const boostStatus = product.boostStatus || "pending";
+        const isPending = boostStatus === "pending";
+        const productLink = `product-detail.html?id=${encodeURIComponent(product.id)}`;
 
-          const productLink = `product-detail.html?id=${encodeURIComponent(product.id)}`;
-
-          return `
-            <article class="report-card">
-              <div class="report-top">
-                <div>
-                  <span class="report-title">
-                    ${safeText(product.title || "Untitled Listing")}
-                  </span>
-
-                  <span class="report-reason">
-                    ${safeText(product.boostPlanLabel || product.boostPlan || "Unknown plan")}
-                  </span>
-                </div>
-
-                <span class="report-status ${statusClass}">
-                  ${safeText(boostStatus)}
+        return `
+          <article class="report-card">
+            <div class="report-top">
+              <div>
+                <span class="report-title">${safeText(product.title || "Untitled Listing")}</span>
+                <span class="report-reason">
+                  ${safeText(product.boostPlanLabel || product.boostPlan || "Unknown plan")}
                 </span>
               </div>
 
-              <div class="boost-payment-info">
-                Amount due: <strong>${safeText(product.boostPrice || "Unknown")}</strong>
-                <br>
-                Duration: ${safeText(product.boostDurationDays || "?")} days
-              </div>
+              <span class="report-status status-${safeText(boostStatus)}">
+                ${safeText(boostStatus)}
+              </span>
+            </div>
 
-              <div class="report-meta">
-                Requested: ${formatDate(product.boostRequestedAt)}
-                <br>
-                Seller ID: ${safeText(product.sellerId || "Unknown")}
-                <br>
-                Seller Email: ${safeText(product.sellerEmail || "Unknown")}
-              </div>
+            <div class="boost-payment-info">
+              Amount due: <strong>${safeText(product.boostPrice || "Unknown")}</strong>
+              <br>
+              Duration: ${safeText(product.boostDurationDays || "?")} days
+            </div>
 
-              <div class="report-actions">
-                <a
-                  class="btn-view"
-                  href="${productLink}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Listing
-                </a>
+            <div class="report-meta">
+              Requested: ${formatDate(product.boostRequestedAt)}
+              <br>
+              Seller ID: ${safeText(product.sellerId || "Unknown")}
+              <br>
+              Seller Email: ${safeText(product.sellerEmail || "Unknown")}
+            </div>
 
-                ${
-                  isPending
-                    ? `
-                      <button
-                        class="btn-confirm-boost"
-                        data-boost-id="${safeText(product.id)}"
-                        data-boost-action="activate"
-                      >
-                        Confirm Payment &amp; Activate
-                      </button>
+            <div class="report-actions">
+              <a class="btn-view" href="${productLink}" target="_blank" rel="noopener noreferrer">
+                View Listing
+              </a>
 
-                      <button
-                        class="btn-reject-boost"
-                        data-boost-id="${safeText(product.id)}"
-                        data-boost-action="reject"
-                      >
-                        Reject
-                      </button>
-                    `
-                    : ""
-                }
-              </div>
-            </article>
-          `;
-        })
-        .join("");
+              ${isPending ? `
+                <button class="btn-confirm-boost" data-boost-id="${safeText(product.id)}" data-boost-action="activate">
+                  Confirm Payment &amp; Activate
+                </button>
 
-      document.querySelectorAll("[data-boost-action]")
-        .forEach((button) => {
-          button.addEventListener("click", async () => {
-            await handleBoostAction(
-              button.dataset.boostId,
-              button.dataset.boostAction
-            );
-          });
+                <button class="btn-reject-boost" data-boost-id="${safeText(product.id)}" data-boost-action="reject">
+                  Reject
+                </button>
+              ` : ""}
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-boost-action]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await handleBoostAction(button.dataset.boostId, button.dataset.boostAction);
         });
+      });
     }
 
     async function handleBoostAction(productId, action) {
-      const selectedProduct = allBoostProducts.find(
-        (product) => product.id === productId
-      );
+      const product = allBoostProducts.find((item) => item.id === productId);
 
-      if (!selectedProduct) {
+      if (!product) {
         alert("The selected boost request could not be found.");
         return;
       }
 
       try {
         if (action === "activate") {
-          const confirmed = confirm(
-            `Confirm that payment of ${selectedProduct.boostPrice || "the boost fee"} was received for "${selectedProduct.title || "this listing"}"?`
-          );
-
-          if (!confirmed) {
-            return;
-          }
+          if (!confirm(`Confirm payment for "${product.title || "this listing"}"?`)) return;
 
           await updateDoc(doc(db, "products", productId), {
             boostStatus: "active",
@@ -2138,46 +1704,29 @@
             boostActivatedAt: Timestamp.now()
           });
 
-          selectedProduct.boostStatus = "active";
-          selectedProduct.featured = true;
+          product.boostStatus = "active";
+          product.featured = true;
         }
 
         if (action === "reject") {
-          const confirmed = confirm(
-            `Reject this boost request for "${selectedProduct.title || "this listing"}"? This cannot be undone.`
-          );
-
-          if (!confirmed) {
-            return;
-          }
+          if (!confirm(`Reject this boost request for "${product.title || "this listing"}"?`)) return;
 
           await updateDoc(doc(db, "products", productId), {
             boostStatus: "rejected",
             boostRejectedAt: Timestamp.now()
           });
 
-          selectedProduct.boostStatus = "rejected";
+          product.boostStatus = "rejected";
         }
 
+        const cachedProduct = allProductsCache.find((item) => item.id === productId);
+        if (cachedProduct) Object.assign(cachedProduct, product);
+
         renderBoosts();
-
-        const productsSnapshot = await getDocs(
-          collection(db, "products")
-        );
-
-        const products = productsSnapshot.docs.map(
-          (documentSnapshot) => ({
-            id: documentSnapshot.id,
-            ...documentSnapshot.data()
-          })
-        );
-
-        allProductsCache = products;
-        updateStatistics(products, allOrdersCache);
-        renderRecentActivity(products, allOrdersCache);
-        renderBreakdowns(products, allOrdersCache);
+        updateStatistics(allProductsCache, allOrdersCache);
+        renderRecentActivity(allProductsCache, allOrdersCache);
+        renderBreakdowns(allProductsCache, allOrdersCache);
       } catch (error) {
-        console.error("Boost action failed:", error);
         alert("The action failed: " + error.message);
       }
     }
@@ -2186,36 +1735,132 @@
       button.addEventListener("click", () => {
         currentBoostFilter = button.dataset.boostFilter;
 
-        boostFilterButtons.forEach(
-          (filterButton) => {
-            filterButton.classList.toggle(
-              "active",
-              filterButton === button
-            );
-          }
-        );
+        boostFilterButtons.forEach((filterButton) => {
+          filterButton.classList.toggle("active", filterButton === button);
+        });
 
         renderBoosts();
       });
     });
 
-    refreshBtn.addEventListener(
-      "click",
-      loadAllData
-    );
+    async function loadMarketplaceSettings() {
+      clearMessages();
+
+      try {
+        const snapshot = await getDoc(doc(db, "settings", "marketplace"));
+
+        const defaults = {
+          marketplaceName: "LoyaltyMarket",
+          supportEmail: "princeteah200@gmail.com",
+          supportPhone: "+231 88 147 1694",
+          commissionPercent: 5,
+          mtnMobileMoney: "+231 88 147 1694",
+          orangeMoney: "+231 77 002 5588",
+          boost3DayPrice: 5,
+          boost7DayPrice: 10,
+          boost14DayPrice: 18,
+          usdToLrdRate: 180,
+          allowNewListings: true,
+          allowNewRegistrations: true,
+          maintenanceMode: false
+        };
+
+        const settings = snapshot.exists()
+          ? { ...defaults, ...snapshot.data() }
+          : defaults;
+
+        settingsInputs.marketplaceName.value = settings.marketplaceName || "";
+        settingsInputs.supportEmail.value = settings.supportEmail || "";
+        settingsInputs.supportPhone.value = settings.supportPhone || "";
+        settingsInputs.commissionPercent.value = Number(settings.commissionPercent ?? 5);
+        settingsInputs.mtnMobileMoney.value = settings.mtnMobileMoney || "";
+        settingsInputs.orangeMoney.value = settings.orangeMoney || "";
+        settingsInputs.boost3DayPrice.value = Number(settings.boost3DayPrice ?? 5);
+        settingsInputs.boost7DayPrice.value = Number(settings.boost7DayPrice ?? 10);
+        settingsInputs.boost14DayPrice.value = Number(settings.boost14DayPrice ?? 18);
+        settingsInputs.usdToLrdRate.value = Number(settings.usdToLrdRate ?? 180);
+        settingsInputs.allowNewListings.checked = settings.allowNewListings !== false;
+        settingsInputs.allowNewRegistrations.checked = settings.allowNewRegistrations !== false;
+        settingsInputs.maintenanceMode.checked = settings.maintenanceMode === true;
+
+        settingsLastUpdated.textContent = settings.updatedAt
+          ? "Last updated: " + formatDate(settings.updatedAt)
+          : "Not saved yet — default values are shown.";
+      } catch (error) {
+        showError("Marketplace settings could not load: " + error.message);
+      }
+    }
+
+    marketplaceSettingsForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessages();
+
+      const commission = Number(settingsInputs.commissionPercent.value);
+      const boost3 = Number(settingsInputs.boost3DayPrice.value);
+      const boost7 = Number(settingsInputs.boost7DayPrice.value);
+      const boost14 = Number(settingsInputs.boost14DayPrice.value);
+      const exchangeRate = Number(settingsInputs.usdToLrdRate.value);
+
+      if (commission < 0 || commission > 100) {
+        showError("Commission must be between 0% and 100%.");
+        return;
+      }
+
+      if ([boost3, boost7, boost14, exchangeRate].some((value) => value < 0 || Number.isNaN(value))) {
+        showError("Boost prices and the currency rate must be valid positive numbers.");
+        return;
+      }
+
+      saveSettingsBtn.disabled = true;
+      saveSettingsBtn.textContent = "Saving...";
+
+      try {
+        const payload = {
+          marketplaceName: settingsInputs.marketplaceName.value.trim() || "LoyaltyMarket",
+          supportEmail: settingsInputs.supportEmail.value.trim(),
+          supportPhone: settingsInputs.supportPhone.value.trim(),
+          commissionPercent: commission,
+          mtnMobileMoney: settingsInputs.mtnMobileMoney.value.trim(),
+          orangeMoney: settingsInputs.orangeMoney.value.trim(),
+          boost3DayPrice: boost3,
+          boost7DayPrice: boost7,
+          boost14DayPrice: boost14,
+          usdToLrdRate: exchangeRate,
+          allowNewListings: settingsInputs.allowNewListings.checked,
+          allowNewRegistrations: settingsInputs.allowNewRegistrations.checked,
+          maintenanceMode: settingsInputs.maintenanceMode.checked,
+          updatedAt: Timestamp.now(),
+          updatedBy: currentAdminUser?.email || "admin"
+        };
+
+        await setDoc(doc(db, "settings", "marketplace"), payload, { merge: true });
+
+        settingsLastUpdated.textContent = "Last updated: " + new Date().toLocaleString();
+        showSuccess("Marketplace settings saved successfully.");
+      } catch (error) {
+        showError(
+          "The settings could not be saved. Check your Firestore security rules. " +
+          error.message
+        );
+      } finally {
+        saveSettingsBtn.disabled = false;
+        saveSettingsBtn.textContent = "Save Marketplace Settings";
+      }
+    });
+
+    refreshBtn.addEventListener("click", async () => {
+      await loadAllData();
+
+      if (settingsSection.style.display !== "none") {
+        await loadMarketplaceSettings();
+      }
+    });
 
     onAuthStateChanged(auth, async (user) => {
-      console.log("Admin authentication checked:", user);
-
       loadingBox.style.display = "none";
 
-      const userEmail = user?.email
-        ?.trim()
-        .toLowerCase();
-
-      const isAdministrator =
-        Boolean(userEmail) &&
-        ADMIN_EMAILS.includes(userEmail);
+      const userEmail = user?.email?.trim().toLowerCase();
+      const isAdministrator = Boolean(userEmail) && ADMIN_EMAILS.includes(userEmail);
 
       if (!isAdministrator) {
         adminMain.style.display = "none";
@@ -2223,13 +1868,15 @@
         return;
       }
 
+      currentAdminUser = user;
       notAuthorizedBox.style.display = "none";
       adminMain.style.display = "block";
+      adminWelcomeText.textContent = `Logged in as ${user.email}`;
 
-      adminWelcomeText.textContent =
-        `Logged in as ${user.email}`;
-
-      await loadAllData();
+      await Promise.all([
+        loadAllData(),
+        loadMarketplaceSettings()
+      ]);
     });
   </script>
 
@@ -2238,18 +1885,12 @@
       window.addEventListener("load", () => {
         navigator.serviceWorker
           .register("service-worker.js")
-          .then(() => {
-            console.log("Service worker registered.");
-          })
+          .then(() => console.log("Service worker registered."))
           .catch((error) => {
-            console.error(
-              "Service worker registration failed:",
-              error
-            );
+            console.error("Service worker registration failed:", error);
           });
       });
     }
   </script>
-
 </body>
 </html>
