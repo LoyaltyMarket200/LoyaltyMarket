@@ -105,6 +105,22 @@
       border-radius: 20px;
       margin-left: 6px;
     }
+    .redirect-notice {
+      max-width: 640px;
+      margin: 30px auto;
+      padding: 16px 20px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      text-align: center;
+      color: #1e40af;
+      font-size: 14px;
+    }
+    .redirect-notice a {
+      color: #1d4ed8;
+      font-weight: 700;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -118,7 +134,12 @@
   <a href="index.html" class="login-btn">Home</a>
 </header>
 
-<section class="seller-profile-section">
+<div id="businessRedirectNotice" class="redirect-notice" style="display:none;">
+  This seller has a business storefront.
+  <a id="businessRedirectLink" href="#">View business profile</a>
+</div>
+
+<section class="seller-profile-section" id="sellerProfileSection">
 
   <div class="seller-profile-card">
     <div class="seller-profile-avatar">👤</div>
@@ -212,6 +233,9 @@ import {
 const params = new URLSearchParams(window.location.search);
 const sellerId = params.get("id");
 
+const businessRedirectNotice = document.getElementById("businessRedirectNotice");
+const businessRedirectLink = document.getElementById("businessRedirectLink");
+
 const sellerName = document.getElementById("sellerName");
 const sellerVerified = document.getElementById("sellerVerified");
 const sellerMemberSince = document.getElementById("sellerMemberSince");
@@ -258,6 +282,16 @@ async function loadSellerProfile() {
 
     if (userDoc.exists()) {
       const userData = userDoc.data();
+
+      // Existing users with no accountType field are treated as
+      // "personal" (no migration needed). Only accounts explicitly
+      // marked "business" get redirected to the storefront page.
+      const accountType = userData.accountType || "personal";
+
+      if (accountType === "business") {
+        businessRedirectLink.href = "business-profile.html?id=" + encodeURIComponent(sellerId);
+        businessRedirectNotice.style.display = "block";
+      }
 
       sellerName.textContent = userData.name || "LoyaltyMarket Seller";
 
