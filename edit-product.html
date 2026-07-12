@@ -190,6 +190,11 @@ const imageInputs = [
 
 let currentUser = null;
 
+// Tracks the listing's status as it was when the page loaded, so an
+// edit doesn't accidentally overwrite "sold" or "archived" back to
+// "active"/"pending_review" just because the seller updated a field.
+let existingStatus = "active";
+
 if (!productId) {
   alert("No product selected to edit.");
   window.location.href = "dashboard.html";
@@ -255,6 +260,8 @@ async function loadProduct() {
       window.location.href = "dashboard.html";
       return;
     }
+
+    existingStatus = product.status || "active";
 
     titleInput.value = product.title || "";
     categoryInput.value = product.category || "";
@@ -338,6 +345,74 @@ function validateForm() {
   return isValid;
 }
 
+// ================= RULE-BASED SCAM DETECTION =================
+// Same free, rule-based checks used on new listings (sell.html),
+// re-run whenever a listing is edited. If a previously-clean
+// listing gets edited into something that trips these rules (e.g.
+// price dropped very low, suspicious wording added), it goes back
+// to "pending_review" so an admin can take a look before it stays
+// visible to buyers. Listings already marked "sold" or "archived"
+// are left alone — an edit shouldn't un-sell or un-archive them.
+
+const CATEGORY_PRICE_FLOORS = {
+  Phones: 15,
+  Electronics: 10,
+  Vehicles: 300,
+  Property: 500,
+  Fashion: 1,
+  Jobs: 0
+};
+
+const SUSPICIOUS_KEYWORDS = [
+  "wire transfer",
+  "western union",
+  "send deposit",
+  "send a deposit",
+  "pay deposit first",
+  "urgent sale",
+  "no returns",
+  "no refunds",
+  "cash only no meet",
+  "moneygram",
+  "gift card"
+];
+
+function checkPriceTooLow(category, priceUsd) {
+  const floor = CATEGORY_PRICE_FLOORS[category];
+  if (floor === undefined) return false;
+  const price = Number(priceUsd);
+  if (!Number.isFinite(price)) return false;
+  return price > 0 && price < floor;
+}
+
+function checkSuspiciousKeywords(title, description) {
+  const combinedText = `${title} ${description}`.toLowerCase();
+  return SUSPICIOUS_KEYWORDS.some((keyword) => combinedText.includes(keyword));
+}
+
+function checkMissingImage(images) {
+  return images.length === 0;
+}
+
+function runScamChecks({ title, description, category, priceUsd, images }) {
+  const reasons = [];
+
+  if (checkPriceTooLow(category, priceUsd)) {
+    reasons.push("Price is unusually low for this category.");
+  }
+
+  if (checkSuspiciousKeywords(title, description)) {
+    reasons.push("Listing text contains language commonly used in scams.");
+  }
+
+  if (checkMissingImage(images)) {
+    reasons.push("No product image was provided.");
+  }
+
+  return reasons;
+}
+// ================= END SCAM DETECTION =================
+
 document.getElementById("editForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -352,13 +427,33 @@ document.getElementById("editForm").addEventListener("submit", async (event) => 
   const priceUsdValue = priceUsdInput.value;
   const priceLrdValue = priceLrdInput.value;
   const phoneValue = phoneInput.value.trim();
+  const titleValue = titleInput.value.trim();
+  const descriptionValue = descriptionInput.value.trim();
+  const categoryValue = categoryInput.value;
+
+  const flagReasons = runScamChecks({
+    title: titleValue,
+    description: descriptionValue,
+    category: categoryValue,
+    priceUsd: priceUsdValue,
+    images: images
+  });
+
+  const isFlagged = flagReasons.length > 0;
+
+  // Don't let an edit undo a "sold" or "archived" status — only
+  // adjust status between active/pending_review.
+  let newStatus = existingStatus;
+  if (existingStatus === "active" || existingStatus === "pending_review") {
+    newStatus = isFlagged ? "pending_review" : "active";
+  }
 
   // Save BOTH new-format and old-format field names on every update,
   // so any older page or tool still reading the legacy field names
   // keeps working, while new pages use the new field names.
   const updatedProduct = {
-    title: titleInput.value.trim(),
-    category: categoryInput.value,
+    title: titleValue,
+    category: categoryValue,
 
     priceUsd: priceUsdValue,
     priceUSD: priceUsdValue,
@@ -374,10 +469,14 @@ document.getElementById("editForm").addEventListener("submit", async (event) => 
     imageUrl: images[0] || "",
     images: images,
 
-    description: descriptionInput.value.trim(),
+    description: descriptionValue,
 
     phone: phoneValue,
-    phoneNumber: phoneValue
+    phoneNumber: phoneValue,
+
+    status: newStatus,
+    flagged: isFlagged,
+    flagReasons: flagReasons
   };
 
   saveBtn.disabled = true;
@@ -385,7 +484,13 @@ document.getElementById("editForm").addEventListener("submit", async (event) => 
 
   try {
     await updateDoc(doc(db, "products", productId), updatedProduct);
-    alert("Product updated successfully!");
+
+    if (isFlagged && existingStatus !== "sold" && existingStatus !== "archived") {
+      alert("Your changes were saved, but this listing needs a quick admin review before it's visible again. This usually happens for things like unusually low prices or missing photos.");
+    } else {
+      alert("Product updated successfully!");
+    }
+
     window.location.href = "dashboard.html";
   } catch (error) {
     alert("Could not save changes: " + error.message);
