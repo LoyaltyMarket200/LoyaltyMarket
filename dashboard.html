@@ -682,4 +682,309 @@ function renderListings() {
     dashboardListings.appendChild(card);
   });
 
-  attachListingButtonLis
+  attachListingButtonListeners();
+}
+
+function openBoostModal(productId) {
+  boostTargetProductId = productId;
+  boostForm.reset();
+  boostPlanOptions.forEach((option) => option.classList.remove("selected"));
+  boostSubmitBtn.disabled = true;
+  boostPlanScreen.style.display = "block";
+  boostPaymentScreen.classList.remove("open");
+  boostModalOverlay.classList.add("open");
+}
+
+function closeBoostModal() {
+  boostModalOverlay.classList.remove("open");
+  boostTargetProductId = null;
+}
+
+boostPlanOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    boostPlanOptions.forEach((o) => o.classList.remove("selected"));
+    option.classList.add("selected");
+    const radio = option.querySelector("input[type=radio]");
+    radio.checked = true;
+    boostSubmitBtn.disabled = false;
+  });
+});
+
+boostCancelBtn.addEventListener("click", closeBoostModal);
+
+boostModalOverlay.addEventListener("click", (event) => {
+  if (event.target === boostModalOverlay) {
+    closeBoostModal();
+  }
+});
+
+boostPaymentDoneBtn.addEventListener("click", closeBoostModal);
+
+boostForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const selectedPlan = boostForm.querySelector("input[name=boostPlan]:checked");
+
+  if (!selectedPlan || !boostTargetProductId) {
+    return;
+  }
+
+  const planKey = selectedPlan.value;
+  const planInfo = boostPlanDetails[planKey];
+
+  boostSubmitBtn.disabled = true;
+  boostSubmitBtn.textContent = "Submitting...";
+
+  try {
+    await updateDoc(doc(db, "products", boostTargetProductId), {
+      boostStatus: "pending",
+      boostPlan: planKey,
+      boostPlanLabel: planInfo.label,
+      boostPrice: planInfo.price,
+      boostDurationDays: planInfo.days,
+      boostRequestedAt: serverTimestamp(),
+      sellerEmail: currentUser.email
+    });
+
+    boostPaymentAmountValue.textContent = planInfo.price;
+    boostPlanScreen.style.display = "none";
+    boostPaymentScreen.classList.add("open");
+
+    loadMyListings();
+
+  } catch (error) {
+    alert("Could not submit boost request: " + error.message);
+  } finally {
+    boostSubmitBtn.disabled = false;
+    boostSubmitBtn.textContent = "Submit Boost Request";
+  }
+});
+
+function attachListingButtonListeners() {
+  document.querySelectorAll(".edit-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.getAttribute("data-id");
+      window.location.href = "edit-product.html?id=" + encodeURIComponent(productId);
+    });
+  });
+
+  document.querySelectorAll(".delete-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+      const confirmDelete = confirm("Are you sure you want to delete this listing? This cannot be undone.");
+
+      if (!confirmDelete) return;
+
+      try {
+        await deleteDoc(doc(db, "products", productId));
+        loadMyListings();
+      } catch (error) {
+        alert("Could not delete listing: " + error.message);
+      }
+    });
+  });
+
+  document.querySelectorAll(".feature-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+      const isCurrentlyFeatured = button.getAttribute("data-featured") === "true";
+      const newFeaturedValue = !isCurrentlyFeatured;
+
+      button.disabled = true;
+      button.textContent = "Updating...";
+
+      try {
+        await updateDoc(doc(db, "products", productId), {
+          featured: newFeaturedValue
+        });
+        loadMyListings();
+      } catch (error) {
+        alert("Could not update featured status: " + error.message);
+        button.disabled = false;
+      }
+    });
+  });
+
+  document.querySelectorAll(".sold-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+      const isCurrentlySold = button.getAttribute("data-sold") === "true";
+      const newStatus = isCurrentlySold ? "active" : "sold";
+
+      button.disabled = true;
+      button.textContent = "Updating...";
+
+      try {
+        await updateDoc(doc(db, "products", productId), {
+          status: newStatus
+        });
+        loadMyListings();
+      } catch (error) {
+        alert("Could not update listing status: " + error.message);
+        button.disabled = false;
+      }
+    });
+  });
+
+  document.querySelectorAll(".duplicate-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+
+      const confirmDuplicate = confirm("Create a copy of this listing? You'll be able to edit it before it's fully live.");
+      if (!confirmDuplicate) return;
+
+      button.disabled = true;
+      button.textContent = "Duplicating...";
+
+      try {
+        const originalRef = doc(db, "products", productId);
+        const originalSnap = await getDoc(originalRef);
+
+        if (!originalSnap.exists()) {
+          alert("Could not find the original listing.");
+          button.disabled = false;
+          button.textContent = "📋 Duplicate";
+          return;
+        }
+
+        const originalData = originalSnap.data();
+
+        const duplicateData = {
+          title: (originalData.title || "Untitled Product") + " (Copy)",
+          category: originalData.category || "",
+          priceUsd: originalData.priceUsd || "0",
+          priceLrd: originalData.priceLrd || "0",
+          condition: originalData.condition || "",
+          county: originalData.county || "",
+          city: originalData.city || "",
+          imageUrl: originalData.imageUrl || "",
+          images: originalData.images || [],
+          description: originalData.description || "",
+          phone: originalData.phone || "",
+          sellerId: currentUser.uid,
+          sellerEmail: currentUser.email,
+          status: "active",
+          featured: false,
+          createdAt: serverTimestamp()
+        };
+
+        const newDocRef = await addDoc(collection(db, "products"), duplicateData);
+
+        window.location.href = "edit-product.html?id=" + encodeURIComponent(newDocRef.id);
+
+      } catch (error) {
+        alert("Could not duplicate listing: " + error.message);
+        button.disabled = false;
+        button.textContent = "📋 Duplicate";
+      }
+    });
+  });
+
+  document.querySelectorAll(".archive-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const productId = button.getAttribute("data-id");
+      const isCurrentlyArchived = button.getAttribute("data-archived") === "true";
+      const newStatus = isCurrentlyArchived ? "active" : "archived";
+
+      button.disabled = true;
+      button.textContent = isCurrentlyArchived ? "Unarchiving..." : "Archiving...";
+
+      try {
+        await updateDoc(doc(db, "products", productId), {
+          status: newStatus
+        });
+        loadMyListings();
+      } catch (error) {
+        alert("Could not update archive status: " + error.message);
+        button.disabled = false;
+      }
+    });
+  });
+
+  document.querySelectorAll(".boost-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.getAttribute("data-id");
+      openBoostModal(productId);
+    });
+  });
+}
+
+async function loadMyListings() {
+  dashboardListings.innerHTML = "<p>Loading your listings...</p>";
+
+  try {
+    const myProductsQuery = query(
+      collection(db, "products"),
+      where("sellerId", "==", currentUser.uid)
+    );
+
+    const snapshot = await getDocs(myProductsQuery);
+
+    allMyProducts = [];
+    snapshot.forEach((productDoc) => {
+      allMyProducts.push({ id: productDoc.id, ...productDoc.data() });
+    });
+
+    renderListings();
+
+  } catch (error) {
+    dashboardListings.innerHTML = `<p>Could not load your listings: ${safeText(error.message)}</p>`;
+  }
+}
+
+archiveFilterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    archiveFilterButtons.forEach((b) => b.classList.remove("active"));
+    button.classList.add("active");
+    currentArchiveFilter = button.getAttribute("data-filter");
+    renderListings();
+  });
+});
+
+function listenForUnreadMessages() {
+  const unreadQuery = query(
+    collection(db, "messages"),
+    where("receiverId", "==", currentUser.uid),
+    where("read", "==", false)
+  );
+
+  onSnapshot(unreadQuery, (snapshot) => {
+    const count = snapshot.size;
+
+    if (count > 0) {
+      unreadBadge.textContent = count > 9 ? "9+" : String(count);
+      unreadBadge.classList.add("has-unread");
+    } else {
+      unreadBadge.classList.remove("has-unread");
+    }
+  });
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    loadUserProfile();
+    loadMyListings();
+    listenForUnreadMessages();
+  } else {
+    window.location.href = "login.html";
+  }
+});
+
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
+  alert("Logged out successfully!");
+  window.location.href = "login.html";
+});
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
+</script>
+
+</body>
+</html>
