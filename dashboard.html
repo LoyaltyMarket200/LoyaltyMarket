@@ -37,7 +37,8 @@
       color: #fff;
     }
     .feature-btn:disabled,
-    .sold-btn:disabled {
+    .sold-btn:disabled,
+    .duplicate-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
@@ -58,6 +59,20 @@
     .sold-btn.is-sold {
       background: #6b7280;
       border-color: #6b7280;
+      color: #fff;
+    }
+    .duplicate-btn {
+      background: #fff;
+      border: 1px solid #2563eb;
+      color: #2563eb;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .duplicate-btn:hover {
+      background: #2563eb;
       color: #fff;
     }
     .status-badge.sold {
@@ -170,7 +185,9 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  addDoc,
   updateDoc,
+  serverTimestamp,
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
@@ -274,6 +291,7 @@ async function loadMyListings() {
 
         <div class="dashboard-listing-actions">
           <button class="edit-btn" data-id="${productId}">Edit</button>
+          <button class="duplicate-btn" data-id="${productId}">📋 Duplicate</button>
           <button class="delete-btn" data-id="${productId}">Delete</button>
           <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}">
             ${isFeatured ? "★ Unfeature" : "☆ Feature this listing"}
@@ -348,6 +366,60 @@ async function loadMyListings() {
         } catch (error) {
           alert("Could not update listing status: " + error.message);
           button.disabled = false;
+        }
+      });
+    });
+
+    document.querySelectorAll(".duplicate-btn").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const productId = button.getAttribute("data-id");
+
+        const confirmDuplicate = confirm("Create a copy of this listing? You'll be able to edit it before it's fully live.");
+        if (!confirmDuplicate) return;
+
+        button.disabled = true;
+        button.textContent = "Duplicating...";
+
+        try {
+          const originalRef = doc(db, "products", productId);
+          const originalSnap = await getDoc(originalRef);
+
+          if (!originalSnap.exists()) {
+            alert("Could not find the original listing.");
+            button.disabled = false;
+            button.textContent = "📋 Duplicate";
+            return;
+          }
+
+          const originalData = originalSnap.data();
+
+          const duplicateData = {
+            title: (originalData.title || "Untitled Product") + " (Copy)",
+            category: originalData.category || "",
+            priceUsd: originalData.priceUsd || "0",
+            priceLrd: originalData.priceLrd || "0",
+            condition: originalData.condition || "",
+            county: originalData.county || "",
+            city: originalData.city || "",
+            imageUrl: originalData.imageUrl || "",
+            images: originalData.images || [],
+            description: originalData.description || "",
+            phone: originalData.phone || "",
+            sellerId: currentUser.uid,
+            sellerEmail: currentUser.email,
+            status: "active",
+            featured: false,
+            createdAt: serverTimestamp()
+          };
+
+          const newDocRef = await addDoc(collection(db, "products"), duplicateData);
+
+          window.location.href = "edit-product.html?id=" + encodeURIComponent(newDocRef.id);
+
+        } catch (error) {
+          alert("Could not duplicate listing: " + error.message);
+          button.disabled = false;
+          button.textContent = "📋 Duplicate";
         }
       });
     });
