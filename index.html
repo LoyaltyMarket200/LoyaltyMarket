@@ -467,10 +467,12 @@ async function loadProducts() {
     const productsQuery = query(collection(db, "products"), orderBy("createdAt", "desc"));
     const snapshot = await getDocs(productsQuery);
 
-    allProducts = snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      data: docSnap.data()
-    }));
+    allProducts = snapshot.docs
+      .map((docSnap) => ({
+        id: docSnap.id,
+        data: docSnap.data()
+      }))
+      .filter((item) => item.data.archived !== true);
 
     if (allProducts.length === 0) {
       productGrid.innerHTML = "<p>No products posted yet. Be the first to sell on LoyaltyMarket.</p>";
