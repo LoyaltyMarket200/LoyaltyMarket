@@ -106,6 +106,23 @@
       border-bottom-color: #2563eb;
     }
 
+    .report-count-badge {
+      display: none;
+      min-width: 20px;
+      height: 20px;
+      margin-left: 7px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: #dc2626;
+      color: #ffffff;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 20px;
+      vertical-align: middle;
+    }
+
     .admin-tab-btn {
       padding: 9px 16px;
       border: 1px solid #cbd5e1;
@@ -1010,6 +1027,7 @@
 
       <button class="admin-section-tab-btn" data-section="reports">
         Reports & Support
+        <span id="pendingReportsBadge" class="report-count-badge" aria-label="Pending reports"></span>
       </button>
 
       <button class="admin-section-tab-btn" data-section="pendingReview">
@@ -1283,6 +1301,7 @@
     const userSearchInput = document.getElementById("userSearchInput");
     const clearUserSearchBtn = document.getElementById("clearUserSearchBtn");
     const refreshBtn = document.getElementById("refreshBtn");
+    const pendingReportsBadge = document.getElementById("pendingReportsBadge");
 
     const sectionButtons = document.querySelectorAll(".admin-section-tab-btn");
     const reportFilterButtons = document.querySelectorAll(".admin-tab-btn[data-filter]");
@@ -1450,6 +1469,14 @@
       document.getElementById("statPendingScamReview").textContent = pendingScamReview.length;
       document.getElementById("statTotalReports").textContent = allReports.length;
       document.getElementById("statPendingReports").textContent = pendingReports.length;
+
+      if (pendingReports.length > 0) {
+        pendingReportsBadge.textContent = pendingReports.length > 99 ? "99+" : String(pendingReports.length);
+        pendingReportsBadge.style.display = "inline-flex";
+      } else {
+        pendingReportsBadge.textContent = "";
+        pendingReportsBadge.style.display = "none";
+      }
       document.getElementById("statPendingBoosts").textContent = pendingBoosts.length;
       document.getElementById("statActiveListings").textContent = activeListings.length;
       document.getElementById("statArchivedListings").textContent = archivedListings.length;
