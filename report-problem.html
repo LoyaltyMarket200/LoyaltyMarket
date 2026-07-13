@@ -217,6 +217,11 @@
       background: #1d4ed8;
     }
 
+    .report-submit-button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
     .report-message {
       display: none;
       margin-top: 18px;
@@ -515,14 +520,15 @@
           ></textarea>
         </div>
 
-        <button type="submit" class="report-submit-button">
+        <button
+          type="submit"
+          class="report-submit-button"
+          id="submitReportButton"
+        >
           Submit Report
         </button>
 
-        <div id="reportMessage" class="report-message">
-          Your report has been recorded. LoyaltyMarket support will review
-          the information provided.
-        </div>
+        <div id="reportMessage" class="report-message"></div>
 
       </form>
     </section>
@@ -590,25 +596,109 @@
     </p>
   </footer>
 
-  <script>
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+
+    import {
+      addDoc,
+      collection,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
     const problemReportForm =
       document.getElementById("problemReportForm");
 
     const reportMessage =
       document.getElementById("reportMessage");
 
-    problemReportForm.addEventListener("submit", function (event) {
-      event.preventDefault();
+    const submitReportButton =
+      document.getElementById("submitReportButton");
 
-      reportMessage.style.display = "block";
+    problemReportForm.addEventListener(
+      "submit",
+      async function (event) {
+        event.preventDefault();
 
-      problemReportForm.reset();
+        submitReportButton.disabled = true;
+        submitReportButton.textContent = "Submitting Report...";
 
-      reportMessage.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    });
+        reportMessage.style.display = "none";
+
+        const reportData = {
+          fullName:
+            document.getElementById("fullName").value.trim(),
+
+          email:
+            document.getElementById("email").value.trim(),
+
+          phone:
+            document.getElementById("phone").value.trim(),
+
+          reportType:
+            document.getElementById("reportType").value,
+
+          listingLink:
+            document.getElementById("listingLink").value.trim(),
+
+          description:
+            document.getElementById("description").value.trim(),
+
+          evidence:
+            document.getElementById("evidence").value.trim(),
+
+          status: "pending",
+
+          userId: auth.currentUser
+            ? auth.currentUser.uid
+            : null,
+
+          userEmail: auth.currentUser
+            ? auth.currentUser.email
+            : null,
+
+          createdAt: serverTimestamp()
+        };
+
+        try {
+          await addDoc(
+            collection(db, "reports"),
+            reportData
+          );
+
+          reportMessage.textContent =
+            "Your report was submitted successfully. LoyaltyMarket support will review it.";
+
+          reportMessage.style.background = "#f0fdf4";
+          reportMessage.style.borderColor = "#bbf7d0";
+          reportMessage.style.color = "#166534";
+          reportMessage.style.display = "block";
+
+          problemReportForm.reset();
+
+          reportMessage.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+
+        } catch (error) {
+          console.error(
+            "Report submission error:",
+            error
+          );
+
+          reportMessage.textContent =
+            "Your report could not be submitted. Please try again.";
+
+          reportMessage.style.background = "#fef2f2";
+          reportMessage.style.borderColor = "#fecaca";
+          reportMessage.style.color = "#991b1b";
+          reportMessage.style.display = "block";
+        }
+
+        submitReportButton.disabled = false;
+        submitReportButton.textContent = "Submit Report";
+      }
+    );
   </script>
 
 </body>
