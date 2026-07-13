@@ -695,24 +695,282 @@
       }
     }
   </style>
+
+  <style>
+    body {
+      background:
+        linear-gradient(rgba(245,247,251,.96), rgba(245,247,251,.96)),
+        radial-gradient(circle at top right, #dbeafe, transparent 38%);
+      color: #0f172a;
+    }
+
+    .admin-navbar {
+      min-height: 78px;
+      height: auto;
+      padding: 12px max(24px, 5vw);
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 4px 20px rgba(15,23,42,.06);
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 60;
+    }
+
+    .admin-navbar .logo-link img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .admin-navbar .logo-text {
+      color: #0f2d67;
+      font-size: 21px;
+    }
+
+    .admin-navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-navbar-link,
+    .admin-navbar-dashboard {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .admin-navbar-link {
+      color: #334155;
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    .admin-navbar-dashboard {
+      color: #ffffff;
+      background: #f97316;
+      box-shadow: 0 8px 18px rgba(249,115,22,.18);
+    }
+
+    .admin-wrap {
+      width: min(1280px, 94%);
+      margin: 32px auto 70px;
+    }
+
+    .admin-hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 22px;
+      padding: 30px 32px;
+      border-radius: 24px;
+      color: #ffffff;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.16), transparent 32%),
+        linear-gradient(135deg, #0f2d67, #1d4ed8);
+      box-shadow: 0 18px 42px rgba(30,58,138,.20);
+    }
+
+    .admin-hero-kicker {
+      margin: 0 0 8px;
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .16em;
+    }
+
+    .admin-hero h1 {
+      margin: 0 0 8px;
+      color: #ffffff;
+      font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.08;
+    }
+
+    .admin-hero p {
+      margin: 0;
+      color: #dbeafe;
+      line-height: 1.6;
+    }
+
+    .admin-hero .refresh-btn {
+      min-width: 145px;
+      background: #f97316;
+      box-shadow: 0 8px 18px rgba(249,115,22,.22);
+    }
+
+    .status-box {
+      border-radius: 20px;
+      border-color: #e2e8f0;
+      box-shadow: 0 14px 34px rgba(15,23,42,.08);
+    }
+
+    .admin-section-tabs {
+      padding: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(15,23,42,.05);
+    }
+
+    .admin-section-tab-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 15px;
+    }
+
+    .admin-section-tab-btn.active {
+      color: #ffffff;
+      border-bottom-color: transparent;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      box-shadow: 0 8px 18px rgba(37,99,235,.17);
+    }
+
+    .stat-card,
+    .activity-card,
+    .breakdown-card,
+    .settings-card,
+    .user-card,
+    .report-card {
+      border-radius: 16px;
+      border-color: #e2e8f0;
+      box-shadow: 0 10px 25px rgba(15,23,42,.06);
+    }
+
+    .stat-card {
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 4px;
+      background: linear-gradient(90deg, #1d4ed8, #38bdf8);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(37,99,235,.10);
+    }
+
+    .stat-card-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: #eff6ff;
+      font-size: 21px;
+    }
+
+    .quick-action-btn {
+      border-radius: 14px;
+      min-height: 58px;
+    }
+
+    .quick-action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(37,99,235,.10);
+    }
+
+    .admin-tab-btn.active {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      border-color: #2563eb;
+    }
+
+    .refresh-btn,
+    .save-settings-btn,
+    .btn-reviewed,
+    .btn-verify,
+    .btn-business-verify {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    }
+
+    .save-settings-btn {
+      background: linear-gradient(135deg, #047857, #059669);
+    }
+
+    .admin-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      text-align: left;
+      padding: 30px max(24px, 6vw);
+    }
+
+    @media (max-width: 760px) {
+      .admin-navbar {
+        align-items: stretch;
+      }
+
+      .admin-navbar-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+
+      .admin-hero {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 22px 18px;
+        border-radius: 18px;
+      }
+
+      .admin-hero .refresh-btn {
+        width: 100%;
+      }
+
+      .admin-section-tabs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+
+      .admin-section-tab-btn {
+        min-width: 0;
+      }
+
+      .admin-footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .admin-navbar-actions,
+      .admin-section-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-wrap {
+        width: 94%;
+      }
+    }
+  </style>
+
 </head>
 
 <body>
-  <header class="navbar">
+  <header class="navbar admin-navbar">
     <a href="index.html" class="logo-link">
       <img src="icons/icon-512.png" alt="LoyaltyMarket">
       <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
     </a>
 
-    <input
-      type="text"
-      class="search-box"
-      placeholder="Search Products, Cars, Phones..."
-    >
-
-    <div class="nav-buttons">
-      <a href="index.html" class="login-btn">Home</a>
-      <a href="dashboard.html" class="register-btn">Dashboard</a>
+    <div class="admin-navbar-actions">
+      <a href="index.html" class="admin-navbar-link">Home</a>
+      <a href="dashboard.html" class="admin-navbar-dashboard">Dashboard</a>
     </div>
   </header>
 
@@ -731,14 +989,15 @@
     <div id="adminErrorBox" class="error-box"></div>
     <div id="adminSuccessBox" class="success-box"></div>
 
-    <div class="admin-header">
+    <section class="admin-hero">
       <div>
-        <h1>⚙️ Admin Control Center</h1>
-        <p id="adminWelcomeText">Manage LoyaltyMarket users and reports.</p>
+        <p class="admin-hero-kicker">LOYALTYMARKET ADMINISTRATION</p>
+        <h1>Admin Control Center</h1>
+        <p id="adminWelcomeText">Manage users, listings, reports, boosts, analytics, and marketplace settings.</p>
       </div>
 
       <button id="refreshBtn" class="refresh-btn">🔄 Refresh Data</button>
-    </div>
+    </section>
 
     <div class="admin-section-tabs">
       <button class="admin-section-tab-btn active" data-section="overview">
@@ -750,7 +1009,7 @@
       </button>
 
       <button class="admin-section-tab-btn" data-section="reports">
-        Reported Listings
+        Reports & Support
       </button>
 
       <button class="admin-section-tab-btn" data-section="pendingReview">
@@ -975,9 +1234,11 @@
     </section>
   </main>
 
-  <footer class="footer">
-    <h2>🇱🇷 LoyaltyMarket</h2>
-    <p>Buy And Sell Products Across Liberia.</p>
+  <footer class="footer admin-footer">
+    <div>
+      <h2>🇱🇷 LoyaltyMarket</h2>
+      <p>You Get Market, We Get Buyer.</p>
+    </div>
     <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
   </footer>
 
@@ -1259,7 +1520,7 @@
       recentReportsList.innerHTML = sortedReports.length
         ? sortedReports.map((report) => `
             <div class="activity-row">
-              <div class="activity-row-title">${safeText(report.productTitle || report.listingTitle || "Untitled Listing")} — ${safeText(report.reason || "Unspecified")}</div>
+              <div class="activity-row-title">${safeText(report.fullName || report.productTitle || report.listingTitle || "Support Report")} — ${safeText(report.reportType || report.reason || "Unspecified")}</div>
               <div class="activity-row-meta">${formatDate(report.createdAt)}</div>
             </div>
           `).join("")
@@ -1677,9 +1938,86 @@
 
       reportsContainer.innerHTML = filteredReports.map((report) => {
         const reportStatus = report.status || "pending";
+        const isSupportReport = Boolean(
+          report.fullName ||
+          report.reportType ||
+          report.description ||
+          report.email ||
+          report.userEmail
+        );
+
         const productLink = report.productId
           ? `product-detail.html?id=${encodeURIComponent(report.productId)}`
-          : "index.html";
+          : "";
+
+        if (isSupportReport) {
+          const reporterName = report.fullName || report.reporterName || "Unknown Reporter";
+          const reporterEmail = report.email || report.userEmail || "Not provided";
+          const reporterPhone = report.phone || "Not provided";
+          const problemType = report.reportType || report.reason || "Unspecified";
+          const listingInfo = report.listingLink || report.productTitle || report.listingTitle || "Not provided";
+          const description = report.description || report.details || "No description was provided.";
+          const evidence = report.evidence || "No evidence information was provided.";
+          const emailLink = reporterEmail !== "Not provided"
+            ? `mailto:${encodeURIComponent(reporterEmail)}`
+            : "";
+
+          return `
+            <article class="report-card">
+              <div class="report-top">
+                <div>
+                  <span class="report-title">🚩 ${safeText(problemType)}</span>
+                  <span class="report-reason">Support Report</span>
+                </div>
+
+                <span class="report-status status-${safeText(reportStatus)}">
+                  ${safeText(reportStatus)}
+                </span>
+              </div>
+
+              <div class="report-details">
+                <strong>Reporter:</strong> ${safeText(reporterName)}<br>
+                <strong>Email:</strong> ${safeText(reporterEmail)}<br>
+                <strong>Phone:</strong> ${safeText(reporterPhone)}<br><br>
+
+                <strong>Problem Type:</strong> ${safeText(problemType)}<br>
+                <strong>Listing Link or Username:</strong> ${safeText(listingInfo)}<br><br>
+
+                <strong>Description:</strong><br>
+                ${safeText(description)}<br><br>
+
+                <strong>Evidence:</strong><br>
+                ${safeText(evidence)}
+              </div>
+
+              <div class="report-meta">
+                Submitted: ${formatDate(report.createdAt)}<br>
+                User ID: ${safeText(report.userId || report.reporterId || "Unknown")}<br>
+                Report ID: ${safeText(report.id)}
+              </div>
+
+              <div class="report-actions">
+                ${emailLink ? `
+                  <a class="btn-view" href="${emailLink}">Email Reporter</a>
+                ` : ""}
+
+                ${productLink ? `
+                  <a class="btn-view" href="${productLink}" target="_blank" rel="noopener noreferrer">
+                    View Listing
+                  </a>
+                ` : ""}
+
+                <button class="btn-reviewed" data-report-id="${safeText(report.id)}" data-report-status="reviewed">
+                  Mark Reviewed
+                </button>
+
+                <button class="btn-dismiss" data-report-id="${safeText(report.id)}" data-report-status="dismissed">
+                  Dismiss
+                </button>
+              </div>
+            </article>
+          `;
+        }
 
         return `
           <article class="report-card">
@@ -1688,7 +2026,6 @@
                 <span class="report-title">
                   ${safeText(report.productTitle || report.listingTitle || "Untitled Listing")}
                 </span>
-
                 <span class="report-reason">${safeText(report.reason || "Unspecified")}</span>
               </div>
 
@@ -1702,17 +2039,17 @@
             </div>
 
             <div class="report-meta">
-              Reported: ${formatDate(report.createdAt)}
-              <br>
-              Reporter ID: ${safeText(report.reporterId || "Unknown")}
-              <br>
+              Reported: ${formatDate(report.createdAt)}<br>
+              Reporter ID: ${safeText(report.reporterId || "Unknown")}<br>
               Seller ID: ${safeText(report.sellerId || "Unknown")}
             </div>
 
             <div class="report-actions">
-              <a class="btn-view" href="${productLink}" target="_blank" rel="noopener noreferrer">
-                View Listing
-              </a>
+              ${productLink ? `
+                <a class="btn-view" href="${productLink}" target="_blank" rel="noopener noreferrer">
+                  View Listing
+                </a>
+              ` : ""}
 
               <button class="btn-reviewed" data-report-id="${safeText(report.id)}" data-report-status="reviewed">
                 Mark Reviewed
