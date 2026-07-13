@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Safety Tips - LoyaltyMarket</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="512x512"
+    href="icons/icon-512.png"
+  >
+
+  <meta name="theme-color" content="#1e3a8a">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f6fb;
+      color: #26364a;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    .safety-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      min-height: 68px;
+      padding: 12px 5%;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .safety-logo {
+      color: #1e3a8a;
+      font-size: 20px;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .safety-logo span {
+      color: #d97706;
+    }
+
+    .safety-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .safety-nav-links a {
+      padding: 9px 14px;
+      border-radius: 7px;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .safety-nav-links a:hover {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .safety-nav-links .post-ad-button {
+      background: #f97316;
+      color: #ffffff;
+    }
+
+    .safety-nav-links .post-ad-button:hover {
+      background: #ea580c;
+      color: #ffffff;
+    }
+
+    .safety-hero {
+      max-width: 1100px;
+      margin: 35px auto 20px;
+      padding: 42px 40px;
+      border-radius: 0 0 18px 18px;
+      background:
+        linear-gradient(
+          135deg,
+          #1e3a8a,
+          #2563eb
+        );
+      color: #ffffff;
+      box-shadow: 0 10px 28px rgba(30, 58, 138, 0.18);
+    }
+
+    .safety-eyebrow {
+      margin: 0 0 3px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .safety-hero h1 {
+      margin: 0 0 8px;
+      font-size: 42px;
+      line-height: 1.15;
+    }
+
+    .safety-hero p {
+      max-width: 760px;
+      margin: 4px 0;
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .safety-layout {
+      max-width: 1100px;
+      margin: 20px auto 55px;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .safety-sidebar {
+      position: sticky;
+      top: 88px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .safety-sidebar h3 {
+      margin: 0 0 12px;
+      color: #1e293b;
+      font-size: 15px;
+    }
+
+    .safety-sidebar a {
+      display: block;
+      padding: 6px 3px;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .safety-sidebar a:hover {
+      color: #2563eb;
+      transform: translateX(3px);
+    }
+
+    .safety-content {
+      padding: 12px 30px 30px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .safety-alert {
+      margin: 8px 0 20px;
+      padding: 18px;
+      border-left: 4px solid #f97316;
+      border-radius: 9px;
+      background: #fff7ed;
+      color: #7c2d12;
+      font-size: 14px;
+    }
+
+    .safety-section {
+      padding: 22px 0;
+      border-bottom: 1px solid #e2e8f0;
+      scroll-margin-top: 95px;
+    }
+
+    .safety-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .safety-section h2 {
+      margin: 0 0 8px;
+      color: #1e293b;
+      font-size: 22px;
+    }
+
+    .safety-section h3 {
+      margin: 18px 0 5px;
+      color: #334155;
+      font-size: 16px;
+    }
+
+    .safety-section p,
+    .safety-section li {
+      color: #526174;
+      font-size: 14px;
+    }
+
+    .safety-section ul {
+      margin: 10px 0;
+      padding-left: 22px;
+    }
+
+    .safety-section li {
+      margin-bottom: 7px;
+    }
+
+    .tip-card {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      background: #eff6ff;
+    }
+
+    .tip-card strong {
+      color: #1e3a8a;
+    }
+
+    .danger-card {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      background: #fef2f2;
+      color: #991b1b;
+      font-size: 14px;
+    }
+
+    .warning-card {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      background: #fffbeb;
+      color: #854d0e;
+      font-size: 14px;
+    }
+
+    .report-box {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      background: #f0fdf4;
+    }
+
+    .report-box strong {
+      color: #166534;
+    }
+
+    .report-box a {
+      color: #15803d;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .safety-footer {
+      padding: 28px 5%;
+      background: #172033;
+      color: #cbd5e1;
+    }
+
+    .safety-footer-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .safety-footer-brand {
+      margin: 0;
+      color: #60a5fa;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .safety-footer-tagline {
+      margin: 4px 0 0;
+      font-size: 13px;
+    }
+
+    .safety-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .safety-footer-links a {
+      color: #cbd5e1;
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .safety-footer-links a:hover {
+      color: #ffffff;
+    }
+
+    .safety-copyright {
+      margin: 15px auto 0;
+      max-width: 1100px;
+      padding-top: 15px;
+      border-top: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    @media (max-width: 800px) {
+      .safety-navbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .safety-nav-links {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .safety-hero {
+        margin-top: 20px;
+        padding: 30px 22px;
+      }
+
+      .safety-hero h1 {
+        font-size: 32px;
+      }
+
+      .safety-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .safety-sidebar {
+        position: static;
+      }
+
+      .safety-content {
+        padding: 10px 20px 25px;
+      }
+
+      .safety-footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .safety-copyright {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .safety-nav-links a {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .safety-hero h1 {
+        font-size: 28px;
+      }
+
+      .safety-section h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="safety-navbar">
+    <a href="index.html" class="safety-logo">
+      <span>LR</span> LoyaltyMarket
+    </a>
+
+    <nav class="safety-nav-links">
+      <a href="index.html">Home</a>
+      <a href="help.html">Help</a>
+      <a href="sell.html" class="post-ad-button">Post An Ad</a>
+    </nav>
+  </header>
+
+  <section class="safety-hero">
+    <p class="safety-eyebrow">LoyaltyMarket Safety Center</p>
+
+    <h1>Safety Tips</h1>
+
+    <p>
+      Learn how to buy, sell, communicate, and meet other users more safely
+      when using LoyaltyMarket.
+    </p>
+  </section>
+
+  <main class="safety-layout">
+
+    <aside class="safety-sidebar">
+      <h3>On This Page</h3>
+
+      <a href="#general">1. General Safety</a>
+      <a href="#buyers">2. Tips for Buyers</a>
+      <a href="#sellers">3. Tips for Sellers</a>
+      <a href="#payments">4. Payment Safety</a>
+      <a href="#meeting">5. Meeting Safely</a>
+      <a href="#scams">6. Common Scam Warnings</a>
+      <a href="#accounts">7. Account Protection</a>
+      <a href="#vehicles">8. Vehicles and Property</a>
+      <a href="#prohibited">9. Prohibited Items</a>
+      <a href="#reporting">10. Reporting Problems</a>
+      <a href="#emergency">11. Emergencies</a>
+    </aside>
+
+    <article class="safety-content">
+
+      <div class="safety-alert">
+        <strong>Important:</strong>
+        LoyaltyMarket connects buyers and sellers, but users are responsible
+        for checking products, people, documents, payments, and meeting
+        locations before completing a transaction.
+      </div>
+
+      <section id="general" class="safety-section">
+        <h2>1. General Safety</h2>
+
+        <ul>
+          <li>Use common sense and do not rush into a transaction.</li>
+          <li>Ask questions before agreeing to buy or sell anything.</li>
+          <li>Check the seller's profile, product details, and photographs.</li>
+          <li>Keep important communication inside LoyaltyMarket when possible.</li>
+          <li>Do not share passwords, verification codes, or banking passwords.</li>
+          <li>Stop communicating if someone pressures or threatens you.</li>
+          <li>Report suspicious advertisements, accounts, or messages.</li>
+        </ul>
+
+        <div class="tip-card">
+          <strong>Best Practice:</strong>
+          A genuine buyer or seller should allow you enough time to inspect,
+          ask questions, and make a careful decision.
+        </div>
+      </section>
+
+      <section id="buyers" class="safety-section">
+        <h2>2. Safety Tips for Buyers</h2>
+
+        <ul>
+          <li>Read the full advertisement before contacting the seller.</li>
+          <li>Compare the price with similar products.</li>
+          <li>Be careful when a price is far lower than normal.</li>
+          <li>Ask for recent and clear photographs of the actual item.</li>
+          <li>Inspect the item before paying whenever possible.</li>
+          <li>Test phones, electronics, appliances, and machines.</li>
+          <li>Check serial numbers, receipts, ownership documents, or warranties.</li>
+          <li>Do not send a deposit to an unknown person without verification.</li>
+          <li>Ask for proof that the seller has the legal right to sell the item.</li>
+        </ul>
+
+        <div class="warning-card">
+          Never purchase an item that you believe may be stolen, counterfeit,
+          illegal, damaged beyond what was disclosed, or owned by someone else.
+        </div>
+      </section>
+
+      <section id="sellers" class="safety-section">
+        <h2>3. Safety Tips for Sellers</h2>
+
+        <ul>
+          <li>Use accurate descriptions and recent photographs.</li>
+          <li>Clearly disclose defects, damage, or missing parts.</li>
+          <li>Confirm that payment is complete before releasing an item.</li>
+          <li>Do not rely only on screenshots or payment messages.</li>
+          <li>Check your real account balance directly.</li>
+          <li>Do not give buyers your password or verification code.</li>
+          <li>Be cautious of buyers offering more than your asking price.</li>
+          <li>Do not accept suspicious requests involving refunds or third parties.</li>
+          <li>Keep records of important sales and conversations.</li>
+        </ul>
+
+        <div class="danger-card">
+          A payment screenshot does not prove that money entered your account.
+          Always verify the payment yourself before handing over the item.
+        </div>
+      </section>
+
+      <section id="payments" class="safety-section">
+        <h2>4. Payment Safety</h2>
+
+        <p>
+          Use payment methods that you understand and can verify independently.
+          LoyaltyMarket may not control payments arranged directly between users.
+        </p>
+
+        <ul>
+          <li>Confirm the amount, currency, and recipient before paying.</li>
+          <li>Do not share bank login details or mobile-money PINs.</li>
+          <li>Do not send verification codes to another user.</li>
+          <li>Be careful of fake payment links and fake websites.</li>
+          <li>Avoid unusual payment requests involving gift cards or strangers.</li>
+          <li>Keep payment receipts and transaction references.</li>
+          <li>Verify refunds through the original payment channel.</li>
+        </ul>
+
+        <div class="tip-card">
+          <strong>Currency Reminder:</strong>
+          Confirm whether the advertised price is in United States Dollars
+          or Liberian Dollars before making payment.
+        </div>
+      </section>
+
+      <section id="meeting" class="safety-section">
+        <h2>5. Meeting Other Users Safely</h2>
+
+        <ul>
+          <li>Meet during daylight hours whenever possible.</li>
+          <li>Choose a busy public location.</li>
+          <li>Tell a trusted person where you are going.</li>
+          <li>Bring a trusted person with you for expensive transactions.</li>
+          <li>Keep your phone charged and available.</li>
+          <li>Avoid isolated areas and private locations with strangers.</li>
+          <li>Do not carry unnecessary amounts of cash.</li>
+          <li>Leave immediately if the situation feels unsafe.</li>
+        </ul>
+
+        <div class="warning-card">
+          For high-value items, consider meeting near a bank, police station,
+          established business, or another secure public location.
+        </div>
+      </section>
+
+      <section id="scams" class="safety-section">
+        <h2>6. Common Scam Warning Signs</h2>
+
+        <ul>
+          <li>The price is unrealistically low.</li>
+          <li>The person refuses inspection or a public meeting.</li>
+          <li>The person pressures you to pay immediately.</li>
+          <li>The seller requests a deposit before providing proof.</li>
+          <li>The buyer claims to have sent too much money.</li>
+          <li>The person sends suspicious links.</li>
+          <li>The person asks for your verification code.</li>
+          <li>The photographs appear copied from another website.</li>
+          <li>The story or product details keep changing.</li>
+          <li>The seller cannot prove ownership.</li>
+          <li>The person asks you to communicate only outside LoyaltyMarket.</li>
+        </ul>
+
+        <div class="danger-card">
+          Stop the transaction if someone asks you to pay money before you have
+          enough information to verify the person, product, and payment request.
+        </div>
+      </section>
+
+      <section id="accounts" class="safety-section">
+        <h2>7. Protect Your LoyaltyMarket Account</h2>
+
+        <ul>
+          <li>Create a strong and unique password.</li>
+          <li>Do not use the same password everywhere.</li>
+          <li>Never share your password with another person.</li>
+          <li>Do not share account verification codes.</li>
+          <li>Log out when using a shared computer or phone.</li>
+          <li>Be careful of fake LoyaltyMarket messages.</li>
+          <li>Check the website address before entering login information.</li>
+          <li>Report unauthorized account access immediately.</li>
+        </ul>
+
+        <div class="tip-card">
+          <strong>Remember:</strong>
+          LoyaltyMarket support should never ask you to send your password,
+          banking password, mobile-money PIN, or private verification code.
+        </div>
+      </section>
+
+      <section id="vehicles" class="safety-section">
+        <h2>8. Vehicles, Property, and High-Value Items</h2>
+
+        <h3>Vehicles</h3>
+
+        <ul>
+          <li>Inspect and test-drive the vehicle safely.</li>
+          <li>Use a qualified mechanic when possible.</li>
+          <li>Check the chassis number and ownership documents.</li>
+          <li>Confirm registration, taxes, and legal ownership.</li>
+          <li>Do not pay fully before confirming the documents.</li>
+        </ul>
+
+        <h3>Land and Property</h3>
+
+        <ul>
+          <li>Verify the owner's identity and legal authority.</li>
+          <li>Inspect the location in person.</li>
+          <li>Check deeds, titles, surveys, and supporting documents.</li>
+          <li>Confirm that the property is not under dispute.</li>
+          <li>Use a qualified lawyer or property professional.</li>
+          <li>Do not rely only on photographs or verbal promises.</li>
+        </ul>
+
+        <div class="warning-card">
+          Vehicle, land, and property transactions can involve serious legal
+          and financial risks. Obtain independent professional advice before
+          transferring large amounts of money.
+        </div>
+      </section>
+
+      <section id="prohibited" class="safety-section">
+        <h2>9. Prohibited and Dangerous Items</h2>
+
+        <p>
+          Do not use LoyaltyMarket to advertise, buy, or sell illegal,
+          dangerous, stolen, counterfeit, or prohibited items.
+        </p>
+
+        <ul>
+          <li>Stolen property.</li>
+          <li>Counterfeit goods.</li>
+          <li>Illegal drugs or controlled substances.</li>
+          <li>Weapons or dangerous materials prohibited by law.</li>
+          <li>Fraudulent documents.</li>
+          <li>Items that violate intellectual-property rights.</li>
+          <li>Products that create an unreasonable safety risk.</li>
+          <li>Other items prohibited by LoyaltyMarket's Terms of Use.</li>
+        </ul>
+      </section>
+
+      <section id="reporting" class="safety-section">
+        <h2>10. Reporting Suspicious Activity</h2>
+
+        <p>
+          Report advertisements, accounts, messages, scams, fraud,
+          impersonation, harassment, illegal content, or safety concerns.
+        </p>
+
+        <p>
+          Include useful information such as the advertisement title,
+          username, phone number, screenshots, payment records, and a clear
+          explanation of what happened.
+        </p>
+
+        <div class="report-box">
+          <strong>LoyaltyMarket Support</strong><br>
+
+          Email:
+          <a href="mailto:support@loyaltymarket.com">
+            support@loyaltymarket.com
+          </a>
+          <br>
+
+          Location: Liberia
+        </div>
+      </section>
+
+      <section id="emergency" class="safety-section">
+        <h2>11. Emergencies and Criminal Activity</h2>
+
+        <p>
+          LoyaltyMarket is not an emergency service. If you are in immediate
+          danger, move to a safe location and contact the appropriate local
+          authorities.
+        </p>
+
+        <p>
+          Suspected theft, fraud, violence, threats, or other criminal activity
+          may also be reported to law-enforcement authorities.
+        </p>
+
+        <div class="danger-card">
+          Do not attempt to confront a suspected criminal alone. Protect
+          yourself first and preserve useful evidence for the authorities.
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="safety-footer">
+    <div class="safety-footer-inner">
+
+      <div>
+        <p class="safety-footer-brand">LoyaltyMarket</p>
+
+        <p class="safety-footer-tagline">
+          We Get Market, We Get Buyer.
+        </p>
+      </div>
+
+      <div class="safety-footer-links">
+        <a href="index.html">Home</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="safety.html">Safety Tips</a>
+        <a href="help.html">Help</a>
+      </div>
+
+    </div>
+
+    <p class="safety-copyright">
+      © 2026 LoyaltyMarket. All Rights Reserved.
+    </p>
+  </footer>
+
+</body>
+</html>
