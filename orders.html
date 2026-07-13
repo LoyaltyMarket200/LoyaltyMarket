@@ -8,271 +8,382 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
+
   <style>
-    .orders-wrap {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 0 16px;
+    *{box-sizing:border-box}
+    body{margin:0;background:#f5f7fb;color:#0f172a}
+
+    .orders-navbar{
+      min-height:78px;height:auto;padding:12px max(24px,5vw);
+      background:#fff;border-bottom:1px solid #e5e7eb;
+      box-shadow:0 4px 20px rgba(15,23,42,.06);
+      justify-content:space-between;position:sticky;top:0;z-index:40
     }
-    .orders-header h1 {
-      margin: 0 0 4px 0;
+
+    .orders-navbar .logo-link img{width:48px;height:48px;object-fit:contain}
+    .orders-navbar .logo-text{color:#0f2d67;font-size:21px}
+
+    .orders-nav-actions{display:flex;align-items:center;gap:10px}
+    .orders-nav-link,.orders-post-link{
+      min-height:42px;display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 16px;border-radius:10px;text-decoration:none;
+      font-size:14px;font-weight:800;border:1px solid transparent
     }
-    .orders-header p {
-      color: #6b7280;
-      margin: 0 0 20px 0;
+    .orders-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}
+    .orders-nav-link:hover{color:#1e3a8a;border-color:#bfdbfe;background:#eff6ff}
+    .orders-post-link{color:#fff;background:#f97316;box-shadow:0 8px 18px rgba(249,115,22,.2)}
+
+    .orders-page{width:min(1180px,94%);margin:32px auto 70px}
+
+    .orders-hero{
+      display:flex;align-items:center;justify-content:space-between;gap:24px;
+      padding:32px;border-radius:24px;color:#fff;
+      background:
+        radial-gradient(circle at top right,rgba(255,255,255,.15),transparent 32%),
+        linear-gradient(135deg,#0f2d67,#1d4ed8);
+      box-shadow:0 18px 42px rgba(30,58,138,.2)
     }
-    .orders-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+
+    .orders-kicker{margin:0 0 8px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.16em}
+    .orders-hero h1{margin:0 0 8px;font-size:clamp(32px,5vw,48px);line-height:1.08}
+    .orders-hero p{margin:0;color:#dbeafe;font-size:15px;line-height:1.6}
+
+    .orders-summary{
+      min-width:160px;padding:20px;border:1px solid rgba(255,255,255,.18);
+      border-radius:18px;background:rgba(255,255,255,.10);text-align:center;
+      backdrop-filter:blur(8px)
     }
-    .orders-tab {
-      background: #fff;
-      border: 1px solid #d1d5db;
-      padding: 8px 16px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      color: #374151;
+    .orders-summary strong{display:block;margin-bottom:4px;font-size:30px}
+    .orders-summary span{color:#dbeafe;font-size:12px;font-weight:700}
+
+    .orders-panel{
+      margin-top:24px;padding:24px;border:1px solid #e2e8f0;border-radius:22px;
+      background:#fff;box-shadow:0 14px 34px rgba(15,23,42,.07)
     }
-    .orders-tab.active {
-      background: #2563eb;
-      color: #fff;
-      border-color: #2563eb;
+
+    .orders-panel-header{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #e2e8f0
     }
-    .order-card {
-      display: flex;
-      gap: 14px;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 14px;
-      align-items: center;
+    .orders-panel-header h2{margin:0 0 4px;font-size:26px}
+    .orders-panel-header p{margin:0;color:#64748b;font-size:13px}
+
+    .orders-tabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px}
+    .orders-tab{
+      background:#fff;border:1px solid #d1d5db;padding:9px 16px;border-radius:999px;
+      font-size:14px;font-weight:800;cursor:pointer;color:#374151
     }
-    .order-card img {
-      width: 72px;
-      height: 72px;
-      object-fit: cover;
-      border-radius: 8px;
-      flex-shrink: 0;
+    .orders-tab:hover{border-color:#93c5fd;color:#1d4ed8}
+    .orders-tab.active{
+      background:linear-gradient(135deg,#1e3a8a,#2563eb);
+      color:#fff;border-color:#2563eb;box-shadow:0 8px 18px rgba(37,99,235,.18)
     }
-    .order-info {
-      flex: 1;
-      min-width: 0;
+
+    .orders-list{display:grid;gap:14px}
+
+    .order-card{
+      display:grid;grid-template-columns:92px minmax(0,1fr) auto;
+      gap:16px;align-items:center;background:#fff;border:1px solid #e2e8f0;
+      border-radius:16px;padding:14px;transition:.2s ease
     }
-    .order-info h4 {
-      margin: 0 0 4px 0;
-      font-size: 15px;
-      color: #111;
+    .order-card:hover{border-color:#bfdbfe;box-shadow:0 10px 24px rgba(37,99,235,.08)}
+
+    .order-card img{
+      width:92px;height:92px;object-fit:cover;border-radius:12px;background:#f1f5f9
     }
-    .order-info p {
-      margin: 0 0 4px 0;
-      font-size: 13px;
-      color: #059669;
-      font-weight: 600;
+
+    .order-info{min-width:0}
+    .order-info h4{margin:0 0 7px;font-size:17px;line-height:1.35}
+    .order-info h4 a{color:#0f172a;text-decoration:none}
+    .order-info h4 a:hover{color:#2563eb}
+    .order-price{margin:0 0 7px;color:#ea580c;font-size:15px;font-weight:900}
+    .order-date{display:block;color:#94a3b8;font-size:12px}
+
+    .order-status{
+      font-size:12px;font-weight:900;padding:7px 11px;border-radius:999px;
+      text-transform:capitalize;white-space:nowrap
     }
-    .order-date {
-      font-size: 12px;
-      color: #9ca3af;
+    .order-status.pending{background:#fef3c7;color:#92400e}
+    .order-status.confirmed{background:#dbeafe;color:#1e40af}
+    .order-status.completed{background:#d1fae5;color:#065f46}
+    .order-status.cancelled{background:#fee2e2;color:#991b1b}
+
+    .orders-empty{
+      padding:58px 24px;text-align:center;border:1px dashed #cbd5e1;
+      border-radius:18px;background:#f8fafc;color:#64748b
     }
-    .order-status {
-      font-size: 12px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 999px;
-      text-transform: capitalize;
-      white-space: nowrap;
+    .orders-empty span{display:block;margin-bottom:12px;font-size:48px}
+    .orders-empty h3{margin:0 0 8px;color:#0f172a;font-size:22px}
+    .orders-empty p{margin:0 0 18px;line-height:1.6}
+    .orders-empty a{
+      display:inline-flex;min-height:44px;align-items:center;justify-content:center;
+      padding:10px 18px;border-radius:10px;color:#fff;background:#2563eb;
+      text-decoration:none;font-weight:800
     }
-    .order-status.pending {
-      background: #fef3c7;
-      color: #92400e;
+
+    .orders-error{padding:18px;border-radius:12px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+
+    .orders-footer{
+      display:flex;justify-content:space-between;align-items:center;gap:20px;
+      text-align:left;padding:30px max(24px,6vw)
     }
-    .order-status.confirmed {
-      background: #dbeafe;
-      color: #1e40af;
+
+    @media(max-width:760px){
+      .orders-navbar{align-items:stretch}
+      .orders-nav-actions{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+      .orders-hero{align-items:flex-start;flex-direction:column}
+      .orders-summary{min-width:0;width:100%}
+      .order-card{grid-template-columns:76px minmax(0,1fr)}
+      .order-card img{width:76px;height:76px}
+      .order-status{grid-column:2;justify-self:start}
+      .orders-footer{flex-direction:column;text-align:center}
     }
-    .order-status.completed {
-      background: #d1fae5;
-      color: #065f46;
-    }
-    .order-status.cancelled {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-    .orders-empty {
-      text-align: center;
-      color: #888;
-      margin-top: 60px;
-    }
-    .orders-empty a {
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 600;
+
+    @media(max-width:560px){
+      .orders-nav-actions{grid-template-columns:1fr}
+      .orders-page{width:94%;margin-top:20px}
+      .orders-hero,.orders-panel{padding:20px 16px;border-radius:18px}
+      .orders-panel-header{align-items:flex-start;flex-direction:column}
+      .order-card{grid-template-columns:1fr}
+      .order-card img{width:100%;height:220px}
+      .order-status{grid-column:auto}
     }
   </style>
 </head>
+
 <body>
+  <header class="navbar orders-navbar">
+    <div class="logo">
+      <a href="index.html" class="logo-link">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket">
+        <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+      </a>
+    </div>
 
-<header class="navbar">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+    <div class="orders-nav-actions">
+      <a href="index.html" class="orders-nav-link">Home</a>
+      <a href="messages.html" class="orders-nav-link">Messages</a>
+      <a href="dashboard.html" class="orders-nav-link">Dashboard</a>
+      <a href="sell.html" class="orders-post-link">Post An Ad</a>
+    </div>
+  </header>
 
-  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
-
-  <a href="index.html" class="login-btn">Home</a>
-  <a href="messages.html" class="register-btn">My Messages</a>
-  <a href="dashboard.html" class="register-btn">Dashboard</a>
-</header>
-
-<div class="orders-wrap">
-
-  <div class="orders-header">
-    <h1>🧾 My Orders</h1>
-    <p>Track items you've requested to buy on LoyaltyMarket.</p>
-  </div>
-
-  <div class="orders-tabs">
-    <button class="orders-tab active" data-filter="all">All</button>
-    <button class="orders-tab" data-filter="pending">Pending</button>
-    <button class="orders-tab" data-filter="confirmed">Confirmed</button>
-    <button class="orders-tab" data-filter="completed">Completed</button>
-    <button class="orders-tab" data-filter="cancelled">Cancelled</button>
-  </div>
-
-  <div id="ordersList">
-    <p>Loading your orders...</p>
-  </div>
-
-</div>
-
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
-
-<script type="module">
-import { db, auth } from "./firebase.js";
-import {
-  collection,
-  query,
-  where,
-  orderBy,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-const ordersList = document.getElementById("ordersList");
-const tabs = document.querySelectorAll(".orders-tab");
-
-let currentUser = null;
-let allOrders = [];
-let activeFilter = "all";
-
-function safeText(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function formatDate(timestamp) {
-  if (!timestamp || !timestamp.toDate) {
-    return "";
-  }
-  return timestamp.toDate().toLocaleString([], {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-}
-
-function renderOrders() {
-  const filtered = activeFilter === "all"
-    ? allOrders
-    : allOrders.filter((order) => (order.status || "pending") === activeFilter);
-
-  if (filtered.length === 0) {
-    ordersList.innerHTML = `
-      <div class="orders-empty">
-        <p>No orders found.</p>
-        <a href="index.html">Browse the marketplace</a>
+  <main class="orders-page">
+    <section class="orders-hero">
+      <div>
+        <p class="orders-kicker">BUYER CENTER</p>
+        <h1>My Orders</h1>
+        <p>Track every item you requested to buy and follow its progress from pending to completed.</p>
       </div>
-    `;
-    return;
-  }
 
-  ordersList.innerHTML = filtered
-    .map((order) => {
-      const status = order.status || "pending";
-      const image =
-        order.productImage ||
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop";
-      const detailUrl = "product-detail.html?id=" + encodeURIComponent(order.productId || "");
+      <div class="orders-summary">
+        <strong id="ordersCount">0</strong>
+        <span>Total Orders</span>
+      </div>
+    </section>
 
-      return `
-        <div class="order-card">
-          <img src="${safeText(image)}" alt="${safeText(order.productTitle || "Product")}">
-          <div class="order-info">
-            <h4><a href="${detailUrl}" style="color:inherit; text-decoration:none;">${safeText(order.productTitle || "Untitled Product")}</a></h4>
-            <p>US$${safeText(order.priceUsd || "0")} | L$${safeText(order.priceLrd || "0")}</p>
-            <span class="order-date">${formatDate(order.createdAt)}</span>
-          </div>
-          <span class="order-status ${safeText(status)}">${safeText(status)}</span>
+    <section class="orders-panel">
+      <div class="orders-panel-header">
+        <div>
+          <h2>Order History</h2>
+          <p>Use the filters below to quickly find orders by status.</p>
+        </div>
+      </div>
+
+      <div class="orders-tabs">
+        <button class="orders-tab active" data-filter="all">All</button>
+        <button class="orders-tab" data-filter="pending">Pending</button>
+        <button class="orders-tab" data-filter="confirmed">Confirmed</button>
+        <button class="orders-tab" data-filter="completed">Completed</button>
+        <button class="orders-tab" data-filter="cancelled">Cancelled</button>
+      </div>
+
+      <div id="ordersList" class="orders-list">
+        <div class="orders-empty">
+          <span>🧾</span>
+          <h3>Loading your orders...</h3>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer orders-footer">
+    <div>
+      <h2>🇱🇷 LoyaltyMarket</h2>
+      <p>You Get Market, We Get Buyer.</p>
+    </div>
+    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { db, auth } from "./firebase.js";
+    import {
+      collection,
+      query,
+      where,
+      orderBy,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const ordersList = document.getElementById("ordersList");
+    const ordersCount = document.getElementById("ordersCount");
+    const tabs = document.querySelectorAll(".orders-tab");
+
+    let currentUser = null;
+    let allOrders = [];
+    let activeFilter = "all";
+
+    function safeText(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp || !timestamp.toDate) {
+        return "Date unavailable";
+      }
+
+      return timestamp.toDate().toLocaleString([], {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function showEmptyState() {
+      ordersList.innerHTML = `
+        <div class="orders-empty">
+          <span>🛍️</span>
+          <h3>No orders found</h3>
+          <p>You have not placed any orders in this category yet.</p>
+          <a href="index.html">Browse Marketplace</a>
         </div>
       `;
-    })
-    .join("");
-}
+    }
 
-function listenForOrders() {
-  const ordersQuery = query(
-    collection(db, "orders"),
-    where("buyerId", "==", currentUser.uid),
-    orderBy("createdAt", "desc")
-  );
+    function renderOrders() {
+      const filtered = activeFilter === "all"
+        ? allOrders
+        : allOrders.filter((order) =>
+            (order.status || "pending").toLowerCase() === activeFilter
+          );
 
-  onSnapshot(ordersQuery, (snapshot) => {
-    allOrders = snapshot.docs.map((docSnap) => docSnap.data());
-    renderOrders();
-  }, (error) => {
-    ordersList.innerHTML = `<p>Could not load orders: ${safeText(error.message)}</p>`;
-  });
-}
+      ordersCount.textContent = String(allOrders.length);
 
-tabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    tabs.forEach((t) => t.classList.remove("active"));
-    tab.classList.add("active");
-    activeFilter = tab.getAttribute("data-filter");
-    renderOrders();
-  });
-});
+      if (filtered.length === 0) {
+        showEmptyState();
+        return;
+      }
 
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
-  currentUser = user;
-  listenForOrders();
-});
-</script>
+      ordersList.innerHTML = filtered.map((order) => {
+        const status = (order.status || "pending").toLowerCase();
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
-</script>
+        const image =
+          order.productImage ||
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
 
+        const detailUrl =
+          "product-detail.html?id=" +
+          encodeURIComponent(order.productId || "");
+
+        return `
+          <article class="order-card">
+            <img
+              src="${safeText(image)}"
+              alt="${safeText(order.productTitle || "Product")}"
+            >
+
+            <div class="order-info">
+              <h4>
+                <a href="${detailUrl}">
+                  ${safeText(order.productTitle || "Untitled Product")}
+                </a>
+              </h4>
+
+              <p class="order-price">
+                US$${safeText(order.priceUsd || "0")}
+                |
+                L$${safeText(order.priceLrd || "0")}
+              </p>
+
+              <span class="order-date">
+                Ordered ${safeText(formatDate(order.createdAt))}
+              </span>
+            </div>
+
+            <span class="order-status ${safeText(status)}">
+              ${safeText(status)}
+            </span>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function listenForOrders() {
+      const ordersQuery = query(
+        collection(db, "orders"),
+        where("buyerId", "==", currentUser.uid),
+        orderBy("createdAt", "desc")
+      );
+
+      onSnapshot(
+        ordersQuery,
+        (snapshot) => {
+          allOrders = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...docSnap.data()
+          }));
+
+          renderOrders();
+        },
+        (error) => {
+          ordersCount.textContent = "0";
+          ordersList.innerHTML = `
+            <div class="orders-error">
+              Could not load orders: ${safeText(error.message)}
+            </div>
+          `;
+        }
+      );
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((item) => item.classList.remove("active"));
+        tab.classList.add("active");
+        activeFilter = tab.getAttribute("data-filter");
+        renderOrders();
+      });
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      currentUser = user;
+      listenForOrders();
+    });
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch((error) =>
+          console.log("Service worker registration failed:", error)
+        );
+    }
+  </script>
 </body>
 </html>
