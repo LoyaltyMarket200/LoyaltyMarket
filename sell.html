@@ -57,22 +57,370 @@
     #productFieldsSection.open {
       display: block;
     }
+
+    /* ===== PROFESSIONAL SELL PAGE REDESIGN ===== */
+    body {
+      background: #f5f7fb;
+    }
+
+    .sell-navbar {
+      min-height: 78px;
+      height: auto;
+      padding: 12px max(24px, 5vw);
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .sell-navbar .logo-link img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .sell-navbar .logo-text {
+      color: #0f2d67;
+      font-size: 21px;
+    }
+
+    .sell-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sell-nav-link {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      color: #334155;
+      background: #f8fafc;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .sell-nav-link:hover {
+      color: #1e3a8a;
+      border-color: #bfdbfe;
+      background: #eff6ff;
+    }
+
+    .sell-page {
+      width: min(1280px, 94%);
+      margin: 34px auto 70px;
+      display: grid;
+      grid-template-columns: minmax(320px, 0.8fr) minmax(0, 1.2fr);
+      gap: 26px;
+      align-items: start;
+    }
+
+    .sell-hero-panel {
+      position: sticky;
+      top: 104px;
+      padding: 38px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.16), transparent 35%),
+        linear-gradient(145deg, #0f2d67, #1d4ed8);
+      color: #ffffff;
+      box-shadow: 0 18px 42px rgba(30, 58, 138, 0.22);
+    }
+
+    .sell-kicker {
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      margin-bottom: 12px;
+    }
+
+    .sell-hero-panel h1 {
+      margin: 0 0 14px;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.08;
+    }
+
+    .sell-hero-panel > p:not(.sell-kicker) {
+      color: #dbeafe;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .sell-benefit-list {
+      display: grid;
+      gap: 14px;
+      margin: 28px 0;
+    }
+
+    .sell-benefit-list > div {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .sell-benefit-list span {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #22c55e;
+      font-weight: 900;
+    }
+
+    .sell-benefit-list p {
+      margin: 0;
+      color: #dbeafe;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .sell-benefit-list strong {
+      color: #ffffff;
+    }
+
+    .sell-safety-note {
+      padding: 16px;
+      border-radius: 14px;
+      background: #fff7ed;
+      color: #9a3412;
+    }
+
+    .sell-safety-note p {
+      margin: 5px 0 0;
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
+    .sell-card {
+      max-width: none;
+      padding: 34px;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+    }
+
+    .sell-card-heading {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .sell-step-badge {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: #1e3a8a;
+      background: #dbeafe;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .sell-card h1 {
+      font-size: 31px;
+      margin-bottom: 7px;
+    }
+
+    .listing-type-row {
+      gap: 14px;
+      margin: 8px 0 24px;
+    }
+
+    .listing-type-option {
+      padding: 18px 14px;
+      border-radius: 14px;
+      background: #ffffff;
+    }
+
+    .listing-type-option:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, .08);
+    }
+
+    .listing-type-option.selected {
+      border-color: #1d4ed8;
+      background: linear-gradient(180deg, #eff6ff, #ffffff);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, .1);
+    }
+
+    .listing-type-icon {
+      font-size: 28px;
+    }
+
+    .listing-type-label {
+      font-size: 15px;
+    }
+
+    .sell-form label {
+      margin-top: 18px;
+      color: #1f2937;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .sell-form input,
+    .sell-form select,
+    .sell-form textarea {
+      min-height: 48px;
+      border-radius: 11px;
+      border-color: #cbd5e1;
+      background: #ffffff;
+    }
+
+    .sell-form textarea {
+      min-height: 130px;
+    }
+
+    .sell-form input:focus,
+    .sell-form select:focus,
+    .sell-form textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37,99,235,.1);
+    }
+
+    .post-btn {
+      min-height: 54px;
+      margin-top: 30px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f59e0b, #f97316);
+      box-shadow: 0 10px 22px rgba(249,115,22,.23);
+      font-size: 16px;
+    }
+
+    .post-btn:hover {
+      background: linear-gradient(135deg, #d97706, #ea580c);
+    }
+
+    .post-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .sell-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      text-align: left;
+      padding: 34px max(24px, 6vw);
+    }
+
+    .sell-footer h2 {
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 980px) {
+      .sell-page {
+        grid-template-columns: 1fr;
+      }
+
+      .sell-hero-panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .sell-navbar {
+        align-items: stretch;
+      }
+
+      .sell-nav-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .sell-page {
+        width: 94%;
+        margin-top: 20px;
+      }
+
+      .sell-hero-panel,
+      .sell-card {
+        padding: 25px 20px;
+        border-radius: 18px;
+      }
+
+      .sell-footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .listing-type-row,
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .sell-nav-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .sell-card h1 {
+        font-size: 27px;
+      }
+    }
+
   </style>
 </head>
 <body>
 
-<header class="navbar">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<header class="navbar sell-navbar">
+  <div class="logo">
+    <a href="index.html" class="logo-link">
+      <img src="icons/icon-512.png" alt="LoyaltyMarket">
+      <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+    </a>
+  </div>
 
-  <a href="index.html" class="login-btn">Home</a>
-  <a href="dashboard.html" class="register-btn">Dashboard</a>
+  <div class="sell-nav-actions">
+    <a href="index.html" class="sell-nav-link">Home</a>
+    <a href="dashboard.html" class="sell-nav-link">Dashboard</a>
+    <a href="messages.html" class="sell-nav-link">Messages</a>
+  </div>
 </header>
 
-<section class="sell-section">
+<section class="sell-page">
+  <div class="sell-hero-panel">
+    <p class="sell-kicker">POST ON LOYALTYMARKET</p>
+    <h1>Turn What You Have Into Opportunity</h1>
+    <p>Create a product or service listing and reach buyers across Liberia.</p>
+
+    <div class="sell-benefit-list">
+      <div><span>✓</span><p><strong>Reach More Buyers</strong><br>Show your listing to people across Liberia.</p></div>
+      <div><span>✓</span><p><strong>Choose Product Or Service</strong><br>Sell an item or offer your skills.</p></div>
+      <div><span>✓</span><p><strong>Manage Everything Easily</strong><br>Edit, feature, boost, archive, or mark as sold.</p></div>
+    </div>
+
+    <div class="sell-safety-note">
+      <strong>Safety Tip</strong>
+      <p>Never send money before inspecting an item or confirming a service provider.</p>
+    </div>
+  </div>
+
   <div class="sell-card">
-    <h1 id="sellHeading">List Your Product</h1>
-    <p class="sell-subtitle" id="sellSubtitle">Post your item for buyers across Liberia.</p>
+    <div class="sell-card-heading">
+      <span class="sell-step-badge">STEP 1</span>
+      <h1 id="sellHeading">List Your Product</h1>
+      <p class="sell-subtitle" id="sellSubtitle">Post your item for buyers across Liberia.</p>
+    </div>
 
     <form class="sell-form" id="sellForm">
 
@@ -205,9 +553,11 @@
   </div>
 </section>
 
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
+<footer class="footer sell-footer">
+  <div>
+    <h2>🇱🇷 LoyaltyMarket</h2>
+    <p>You Get Market, We Get Buyer.</p>
+  </div>
   <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
 </footer>
 
