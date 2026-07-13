@@ -8,148 +8,141 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
+  <style>
+    *{box-sizing:border-box} body{margin:0;background:#f5f7fb;color:#0f172a}
+    .settings-navbar{min-height:78px;height:auto;padding:12px max(24px,5vw);background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(15,23,42,.06);justify-content:space-between;position:sticky;top:0;z-index:40}
+    .settings-navbar .logo-link img{width:48px;height:48px;object-fit:contain}.settings-navbar .logo-text{color:#0f2d67;font-size:21px}
+    .settings-nav-actions{display:flex;align-items:center;gap:10px}.settings-nav-link,.settings-post-link{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;border:1px solid transparent}
+    .settings-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}.settings-nav-link:hover{color:#1e3a8a;border-color:#bfdbfe;background:#eff6ff}
+    .settings-post-link{color:#fff;background:#f97316;box-shadow:0 8px 18px rgba(249,115,22,.2)}
+    .settings-page{width:min(1240px,94%);margin:32px auto 70px;display:grid;grid-template-columns:285px minmax(0,1fr);gap:24px;align-items:start}
+    .settings-sidebar{position:sticky;top:104px;padding:24px;border:1px solid #e2e8f0;border-radius:20px;background:#fff;box-shadow:0 12px 30px rgba(15,23,42,.07)}
+    .settings-profile{text-align:center;padding-bottom:20px;border-bottom:1px solid #e2e8f0}.settings-avatar{width:78px;height:78px;margin:0 auto 12px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#dbeafe,#eff6ff);color:#0f2d67;font-size:34px;border:4px solid #fff;box-shadow:0 8px 22px rgba(30,58,138,.15)}
+    .settings-profile h3{margin:0 0 6px;font-size:16px;word-break:break-word}.settings-profile p{margin:4px 0;color:#64748b;font-size:13px}.settings-profile .verified{color:#166534;font-weight:800}
+    .settings-menu{display:grid;gap:8px;margin-top:18px}.settings-menu a{display:block;padding:12px 13px;border-radius:10px;color:#334155;text-decoration:none;font-size:14px;font-weight:700}.settings-menu a:hover{background:#f8fafc;color:#1e3a8a}.settings-menu a.active{color:#fff;background:linear-gradient(135deg,#1e3a8a,#2563eb);box-shadow:0 8px 18px rgba(37,99,235,.2)}
+    .settings-main{min-width:0}.settings-hero{padding:30px 32px;margin-bottom:20px;border-radius:22px;color:#fff;background:radial-gradient(circle at top right,rgba(255,255,255,.15),transparent 32%),linear-gradient(135deg,#0f2d67,#1d4ed8);box-shadow:0 18px 42px rgba(30,58,138,.2)}
+    .settings-kicker{margin-bottom:8px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.16em}.settings-hero h1{margin:0 0 8px;font-size:clamp(30px,4vw,42px);line-height:1.1}.settings-hero p{margin:0;color:#dbeafe;font-size:15px;line-height:1.6}
+    .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.settings-card{padding:24px;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(15,23,42,.06)}.settings-card.full-width{grid-column:1/-1}
+    .settings-card h3{margin:0 0 6px;font-size:20px}.settings-card-subtitle{margin:0 0 20px;color:#64748b;font-size:13px;line-height:1.5}.settings-card label{display:block;margin:15px 0 7px;color:#1f2937;font-size:14px;font-weight:800}
+    .settings-card input{width:100%;min-height:49px;padding:13px 14px;border:1px solid #cbd5e1;border-radius:11px;font-size:15px;background:#fff}.settings-card input:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.10)}.settings-card input:disabled{color:#64748b;background:#f8fafc;cursor:not-allowed}
+    .settings-hint{margin-top:8px;color:#94a3b8;font-size:12px;line-height:1.5}.settings-submit-btn{width:100%;min-height:50px;margin-top:20px;border:none;border-radius:11px;color:#fff;background:linear-gradient(135deg,#1e3a8a,#2563eb);font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 8px 18px rgba(37,99,235,.18)}
+    .settings-submit-btn:disabled{opacity:.65;cursor:not-allowed}.settings-message{display:none;margin-top:14px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.5}.settings-message.error{display:block;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.settings-message.success{display:block;background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
+    .security-list{display:grid;gap:12px;margin-top:18px}.security-item{display:flex;gap:11px;padding:14px;border:1px solid #e2e8f0;border-radius:13px;background:#f8fafc}.security-item span{font-size:22px}.security-item strong{display:block;margin-bottom:3px;font-size:14px}.security-item p{margin:0;color:#64748b;font-size:12px;line-height:1.5}
+    .danger-zone{border-color:#fecaca;background:#fffafa}.danger-zone h3{color:#b91c1c}.logout-btn{min-height:46px;margin-top:14px;padding:11px 20px;border:1px solid #dc2626;border-radius:10px;color:#dc2626;background:#fff;font-size:14px;font-weight:900;cursor:pointer}.logout-btn:hover{color:#fff;background:#dc2626}
+    .settings-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:30px max(24px,6vw)}
+    @media(max-width:960px){.settings-page{grid-template-columns:1fr}.settings-sidebar{position:static}.settings-menu{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.settings-navbar{align-items:stretch}.settings-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.settings-grid{grid-template-columns:1fr}.settings-card.full-width{grid-column:auto}.settings-page{width:94%;margin-top:20px}.settings-hero,.settings-card,.settings-sidebar{padding:20px 16px;border-radius:18px}.settings-footer{flex-direction:column;text-align:center}}
+    @media(max-width:520px){.settings-nav-actions,.settings-menu{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-
-<header class="navbar">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-
-  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
-
-  <a href="index.html" class="login-btn">Home</a>
-  <a href="dashboard.html" class="register-btn">Dashboard</a>
+<header class="navbar settings-navbar">
+  <div class="logo"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="LoyaltyMarket"><span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span></a></div>
+  <div class="settings-nav-actions"><a href="index.html" class="settings-nav-link">Home</a><a href="dashboard.html" class="settings-nav-link">Dashboard</a><a href="sell.html" class="settings-post-link">Post An Ad</a></div>
 </header>
 
-<section class="dashboard-section">
-
-  <aside class="dashboard-sidebar">
-    <div class="dashboard-profile">
-      <div class="dashboard-avatar">👤</div>
-      <h3 id="userEmail">Loading...</h3>
-      <p>⭐ Verified Seller</p>
-      <p class="member-since">Member since 2026</p>
-    </div>
-
-    <nav class="dashboard-nav">
-      <a href="dashboard.html" class="dashboard-nav-link">📋 My Listings</a>
-      <a href="wishlist.html" class="dashboard-nav-link">❤️ My Wishlist</a>
-      <a href="sell.html" class="dashboard-nav-link">➕ Post New Listing</a>
-      <a href="account-settings.html" class="dashboard-nav-link active">⚙️ Account Settings</a>
+<main class="settings-page">
+  <aside class="settings-sidebar">
+    <div class="settings-profile"><div class="settings-avatar">👤</div><h3 id="userEmail">Loading...</h3><p class="verified">⭐ Verified Seller</p><p>Member since 2026</p></div>
+    <nav class="settings-menu">
+      <a href="dashboard.html">📋 My Listings</a>
+      <a href="wishlist.html">❤️ My Wishlist</a>
+      <a href="sell.html">➕ Post New Listing</a>
+      <a href="my-sales.html">💰 My Sales</a>
+      <a href="account-setting.html" class="active">⚙️ Account Settings</a>
     </nav>
   </aside>
 
-  <main class="dashboard-main">
-    <h1>Account Settings</h1>
-    <p class="dashboard-subtitle">Manage your account information and password.</p>
+  <section class="settings-main">
+    <div class="settings-hero"><p class="settings-kicker">ACCOUNT CENTER</p><h1>Manage Your Account</h1><p>Review your account information, update your password, and control your current session.</p></div>
+    <div class="settings-grid">
+      <article class="settings-card">
+        <h3>Account Information</h3><p class="settings-card-subtitle">Your current LoyaltyMarket sign-in details.</p>
+        <label for="currentEmail">Email Address</label><input type="email" id="currentEmail" disabled><p class="settings-hint">Your email cannot be changed at this time.</p>
+        <div class="security-list">
+          <div class="security-item"><span>🛡️</span><div><strong>Secure Account</strong><p>Use a strong password that you do not use on other websites.</p></div></div>
+          <div class="security-item"><span>🔒</span><div><strong>Private Information</strong><p>Never share your password or verification codes with anyone.</p></div></div>
+        </div>
+      </article>
 
-    <div class="settings-card">
-      <h3>Account Information</h3>
+      <article class="settings-card">
+        <h3>Change Password</h3><p class="settings-card-subtitle">Confirm your current password before creating a new one.</p>
+        <form id="passwordForm">
+          <label for="currentPassword">Current Password</label><input type="password" id="currentPassword" required autocomplete="current-password">
+          <label for="newPassword">New Password</label><input type="password" id="newPassword" required minlength="6" autocomplete="new-password">
+          <label for="confirmPassword">Confirm New Password</label><input type="password" id="confirmPassword" required minlength="6" autocomplete="new-password">
+          <button type="submit" class="settings-submit-btn" id="updatePasswordBtn">Update Password</button>
+          <div id="settingsMessage" class="settings-message" role="status"></div>
+        </form>
+      </article>
 
-      <label>Email Address</label>
-      <input type="email" id="currentEmail" disabled>
-
-      <p class="settings-hint">Your email cannot be changed at this time.</p>
+      <article class="settings-card danger-zone full-width">
+        <h3>Session Controls</h3><p class="settings-card-subtitle">Logging out will end your current LoyaltyMarket session on this browser.</p>
+        <button id="logoutSettingsBtn" class="logout-btn">Log Out</button>
+      </article>
     </div>
+  </section>
+</main>
 
-    <div class="settings-card">
-      <h3>Change Password</h3>
-
-      <form id="passwordForm">
-        <label>Current Password</label>
-        <input type="password" id="currentPassword" required>
-
-        <label>New Password</label>
-        <input type="password" id="newPassword" required minlength="6">
-
-        <label>Confirm New Password</label>
-        <input type="password" id="confirmPassword" required minlength="6">
-
-        <button type="submit" class="post-btn">Update Password</button>
-      </form>
-    </div>
-
-    <div class="settings-card danger-zone">
-      <h3>Danger Zone</h3>
-      <p class="settings-hint">Logging out will end your current session.</p>
-      <button id="logoutSettingsBtn" class="delete-btn" style="width:auto; padding:12px 24px;">Log Out</button>
-    </div>
-
-  </main>
-
-</section>
-
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
+<footer class="footer settings-footer"><div><h2>🇱🇷 LoyaltyMarket</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p></footer>
 
 <script type="module">
 import { auth } from "./firebase.js";
-import {
-  onAuthStateChanged,
-  signOut,
-  updatePassword,
-  reauthenticateWithCredential,
-  EmailAuthProvider
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-const currentEmail = document.getElementById("currentEmail");
-const userEmail = document.getElementById("userEmail");
-const passwordForm = document.getElementById("passwordForm");
-const logoutSettingsBtn = document.getElementById("logoutSettingsBtn");
+const currentEmail=document.getElementById("currentEmail");
+const userEmail=document.getElementById("userEmail");
+const passwordForm=document.getElementById("passwordForm");
+const logoutSettingsBtn=document.getElementById("logoutSettingsBtn");
+const updatePasswordBtn=document.getElementById("updatePasswordBtn");
+const settingsMessage=document.getElementById("settingsMessage");
+let currentUser=null;
 
-let currentUser = null;
+function showMessage(message,type){settingsMessage.textContent=message;settingsMessage.className="settings-message "+type}
+function friendlyAuthError(code){
+  const messages={
+    "auth/wrong-password":"The current password is incorrect.",
+    "auth/invalid-credential":"The current password is incorrect.",
+    "auth/weak-password":"The new password must contain at least 6 characters.",
+    "auth/requires-recent-login":"Please log out, log in again, and retry this change.",
+    "auth/network-request-failed":"Check your internet connection and try again."
+  };
+  return messages[code]||"Could not update your password. Please try again.";
+}
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-    currentEmail.value = user.email;
-    userEmail.textContent = user.email;
-  } else {
-    window.location.href = "login.html";
-  }
+onAuthStateChanged(auth,(user)=>{
+  if(user){currentUser=user;currentEmail.value=user.email||"";userEmail.textContent=user.email||"LoyaltyMarket User"}
+  else{window.location.href="login.html"}
 });
 
-passwordForm.addEventListener("submit", async (event) => {
+passwordForm.addEventListener("submit",async(event)=>{
   event.preventDefault();
-
-  const currentPassword = document.getElementById("currentPassword").value;
-  const newPassword = document.getElementById("newPassword").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-
-  if (newPassword !== confirmPassword) {
-    alert("New passwords do not match.");
-    return;
-  }
-
-  try {
-    const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
-    await reauthenticateWithCredential(currentUser, credential);
-    await updatePassword(currentUser, newPassword);
-
-    alert("Password updated successfully!");
+  if(!currentUser)return;
+  const currentPassword=document.getElementById("currentPassword").value;
+  const newPassword=document.getElementById("newPassword").value;
+  const confirmPassword=document.getElementById("confirmPassword").value;
+  settingsMessage.className="settings-message";settingsMessage.textContent="";
+  if(newPassword!==confirmPassword){showMessage("The new passwords do not match.","error");return}
+  if(newPassword.length<6){showMessage("The new password must contain at least 6 characters.","error");return}
+  updatePasswordBtn.disabled=true;updatePasswordBtn.textContent="Updating Password...";
+  try{
+    const credential=EmailAuthProvider.credential(currentUser.email,currentPassword);
+    await reauthenticateWithCredential(currentUser,credential);
+    await updatePassword(currentUser,newPassword);
+    showMessage("Password updated successfully.","success");
     passwordForm.reset();
-  } catch (error) {
-    alert("Could not update password: " + error.message);
-  }
+  }catch(error){showMessage(friendlyAuthError(error.code),"error")}
+  finally{updatePasswordBtn.disabled=false;updatePasswordBtn.textContent="Update Password"}
 });
 
-logoutSettingsBtn.addEventListener("click", async () => {
-  await signOut(auth);
-  alert("Logged out successfully!");
-  window.location.href = "login.html";
+logoutSettingsBtn.addEventListener("click",async()=>{
+  try{await signOut(auth);window.location.href="login.html"}
+  catch(error){alert("Could not log out: "+error.message)}
 });
 </script>
 
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
+if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch((error)=>console.log("Service worker registration failed:",error))}
 </script>
-
 </body>
 </html>
