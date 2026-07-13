@@ -382,31 +382,85 @@
       color: #64748b;
       margin-top: 2px;
     }
+
+    /* PROFESSIONAL DASHBOARD REDESIGN */
+    body{background:#f5f7fb}
+    .dashboard-navbar{min-height:78px;height:auto;padding:12px max(24px,5vw);background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(15,23,42,.06);justify-content:space-between;position:sticky;top:0;z-index:50}
+    .dashboard-navbar .logo-link img{width:48px;height:48px;object-fit:contain}
+    .dashboard-navbar .logo-text{color:#0f2d67;font-size:21px}
+    .dashboard-nav-actions{display:flex;align-items:center;gap:10px}
+    .dashboard-top-link,.dashboard-post-btn,.dashboard-logout-btn{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;border:1px solid transparent;cursor:pointer}
+    .dashboard-top-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}
+    .dashboard-top-link:hover{color:#1e3a8a;border-color:#bfdbfe;background:#eff6ff}
+    .dashboard-post-btn{color:#fff;background:#f97316;box-shadow:0 8px 18px rgba(249,115,22,.2)}
+    .dashboard-post-btn:hover{background:#ea580c}
+    .dashboard-logout-btn{color:#b91c1c;background:#fff;border-color:#fecaca}
+    .dashboard-shell{width:min(1450px,94%);margin:30px auto 70px}
+    .dashboard-welcome{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:34px 38px;border-radius:22px;background:radial-gradient(circle at top right,rgba(255,255,255,.17),transparent 34%),linear-gradient(135deg,#0f2d67,#1d4ed8);color:#fff;box-shadow:0 18px 44px rgba(30,58,138,.2)}
+    .dashboard-kicker{margin-bottom:8px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.18em}
+    .dashboard-welcome h1{margin:0 0 9px;font-size:clamp(28px,4vw,42px);line-height:1.1}
+    .dashboard-welcome p:last-child{color:#dbeafe;font-size:16px;line-height:1.6}
+    .dashboard-welcome-btn{flex-shrink:0;padding:14px 20px;border-radius:12px;color:#0f2d67;background:#fff;text-decoration:none;font-weight:900;box-shadow:0 10px 24px rgba(0,0,0,.14)}
+    .dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:22px 0}
+    .dashboard-stat-card{display:flex;align-items:center;gap:15px;padding:20px;border:1px solid #e2e8f0;border-radius:16px;background:#fff;box-shadow:0 8px 22px rgba(15,23,42,.06)}
+    .dashboard-stat-icon{width:48px;height:48px;flex-shrink:0;display:grid;place-items:center;border-radius:14px;background:#eff6ff;font-size:23px}
+    .dashboard-stat-card strong{display:block;color:#0f172a;font-size:25px;line-height:1}
+    .dashboard-stat-card p{margin-top:6px;color:#64748b;font-size:13px;font-weight:700}
+    .dashboard-section{display:grid;grid-template-columns:270px minmax(0,1fr);gap:22px;padding:0;align-items:start}
+    .dashboard-sidebar{border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 8px 24px rgba(15,23,42,.06);top:100px}
+    .dashboard-main{min-width:0;padding:25px;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.06)}
+    .archive-filter-row{flex-wrap:wrap;padding:6px;border-radius:999px;background:#f1f5f9;width:fit-content}
+    .archive-filter-btn{border:none;background:transparent}
+    .archive-filter-btn.active{color:#fff;background:#1e3a8a;box-shadow:0 4px 12px rgba(30,58,138,.2)}
+    .dashboard-listings{grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:18px}
+    .dashboard-listing-card{overflow:hidden;padding:0;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 6px 18px rgba(15,23,42,.07);transition:.2s}
+    .dashboard-listing-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,23,42,.12)}
+    .dashboard-listing-image{height:190px;margin:0;border-radius:0}
+    .dashboard-listing-info{padding:16px 16px 8px}
+    .dashboard-listing-actions{padding:10px 16px 18px;border-top:1px solid #f1f5f9}
+    @media(max-width:1000px){.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-section{grid-template-columns:1fr}.dashboard-sidebar{position:static}.dashboard-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.dashboard-navbar{align-items:stretch}.dashboard-nav-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.dashboard-welcome{flex-direction:column;align-items:flex-start;padding:28px 22px}.dashboard-welcome-btn{width:100%;text-align:center}.dashboard-shell{width:94%;margin-top:20px}.dashboard-main{padding:18px}}
+    @media(max-width:520px){.dashboard-stats{grid-template-columns:1fr 1fr;gap:10px}.dashboard-stat-card{align-items:flex-start;flex-direction:column;padding:15px}.dashboard-nav{grid-template-columns:1fr}.dashboard-listings{grid-template-columns:1fr}}
+
   </style>
 </head>
 <body>
 
-<header class="navbar">
+<header class="navbar dashboard-navbar">
   <div class="logo">
     <a href="index.html" class="logo-link">
       <img src="icons/icon-512.png" alt="LoyaltyMarket">
       <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
     </a>
   </div>
-
-  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
-
-  <a href="index.html" class="login-btn">Home</a>
-  <a href="messages.html" class="register-btn nav-messages-link">
-    My Messages
-    <span id="unreadBadge" class="unread-badge">0</span>
-  </a>
-  <a href="sell.html" class="sell-btn">Sell Product</a>
-  <button id="logoutBtn" class="register-btn">Logout</button>
+  <div class="dashboard-nav-actions">
+    <a href="index.html" class="dashboard-top-link">Home</a>
+    <a href="messages.html" class="dashboard-top-link nav-messages-link">Messages
+      <span id="unreadBadge" class="unread-badge">0</span>
+    </a>
+    <a href="sell.html" class="dashboard-post-btn">Post An Ad</a>
+    <button id="logoutBtn" class="dashboard-logout-btn">Logout</button>
+  </div>
 </header>
 
-<section class="dashboard-section">
+<section class="dashboard-shell">
+  <div class="dashboard-welcome">
+    <div>
+      <p class="dashboard-kicker">SELLER CENTER</p>
+      <h1>Welcome To Your Dashboard</h1>
+      <p>Manage your listings, sales, messages, and business profile in one place.</p>
+    </div>
+    <a href="sell.html" class="dashboard-welcome-btn">＋ Post New Listing</a>
+  </div>
 
+  <div class="dashboard-stats">
+    <article class="dashboard-stat-card"><span class="dashboard-stat-icon">📦</span><div><strong id="totalListingsStat">0</strong><p>Total Listings</p></div></article>
+    <article class="dashboard-stat-card"><span class="dashboard-stat-icon">✅</span><div><strong id="activeListingsStat">0</strong><p>Active Listings</p></div></article>
+    <article class="dashboard-stat-card"><span class="dashboard-stat-icon">💰</span><div><strong id="soldListingsStat">0</strong><p>Sold Listings</p></div></article>
+    <article class="dashboard-stat-card"><span class="dashboard-stat-icon">🗄️</span><div><strong id="archivedListingsStat">0</strong><p>Archived</p></div></article>
+  </div>
+
+  <div class="dashboard-section">
   <aside class="dashboard-sidebar">
     <div class="dashboard-profile">
       <div class="dashboard-avatar">👤</div>
@@ -446,6 +500,7 @@
     </p>
   </main>
 
+  </div>
 </section>
 
 <div class="boost-modal-overlay" id="boostModalOverlay">
@@ -553,6 +608,10 @@ const businessStorefrontLink = document.getElementById("businessStorefrontLink")
 const logoutBtn = document.getElementById("logoutBtn");
 const dashboardListings = document.getElementById("dashboardListings");
 const archiveFilterButtons = document.querySelectorAll(".archive-filter-btn");
+const totalListingsStat = document.getElementById("totalListingsStat");
+const activeListingsStat = document.getElementById("activeListingsStat");
+const soldListingsStat = document.getElementById("soldListingsStat");
+const archivedListingsStat = document.getElementById("archivedListingsStat");
 
 const boostModalOverlay = document.getElementById("boostModalOverlay");
 const boostPlanScreen = document.getElementById("boostPlanScreen");
@@ -642,7 +701,15 @@ async function loadUserProfile() {
   }
 }
 
+function updateDashboardStats() {
+  totalListingsStat.textContent = String(allMyProducts.length);
+  activeListingsStat.textContent = String(allMyProducts.filter((product) => product.status !== "sold" && product.status !== "archived").length);
+  soldListingsStat.textContent = String(allMyProducts.filter((product) => product.status === "sold").length);
+  archivedListingsStat.textContent = String(allMyProducts.filter((product) => product.status === "archived").length);
+}
+
 function renderListings() {
+  updateDashboardStats();
   let productsToShow = allMyProducts;
 
   if (currentArchiveFilter === "active") {
