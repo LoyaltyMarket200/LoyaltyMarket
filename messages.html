@@ -8,651 +8,72 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
-
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background: #f5f7fb;
-      color: #0f172a;
-    }
-
-    .messages-navbar {
-      min-height: 78px;
-      height: auto;
-      padding: 12px max(24px, 5vw);
-      background: #fff;
-      border-bottom: 1px solid #e5e7eb;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 40;
-    }
-
-    .messages-navbar .logo-link img {
-      width: 48px;
-      height: 48px;
-      object-fit: contain;
-    }
-
-    .messages-navbar .logo-text {
-      color: #0f2d67;
-      font-size: 21px;
-    }
-
-    .messages-nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .messages-nav-link,
-    .messages-post-link {
-      min-height: 42px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 16px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 800;
-      border: 1px solid transparent;
-    }
-
-    .messages-nav-link {
-      color: #334155;
-      background: #f8fafc;
-      border-color: #e2e8f0;
-    }
-
-    .messages-nav-link:hover {
-      color: #1e3a8a;
-      border-color: #bfdbfe;
-      background: #eff6ff;
-    }
-
-    .messages-post-link {
-      color: #fff;
-      background: #f97316;
-      box-shadow: 0 8px 18px rgba(249,115,22,.2);
-    }
-
-    .messages-page {
-      width: min(1180px, 94%);
-      margin: 32px auto 70px;
-      display: grid;
-      grid-template-columns: 330px minmax(0, 1fr);
-      gap: 24px;
-      align-items: start;
-    }
-
-    .messages-sidebar {
-      position: sticky;
-      top: 104px;
-      padding: 28px;
-      border-radius: 22px;
-      color: #fff;
-      background:
-        radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 30%),
-        linear-gradient(145deg, #0f2d67, #1d4ed8 65%, #0ea5e9);
-      box-shadow: 0 18px 42px rgba(30,58,138,.2);
-    }
-
-    .messages-kicker {
-      margin-bottom: 10px;
-      color: #fbbf24;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .16em;
-    }
-
-    .messages-sidebar h1 {
-      margin: 0 0 12px;
-      font-size: 36px;
-      line-height: 1.08;
-    }
-
-    .messages-sidebar > p {
-      color: #dbeafe;
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    .message-tips {
-      display: grid;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .message-tip {
-      display: flex;
-      gap: 11px;
-      padding: 14px;
-      border: 1px solid rgba(255,255,255,.17);
-      border-radius: 14px;
-      background: rgba(255,255,255,.08);
-    }
-
-    .message-tip span {
-      font-size: 22px;
-    }
-
-    .message-tip strong {
-      display: block;
-      margin-bottom: 3px;
-      font-size: 14px;
-    }
-
-    .message-tip p {
-      margin: 0;
-      color: #dbeafe;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .inbox-panel {
-      min-width: 0;
-      padding: 28px;
-      border: 1px solid #e2e8f0;
-      border-radius: 22px;
-      background: #fff;
-      box-shadow: 0 14px 34px rgba(15,23,42,.08);
-    }
-
-    .inbox-header {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 18px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .inbox-header h2 {
-      margin: 0 0 6px;
-      font-size: 30px;
-    }
-
-    .inbox-subtitle {
-      margin: 0;
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    .inbox-count {
-      min-width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      padding: 0 12px;
-      border-radius: 999px;
-      background: #eff6ff;
-      color: #1e3a8a;
-      font-weight: 900;
-    }
-
-    .conversation-list {
-      margin-top: 18px;
-    }
-
-    .conversation-card {
-      display: grid;
-      grid-template-columns: 68px minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 14px;
-      padding: 14px;
-      margin-bottom: 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      background: #fff;
-      color: inherit;
-      text-decoration: none;
-      transition: .2s ease;
-    }
-
-    .conversation-card:hover {
-      transform: translateY(-2px);
-      border-color: #93c5fd;
-      box-shadow: 0 10px 22px rgba(37,99,235,.08);
-    }
-
-    .conversation-card img {
-      width: 68px;
-      height: 68px;
-      object-fit: cover;
-      border-radius: 13px;
-      background: #f1f5f9;
-    }
-
-    .conversation-info {
-      min-width: 0;
-    }
-
-    .conversation-info h4 {
-      margin: 0 0 5px;
-      font-size: 16px;
-      color: #0f172a;
-    }
-
-    .conversation-last-message {
-      margin: 0;
-      color: #64748b;
-      font-size: 13px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .conversation-time {
-      align-self: start;
-      color: #94a3b8;
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .inbox-empty-state {
-      text-align: center;
-      color: #64748b;
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      border-radius: 16px;
-      padding: 52px 24px;
-    }
-
-    .inbox-empty-state .empty-icon {
-      display: block;
-      margin-bottom: 12px;
-      font-size: 42px;
-    }
-
-    .inbox-empty-state h3 {
-      margin: 0 0 8px;
-      color: #0f172a;
-    }
-
-    .messages-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      text-align: left;
-      padding: 30px max(24px, 6vw);
-    }
-
-    .messages-footer h2 {
-      margin-bottom: 6px;
-    }
-
-    @media (max-width: 900px) {
-      .messages-page {
-        grid-template-columns: 1fr;
-      }
-
-      .messages-sidebar {
-        position: static;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .messages-navbar {
-        align-items: stretch;
-      }
-
-      .messages-nav-actions {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .messages-page {
-        width: 94%;
-        margin-top: 20px;
-      }
-
-      .messages-sidebar,
-      .inbox-panel {
-        padding: 22px 18px;
-        border-radius: 18px;
-      }
-
-      .messages-footer {
-        flex-direction: column;
-        text-align: center;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .messages-nav-actions {
-        grid-template-columns: 1fr;
-      }
-
-      .inbox-header {
-        align-items: flex-start;
-      }
-
-      .conversation-card {
-        grid-template-columns: 56px minmax(0, 1fr);
-      }
-
-      .conversation-card img {
-        width: 56px;
-        height: 56px;
-      }
-
-      .conversation-time {
-        grid-column: 2;
-        justify-self: start;
-      }
-    }
+    *{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#0f172a}
+    .messages-navbar{min-height:78px;height:auto;padding:12px max(24px,5vw);background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(15,23,42,.06);justify-content:space-between;position:sticky;top:0;z-index:40}
+    .messages-navbar .logo-link img{width:48px;height:48px;object-fit:contain}.messages-navbar .logo-text{color:#0f2d67;font-size:21px}
+    .messages-nav-actions{display:flex;align-items:center;gap:10px}.messages-nav-link,.messages-post-link{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;border:1px solid transparent}
+    .messages-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}.messages-post-link{color:#fff;background:#f97316}
+    .messages-page{width:min(1180px,94%);margin:32px auto 70px;display:grid;grid-template-columns:330px minmax(0,1fr);gap:24px;align-items:start}
+    .messages-sidebar{position:sticky;top:104px;padding:28px;border-radius:22px;color:#fff;background:linear-gradient(145deg,#0f2d67,#1d4ed8 65%,#0ea5e9);box-shadow:0 18px 42px rgba(30,58,138,.2)}
+    .messages-kicker{margin-bottom:10px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.16em}.messages-sidebar h1{margin:0 0 12px;font-size:36px}.messages-sidebar>p{color:#dbeafe;line-height:1.7}
+    .message-tips{display:grid;gap:12px;margin-top:24px}.message-tip{display:flex;gap:11px;padding:14px;border:1px solid rgba(255,255,255,.17);border-radius:14px;background:rgba(255,255,255,.08)}.message-tip span{font-size:22px}.message-tip strong{display:block;margin-bottom:3px}.message-tip p{margin:0;color:#dbeafe;font-size:12px;line-height:1.5}
+    .inbox-panel{min-width:0;padding:28px;border:1px solid #e2e8f0;border-radius:22px;background:#fff;box-shadow:0 14px 34px rgba(15,23,42,.08)}
+    .inbox-header{display:flex;align-items:end;justify-content:space-between;gap:18px;padding-bottom:18px;border-bottom:1px solid #e2e8f0}.inbox-header h2{margin:0 0 6px;font-size:30px}.inbox-subtitle{margin:0;color:#64748b}.inbox-count{min-width:44px;height:44px;display:grid;place-items:center;padding:0 12px;border-radius:999px;background:#eff6ff;color:#1e3a8a;font-weight:900}
+    .conversation-list{margin-top:18px}.conversation-card{position:relative;display:grid;grid-template-columns:68px minmax(0,1fr) auto;align-items:center;gap:14px;padding:14px;margin-bottom:12px;border:1px solid #e2e8f0;border-radius:16px;background:#fff;color:inherit;text-decoration:none;transition:.2s}
+    .conversation-card.unread{border-color:#93c5fd;background:#eff6ff}.conversation-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(37,99,235,.08)}
+    .conversation-card img{width:68px;height:68px;object-fit:cover;border-radius:13px;background:#f1f5f9}.conversation-info{min-width:0}.conversation-person{margin:0 0 4px;color:#1e3a8a;font-size:12px;font-weight:900}.conversation-info h4{margin:0 0 5px;font-size:16px}.conversation-last-message{margin:0;color:#64748b;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.conversation-time{align-self:start;color:#94a3b8;font-size:12px;font-weight:700}
+    .conversation-unread{position:absolute;right:13px;bottom:12px;min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:#dc2626;color:#fff;font-size:11px;font-weight:900;line-height:22px;text-align:center}
+    .inbox-empty-state{text-align:center;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:16px;padding:52px 24px}.empty-icon{display:block;margin-bottom:12px;font-size:42px}
+    .messages-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:30px max(24px,6vw)}
+    @media(max-width:900px){.messages-page{grid-template-columns:1fr}.messages-sidebar{position:static}}@media(max-width:700px){.messages-navbar{align-items:stretch}.messages-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.messages-page{width:94%;margin-top:20px}.messages-sidebar,.inbox-panel{padding:22px 18px}.messages-footer{flex-direction:column;text-align:center}}@media(max-width:520px){.messages-nav-actions{grid-template-columns:1fr}.conversation-card{grid-template-columns:56px minmax(0,1fr)}.conversation-card img{width:56px;height:56px}.conversation-time{grid-column:2}}
   </style>
 </head>
-
 <body>
-  <header class="navbar messages-navbar">
-    <div class="logo">
-      <a href="index.html" class="logo-link">
-        <img src="icons/icon-512.png" alt="LoyaltyMarket">
-        <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
-      </a>
+<header class="navbar messages-navbar">
+  <div class="logo"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="LoyaltyMarket"><span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span></a></div>
+  <div class="messages-nav-actions"><a href="index.html" class="messages-nav-link">Home</a><a href="dashboard.html" class="messages-nav-link">Dashboard</a><a href="sell.html" class="messages-post-link">Post An Ad</a></div>
+</header>
+<main class="messages-page">
+  <aside class="messages-sidebar">
+    <p class="messages-kicker">YOUR INBOX</p><h1>Keep Every Deal Moving.</h1><p>Continue conversations with buyers and sellers and keep product details in one place.</p>
+    <div class="message-tips">
+      <div class="message-tip"><span>🛡️</span><div><strong>Stay Safe</strong><p>Do not send deposits before inspecting an item or confirming the seller.</p></div></div>
+      <div class="message-tip"><span>📦</span><div><strong>Check The Listing</strong><p>Confirm the price, condition, location, and product details before meeting.</p></div></div>
+      <div class="message-tip"><span>🤝</span><div><strong>Meet Carefully</strong><p>Use a public location and tell someone where you are going.</p></div></div>
     </div>
-
-    <div class="messages-nav-actions">
-      <a href="index.html" class="messages-nav-link">Home</a>
-      <a href="dashboard.html" class="messages-nav-link">Dashboard</a>
-      <a href="sell.html" class="messages-post-link">Post An Ad</a>
-    </div>
-  </header>
-
-  <main class="messages-page">
-    <aside class="messages-sidebar">
-      <p class="messages-kicker">YOUR INBOX</p>
-      <h1>Keep Every Deal Moving.</h1>
-      <p>
-        Continue conversations with buyers and sellers and keep product details in one place.
-      </p>
-
-      <div class="message-tips">
-        <div class="message-tip">
-          <span>🛡️</span>
-          <div>
-            <strong>Stay Safe</strong>
-            <p>Do not send deposits before inspecting an item or confirming the seller.</p>
-          </div>
-        </div>
-
-        <div class="message-tip">
-          <span>📦</span>
-          <div>
-            <strong>Check The Listing</strong>
-            <p>Confirm the price, condition, location, and product details before meeting.</p>
-          </div>
-        </div>
-
-        <div class="message-tip">
-          <span>🤝</span>
-          <div>
-            <strong>Meet Carefully</strong>
-            <p>Use a public location and tell someone where you are going.</p>
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    <section class="inbox-panel">
-      <div class="inbox-header">
-        <div>
-          <h2>My Messages</h2>
-          <p class="inbox-subtitle">Conversations with buyers and sellers.</p>
-        </div>
-        <span id="conversationCount" class="inbox-count">0</span>
-      </div>
-
-      <div id="conversationsList" class="conversation-list">
-        <div class="inbox-empty-state">
-          <span class="empty-icon">💬</span>
-          <h3>Loading conversations...</h3>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer messages-footer">
-    <div>
-      <h2>🇱🇷 LoyaltyMarket</h2>
-      <p>You Get Market, We Get Buyer.</p>
-    </div>
-    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-  </footer>
-
-  <script type="module">
-    import { db, auth } from "./firebase.js";
-
-    import {
-      collection,
-      query,
-      where,
-      getDocs,
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-    import {
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-    const conversationsList = document.getElementById("conversationsList");
-    const conversationCount = document.getElementById("conversationCount");
-
-    let currentUser = null;
-
-    function safeText(value) {
-      return String(value || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function timestampToMilliseconds(timestamp) {
-      if (!timestamp) return 0;
-
-      if (typeof timestamp.toMillis === "function") {
-        return timestamp.toMillis();
-      }
-
-      if (typeof timestamp.seconds === "number") {
-        return timestamp.seconds * 1000;
-      }
-
-      const date = new Date(timestamp);
-      return Number.isNaN(date.getTime()) ? 0 : date.getTime();
-    }
-
-    function formatTime(timestamp) {
-      const milliseconds = timestampToMilliseconds(timestamp);
-
-      if (!milliseconds) return "";
-
-      return new Date(milliseconds).toLocaleDateString([], {
-        month: "short",
-        day: "numeric"
-      });
-    }
-
-    function getConversationKey(message) {
-      if (message.chatId) return message.chatId;
-
-      return [
-        message.productId || "unknown-product",
-        message.senderId || "unknown-sender",
-        message.receiverId || "unknown-receiver"
-      ].sort().join("_");
-    }
-
-    async function loadConversations() {
-      conversationsList.innerHTML = `
-        <div class="inbox-empty-state">
-          <span class="empty-icon">💬</span>
-          <h3>Loading conversations...</h3>
-        </div>
-      `;
-
-      try {
-        const conversationsQuery = query(
-          collection(db, "messages"),
-          where("participants", "array-contains", currentUser.uid)
-        );
-
-        const messagesSnapshot = await getDocs(conversationsQuery);
-
-        const allMessages = messagesSnapshot.docs.map((docSnap) => ({
-          id: docSnap.id,
-          ...docSnap.data()
-        }));
-
-        if (allMessages.length === 0) {
-          conversationCount.textContent = "0";
-          conversationsList.innerHTML = `
-            <div class="inbox-empty-state">
-              <span class="empty-icon">💬</span>
-              <h3>No conversations yet</h3>
-              <p>
-                When you message a seller or someone messages you about a listing,
-                it will show up here.
-              </p>
-            </div>
-          `;
-          return;
-        }
-
-        const conversationsByChatId = {};
-
-        allMessages.forEach((message) => {
-          const conversationKey = getConversationKey(message);
-          const existing = conversationsByChatId[conversationKey];
-
-          const messageTime = timestampToMilliseconds(message.createdAt);
-          const existingTime = timestampToMilliseconds(existing?.createdAt);
-
-          if (!existing || messageTime > existingTime) {
-            conversationsByChatId[conversationKey] = message;
-          }
-        });
-
-        const conversations = Object.values(conversationsByChatId).sort(
-          (a, b) =>
-            timestampToMilliseconds(b.createdAt) -
-            timestampToMilliseconds(a.createdAt)
-        );
-
-        conversationCount.textContent = String(conversations.length);
-        conversationsList.innerHTML = "";
-
-        for (const conversation of conversations) {
-          const otherUserId =
-            conversation.senderId === currentUser.uid
-              ? conversation.receiverId
-              : conversation.senderId;
-
-          let productTitle = "Untitled Listing";
-          let productImage =
-            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop";
-
-          if (conversation.productId) {
-            try {
-              const productSnap = await getDoc(
-                doc(db, "products", conversation.productId)
-              );
-
-              if (productSnap.exists()) {
-                const product = productSnap.data();
-
-                const productImages =
-                  Array.isArray(product.images) && product.images.length > 0
-                    ? product.images
-                    : [];
-
-                productTitle = product.title || productTitle;
-                productImage =
-                  productImages[0] ||
-                  product.imageUrl ||
-                  product.imageURL ||
-                  product.image ||
-                  product.mainImage ||
-                  productImage;
-              }
-            } catch (error) {
-              console.warn("Could not load product for conversation:", error);
-            }
-          }
-
-          const card = document.createElement("a");
-          card.className = "conversation-card";
-
-          card.href =
-            "chat.html?product=" +
-            encodeURIComponent(conversation.productId || "") +
-            "&seller=" +
-            encodeURIComponent(otherUserId || "");
-
-          card.innerHTML = `
-            <img src="${safeText(productImage)}" alt="${safeText(productTitle)}">
-
-            <div class="conversation-info">
-              <h4>${safeText(productTitle)}</h4>
-              <p class="conversation-last-message">
-                ${safeText(conversation.text || "No message text")}
-              </p>
-            </div>
-
-            <span class="conversation-time">
-              ${formatTime(conversation.createdAt)}
-            </span>
-          `;
-
-          conversationsList.appendChild(card);
-        }
-
-      } catch (error) {
-        console.error("Could not load conversations:", error);
-        conversationCount.textContent = "0";
-
-        conversationsList.innerHTML = `
-          <div class="inbox-empty-state">
-            <span class="empty-icon">⚠️</span>
-            <h3>Could not load conversations</h3>
-            <p>${safeText(error.message)}</p>
-          </div>
-        `;
-      }
-    }
-
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-        return;
-      }
-
-      currentUser = user;
-      loadConversations();
-    });
-  </script>
-
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("service-worker.js")
-        .catch((error) =>
-          console.log("Service worker registration failed:", error)
-        );
-    }
-  </script>
+  </aside>
+  <section class="inbox-panel">
+    <div class="inbox-header"><div><h2>My Messages</h2><p class="inbox-subtitle">Conversations with buyers and sellers.</p></div><span id="conversationCount" class="inbox-count">0</span></div>
+    <div id="conversationsList" class="conversation-list"><div class="inbox-empty-state"><span class="empty-icon">💬</span><h3>Loading conversations...</h3></div></div>
+  </section>
+</main>
+<footer class="footer messages-footer"><div><h2>🇱🇷 LoyaltyMarket</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p></footer>
+<script type="module">
+import {db,auth} from "./firebase.js";
+import {collection,query,where,onSnapshot,doc,getDoc} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+const conversationsList=document.getElementById("conversationsList"),conversationCount=document.getElementById("conversationCount");
+let currentUser=null,unsubscribeMessages=null;const productCache=new Map(),userCache=new Map();
+const safeText=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+function ms(t){if(!t)return 0;if(typeof t.toMillis==="function")return t.toMillis();if(typeof t.seconds==="number")return t.seconds*1000;const d=new Date(t);return Number.isNaN(d.getTime())?0:d.getTime()}
+function fmt(t){const x=ms(t);if(!x)return"";const d=new Date(x),n=new Date();return d.toDateString()===n.toDateString()?d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):d.toLocaleDateString([],{month:"short",day:"numeric"})}
+function key(m){return m.chatId||[m.productId||"unknown-product",m.senderId||"unknown-sender",m.receiverId||"unknown-receiver"].sort().join("_")}
+async function getProduct(id){if(!id)return null;if(productCache.has(id))return productCache.get(id);try{const s=await getDoc(doc(db,"products",id));const v=s.exists()?s.data():null;productCache.set(id,v);return v}catch{productCache.set(id,null);return null}}
+async function getUser(id){if(!id)return null;if(userCache.has(id))return userCache.get(id);try{const s=await getDoc(doc(db,"users",id));const v=s.exists()?s.data():null;userCache.set(id,v);return v}catch{userCache.set(id,null);return null}}
+async function render(all){
+  if(!all.length){conversationCount.textContent="0";conversationsList.innerHTML='<div class="inbox-empty-state"><span class="empty-icon">💬</span><h3>No conversations yet</h3><p>When you message a seller or someone messages you, it will show here.</p></div>';return}
+  const grouped={};for(const m of all){const k=key(m);if(!grouped[k])grouped[k]={messages:[],latest:m};grouped[k].messages.push(m);if(ms(m.createdAt)>ms(grouped[k].latest.createdAt))grouped[k].latest=m}
+  const convs=Object.values(grouped).sort((a,b)=>ms(b.latest.createdAt)-ms(a.latest.createdAt));conversationCount.textContent=String(convs.length);conversationsList.innerHTML="";
+  for(const c of convs){const m=c.latest,other=m.senderId===currentUser.uid?m.receiverId:m.senderId,unread=c.messages.filter(x=>x.receiverId===currentUser.uid&&x.read===false).length,[p,u]=await Promise.all([getProduct(m.productId),getUser(other)]);
+    const title=p?.title||m.productTitle||"Untitled Listing",imgs=Array.isArray(p?.images)&&p.images.length?p.images:[],img=imgs[0]||p?.imageUrl||p?.imageURL||p?.image||p?.mainImage||"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop",name=u?.businessName||u?.name||u?.email||"Marketplace User";
+    const a=document.createElement("a");a.className="conversation-card"+(unread?" unread":"");a.href="chat.html?product="+encodeURIComponent(m.productId||"")+"&user="+encodeURIComponent(other||"");
+    a.innerHTML=`<img src="${safeText(img)}" alt="${safeText(title)}"><div class="conversation-info"><p class="conversation-person">${safeText(name)}</p><h4>${safeText(title)}</h4><p class="conversation-last-message">${m.senderId===currentUser.uid?"You: ":""}${safeText(m.text||"No message text")}</p></div><span class="conversation-time">${fmt(m.createdAt)}</span>${unread?`<span class="conversation-unread">${unread>99?"99+":unread}</span>`:""}`;conversationsList.appendChild(a)
+  }
+}
+function listen(){const q=query(collection(db,"messages"),where("participants","array-contains",currentUser.uid));unsubscribeMessages=onSnapshot(q,s=>render(s.docs.map(d=>({id:d.id,...d.data()}))),e=>{conversationCount.textContent="0";conversationsList.innerHTML=`<div class="inbox-empty-state"><span class="empty-icon">⚠️</span><h3>Could not load conversations</h3><p>${safeText(e.message)}</p></div>`})}
+onAuthStateChanged(auth,u=>{if(!u){location.href="login.html";return}currentUser=u;listen()});addEventListener("beforeunload",()=>unsubscribeMessages&&unsubscribeMessages());
+</script>
+<script>if("serviceWorker"in navigator)navigator.serviceWorker.register("service-worker.js").catch(console.log)</script>
 </body>
 </html>
