@@ -8,47 +8,237 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
-  <style>
-    .badge-featured{background:#d97706!important;color:#fff!important}.nav-messages-link{position:relative}.unread-badge{position:absolute;top:-8px;right:-8px;background:#dc2626;color:#fff;font-size:11px;font-weight:700;min-width:18px;height:18px;border-radius:999px;display:none;align-items:center;justify-content:center;padding:0 4px}.unread-badge.has-unread{display:flex}.browse-layout{display:flex;gap:24px;max-width:1200px;margin:30px auto;padding:0 20px;align-items:flex-start}.category-sidebar{width:240px;flex-shrink:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}.category-sidebar h3{margin:0;padding:16px 18px;font-size:15px;color:#111;background:#f8fafc;border-bottom:1px solid #e5e7eb}.category-sidebar-list{list-style:none;margin:0;padding:0}.category-sidebar-list li{border-bottom:1px solid #f1f5f9}.category-sidebar-list li:last-child{border-bottom:none}.category-sidebar-link{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;text-decoration:none;color:#333;font-size:14px;font-weight:500}.category-sidebar-link:hover{background:#f8fafc;color:#2563eb}.category-sidebar-icon{margin-right:8px}.category-sidebar-count{background:#f1f5f9;color:#64748b;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;min-width:22px;text-align:center}.browse-main{flex:1;min-width:0}.browse-main h2{margin-top:0}.results-count-line{color:#64748b;font-size:14px;margin:-8px 0 16px}.site-notice{display:none;max-width:1200px;margin:18px auto 0;padding:14px 18px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-weight:700}.maintenance-screen{display:none;min-height:70vh;align-items:center;justify-content:center;padding:40px 20px;text-align:center;background:#f8fafc}.maintenance-card{width:min(620px,100%);padding:36px;background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 12px 35px rgba(15,23,42,.1)}.maintenance-card h1{margin:0 0 14px;font-size:clamp(28px,5vw,44px)}.maintenance-card p{color:#64748b;line-height:1.7}.disabled-link{opacity:.55;pointer-events:none;cursor:not-allowed}.footer-support{margin-top:10px;font-size:13px;opacity:.9}@media(max-width:800px){.browse-layout{flex-direction:column}.category-sidebar{width:100%}}
-  </style>
 </head>
-<body>
-<header class="navbar">
-  <div class="logo"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="LoyaltyMarket"><span class="logo-text"><span class="lr-tag">LR</span><span data-marketplace-name>LoyaltyMarket</span></span></a></div>
-  <input type="text" class="search-box" id="searchInput" placeholder="Search Products, Cars, Phones...">
-  <div class="nav-buttons">
-    <a href="login.html" id="loginBtn" class="login-btn">Login</a>
-    <a href="register.html" id="registerBtn" class="register-btn">Register</a>
-    <a href="dashboard.html" id="dashboardBtn" class="register-btn" style="display:none;">Dashboard</a>
-    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link" style="display:none;">My Messages<span id="unreadBadge" class="unread-badge">0</span></a>
-    <a href="sell.html" id="navSellBtn" class="sell-btn">Sell Product</a>
+<body class="homepage">
+  <div class="top-strip">
+    <div class="site-shell top-strip-inner">
+      <p>🇱🇷 Liberia's trusted online marketplace</p>
+      <div class="top-strip-links">
+        <a href="safety.html">Safety Tips</a>
+        <a href="business-profile.html">Verified Businesses</a>
+        <a href="contact.html">Help &amp; Support</a>
+      </div>
+    </div>
   </div>
-</header>
-<div id="siteNotice" class="site-notice"></div>
-<section id="maintenanceScreen" class="maintenance-screen"><div class="maintenance-card"><h1>🛠️ <span data-marketplace-name>LoyaltyMarket</span> Is Under Maintenance</h1><p>We are making important improvements. Please check back shortly.</p><p id="maintenanceSupportText"></p></div></section>
-<div id="normalSiteContent">
-<section class="hero"><h4>🇱🇷 Liberia's Marketplace</h4><h1>Buy &amp; Sell Anything In Liberia</h1><p>Find Phones, Vehicles, Property, Fashion, Electronics, Jobs And Much More.</p><div class="hero-buttons"><a href="#products" class="shop-btn">Start Shopping</a><a href="sell.html" id="heroSellBtn" class="sell-btn2">Sell Product</a></div></section>
-<section class="filters">
-  <select id="countyFilter"><option value="">Select County</option><option value="Montserrado">Montserrado</option><option value="Margibi">Margibi</option><option value="Grand Bassa">Grand Bassa</option><option value="Nimba">Nimba</option><option value="Bong">Bong</option></select>
-  <select id="categoryFilter"><option value="">Select Category</option><option value="Phones">Phones</option><option value="Electronics">Electronics</option><option value="Vehicles">Vehicles</option><option value="Property">Property</option><option value="Fashion">Fashion</option><option value="Jobs">Jobs</option></select>
-  <select id="priceFilter"><option value="">Price Range</option><option value="100">Under US$100</option><option value="500">Under US$500</option><option value="1000">Under US$1,000</option><option value="over1000">Over US$1,000</option></select>
-  <select id="conditionFilter"><option value="">Condition</option><option value="Brand New">Brand New</option><option value="Used">Used</option><option value="Foreign Used">Foreign Used</option></select>
-  <button class="search-btn" id="applyFiltersBtn">Search</button>
-</section>
-<div class="browse-layout" id="products">
-<aside class="category-sidebar"><h3>Browse Categories</h3><ul class="category-sidebar-list">
-<li><a href="category-phones.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">📱</span>Phones</span><span class="category-sidebar-count" data-category="Phones">0</span></a></li>
-<li><a href="category-electronics.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">💻</span>Electronics</span><span class="category-sidebar-count" data-category="Electronics">0</span></a></li>
-<li><a href="category-vehicles.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">🚗</span>Vehicles</span><span class="category-sidebar-count" data-category="Vehicles">0</span></a></li>
-<li><a href="category-property.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">🏠</span>Property</span><span class="category-sidebar-count" data-category="Property">0</span></a></li>
-<li><a href="category-fashion.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">👕</span>Fashion</span><span class="category-sidebar-count" data-category="Fashion">0</span></a></li>
-<li><a href="category-jobs.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">💼</span>Jobs</span><span class="category-sidebar-count" data-category="Jobs">0</span></a></li>
-</ul></aside>
-<main class="browse-main"><h2>Latest Products</h2><p class="results-count-line" id="resultsCountLine"></p><div class="product-grid" id="productGrid"><p>Loading products...</p></div></main>
-</div>
-<section class="why-choose"><h2>Why Choose <span data-marketplace-name>LoyaltyMarket</span>?</h2><div class="why-grid"><div class="why-card"><h3>Built For Liberia</h3><p>A marketplace designed for buyers and sellers across Liberia.</p></div><div class="why-card"><h3>USD &amp; L$ Prices</h3><p>We show prices in both US Dollars and Liberian Dollars.</p></div><div class="why-card"><h3>Trusted Sellers</h3><p>We support verified sellers, ratings, and safer transactions.</p></div></div></section>
-</div>
-<footer class="footer"><h2>🇱🇷 <span data-marketplace-name>LoyaltyMarket</span></h2><p>Buy and sell products, cars, phones, and more. Discover Products Across Liberia.</p><p id="footerSupport" class="footer-support"></p><p>&copy; 2026 <span data-marketplace-name>LoyaltyMarket</span>. All Rights Reserved.</p></footer>
+
+  <header class="navbar marketplace-navbar">
+    <div class="site-shell navbar-inner">
+      <a href="index.html" class="logo-link" aria-label="LoyaltyMarket home">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+        <span class="logo-text"><span class="lr-tag">LR</span><span data-marketplace-name>LoyaltyMarket</span></span>
+      </a>
+
+      <p class="navbar-tagline">YOU GET MARKET, WE GET BUYER.</p>
+
+      <nav class="nav-buttons" aria-label="Main navigation">
+        <a href="login.html" id="loginBtn" class="nav-text-link">Sign In</a>
+        <a href="register.html" id="registerBtn" class="nav-text-link">Register</a>
+        <a href="dashboard.html" id="dashboardBtn" class="nav-text-link" style="display:none;">Dashboard</a>
+        <a href="messages.html" id="messagesBtn" class="nav-text-link nav-messages-link" style="display:none;">Messages<span id="unreadBadge" class="unread-badge">0</span></a>
+        <a href="sell.html" id="navSellBtn" class="sell-btn nav-sell-btn">Post An Ad</a>
+      </nav>
+    </div>
+  </header>
+
+  <div id="siteNotice" class="site-notice"></div>
+
+  <section id="maintenanceScreen" class="maintenance-screen">
+    <div class="maintenance-card">
+      <h1>🛠️ <span data-marketplace-name>LoyaltyMarket</span> Is Under Maintenance</h1>
+      <p>We are making important improvements. Please check back shortly.</p>
+      <p id="maintenanceSupportText"></p>
+    </div>
+  </section>
+
+  <div id="normalSiteContent">
+    <section class="marketplace-hero">
+      <div class="site-shell hero-inner">
+        <div class="hero-copy">
+          <span class="hero-eyebrow">Made For Liberia</span>
+          <h1>What Are You Looking For?</h1>
+          <p>Discover products, vehicles, property, jobs and trusted services from sellers across Liberia.</p>
+        </div>
+
+        <div class="hero-search-panel">
+          <div class="hero-search-row">
+            <div class="search-field location-field">
+              <span aria-hidden="true">📍</span>
+              <select id="countyFilter" aria-label="Select county">
+                <option value="">All Liberia</option>
+                <option value="Montserrado">Montserrado</option>
+                <option value="Margibi">Margibi</option>
+                <option value="Grand Bassa">Grand Bassa</option>
+                <option value="Nimba">Nimba</option>
+                <option value="Bong">Bong</option>
+                <option value="Lofa">Lofa</option>
+                <option value="Grand Cape Mount">Grand Cape Mount</option>
+                <option value="Bomi">Bomi</option>
+                <option value="Gbarpolu">Gbarpolu</option>
+                <option value="Grand Gedeh">Grand Gedeh</option>
+                <option value="Grand Kru">Grand Kru</option>
+                <option value="Maryland">Maryland</option>
+                <option value="River Cess">River Cess</option>
+                <option value="River Gee">River Gee</option>
+                <option value="Sinoe">Sinoe</option>
+              </select>
+            </div>
+            <div class="search-field keyword-field">
+              <span aria-hidden="true">🔎</span>
+              <input type="text" id="searchInput" placeholder="Search products, cars, phones, services..." autocomplete="off">
+            </div>
+            <button class="hero-search-btn" id="applyFiltersBtn" type="button">Search</button>
+          </div>
+
+          <div class="advanced-filter-row">
+            <select id="categoryFilter" aria-label="Select category">
+              <option value="">All Categories</option>
+              <option value="Phones">Phones &amp; Tablets</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Vehicles">Vehicles</option>
+              <option value="Property">Property</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Jobs">Jobs</option>
+              <option value="Services">Services</option>
+              <option value="Home & Appliances">Home &amp; Appliances</option>
+              <option value="Beauty & Personal Care">Beauty &amp; Personal Care</option>
+              <option value="Repair & Construction">Repair &amp; Construction</option>
+              <option value="Commercial Equipment & Tools">Commercial Equipment &amp; Tools</option>
+              <option value="Agriculture & Farming">Agriculture &amp; Farming</option>
+              <option value="Animals & Pets">Animals &amp; Pets</option>
+              <option value="Babies & Kids">Babies &amp; Kids</option>
+              <option value="Sports & Leisure">Sports &amp; Leisure</option>
+            </select>
+            <select id="priceFilter" aria-label="Select price range">
+              <option value="">Any Price</option>
+              <option value="100">Under US$100</option>
+              <option value="500">Under US$500</option>
+              <option value="1000">Under US$1,000</option>
+              <option value="over1000">Over US$1,000</option>
+            </select>
+            <select id="conditionFilter" aria-label="Select condition">
+              <option value="">Any Condition</option>
+              <option value="Brand New">Brand New</option>
+              <option value="Used">Used</option>
+              <option value="Foreign Used">Foreign Used</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-links-section">
+      <div class="site-shell quick-links-grid">
+        <a href="sell.html" id="heroSellBtn" class="quick-link-card">
+          <span class="quick-link-icon">📸</span>
+          <span><strong>How To Sell</strong><small>Post your first listing</small></span>
+        </a>
+        <a href="safety.html" class="quick-link-card">
+          <span class="quick-link-icon">🛡️</span>
+          <span><strong>Buy Safely</strong><small>Smart marketplace tips</small></span>
+        </a>
+        <a href="#services" class="quick-link-card">
+          <span class="quick-link-icon">🧰</span>
+          <span><strong>Find A Service</strong><small>Hire trusted professionals</small></span>
+        </a>
+        <a href="category-jobs.html" class="quick-link-card">
+          <span class="quick-link-icon">💼</span>
+          <span><strong>Find A Job</strong><small>Explore new opportunities</small></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="browse-layout site-shell" id="products">
+      <aside class="category-sidebar">
+        <div class="sidebar-title-row">
+          <h2>Browse Categories</h2>
+          <span>Explore</span>
+        </div>
+        <ul class="category-sidebar-list">
+          <li><a href="category-vehicles.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">🚗</span><span>Vehicles</span></span><span class="category-sidebar-count" data-category="Vehicles">0</span></a></li>
+          <li><a href="category-property.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">🏠</span><span>Property</span></span><span class="category-sidebar-count" data-category="Property">0</span></a></li>
+          <li><a href="category-phones.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">📱</span><span>Phones &amp; Tablets</span></span><span class="category-sidebar-count" data-category="Phones">0</span></a></li>
+          <li><a href="category-electronics.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">💻</span><span>Electronics</span></span><span class="category-sidebar-count" data-category="Electronics">0</span></a></li>
+          <li><a href="#products" data-filter-category="Home & Appliances" class="category-sidebar-link"><span><span class="category-sidebar-icon">🛋️</span><span>Home &amp; Appliances</span></span><span class="category-sidebar-count" data-category="Home & Appliances">0</span></a></li>
+          <li><a href="category-fashion.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">👗</span><span>Fashion</span></span><span class="category-sidebar-count" data-category="Fashion">0</span></a></li>
+          <li><a href="#products" data-filter-category="Beauty & Personal Care" class="category-sidebar-link"><span><span class="category-sidebar-icon">💄</span><span>Beauty &amp; Personal Care</span></span><span class="category-sidebar-count" data-category="Beauty & Personal Care">0</span></a></li>
+          <li><a href="#products" data-filter-category="Services" class="category-sidebar-link"><span><span class="category-sidebar-icon">🧰</span><span>Services</span></span><span class="category-sidebar-count" data-category="Services">0</span></a></li>
+          <li><a href="#products" data-filter-category="Repair & Construction" class="category-sidebar-link"><span><span class="category-sidebar-icon">👷</span><span>Repair &amp; Construction</span></span><span class="category-sidebar-count" data-category="Repair & Construction">0</span></a></li>
+          <li><a href="#products" data-filter-category="Commercial Equipment & Tools" class="category-sidebar-link"><span><span class="category-sidebar-icon">🛠️</span><span>Equipment &amp; Tools</span></span><span class="category-sidebar-count" data-category="Commercial Equipment & Tools">0</span></a></li>
+          <li><a href="#products" data-filter-category="Agriculture & Farming" class="category-sidebar-link"><span><span class="category-sidebar-icon">🌾</span><span>Agriculture &amp; Farming</span></span><span class="category-sidebar-count" data-category="Agriculture & Farming">0</span></a></li>
+          <li><a href="#products" data-filter-category="Animals & Pets" class="category-sidebar-link"><span><span class="category-sidebar-icon">🐕</span><span>Animals &amp; Pets</span></span><span class="category-sidebar-count" data-category="Animals & Pets">0</span></a></li>
+          <li><a href="category-jobs.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">💼</span><span>Jobs</span></span><span class="category-sidebar-count" data-category="Jobs">0</span></a></li>
+        </ul>
+      </aside>
+
+      <main class="browse-main">
+        <div class="section-heading-row">
+          <div>
+            <span class="section-kicker">Fresh On LoyaltyMarket</span>
+            <h2>Latest Listings</h2>
+            <p class="results-count-line" id="resultsCountLine"></p>
+          </div>
+          <a href="search.html" class="view-all-link">View All Listings →</a>
+        </div>
+        <div class="product-grid" id="productGrid"><p>Loading products...</p></div>
+      </main>
+    </section>
+
+    <section class="services-showcase" id="services">
+      <div class="site-shell">
+        <div class="section-heading-row services-heading">
+          <div>
+            <span class="section-kicker">More Than Products</span>
+            <h2>Find Trusted Services Across Liberia</h2>
+            <p>Connect with professionals and local businesses ready to help.</p>
+          </div>
+          <a href="#products" data-filter-category="Services" class="view-all-link">Browse All Services →</a>
+        </div>
+        <div class="services-grid">
+          <a href="#products" data-filter-category="Services" class="service-card"><span>🔧</span><h3>Mechanics</h3><p>Repairs, diagnostics and vehicle maintenance.</p></a>
+          <a href="#products" data-filter-category="Repair & Construction" class="service-card"><span>🏗️</span><h3>Builders &amp; Repairs</h3><p>Construction, plumbing, electrical and carpentry.</p></a>
+          <a href="#products" data-filter-category="Services" class="service-card"><span>📷</span><h3>Creative Services</h3><p>Photography, video, design and social media.</p></a>
+          <a href="#products" data-filter-category="Services" class="service-card"><span>🚚</span><h3>Delivery &amp; Moving</h3><p>Transport, deliveries and relocation support.</p></a>
+          <a href="#products" data-filter-category="Beauty & Personal Care" class="service-card"><span>💇🏾</span><h3>Beauty &amp; Personal Care</h3><p>Barbers, hairdressers, makeup artists and more.</p></a>
+          <a href="#products" data-filter-category="Services" class="service-card"><span>💼</span><h3>Business Services</h3><p>Websites, consulting, printing and accounting.</p></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-section">
+      <div class="site-shell trust-grid">
+        <div class="trust-copy">
+          <span class="section-kicker">Trade With Confidence</span>
+          <h2>A Marketplace Built For Liberia</h2>
+          <p>LoyaltyMarket brings buyers, sellers and service providers together with verification, reviews and safer marketplace tools.</p>
+          <a href="register.html" class="primary-cta">Create Free Account</a>
+        </div>
+        <div class="trust-points">
+          <article><span>✓</span><div><h3>Verified Sellers &amp; Businesses</h3><p>Look for verification badges before making a deal.</p></div></article>
+          <article><span>✓</span><div><h3>USD &amp; Liberian Dollar Prices</h3><p>Compare listings in the currencies people use every day.</p></div></article>
+          <article><span>✓</span><div><h3>Direct Buyer–Seller Messaging</h3><p>Ask questions and agree on the details before meeting.</p></div></article>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer marketplace-footer">
+    <div class="footer-skyline" aria-hidden="true"></div>
+    <div class="site-shell footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo-link footer-logo">
+          <img src="icons/icon-512.png" alt="">
+          <span class="logo-text"><span class="lr-tag">LR</span><span data-marketplace-name>LoyaltyMarket</span></span>
+        </a>
+        <p>Buy, sell and discover trusted services across Liberia.</p>
+        <p id="footerSupport" class="footer-support"></p>
+      </div>
+      <div><h3>Marketplace</h3><a href="index.html#products">Browse Listings</a><a href="sell.html">Post An Ad</a><a href="business-profile.html">Business Accounts</a><a href="category-jobs.html">Jobs</a></div>
+      <div><h3>Support</h3><a href="safety.html">Safety Tips</a><a href="contact.html">Contact Us</a><a href="faq.html">Help Center</a><a href="report.html">Report A Problem</a></div>
+      <div><h3>Legal</h3><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a><a href="prohibited-items.html">Prohibited Items</a><a href="community-rules.html">Community Rules</a></div>
+      <div><h3>Follow LoyaltyMarket</h3><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">YouTube</a><a href="#">TikTok</a></div>
+    </div>
+    <div class="site-shell footer-bottom"><p>&copy; 2026 <span data-marketplace-name>LoyaltyMarket</span>. All Rights Reserved.</p><p>Made For Liberia 🇱🇷</p></div>
+  </footer>
 <script src="script.js"></script>
 <script type="module">
 import { db, auth } from "./firebase.js";
@@ -73,10 +263,11 @@ async function getSellerName(sellerId){if(!sellerId)return"";if(sellerNameCache[
 function renderProducts(products){productGrid.innerHTML="";resultsCountLine.textContent=products.length===1?"Showing 1 product":`Showing ${products.length} products`;if(!products.length){productGrid.innerHTML='<div style="background:white;padding:30px;border-radius:14px"><h3>No products found</h3><p style="margin-top:8px;color:#64748b">Try adjusting your search or filters.</p></div>';return}const rate=Number(marketplaceSettings.usdToLrdRate)||180;products.forEach(({id,data:product})=>{const image=product.imageUrl||"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",title=product.title||"Untitled Product",priceUsd=Number(product.priceUsd||0),savedLrd=Number(product.priceLrd),priceLrd=Number.isFinite(savedLrd)&&savedLrd>0?savedLrd:Math.round(priceUsd*rate),city=product.city||"Liberia",county=product.county||"",condition=product.condition||"Used",featured=product.featured===true;const link=document.createElement("a");link.href="product-detail.html?id="+encodeURIComponent(id);link.style.textDecoration="none";link.style.color="inherit";link.innerHTML=`<div class="product-card"><span class="badge ${featured?"badge-featured":""}">${featured?"⭐ Featured":"New"}</span><button class="heart" type="button" data-product-id="${safeText(id)}">♡</button><div class="product-image"><img src="${safeText(image)}" alt="${safeText(title)}" loading="lazy"></div><h3>${safeText(title)}</h3><p class="price">US$${safeText(formatMoney(priceUsd))} | L$${safeText(formatMoney(priceLrd))}</p><p class="location">📍 ${safeText(city)}${county?`, ${safeText(county)}`:""}</p><p class="condition">${safeText(condition)}</p></div>`;productGrid.appendChild(link)});window.initWishlistButtons?.()}
 async function applyFiltersAndSearch(){const searchTerm=searchInput.value.trim().toLowerCase(),selectedCounty=countyFilter.value,selectedCategory=categoryFilter.value,selectedPrice=priceFilter.value,selectedCondition=conditionFilter.value,results=[];for(const item of allProducts){const product=item.data,title=String(product.title||"").toLowerCase(),description=String(product.description||"").toLowerCase(),county=String(product.county||""),city=String(product.city||"").toLowerCase(),category=String(product.category||""),condition=String(product.condition||""),price=Number(product.priceUsd||0);let matchesSearch=true;if(searchTerm){const sellerName=(await getSellerName(product.sellerId)).toLowerCase();matchesSearch=title.includes(searchTerm)||description.includes(searchTerm)||county.toLowerCase().includes(searchTerm)||city.includes(searchTerm)||category.toLowerCase().includes(searchTerm)||sellerName.includes(searchTerm)}const matchesCounty=!selectedCounty||county===selectedCounty,matchesCategory=!selectedCategory||category===selectedCategory,matchesCondition=!selectedCondition||condition===selectedCondition;let matchesPrice=true;if(selectedPrice==="100")matchesPrice=price<100;else if(selectedPrice==="500")matchesPrice=price<500;else if(selectedPrice==="1000")matchesPrice=price<1000;else if(selectedPrice==="over1000")matchesPrice=price>=1000;if(matchesSearch&&matchesCounty&&matchesCategory&&matchesCondition&&matchesPrice)results.push(item)}results.sort((a,b)=>(b.data.featured===true?1:0)-(a.data.featured===true?1:0));renderProducts(results)}
 async function loadProducts(){try{const snapshot=await getDocs(query(collection(db,"products"),orderBy("createdAt","desc")));allProducts=snapshot.docs.map(d=>({id:d.id,data:d.data()})).filter(item=>!HIDDEN_STATUSES.includes(item.data.status));await applyFiltersAndSearch();loadCategoryCounts()}catch(error){console.error(error);productGrid.innerHTML="<p>Could not load products. Please try again.</p>"}}
-function loadCategoryCounts(){const counts={Phones:0,Electronics:0,Vehicles:0,Property:0,Fashion:0,Jobs:0};allProducts.forEach(({data})=>{if(!HIDDEN_STATUSES.includes(data.status)&&Object.hasOwn(counts,data.category))counts[data.category]++});categoryCountEls.forEach(el=>el.textContent=String(counts[el.dataset.category]||0))}
+function loadCategoryCounts(){const counts={Phones:0,Electronics:0,Vehicles:0,Property:0,Fashion:0,Jobs:0,Services:0,"Home & Appliances":0,"Beauty & Personal Care":0,"Repair & Construction":0,"Commercial Equipment & Tools":0,"Agriculture & Farming":0,"Animals & Pets":0,"Babies & Kids":0,"Sports & Leisure":0};allProducts.forEach(({data})=>{if(!HIDDEN_STATUSES.includes(data.status)&&Object.hasOwn(counts,data.category))counts[data.category]++});categoryCountEls.forEach(el=>el.textContent=String(counts[el.dataset.category]||0))}
 function listenForUnreadMessages(userId){unsubscribeUnreadMessages?.();const unreadQuery=query(collection(db,"messages"),where("receiverId","==",userId),where("read","==",false));unsubscribeUnreadMessages=onSnapshot(unreadQuery,snapshot=>{const count=snapshot.size;if(count){unreadBadge.textContent=count>9?"9+":String(count);unreadBadge.classList.add("has-unread")}else unreadBadge.classList.remove("has-unread")},error=>console.error(error))}
 onAuthStateChanged(auth,user=>{if(user){loginBtn.style.display="none";registerBtn.style.display="none";dashboardBtn.style.display="inline-block";messagesBtn.style.display="inline-block";listenForUnreadMessages(user.uid)}else{loginBtn.style.display="inline-block";registerBtn.style.display=marketplaceSettings.allowNewRegistrations===false?"none":"inline-block";dashboardBtn.style.display="none";messagesBtn.style.display="none";unreadBadge.classList.remove("has-unread");unsubscribeUnreadMessages?.();unsubscribeUnreadMessages=null}})
 let timer=null;searchInput.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(applyFiltersAndSearch,250)});[countyFilter,categoryFilter,priceFilter,conditionFilter].forEach(el=>el.addEventListener("change",applyFiltersAndSearch));applyFiltersBtn.addEventListener("click",event=>{event.preventDefault();applyFiltersAndSearch()});registerBtn.addEventListener("click",event=>{if(marketplaceSettings.allowNewRegistrations===false){event.preventDefault();alert("New registrations are temporarily paused.")}});[navSellBtn,heroSellBtn].forEach(link=>link.addEventListener("click",event=>{if(marketplaceSettings.allowNewListings===false){event.preventDefault();alert("New listings are temporarily paused.")}}));
+document.querySelectorAll("[data-filter-category]").forEach(link=>link.addEventListener("click",event=>{event.preventDefault();const selected=link.dataset.filterCategory||"";categoryFilter.value=selected;document.getElementById("products")?.scrollIntoView({behavior:"smooth"});applyFiltersAndSearch()}));
 async function startHomepage(){await loadMarketplaceSettings();if(marketplaceSettings.maintenanceMode!==true)await loadProducts()}startHomepage();
 </script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").then(()=>console.log("Service worker registered")).catch(error=>console.log("Service worker registration failed:",error))}</script>
