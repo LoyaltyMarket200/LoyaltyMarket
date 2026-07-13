@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - LoyaltyMarket</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <meta name="theme-color" content="#1e3a8a">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(249, 115, 22, 0.08), transparent 26%),
+        #f8fafc;
+      color: #0f172a;
+    }
+
+    .welcome-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .welcome-visual {
+      position: relative;
+      overflow: hidden;
+      padding: 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #fff;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255,255,255,.18), transparent 20%),
+        radial-gradient(circle at 78% 78%, rgba(255,255,255,.12), transparent 18%),
+        linear-gradient(145deg, #0f2d67, #1d4ed8 64%, #0ea5e9);
+    }
+
+    .visual-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .visual-top img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      border-radius: 14px;
+      background: #fff;
+      padding: 5px;
+    }
+
+    .visual-brand {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .visual-brand span {
+      color: #f59e0b;
+    }
+
+    .visual-center {
+      max-width: 620px;
+      margin: auto 0;
+    }
+
+    .visual-kicker {
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      margin-bottom: 14px;
+    }
+
+    .visual-center h1 {
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 1.03;
+      margin-bottom: 18px;
+    }
+
+    .visual-center p {
+      max-width: 540px;
+      color: #dbeafe;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .visual-items {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .visual-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 16px;
+      background: rgba(255,255,255,.09);
+      backdrop-filter: blur(8px);
+    }
+
+    .visual-item span {
+      font-size: 28px;
+    }
+
+    .visual-item strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 15px;
+    }
+
+    .visual-item p {
+      font-size: 12px;
+      color: #dbeafe;
+      line-height: 1.4;
+    }
+
+    .visual-footer {
+      color: #bfdbfe;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .welcome-content {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 44px 24px;
+      background: rgba(255,255,255,.88);
+    }
+
+    .skip-link {
+      position: absolute;
+      top: 28px;
+      right: 32px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .skip-link:hover {
+      color: #1e3a8a;
+    }
+
+    .welcome-card {
+      width: min(560px, 100%);
+      padding: 38px;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.10);
+    }
+
+    .mobile-logo {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .mobile-logo img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
+    .mobile-logo strong {
+      font-size: 20px;
+      color: #0f2d67;
+    }
+
+    .welcome-card h2 {
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.1;
+      margin-bottom: 12px;
+      color: #0f172a;
+    }
+
+    .welcome-subtitle {
+      color: #64748b;
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .choice-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      border: 2px solid #e2e8f0;
+      border-radius: 15px;
+      background: #fff;
+      color: #0f172a;
+      text-align: left;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .choice-button:hover {
+      transform: translateY(-2px);
+      border-color: #2563eb;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.10);
+    }
+
+    .choice-button .choice-icon {
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #eff6ff;
+      font-size: 27px;
+    }
+
+    .choice-button.sell .choice-icon {
+      background: #fff7ed;
+    }
+
+    .choice-button.service .choice-icon {
+      background: #ecfdf5;
+    }
+
+    .choice-copy {
+      flex: 1;
+    }
+
+    .choice-copy strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    .choice-copy span {
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .choice-arrow {
+      color: #94a3b8;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .terms {
+      margin-top: 24px;
+      color: #94a3b8;
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .terms a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .terms a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      .welcome-page {
+        grid-template-columns: 1fr;
+      }
+
+      .welcome-visual {
+        display: none;
+      }
+
+      .welcome-content {
+        min-height: 100vh;
+      }
+
+      .mobile-logo {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .welcome-content {
+        padding: 80px 16px 28px;
+      }
+
+      .skip-link {
+        top: 22px;
+        right: 20px;
+      }
+
+      .welcome-card {
+        padding: 26px 20px;
+        border-radius: 18px;
+      }
+
+      .welcome-card h2 {
+        font-size: 34px;
+      }
+
+      .choice-button {
+        padding: 15px;
+      }
+
+      .choice-button .choice-icon {
+        width: 46px;
+        height: 46px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="welcome-page">
+    <section class="welcome-visual">
+      <div class="visual-top">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+        <div class="visual-brand"><span>LR</span> LoyaltyMarket</div>
+      </div>
+
+      <div class="visual-center">
+        <p class="visual-kicker">MADE FOR LIBERIA</p>
+        <h1>You Get Market, We Get Buyer.</h1>
+        <p>
+          Buy, sell, find services, and connect with trusted people and businesses across Liberia.
+        </p>
+
+        <div class="visual-items">
+          <div class="visual-item">
+            <span>🏠</span>
+            <div>
+              <strong>Property</strong>
+              <p>Find homes, land, rentals, and commercial spaces.</p>
+            </div>
+          </div>
+
+          <div class="visual-item">
+            <span>🚗</span>
+            <div>
+              <strong>Vehicles</strong>
+              <p>Browse cars, bikes, spare parts, and services.</p>
+            </div>
+          </div>
+
+          <div class="visual-item">
+            <span>📱</span>
+            <div>
+              <strong>Products</strong>
+              <p>Discover phones, electronics, fashion, and more.</p>
+            </div>
+          </div>
+
+          <div class="visual-item">
+            <span>🛠️</span>
+            <div>
+              <strong>Services</strong>
+              <p>Hire skilled people and trusted local businesses.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="visual-footer">Liberia's trusted online marketplace.</p>
+    </section>
+
+    <section class="welcome-content">
+      <button type="button" class="skip-link" id="skipBtn">Skip</button>
+
+      <div class="welcome-card">
+        <div class="mobile-logo">
+          <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+          <strong>LR LoyaltyMarket</strong>
+        </div>
+
+        <h2>What You Come For Today?</h2>
+        <p class="welcome-subtitle">
+          Choose what you want to do so we can take you to the right place.
+        </p>
+
+        <div class="choice-list">
+          <button type="button" class="choice-button buy" id="buyBtn">
+            <span class="choice-icon">🛍️</span>
+            <span class="choice-copy">
+              <strong>I Come To Buy</strong>
+              <span>Browse products, vehicles, property, jobs, and services.</span>
+            </span>
+            <span class="choice-arrow">›</span>
+          </button>
+
+          <button type="button" class="choice-button sell" id="sellBtn">
+            <span class="choice-icon">💰</span>
+            <span class="choice-copy">
+              <strong>I Come To Sell</strong>
+              <span>Post a product and connect with buyers across Liberia.</span>
+            </span>
+            <span class="choice-arrow">›</span>
+          </button>
+
+          <button type="button" class="choice-button service" id="serviceBtn">
+            <span class="choice-icon">🛠️</span>
+            <span class="choice-copy">
+              <strong>I Come To Offer Service</strong>
+              <span>Promote your skills, profession, or local business.</span>
+            </span>
+            <span class="choice-arrow">›</span>
+          </button>
+        </div>
+
+        <p class="terms">
+          By continuing, you agree to the
+          <a href="terms.html">Terms and Conditions</a>
+          and
+          <a href="privacy.html">Privacy Policy</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const WELCOME_KEY = "loyaltyMarketWelcomeCompleted";
+
+    function completeWelcome(destination, choice) {
+      localStorage.setItem(WELCOME_KEY, "true");
+      localStorage.setItem("loyaltyMarketVisitorChoice", choice);
+      window.location.href = destination;
+    }
+
+    document.getElementById("buyBtn").addEventListener("click", () => {
+      completeWelcome("index.html", "buy");
+    });
+
+    document.getElementById("sellBtn").addEventListener("click", () => {
+      completeWelcome("sell.html?type=product", "sell");
+    });
+
+    document.getElementById("serviceBtn").addEventListener("click", () => {
+      completeWelcome("sell.html?type=service", "service");
+    });
+
+    document.getElementById("skipBtn").addEventListener("click", () => {
+      completeWelcome("index.html", "skip");
+    });
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch((error) => console.log("Service worker registration failed:", error));
+    }
+  </script>
+</body>
+</html>
