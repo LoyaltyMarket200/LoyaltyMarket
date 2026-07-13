@@ -280,6 +280,8 @@
     .badge-verified { background: #dcfce7; color: #166534; }
     .badge-unverified { background: #e2e8f0; color: #475569; }
     .badge-suspended { background: #fee2e2; color: #b91c1c; }
+    .badge-business { background: #dbeafe; color: #1e40af; }
+    .badge-business-verified { background: #fef3c7; color: #92400e; }
     .report-reason { background: #fee2e2; color: #b91c1c; }
     .status-pending { background: #fef3c7; color: #92400e; }
     .status-reviewed { background: #dbeafe; color: #1e40af; }
@@ -317,10 +319,12 @@
     }
 
     .btn-reviewed,
-    .btn-verify { background: #2563eb; color: white; }
+    .btn-verify,
+    .btn-business-verify { background: #2563eb; color: white; }
 
     .btn-dismiss,
-    .btn-unverify { background: #64748b; color: white; }
+    .btn-unverify,
+    .btn-business-unverify { background: #64748b; color: white; }
 
     .btn-suspend,
     .btn-reject-boost,
@@ -767,6 +771,7 @@
         <div class="stat-card"><span class="stat-card-icon">👥</span><div class="stat-card-label">Total Users</div><div class="stat-card-value" id="statTotalUsers">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">🆕</span><div class="stat-card-label">New Users Today</div><div class="stat-card-value" id="statNewUsersToday">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">⭐</span><div class="stat-card-label">Verified Sellers</div><div class="stat-card-value" id="statVerifiedSellers">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon">🏢</span><div class="stat-card-label">Verified Businesses</div><div class="stat-card-value" id="statVerifiedBusinesses">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">📋</span><div class="stat-card-label">Total Listings</div><div class="stat-card-value" id="statTotalListings">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">📈</span><div class="stat-card-label">New Listings Today</div><div class="stat-card-value" id="statNewListingsToday">—</div></div>
         <div class="stat-card"><span class="stat-card-icon">🛡️</span><div class="stat-card-label">Pending Review</div><div class="stat-card-value" id="statPendingScamReview">—</div></div>
@@ -1160,6 +1165,9 @@
 
     function updateStatistics(products, orders) {
       const verifiedUsers = allUsers.filter((user) => user.verified === true);
+      const verifiedBusinesses = allUsers.filter(
+        (user) => (user.accountType || "personal") === "business" && user.businessVerified === true
+      );
       const newUsersToday = allUsers.filter((user) => wasCreatedToday(user.createdAt));
       const newListingsToday = products.filter((product) => wasCreatedToday(product.createdAt));
       const pendingReports = allReports.filter((report) => (report.status || "pending") === "pending");
@@ -1175,6 +1183,7 @@
       document.getElementById("statTotalUsers").textContent = allUsers.length;
       document.getElementById("statNewUsersToday").textContent = newUsersToday.length;
       document.getElementById("statVerifiedSellers").textContent = verifiedUsers.length;
+      document.getElementById("statVerifiedBusinesses").textContent = verifiedBusinesses.length;
       document.getElementById("statTotalListings").textContent = products.length;
       document.getElementById("statNewListingsToday").textContent = newListingsToday.length;
       document.getElementById("statPendingScamReview").textContent = pendingScamReview.length;
@@ -1430,7 +1439,14 @@
       const filteredUsers = allUsers.filter((user) => {
         const name = String(user.name || "").toLowerCase();
         const email = String(user.email || "").toLowerCase();
-        return searchText === "" || name.includes(searchText) || email.includes(searchText);
+        const businessName = String(user.businessName || "").toLowerCase();
+
+        return (
+          searchText === "" ||
+          name.includes(searchText) ||
+          email.includes(searchText) ||
+          businessName.includes(searchText)
+        );
       });
 
       if (filteredUsers.length === 0) {
@@ -1441,27 +1457,72 @@
       usersContainer.innerHTML = filteredUsers.map((user) => {
         const isVerified = user.verified === true;
         const isSuspended = user.suspended === true;
+        const accountType = user.accountType || "personal";
+        const isBusiness = accountType === "business";
+        const isBusinessVerified = user.businessVerified === true;
+
+        const displayName = isBusiness && user.businessName
+          ? user.businessName
+          : (user.name || "Unnamed User");
+
+        const ownerLine = isBusiness && user.name
+          ? `<br>Account owner: ${safeText(user.name)}`
+          : "";
+
+        const businessDetails = isBusiness
+          ? `
+              <br>
+              Business category: ${safeText(user.businessCategory || "Not provided")}
+              <br>
+              Business location: ${safeText(user.businessCity || user.city || "Not provided")}, ${safeText(user.businessCounty || user.county || "Not provided")}
+              <br>
+              Business phone: ${safeText(user.businessPhone || user.phone || "Not provided")}
+              ${user.businessRegistrationNumber
+                ? `<br>Registration number: ${safeText(user.businessRegistrationNumber)}`
+                : ""}
+            `
+          : "";
 
         return `
           <article class="user-card">
             <div class="user-top">
               <div>
                 <div class="user-name">
-                  ${safeText(user.name || "Unnamed User")}
+                  ${safeText(displayName)}
+
+                  ${isBusiness
+                    ? '<span class="user-badge badge-business">🏢 Business Account</span>'
+                    : '<span class="user-badge badge-unverified">Personal Account</span>'}
+
                   <span class="user-badge ${isVerified ? "badge-verified" : "badge-unverified"}">
-                    ${isVerified ? "Verified" : "Unverified"}
+                    ${isVerified ? "Verified Seller" : "Unverified Seller"}
                   </span>
-                  ${isSuspended ? '<span class="user-badge badge-suspended">Suspended</span>' : ""}
+
+                  ${isBusiness
+                    ? `<span class="user-badge ${isBusinessVerified ? "badge-business-verified" : "badge-unverified"}">
+                        ${isBusinessVerified ? "✓ Verified Business" : "Business Not Verified"}
+                      </span>`
+                    : ""}
+
+                  ${isSuspended
+                    ? '<span class="user-badge badge-suspended">Suspended</span>'
+                    : ""}
                 </div>
 
-                <div class="user-email">${safeText(user.email || "No email available")}</div>
+                <div class="user-email">
+                  ${safeText(user.email || "No email available")}
+                  ${ownerLine}
+                </div>
               </div>
             </div>
 
             <div class="user-meta">
+              Account type: ${safeText(accountType)}
+              <br>
               Joined: ${formatDate(user.createdAt)}
               <br>
               User ID: ${safeText(user.id)}
+              ${businessDetails}
             </div>
 
             <div class="user-actions">
@@ -1470,8 +1531,18 @@
                 data-user-id="${safeText(user.id)}"
                 data-user-action="${isVerified ? "unverify" : "verify"}"
               >
-                ${isVerified ? "Remove Verification" : "Verify Seller"}
+                ${isVerified ? "Remove Seller Verification" : "Verify Seller"}
               </button>
+
+              ${isBusiness ? `
+                <button
+                  class="${isBusinessVerified ? "btn-business-unverify" : "btn-business-verify"}"
+                  data-user-id="${safeText(user.id)}"
+                  data-user-action="${isBusinessVerified ? "unverifyBusiness" : "verifyBusiness"}"
+                >
+                  ${isBusinessVerified ? "Remove Business Verification" : "Verify Business"}
+                </button>
+              ` : ""}
 
               <button
                 class="${isSuspended ? "btn-unsuspend" : "btn-suspend"}"
@@ -1509,8 +1580,44 @@
       }
 
       try {
-        if (action === "verify") await updateUser(userId, { verified: true });
-        if (action === "unverify") await updateUser(userId, { verified: false });
+        if (action === "verify") {
+          await updateUser(userId, { verified: true });
+          showSuccess("Seller verification approved.");
+        }
+
+        if (action === "unverify") {
+          await updateUser(userId, { verified: false });
+          showSuccess("Seller verification removed.");
+        }
+
+        if (action === "verifyBusiness") {
+          if ((selectedUser.accountType || "personal") !== "business") {
+            alert("This user is not registered as a business account.");
+            return;
+          }
+
+          if (!confirm(`Verify ${selectedUser.businessName || selectedUser.name || "this business"}?`)) return;
+
+          await updateUser(userId, {
+            businessVerified: true,
+            businessVerifiedAt: Timestamp.now(),
+            businessVerifiedBy: currentAdminUser?.email || "admin"
+          });
+
+          showSuccess("Business verification approved.");
+        }
+
+        if (action === "unverifyBusiness") {
+          if (!confirm(`Remove business verification from ${selectedUser.businessName || selectedUser.name || "this business"}?`)) return;
+
+          await updateUser(userId, {
+            businessVerified: false,
+            businessVerificationRemovedAt: Timestamp.now(),
+            businessVerificationRemovedBy: currentAdminUser?.email || "admin"
+          });
+
+          showSuccess("Business verification removed.");
+        }
 
         if (action === "suspend") {
           if (!confirm(`Suspend ${selectedUser.name || selectedUser.email || "this user"}?`)) return;
