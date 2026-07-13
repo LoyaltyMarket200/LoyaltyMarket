@@ -8,83 +8,642 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f7fb;
+      color: #0f172a;
+    }
+
+    .login-navbar {
+      min-height: 78px;
+      height: auto;
+      padding: 12px max(24px, 5vw);
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .login-navbar .logo-link img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .login-navbar .logo-text {
+      color: #0f2d67;
+      font-size: 21px;
+    }
+
+    .login-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .login-nav-link,
+    .login-register-link {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .login-nav-link {
+      color: #334155;
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    .login-nav-link:hover {
+      color: #1e3a8a;
+      border-color: #bfdbfe;
+      background: #eff6ff;
+    }
+
+    .login-register-link {
+      color: #ffffff;
+      background: #f97316;
+      box-shadow: 0 8px 18px rgba(249, 115, 22, 0.2);
+    }
+
+    .login-register-link:hover {
+      background: #ea580c;
+    }
+
+    .login-page {
+      min-height: calc(100vh - 78px);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .login-visual {
+      position: relative;
+      overflow: hidden;
+      padding: 52px;
+      color: #ffffff;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.16), transparent 22%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,.10), transparent 20%),
+        linear-gradient(145deg, #0f2d67, #1d4ed8 65%, #0ea5e9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-kicker {
+      margin-bottom: 12px;
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .18em;
+    }
+
+    .login-visual h1 {
+      margin: 0 0 16px;
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 1.03;
+      max-width: 640px;
+    }
+
+    .login-visual > p {
+      max-width: 560px;
+      color: #dbeafe;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .login-benefits {
+      display: grid;
+      gap: 14px;
+      margin-top: 30px;
+      max-width: 620px;
+    }
+
+    .login-benefit {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 15px;
+      background: rgba(255,255,255,.09);
+      backdrop-filter: blur(8px);
+    }
+
+    .login-benefit span {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #22c55e;
+      font-weight: 900;
+    }
+
+    .login-benefit strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .login-benefit p {
+      margin: 0;
+      color: #dbeafe;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .login-form-side {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 42px 24px;
+      background:
+        radial-gradient(circle at top right, rgba(249,115,22,.06), transparent 24%),
+        #f8fafc;
+    }
+
+    .login-card {
+      width: min(500px, 100%);
+      padding: 38px;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.10);
+    }
+
+    .login-card-badge {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1e3a8a;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .login-card h2 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      color: #0f172a;
+    }
+
+    .login-subtitle {
+      margin-bottom: 26px;
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-form label {
+      margin: 14px 0 7px;
+      color: #1f2937;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      min-height: 50px;
+      padding: 13px 46px 13px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 11px;
+      font-size: 15px;
+      background: #ffffff;
+    }
+
+    .input-wrap input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+    }
+
+    .input-icon {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 18px;
+    }
+
+    .auth-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin: 18px 0;
+      font-size: 13px;
+    }
+
+    .remember-me {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 7px;
+      margin: 0 !important;
+      color: #475569 !important;
+      font-weight: 600 !important;
+    }
+
+    .remember-me input {
+      width: auto;
+      accent-color: #2563eb;
+    }
+
+    .forgot-link {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .auth-btn {
+      width: 100%;
+      min-height: 52px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, .22);
+    }
+
+    .auth-btn:hover {
+      background: linear-gradient(135deg, #172554, #1d4ed8);
+    }
+
+    .auth-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .login-message {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .login-message.error {
+      display: block;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .login-message.success {
+      display: block;
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .auth-switch {
+      margin-top: 22px;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .auth-switch a {
+      color: #f97316;
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    .auth-switch a:hover {
+      text-decoration: underline;
+    }
+
+    .login-trust {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .login-trust div {
+      text-align: center;
+      color: #64748b;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .login-trust span {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 20px;
+    }
+
+    .login-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      text-align: left;
+      padding: 30px max(24px, 6vw);
+    }
+
+    .login-footer h2 {
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 940px) {
+      .login-page {
+        grid-template-columns: 1fr;
+      }
+
+      .login-visual {
+        display: none;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .login-navbar {
+        align-items: stretch;
+      }
+
+      .login-nav-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .login-card {
+        padding: 28px 20px;
+        border-radius: 18px;
+      }
+
+      .login-footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-nav-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .login-form-side {
+        padding: 24px 14px;
+      }
+
+      .auth-options {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .login-trust {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <header class="navbar login-navbar">
+    <div class="logo">
+      <a href="index.html" class="logo-link">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket">
+        <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+      </a>
+    </div>
 
-<header class="navbar">
-  <div class="logo">
-    <h2>🇱🇷 LoyaltyMarket</h2>
-  </div>
+    <div class="login-nav-actions">
+      <a href="index.html" class="login-nav-link">Home</a>
+      <a href="register.html" class="login-register-link">Create Account</a>
+    </div>
+  </header>
 
-  <a href="index.html" class="login-btn">Home</a>
-  <a href="register.html" class="register-btn">Register</a>
-</header>
+  <main class="login-page">
+    <section class="login-visual">
+      <p class="login-kicker">WELCOME BACK</p>
+      <h1>You Get Market, We Get Buyer.</h1>
+      <p>
+        Sign in to manage your listings, messages, orders, wishlist, sales, and business profile.
+      </p>
 
-<section class="auth-section">
-  <div class="auth-card">
-    <h1>Welcome Back</h1>
-    <p class="auth-subtitle">Login to buy, sell, and manage your LoyaltyMarket account.</p>
+      <div class="login-benefits">
+        <div class="login-benefit">
+          <span>✓</span>
+          <div>
+            <strong>Manage Your Listings</strong>
+            <p>Edit, feature, boost, archive, or mark products as sold.</p>
+          </div>
+        </div>
 
-    <form class="auth-form" id="loginForm">
-      <label>Email Address</label>
-      <input type="email" id="email" placeholder="you@example.com" required>
+        <div class="login-benefit">
+          <span>✓</span>
+          <div>
+            <strong>Talk To Buyers And Sellers</strong>
+            <p>Continue conversations and follow up on marketplace deals.</p>
+          </div>
+        </div>
 
-      <label>Password</label>
-      <input type="password" id="password" placeholder="Enter your password" required>
-
-      <div class="auth-options">
-        <label class="remember-me">
-          <input type="checkbox">
-          Remember Me
-        </label>
-
-        <a href="#" class="forgot-link">Forgot Password?</a>
+        <div class="login-benefit">
+          <span>✓</span>
+          <div>
+            <strong>Grow Your Business</strong>
+            <p>Build trust with verification, reviews, and a business storefront.</p>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <button type="submit" class="auth-btn">Login</button>
-    </form>
+    <section class="login-form-side">
+      <div class="login-card">
+        <span class="login-card-badge">SECURE LOGIN</span>
+        <h2>Welcome Back</h2>
+        <p class="login-subtitle">
+          Login to buy, sell, and manage your LoyaltyMarket account.
+        </p>
 
-    <p class="auth-switch">
-      Don't Have An Account? <a href="register.html">Create One</a>
-    </p>
-  </div>
-</section>
+        <form class="auth-form" id="loginForm">
+          <label for="email">Email Address</label>
+          <div class="input-wrap">
+            <input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+            <span class="input-icon">✉️</span>
+          </div>
 
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password">
+            <span class="input-icon">🔒</span>
+          </div>
 
-<script type="module">
-import { auth } from "./firebase.js";
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+          <div class="auth-options">
+            <label class="remember-me">
+              <input type="checkbox" id="rememberMe">
+              Remember Me
+            </label>
 
-const loginForm = document.getElementById("loginForm");
+            <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot Password?</a>
+          </div>
 
-loginForm.addEventListener("submit", async function(event) {
-  event.preventDefault();
+          <button type="submit" class="auth-btn" id="loginBtn">Login</button>
+          <div id="loginMessage" class="login-message" role="status"></div>
+        </form>
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+        <p class="auth-switch">
+          Don't Have An Account? <a href="register.html">Create One</a>
+        </p>
 
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    alert("Login Successful!");
-    window.location.href = "dashboard.html";
-  } catch (error) {
-    alert(error.message);
-  }
-});
-</script>
+        <div class="login-trust">
+          <div><span>🛡️</span>Secure Account</div>
+          <div><span>💬</span>Direct Messaging</div>
+          <div><span>🇱🇷</span>Made For Liberia</div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
-</script>
+  <footer class="footer login-footer">
+    <div>
+      <h2>🇱🇷 LoyaltyMarket</h2>
+      <p>You Get Market, We Get Buyer.</p>
+    </div>
+    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  </footer>
 
+  <script type="module">
+    import { auth } from "./firebase.js";
+    import {
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const loginForm = document.getElementById("loginForm");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginMessage = document.getElementById("loginMessage");
+    const rememberMe = document.getElementById("rememberMe");
+    const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    function showMessage(message, type) {
+      loginMessage.textContent = message;
+      loginMessage.className = "login-message " + type;
+    }
+
+    function friendlyAuthError(code) {
+      const messages = {
+        "auth/invalid-credential": "The email or password is incorrect.",
+        "auth/user-not-found": "No account was found with that email.",
+        "auth/wrong-password": "The email or password is incorrect.",
+        "auth/invalid-email": "Please enter a valid email address.",
+        "auth/too-many-requests": "Too many attempts. Please wait and try again.",
+        "auth/network-request-failed": "Check your internet connection and try again."
+      };
+
+      return messages[code] || "Could not log in. Please check your details and try again.";
+    }
+
+    loginForm.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Logging In...";
+      loginMessage.className = "login-message";
+      loginMessage.textContent = "";
+
+      try {
+        const persistence = rememberMe.checked
+          ? browserLocalPersistence
+          : browserSessionPersistence;
+
+        await setPersistence(auth, persistence);
+        await signInWithEmailAndPassword(auth, email, password);
+
+        showMessage("Login successful. Opening your dashboard...", "success");
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 500);
+
+      } catch (error) {
+        showMessage(friendlyAuthError(error.code), "error");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
+      }
+    });
+
+    forgotPasswordLink.addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        showMessage("Enter your email address first, then click Forgot Password.", "error");
+        emailInput.focus();
+        return;
+      }
+
+      forgotPasswordLink.style.pointerEvents = "none";
+      forgotPasswordLink.textContent = "Sending...";
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showMessage("Password reset email sent. Check your inbox and spam folder.", "success");
+      } catch (error) {
+        showMessage(friendlyAuthError(error.code), "error");
+      } finally {
+        forgotPasswordLink.style.pointerEvents = "auto";
+        forgotPasswordLink.textContent = "Forgot Password?";
+      }
+    });
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch((error) => console.log("Service worker registration failed:", error));
+    }
+  </script>
 </body>
 </html>
