@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    if (localStorage.getItem("loyaltyMarketWelcomeCompleted") !== "true") {
+      window.location.replace("welcome.html");
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LoyaltyMarket - Liberia's Marketplace</title>
@@ -28,7 +33,7 @@
         <span class="logo-text"><span class="lr-tag">LR</span><span data-marketplace-name>LoyaltyMarket</span></span>
       </a>
 
-      <p class="navbar-tagline">YOU GET MARKET, WE GET BUYER.</p>
+      <p class="navbar-tagline">You Get Market, We Get Buyer.</p>
 
       <nav class="nav-buttons" aria-label="Main navigation">
         <a href="login.html" id="loginBtn" class="nav-text-link">Sign In</a>
