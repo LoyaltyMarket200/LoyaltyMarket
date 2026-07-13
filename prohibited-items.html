@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Prohibited Items - LoyaltyMarket</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="512x512"
+    href="icons/icon-512.png"
+  >
+
+  <meta name="theme-color" content="#1e3a8a">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f6fb;
+      color: #26364a;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    .prohibited-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      min-height: 68px;
+      padding: 12px 5%;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .prohibited-logo {
+      color: #1e3a8a;
+      font-size: 20px;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .prohibited-logo span {
+      color: #d97706;
+    }
+
+    .prohibited-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .prohibited-nav-links a {
+      padding: 9px 14px;
+      border-radius: 7px;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .prohibited-nav-links a:hover {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .prohibited-nav-links .post-ad-button {
+      background: #f97316;
+      color: #ffffff;
+    }
+
+    .prohibited-nav-links .post-ad-button:hover {
+      background: #ea580c;
+      color: #ffffff;
+    }
+
+    .prohibited-hero {
+      max-width: 1100px;
+      margin: 35px auto 20px;
+      padding: 42px 40px;
+      border-radius: 0 0 18px 18px;
+      background: linear-gradient(135deg, #7f1d1d, #dc2626);
+      color: #ffffff;
+      box-shadow: 0 10px 28px rgba(127, 29, 29, 0.2);
+    }
+
+    .prohibited-eyebrow {
+      margin: 0 0 3px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.88;
+    }
+
+    .prohibited-hero h1 {
+      margin: 0 0 8px;
+      font-size: 42px;
+      line-height: 1.15;
+    }
+
+    .prohibited-hero p {
+      max-width: 790px;
+      margin: 4px 0;
+      font-size: 14px;
+      opacity: 0.96;
+    }
+
+    .prohibited-layout {
+      max-width: 1100px;
+      margin: 20px auto 55px;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .prohibited-sidebar {
+      position: sticky;
+      top: 88px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .prohibited-sidebar h3 {
+      margin: 0 0 12px;
+      color: #1e293b;
+      font-size: 15px;
+    }
+
+    .prohibited-sidebar a {
+      display: block;
+      padding: 6px 3px;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .prohibited-sidebar a:hover {
+      color: #dc2626;
+      transform: translateX(3px);
+    }
+
+    .prohibited-content {
+      padding: 12px 30px 30px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .prohibited-alert {
+      margin: 8px 0 20px;
+      padding: 18px;
+      border-left: 4px solid #dc2626;
+      border-radius: 9px;
+      background: #fef2f2;
+      color: #991b1b;
+      font-size: 14px;
+    }
+
+    .prohibited-section {
+      padding: 22px 0;
+      border-bottom: 1px solid #e2e8f0;
+      scroll-margin-top: 95px;
+    }
+
+    .prohibited-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .prohibited-section h2 {
+      margin: 0 0 8px;
+      color: #1e293b;
+      font-size: 22px;
+    }
+
+    .prohibited-section h3 {
+      margin: 18px 0 5px;
+      color: #334155;
+      font-size: 16px;
+    }
+
+    .prohibited-section p,
+    .prohibited-section li {
+      color: #526174;
+      font-size: 14px;
+    }
+
+    .prohibited-section ul {
+      margin: 10px 0;
+      padding-left: 22px;
+    }
+
+    .prohibited-section li {
+      margin-bottom: 7px;
+    }
+
+    .danger-box {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      background: #fef2f2;
+      color: #991b1b;
+      font-size: 14px;
+    }
+
+    .warning-box {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      background: #fffbeb;
+      color: #854d0e;
+      font-size: 14px;
+    }
+
+    .info-box {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 14px;
+    }
+
+    .report-box {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      background: #f0fdf4;
+    }
+
+    .report-box strong {
+      color: #166534;
+    }
+
+    .report-box a {
+      color: #15803d;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .prohibited-footer {
+      padding: 28px 5%;
+      background: #172033;
+      color: #cbd5e1;
+    }
+
+    .prohibited-footer-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .prohibited-footer-brand {
+      margin: 0;
+      color: #60a5fa;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .prohibited-footer-tagline {
+      margin: 4px 0 0;
+      font-size: 13px;
+    }
+
+    .prohibited-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .prohibited-footer-links a {
+      color: #cbd5e1;
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .prohibited-footer-links a:hover {
+      color: #ffffff;
+    }
+
+    .prohibited-copyright {
+      margin: 15px auto 0;
+      max-width: 1100px;
+      padding-top: 15px;
+      border-top: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    @media (max-width: 800px) {
+      .prohibited-navbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .prohibited-nav-links {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .prohibited-hero {
+        margin-top: 20px;
+        padding: 30px 22px;
+      }
+
+      .prohibited-hero h1 {
+        font-size: 32px;
+      }
+
+      .prohibited-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .prohibited-sidebar {
+        position: static;
+      }
+
+      .prohibited-content {
+        padding: 10px 20px 25px;
+      }
+
+      .prohibited-footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .prohibited-copyright {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .prohibited-nav-links a {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .prohibited-hero h1 {
+        font-size: 28px;
+      }
+
+      .prohibited-section h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="prohibited-navbar">
+    <a href="index.html" class="prohibited-logo">
+      <span>LR</span> LoyaltyMarket
+    </a>
+
+    <nav class="prohibited-nav-links">
+      <a href="index.html">Home</a>
+      <a href="help.html">Help</a>
+      <a href="sell.html" class="post-ad-button">Post An Ad</a>
+    </nav>
+  </header>
+
+  <section class="prohibited-hero">
+    <p class="prohibited-eyebrow">LoyaltyMarket Marketplace Policy</p>
+
+    <h1>Prohibited Items</h1>
+
+    <p>
+      These products, services, and activities are not allowed on LoyaltyMarket.
+      Listings that violate this policy may be removed without notice.
+    </p>
+  </section>
+
+  <main class="prohibited-layout">
+
+    <aside class="prohibited-sidebar">
+      <h3>On This Page</h3>
+
+      <a href="#illegal">1. Illegal and Stolen Items</a>
+      <a href="#weapons">2. Weapons and Explosives</a>
+      <a href="#drugs">3. Drugs and Controlled Substances</a>
+      <a href="#medical">4. Medical and Health Items</a>
+      <a href="#counterfeit">5. Counterfeit Goods</a>
+      <a href="#documents">6. Documents and Personal Data</a>
+      <a href="#adult">7. Adult and Explicit Content</a>
+      <a href="#animals">8. Animals and Wildlife</a>
+      <a href="#financial">9. Financial Products and Scams</a>
+      <a href="#dangerous">10. Dangerous Materials</a>
+      <a href="#services">11. Prohibited Services</a>
+      <a href="#enforcement">12. Enforcement</a>
+      <a href="#reporting">13. Reporting Violations</a>
+    </aside>
+
+    <article class="prohibited-content">
+
+      <div class="prohibited-alert">
+        <strong>Important:</strong>
+        Users must follow applicable Liberian laws and LoyaltyMarket rules.
+        A product or service may be prohibited even when it is not specifically
+        named on this page.
+      </div>
+
+      <section id="illegal" class="prohibited-section">
+        <h2>1. Illegal, Stolen, or Unlawfully Obtained Items</h2>
+
+        <p>
+          LoyaltyMarket does not allow listings for items that are illegal,
+          stolen, unlawfully obtained, or connected to criminal activity.
+        </p>
+
+        <ul>
+          <li>Stolen phones, vehicles, electronics, or personal property.</li>
+          <li>Items with removed, altered, or hidden serial numbers.</li>
+          <li>Property obtained through fraud or deception.</li>
+          <li>Items seized or restricted by lawful authorities.</li>
+          <li>Goods that a seller does not have legal authority to sell.</li>
+          <li>Products imported, transported, or sold illegally.</li>
+        </ul>
+
+        <div class="danger-box">
+          LoyaltyMarket may preserve relevant information and cooperate with
+          lawful investigations involving suspected stolen property.
+        </div>
+      </section>
+
+      <section id="weapons" class="prohibited-section">
+        <h2>2. Weapons, Ammunition, and Explosives</h2>
+
+        <p>
+          Weapons and dangerous devices are not allowed unless LoyaltyMarket
+          later introduces a specifically authorized and legally compliant
+          category.
+        </p>
+
+        <ul>
+          <li>Firearms and firearm parts.</li>
+          <li>Ammunition and bullets.</li>
+          <li>Explosives, grenades, bombs, or explosive materials.</li>
+          <li>Silencers and restricted firearm accessories.</li>
+          <li>Switchblades or prohibited combat weapons.</li>
+          <li>Tasers, stun weapons, or other restricted devices.</li>
+          <li>Instructions for building weapons or explosives.</li>
+        </ul>
+
+        <div class="danger-box">
+          Listings involving weapons or explosives may be removed immediately
+          and may be reported where required by law.
+        </div>
+      </section>
+
+      <section id="drugs" class="prohibited-section">
+        <h2>3. Illegal Drugs and Controlled Substances</h2>
+
+        <ul>
+          <li>Illegal drugs and narcotics.</li>
+          <li>Controlled substances sold without authorization.</li>
+          <li>Drug paraphernalia intended for illegal drug use.</li>
+          <li>Prescription medicine sold without lawful authority.</li>
+          <li>Substances falsely advertised as legal alternatives to drugs.</li>
+          <li>Ingredients or equipment clearly intended for drug production.</li>
+        </ul>
+
+        <div class="warning-box">
+          Ordinary lawful pharmacy products may require additional verification,
+          licensing, or marketplace approval before being listed.
+        </div>
+      </section>
+
+      <section id="medical" class="prohibited-section">
+        <h2>4. Restricted Medical and Health Products</h2>
+
+        <p>
+          Some health products may create serious risks when sold without
+          professional oversight or legal authorization.
+        </p>
+
+        <ul>
+          <li>Prescription-only medicines without proper authorization.</li>
+          <li>Controlled or restricted medications.</li>
+          <li>Unsafe, recalled, expired, or contaminated medical products.</li>
+          <li>Human organs, blood, tissue, or bodily materials.</li>
+          <li>False cures or misleading medical treatments.</li>
+          <li>Unlicensed medical procedures.</li>
+          <li>Products making dangerous or unsupported health claims.</li>
+        </ul>
+
+        <div class="info-box">
+          Lawful pharmacies and qualified medical providers may need separate
+          verification before advertising approved products or services.
+        </div>
+      </section>
+
+      <section id="counterfeit" class="prohibited-section">
+        <h2>5. Counterfeit, Fake, and Pirated Goods</h2>
+
+        <ul>
+          <li>Fake designer clothing, shoes, bags, or watches.</li>
+          <li>Counterfeit electronics or accessories.</li>
+          <li>Pirated movies, music, software, or games.</li>
+          <li>Fake brand labels, packaging, or certificates.</li>
+          <li>Unauthorized copies of copyrighted products.</li>
+          <li>Products falsely presented as genuine.</li>
+        </ul>
+
+        <div class="warning-box">
+          Sellers must clearly state when an item is generic, compatible,
+          refurbished, or not manufactured by the original brand.
+        </div>
+      </section>
+
+      <section id="documents" class="prohibited-section">
+        <h2>6. Government Documents and Personal Information</h2>
+
+        <ul>
+          <li>Passports, visas, residence permits, or identity cards.</li>
+          <li>Driver's licenses or government-issued certificates.</li>
+          <li>Bank cards, SIM cards registered to another person, or account access.</li>
+          <li>Stolen personal records or private databases.</li>
+          <li>Login credentials, passwords, verification codes, or PINs.</li>
+          <li>Fake academic certificates or professional licenses.</li>
+          <li>Forged legal documents, deeds, receipts, or permits.</li>
+        </ul>
+
+        <div class="danger-box">
+          Do not publicly upload identification documents, banking information,
+          or other sensitive personal records to a listing.
+        </div>
+      </section>
+
+      <section id="adult" class="prohibited-section">
+        <h2>7. Adult Services and Explicit Content</h2>
+
+        <ul>
+          <li>Prostitution or paid sexual services.</li>
+          <li>Pornographic or sexually explicit content.</li>
+          <li>Sexual content involving minors.</li>
+          <li>Escort services offered for sexual purposes.</li>
+          <li>Non-consensual intimate photographs or videos.</li>
+          <li>Services involving sexual exploitation or trafficking.</li>
+        </ul>
+
+        <div class="danger-box">
+          Content involving the sexual exploitation of children is strictly
+          prohibited and may be reported to the appropriate authorities.
+        </div>
+      </section>
+
+      <section id="animals" class="prohibited-section">
+        <h2>8. Protected Animals and Wildlife Products</h2>
+
+        <ul>
+          <li>Protected, endangered, or illegally captured animals.</li>
+          <li>Wildlife products prohibited by law.</li>
+          <li>Ivory, illegal skins, horns, teeth, or animal parts.</li>
+          <li>Animals offered for fighting or cruel activity.</li>
+          <li>Animals sold in unsafe or inhumane conditions.</li>
+          <li>Products made from protected wildlife.</li>
+        </ul>
+
+        <div class="warning-box">
+          Permitted animal listings must follow health, welfare, ownership,
+          transport, and local legal requirements.
+        </div>
+      </section>
+
+      <section id="financial" class="prohibited-section">
+        <h2>9. Financial Products, Gambling, and Money Scams</h2>
+
+        <ul>
+          <li>Stolen bank accounts or financial credentials.</li>
+          <li>Fake investment opportunities or guaranteed-profit schemes.</li>
+          <li>Pyramid schemes and unlawful recruitment programs.</li>
+          <li>Money-laundering services.</li>
+          <li>Fake loans or advance-fee loan scams.</li>
+          <li>Counterfeit currency.</li>
+          <li>Illegal gambling services or devices.</li>
+          <li>Requests to transfer or receive suspicious funds.</li>
+        </ul>
+
+        <div class="danger-box">
+          LoyaltyMarket must not be used to move, hide, disguise, or obtain
+          money through fraud or unlawful activity.
+        </div>
+      </section>
+
+      <section id="dangerous" class="prohibited-section">
+        <h2>10. Dangerous, Toxic, or Hazardous Materials</h2>
+
+        <ul>
+          <li>Radioactive materials.</li>
+          <li>Toxic chemicals or poisons.</li>
+          <li>Restricted pesticides.</li>
+          <li>Unsafe industrial chemicals.</li>
+          <li>Biological hazards.</li>
+          <li>Dangerous substances without proper labeling or permits.</li>
+          <li>Recalled products that create serious safety risks.</li>
+        </ul>
+
+        <div class="warning-box">
+          Lawful commercial chemicals may require licensing, secure handling,
+          accurate labeling, and marketplace approval.
+        </div>
+      </section>
+
+      <section id="services" class="prohibited-section">
+        <h2>11. Prohibited Services and Activities</h2>
+
+        <ul>
+          <li>Hacking, spyware, malware, or unauthorized account access.</li>
+          <li>Fake document creation.</li>
+          <li>Exam cheating or selling stolen test materials.</li>
+          <li>Human trafficking or exploitation.</li>
+          <li>Paid violence, threats, or intimidation.</li>
+          <li>Unlicensed legal, financial, or medical services where prohibited.</li>
+          <li>Services that promote fraud, theft, or illegal activity.</li>
+          <li>Identity theft or impersonation services.</li>
+        </ul>
+      </section>
+
+      <section id="enforcement" class="prohibited-section">
+        <h2>12. Enforcement</h2>
+
+        <p>
+          LoyaltyMarket may review, reject, restrict, or remove listings that
+          violate this policy or create legal, financial, or safety risks.
+        </p>
+
+        <p>
+          Depending on the situation, LoyaltyMarket may:
+        </p>
+
+        <ul>
+          <li>Remove or reject a listing.</li>
+          <li>Request proof of ownership or authorization.</li>
+          <li>Limit account features.</li>
+          <li>Suspend or permanently remove an account.</li>
+          <li>Preserve evidence connected to a report.</li>
+          <li>Cooperate with lawful government or police requests.</li>
+        </ul>
+
+        <div class="warning-box">
+          Attempting to avoid enforcement by changing descriptions, using coded
+          words, or creating another account is also prohibited.
+        </div>
+      </section>
+
+      <section id="reporting" class="prohibited-section">
+        <h2>13. Report a Prohibited Listing</h2>
+
+        <p>
+          Report any listing that appears illegal, stolen, dangerous,
+          counterfeit, fraudulent, or otherwise prohibited.
+        </p>
+
+        <p>
+          Include the listing title, seller name, screenshots, links, and a
+          clear explanation of the concern.
+        </p>
+
+        <div class="report-box">
+          <strong>LoyaltyMarket Support</strong><br>
+
+          Email:
+          <a href="mailto:support@loyaltymarket.com">
+            support@loyaltymarket.com
+          </a>
+          <br>
+
+          Location: Liberia
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="prohibited-footer">
+    <div class="prohibited-footer-inner">
+
+      <div>
+        <p class="prohibited-footer-brand">LoyaltyMarket</p>
+
+        <p class="prohibited-footer-tagline">
+          We Get Market, We Get Buyer.
+        </p>
+      </div>
+
+      <div class="prohibited-footer-links">
+        <a href="index.html">Home</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="safety.html">Safety Tips</a>
+        <a href="community-rules.html">Community Rules</a>
+        <a href="prohibited-items.html">Prohibited Items</a>
+        <a href="help.html">Help</a>
+      </div>
+
+    </div>
+
+    <p class="prohibited-copyright">
+      © 2026 LoyaltyMarket. All Rights Reserved.
+    </p>
+  </footer>
+
+</body>
+</html>
