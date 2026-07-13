@@ -2034,13 +2034,35 @@
                   </a>
                 ` : ""}
 
-                <button class="btn-reviewed" data-report-id="${safeText(report.id)}" data-report-status="reviewed">
-                  Mark Reviewed
-                </button>
+                ${reportStatus !== "reviewed" ? `
 
-                <button class="btn-dismiss" data-report-id="${safeText(report.id)}" data-report-status="dismissed">
-                  Dismiss
-                </button>
+
+                  <button class="btn-reviewed" data-report-id="${safeText(report.id)}" data-report-status="reviewed">
+
+
+                    Mark Reviewed
+
+
+                  </button>
+
+
+                ` : ""}
+
+
+
+                ${reportStatus !== "dismissed" ? `
+
+
+                  <button class="btn-dismiss" data-report-id="${safeText(report.id)}" data-report-status="dismissed">
+
+
+                    Dismiss
+
+
+                  </button>
+
+
+                ` : ""}
               </div>
             </article>
           `;
@@ -2078,13 +2100,35 @@
                 </a>
               ` : ""}
 
-              <button class="btn-reviewed" data-report-id="${safeText(report.id)}" data-report-status="reviewed">
-                Mark Reviewed
-              </button>
+              ${reportStatus !== "reviewed" ? `
 
-              <button class="btn-dismiss" data-report-id="${safeText(report.id)}" data-report-status="dismissed">
-                Dismiss
-              </button>
+
+                <button class="btn-reviewed" data-report-id="${safeText(report.id)}" data-report-status="reviewed">
+
+
+                  Mark Reviewed
+
+
+                </button>
+
+
+              ` : ""}
+
+
+
+              ${reportStatus !== "dismissed" ? `
+
+
+                <button class="btn-dismiss" data-report-id="${safeText(report.id)}" data-report-status="dismissed">
+
+
+                  Dismiss
+
+
+                </button>
+
+
+              ` : ""}
             </div>
           </article>
         `;
