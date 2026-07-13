@@ -8,6 +8,56 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
+  <style>
+    .listing-type-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .listing-type-option {
+      display: block;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .listing-type-option:hover {
+      border-color: #2563eb;
+    }
+    .listing-type-option.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+    .listing-type-option input {
+      display: none;
+    }
+    .listing-type-icon {
+      font-size: 22px;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .listing-type-label {
+      font-weight: 700;
+      font-size: 14px;
+      color: #111827;
+    }
+    .listing-type-desc {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 3px;
+    }
+    #serviceFieldsSection,
+    #productFieldsSection {
+      display: none;
+    }
+    #serviceFieldsSection.open,
+    #productFieldsSection.open {
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
@@ -21,67 +71,134 @@
 
 <section class="sell-section">
   <div class="sell-card">
-    <h1>List Your Product</h1>
-    <p class="sell-subtitle">Post your item for buyers across Liberia.</p>
+    <h1 id="sellHeading">List Your Product</h1>
+    <p class="sell-subtitle" id="sellSubtitle">Post your item for buyers across Liberia.</p>
 
     <form class="sell-form" id="sellForm">
-      <label>Product Title</label>
-      <input type="text" id="title" placeholder="Example: iPhone 13 Pro" required>
 
-      <label>Category</label>
-      <select id="category" required>
-        <option value="">Select Category</option>
-        <option>Phones</option>
-        <option>Electronics</option>
-        <option>Vehicles</option>
-        <option>Property</option>
-        <option>Fashion</option>
-        <option>Jobs</option>
-      </select>
+      <label>What are you listing?</label>
+      <div class="listing-type-row">
+        <label class="listing-type-option selected" id="productOption">
+          <input type="radio" name="listingType" value="product" checked>
+          <span class="listing-type-icon">📦</span>
+          <span class="listing-type-label">Product</span>
+          <span class="listing-type-desc">Sell an item</span>
+        </label>
 
-      <div class="form-row">
-        <div class="form-col">
-          <label>Price USD</label>
-          <input type="number" id="priceUsd" placeholder="550" required>
-        </div>
-
-        <div class="form-col">
-          <label>Price L$</label>
-          <input type="number" id="priceLrd" placeholder="104500" required>
-        </div>
+        <label class="listing-type-option" id="serviceOption">
+          <input type="radio" name="listingType" value="service">
+          <span class="listing-type-icon">🛠️</span>
+          <span class="listing-type-label">Service</span>
+          <span class="listing-type-desc">Offer your skills</span>
+        </label>
       </div>
 
-      <label>Condition</label>
-      <select id="condition" required>
-        <option value="">Select Condition</option>
-        <option>Brand New</option>
-        <option>Used</option>
-        <option>Foreign Used</option>
-      </select>
+      <div id="productFieldsSection" class="open">
+        <label>Product Title</label>
+        <input type="text" id="title" placeholder="Example: iPhone 13 Pro">
 
-      <div class="form-row">
-        <div class="form-col">
-          <label>County</label>
-          <input type="text" id="county" placeholder="Montserrado" required>
+        <label>Category</label>
+        <select id="category">
+          <option value="">Select Category</option>
+          <option>Phones</option>
+          <option>Electronics</option>
+          <option>Vehicles</option>
+          <option>Property</option>
+          <option>Fashion</option>
+          <option>Jobs</option>
+        </select>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label>Price USD</label>
+            <input type="number" id="priceUsd" placeholder="550">
+          </div>
+
+          <div class="form-col">
+            <label>Price L$</label>
+            <input type="number" id="priceLrd" placeholder="104500">
+          </div>
         </div>
 
-        <div class="form-col">
-          <label>City</label>
-          <input type="text" id="city" placeholder="Monrovia" required>
+        <label>Condition</label>
+        <select id="condition">
+          <option value="">Select Condition</option>
+          <option>Brand New</option>
+          <option>Used</option>
+          <option>Foreign Used</option>
+        </select>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label>County</label>
+            <input type="text" id="county" placeholder="Montserrado">
+          </div>
+
+          <div class="form-col">
+            <label>City</label>
+            <input type="text" id="city" placeholder="Monrovia">
+          </div>
         </div>
+
+        <label>Product Images (up to 4 links)</label>
+        <input type="url" id="imageUrl1" placeholder="Main image link (required)">
+        <input type="url" id="imageUrl2" placeholder="Second image link (optional)" style="margin-top:10px;">
+        <input type="url" id="imageUrl3" placeholder="Third image link (optional)" style="margin-top:10px;">
+        <input type="url" id="imageUrl4" placeholder="Fourth image link (optional)" style="margin-top:10px;">
+
+        <label>Description</label>
+        <textarea id="description" rows="5" placeholder="Describe your product..."></textarea>
+
+        <label>Phone Number</label>
+        <input type="tel" id="phone" placeholder="0881471694">
       </div>
 
-      <label>Product Images (up to 4 links)</label>
-      <input type="url" id="imageUrl1" placeholder="Main image link (required)" required>
-      <input type="url" id="imageUrl2" placeholder="Second image link (optional)" style="margin-top:10px;">
-      <input type="url" id="imageUrl3" placeholder="Third image link (optional)" style="margin-top:10px;">
-      <input type="url" id="imageUrl4" placeholder="Fourth image link (optional)" style="margin-top:10px;">
+      <div id="serviceFieldsSection">
+        <label>Service Title</label>
+        <input type="text" id="serviceTitle" placeholder="Example: Home Electrical Repairs">
 
-      <label>Description</label>
-      <textarea id="description" rows="5" placeholder="Describe your product..." required></textarea>
+        <label>Service Category</label>
+        <select id="serviceCategory">
+          <option value="">Select Service Category</option>
+          <option>Mechanics</option>
+          <option>Builders &amp; Repairs</option>
+          <option>Creative Services</option>
+          <option>Delivery &amp; Moving</option>
+          <option>Beauty &amp; Personal Care</option>
+          <option>Business Services</option>
+          <option>Other</option>
+        </select>
 
-      <label>Phone Number</label>
-      <input type="tel" id="phone" placeholder="0881471694" required>
+        <label>Starting Price (US$)</label>
+        <input type="number" id="serviceStartingPriceUsd" placeholder="Example: 20">
+        <p style="color:#64748b; font-size:12px; margin-top:6px;">
+          Leave blank if pricing depends on the job — you can discuss details with buyers directly.
+        </p>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label>County Served</label>
+            <input type="text" id="serviceCounty" placeholder="Montserrado">
+          </div>
+
+          <div class="form-col">
+            <label>City Served</label>
+            <input type="text" id="serviceCity" placeholder="Monrovia">
+          </div>
+        </div>
+
+        <label>Work Photos (up to 4 links, optional)</label>
+        <input type="url" id="serviceImageUrl1" placeholder="First photo link (optional)">
+        <input type="url" id="serviceImageUrl2" placeholder="Second photo link (optional)" style="margin-top:10px;">
+        <input type="url" id="serviceImageUrl3" placeholder="Third photo link (optional)" style="margin-top:10px;">
+        <input type="url" id="serviceImageUrl4" placeholder="Fourth photo link (optional)" style="margin-top:10px;">
+
+        <label>Service Description</label>
+        <textarea id="serviceDescription" rows="5" placeholder="Describe the service you offer, your experience, and what's included..."></textarea>
+
+        <label>Phone Number</label>
+        <input type="tel" id="servicePhone" placeholder="0881471694">
+      </div>
 
       <button type="submit" class="post-btn" id="postBtn">Post Product</button>
     </form>
@@ -113,25 +230,99 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUser = user;
   } else {
-    alert("Please login before posting a product.");
+    alert("Please login before posting a listing.");
     window.location.href = "login.html";
   }
 });
 
 const sellForm = document.getElementById("sellForm");
 const postBtn = document.getElementById("postBtn");
+const sellHeading = document.getElementById("sellHeading");
+const sellSubtitle = document.getElementById("sellSubtitle");
 
-// ================= RULE-BASED SCAM DETECTION =================
-// No external AI API is used here. Instead, listings are checked
+const productOption = document.getElementById("productOption");
+const serviceOption = document.getElementById("serviceOption");
+const listingTypeInputs = document.querySelectorAll('input[name="listingType"]');
+const productFieldsSection = document.getElementById("productFieldsSection");
+const serviceFieldsSection = document.getElementById("serviceFieldsSection");
+
+// Product fields
+const titleInput = document.getElementById("title");
+const categoryInput = document.getElementById("category");
+const priceUsdInput = document.getElementById("priceUsd");
+const priceLrdInput = document.getElementById("priceLrd");
+const conditionInput = document.getElementById("condition");
+const countyInput = document.getElementById("county");
+const cityInput = document.getElementById("city");
+const imageUrl1Input = document.getElementById("imageUrl1");
+const descriptionInput = document.getElementById("description");
+const phoneInput = document.getElementById("phone");
+
+// Service fields
+const serviceTitleInput = document.getElementById("serviceTitle");
+const serviceCategoryInput = document.getElementById("serviceCategory");
+const serviceStartingPriceUsdInput = document.getElementById("serviceStartingPriceUsd");
+const serviceCountyInput = document.getElementById("serviceCounty");
+const serviceCityInput = document.getElementById("serviceCity");
+const serviceDescriptionInput = document.getElementById("serviceDescription");
+const servicePhoneInput = document.getElementById("servicePhone");
+
+function getSelectedListingType() {
+  const checked = document.querySelector('input[name="listingType"]:checked');
+  return checked ? checked.value : "product";
+}
+
+function updateListingTypeUI() {
+  const selectedType = getSelectedListingType();
+  const isService = selectedType === "service";
+
+  productOption.classList.toggle("selected", !isService);
+  serviceOption.classList.toggle("selected", isService);
+  productFieldsSection.classList.toggle("open", !isService);
+  serviceFieldsSection.classList.toggle("open", isService);
+
+  sellHeading.textContent = isService ? "List Your Service" : "List Your Product";
+  sellSubtitle.textContent = isService
+    ? "Offer your skills and services to buyers across Liberia."
+    : "Post your item for buyers across Liberia.";
+  postBtn.textContent = isService ? "Post Service" : "Post Product";
+
+  // Only require the fields for the section that's actually showing,
+  // so switching types never blocks submission with hidden required fields.
+  titleInput.required = !isService;
+  categoryInput.required = !isService;
+  priceUsdInput.required = !isService;
+  priceLrdInput.required = !isService;
+  conditionInput.required = !isService;
+  countyInput.required = !isService;
+  cityInput.required = !isService;
+  imageUrl1Input.required = !isService;
+  descriptionInput.required = !isService;
+  phoneInput.required = !isService;
+
+  serviceTitleInput.required = isService;
+  serviceCategoryInput.required = isService;
+  serviceCountyInput.required = isService;
+  serviceCityInput.required = isService;
+  serviceDescriptionInput.required = isService;
+  servicePhoneInput.required = isService;
+}
+
+listingTypeInputs.forEach((input) => {
+  input.addEventListener("change", updateListingTypeUI);
+});
+
+updateListingTypeUI();
+
+// ================= RULE-BASED SCAM DETECTION (products only) =================
+// No external AI API is used here. Instead, product listings are checked
 // against a set of simple, free rules. If any rule trips, the
 // listing is saved with status "pending_review" instead of
 // "active", along with the specific reasons, so an admin can
 // review it in the Admin Dashboard before it goes live.
+// Service listings currently skip these checks since pricing and
+// photos work differently for services (starting price, optional photos).
 
-// Rough "this price is suspiciously low for this category" floors,
-// in US dollars. These are intentionally conservative — the goal
-// is to catch obvious too-good-to-be-true listings, not to reject
-// normal cheap items.
 const CATEGORY_PRICE_FLOORS = {
   Phones: 15,
   Electronics: 10,
@@ -141,9 +332,6 @@ const CATEGORY_PRICE_FLOORS = {
   Jobs: 0
 };
 
-// Keywords/phrases commonly used in scam or off-platform-payment
-// listings. Checked against the title and description, case
-// insensitive.
 const SUSPICIOUS_KEYWORDS = [
   "wire transfer",
   "western union",
@@ -224,20 +412,68 @@ sellForm.addEventListener("submit", async function(event) {
     return;
   }
 
+  const listingType = getSelectedListingType();
+
+  postBtn.disabled = true;
+
+  if (listingType === "service") {
+    // ---------------- SERVICE LISTING ----------------
+    const serviceImages = [
+      document.getElementById("serviceImageUrl1").value.trim(),
+      document.getElementById("serviceImageUrl2").value.trim(),
+      document.getElementById("serviceImageUrl3").value.trim(),
+      document.getElementById("serviceImageUrl4").value.trim()
+    ].filter((url) => url !== "");
+
+    const serviceListing = {
+      listingType: "service",
+      title: serviceTitleInput.value.trim(),
+      category: serviceCategoryInput.value,
+      startingPriceUsd: serviceStartingPriceUsdInput.value.trim(),
+      county: serviceCountyInput.value.trim(),
+      city: serviceCityInput.value.trim(),
+      imageUrl: serviceImages[0] || "",
+      images: serviceImages,
+      description: serviceDescriptionInput.value.trim(),
+      phone: servicePhoneInput.value.trim(),
+      sellerId: currentUser.uid,
+      sellerEmail: currentUser.email,
+      status: "active",
+      flagged: false,
+      flagReasons: [],
+      createdAt: serverTimestamp()
+    };
+
+    postBtn.textContent = "Posting...";
+
+    try {
+      await addDoc(collection(db, "products"), serviceListing);
+      alert("Service posted successfully!");
+      window.location.href = "dashboard.html";
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      postBtn.disabled = false;
+      postBtn.textContent = "Post Service";
+    }
+
+    return;
+  }
+
+  // ---------------- PRODUCT LISTING ----------------
   const images = [
-    document.getElementById("imageUrl1").value.trim(),
+    imageUrl1Input.value.trim(),
     document.getElementById("imageUrl2").value.trim(),
     document.getElementById("imageUrl3").value.trim(),
     document.getElementById("imageUrl4").value.trim()
   ].filter((url) => url !== "");
 
-  const title = document.getElementById("title").value.trim();
-  const category = document.getElementById("category").value;
-  const priceUsd = document.getElementById("priceUsd").value;
-  const priceLrd = document.getElementById("priceLrd").value;
-  const description = document.getElementById("description").value.trim();
+  const title = titleInput.value.trim();
+  const category = categoryInput.value;
+  const priceUsd = priceUsdInput.value;
+  const priceLrd = priceLrdInput.value;
+  const description = descriptionInput.value.trim();
 
-  postBtn.disabled = true;
   postBtn.textContent = "Checking listing...";
 
   const flagReasons = await runScamChecks({
@@ -252,17 +488,18 @@ sellForm.addEventListener("submit", async function(event) {
   const isFlagged = flagReasons.length > 0;
 
   const product = {
+    listingType: "product",
     title: title,
     category: category,
     priceUsd: priceUsd,
     priceLrd: priceLrd,
-    condition: document.getElementById("condition").value,
-    county: document.getElementById("county").value.trim(),
-    city: document.getElementById("city").value.trim(),
+    condition: conditionInput.value,
+    county: countyInput.value.trim(),
+    city: cityInput.value.trim(),
     imageUrl: images[0] || "",
     images: images,
     description: description,
-    phone: document.getElementById("phone").value.trim(),
+    phone: phoneInput.value.trim(),
     sellerId: currentUser.uid,
     sellerEmail: currentUser.email,
     status: isFlagged ? "pending_review" : "active",
