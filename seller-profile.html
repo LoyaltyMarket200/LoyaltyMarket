@@ -8,517 +8,650 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
+
   <style>
-    .seller-profile-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 32px;
-      text-align: center;
-      max-width: 640px;
-      margin: 30px auto 20px auto;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    *{box-sizing:border-box}
+    body{margin:0;background:#f5f7fb;color:#0f172a}
+
+    .seller-navbar{
+      min-height:78px;height:auto;padding:12px max(24px,5vw);
+      background:#fff;border-bottom:1px solid #e5e7eb;
+      box-shadow:0 4px 20px rgba(15,23,42,.06);
+      justify-content:space-between;position:sticky;top:0;z-index:40
     }
-    .seller-profile-avatar {
-      font-size: 48px;
-      width: 88px;
-      height: 88px;
-      line-height: 88px;
-      border-radius: 50%;
-      background: #eff6ff;
-      margin: 0 auto 14px auto;
+
+    .seller-navbar .logo-link img{width:48px;height:48px;object-fit:contain}
+    .seller-navbar .logo-text{color:#0f2d67;font-size:21px}
+
+    .seller-nav-actions{display:flex;align-items:center;gap:10px}
+    .seller-nav-link,.seller-post-link{
+      min-height:42px;display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 16px;border-radius:10px;text-decoration:none;
+      font-size:14px;font-weight:800;border:1px solid transparent
     }
-    .seller-profile-card h1 {
-      margin: 0 0 6px 0;
-      font-size: 24px;
+    .seller-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}
+    .seller-nav-link:hover{color:#1e3a8a;border-color:#bfdbfe;background:#eff6ff}
+    .seller-post-link{color:#fff;background:#f97316}
+
+    .seller-page{width:min(1180px,94%);margin:32px auto 70px}
+
+    .redirect-notice{
+      display:none;margin-bottom:18px;padding:14px 16px;border:1px solid #bfdbfe;
+      border-radius:14px;background:#eff6ff;color:#1e40af;font-size:14px
     }
-    #sellerVerified {
-      display: inline-block;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 3px 12px;
-      border-radius: 20px;
-      background: #fef3c7;
-      color: #92400e;
-      margin-bottom: 4px;
+    .redirect-notice a{color:#1d4ed8;font-weight:900;text-decoration:none}
+
+    .seller-hero{
+      display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;
+      padding:32px;border-radius:24px;color:#fff;
+      background:
+        radial-gradient(circle at top right,rgba(255,255,255,.15),transparent 32%),
+        linear-gradient(135deg,#0f2d67,#1d4ed8);
+      box-shadow:0 18px 42px rgba(30,58,138,.2)
     }
-    .member-since {
-      color: #64748b;
-      font-size: 14px;
-      margin: 4px 0 0 0;
+
+    .seller-profile-main{display:flex;gap:18px;align-items:center}
+    .seller-avatar{
+      width:92px;height:92px;display:grid;place-items:center;border-radius:50%;
+      background:rgba(255,255,255,.14);border:4px solid rgba(255,255,255,.22);
+      font-size:42px;flex-shrink:0
     }
-    .seller-stats-row {
-      display: flex;
-      gap: 14px;
-      max-width: 640px;
-      margin: 0 auto 30px auto;
-      padding: 0 20px;
+    .seller-hero h1{margin:0 0 8px;font-size:clamp(30px,5vw,46px);line-height:1.08}
+    .seller-badge{
+      display:inline-flex;padding:6px 11px;border-radius:999px;
+      background:#fbbf24;color:#78350f;font-size:12px;font-weight:900
     }
-    .seller-stat-box {
-      flex: 1;
-      background: #fff;
-      border-radius: 12px;
-      padding: 16px 10px;
-      text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    .seller-member{margin:8px 0 0;color:#dbeafe;font-size:13px}
+    .message-seller-btn{
+      display:none;min-height:46px;align-items:center;justify-content:center;
+      padding:11px 20px;border-radius:11px;color:#fff;background:#f97316;
+      text-decoration:none;font-weight:900;white-space:nowrap
     }
-    .seller-stat-value {
-      font-size: 20px;
-      font-weight: 800;
-      color: #1e3a8a;
+
+    .seller-stats{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;
+      margin-top:22px
     }
-    .seller-stat-label {
-      font-size: 12px;
-      color: #64748b;
-      margin-top: 4px;
+    .seller-stat{
+      padding:18px;border:1px solid #e2e8f0;border-radius:16px;
+      background:#fff;box-shadow:0 10px 24px rgba(15,23,42,.06);text-align:center
     }
-    .message-seller-btn {
-      display: inline-block;
-      margin-top: 16px;
-      background: #2563eb;
-      color: #fff;
-      padding: 10px 22px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
+    .seller-stat-value{font-size:25px;font-weight:900;color:#1e3a8a}
+    .seller-stat-label{margin-top:5px;color:#64748b;font-size:12px;font-weight:700}
+
+    .seller-section{
+      margin-top:24px;padding:24px;border:1px solid #e2e8f0;border-radius:22px;
+      background:#fff;box-shadow:0 14px 34px rgba(15,23,42,.07)
     }
-    .message-seller-btn:hover {
-      background: #1d4ed8;
+    .seller-section-header{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #e2e8f0
     }
-    .seller-listings-section,
-    .seller-reviews-section {
-      max-width: 1000px;
-      margin: 0 auto 30px auto;
-      padding: 0 20px;
+    .seller-section-header h2{margin:0 0 4px;font-size:26px}
+    .seller-section-header p{margin:0;color:#64748b;font-size:13px}
+
+    .seller-listings-grid{
+      display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px
     }
-    .seller-listings-section h2,
-    .seller-reviews-section h2 {
-      margin-bottom: 14px;
+    .seller-product-link{color:inherit;text-decoration:none}
+    .seller-product-card{
+      overflow:hidden;border:1px solid #e2e8f0;border-radius:17px;background:#fff;
+      transition:.2s ease
     }
-    .listing-featured-badge {
-      display: inline-block;
-      background: #fef3c7;
-      color: #92400e;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 20px;
-      margin-left: 6px;
+    .seller-product-card:hover{transform:translateY(-3px);border-color:#bfdbfe;box-shadow:0 12px 26px rgba(37,99,235,.10)}
+    .seller-product-image{height:210px;background:#f1f5f9}
+    .seller-product-image img{width:100%;height:100%;object-fit:cover;display:block}
+    .seller-product-body{padding:15px}
+    .seller-product-body h3{margin:0 0 8px;font-size:16px;line-height:1.35}
+    .seller-price{margin:0 0 7px;color:#ea580c;font-size:15px;font-weight:900}
+    .seller-location{margin:0;color:#64748b;font-size:12px}
+    .listing-featured-badge{
+      display:inline-flex;margin-left:6px;padding:3px 7px;border-radius:999px;
+      background:#fef3c7;color:#92400e;font-size:10px;font-weight:900
     }
-    .redirect-notice {
-      max-width: 640px;
-      margin: 30px auto;
-      padding: 16px 20px;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 10px;
-      text-align: center;
-      color: #1e40af;
-      font-size: 14px;
+
+    .review-grid{display:grid;grid-template-columns:360px minmax(0,1fr);gap:20px}
+    .review-form-card{
+      display:none;padding:20px;border:1px solid #e2e8f0;border-radius:16px;background:#f8fafc
     }
-    .redirect-notice a {
-      color: #1d4ed8;
-      font-weight: 700;
-      text-decoration: none;
+    .review-form-card h3{margin:0 0 14px}
+    .review-form-card label{display:block;margin:13px 0 7px;font-size:13px;font-weight:800}
+    .review-form-card select,.review-form-card textarea{
+      width:100%;padding:12px 13px;border:1px solid #cbd5e1;border-radius:10px;
+      background:#fff;font:inherit
+    }
+    .review-form-card select:focus,.review-form-card textarea:focus{
+      outline:none;border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.10)
+    }
+    .review-submit{
+      width:100%;min-height:46px;margin-top:15px;border:none;border-radius:10px;
+      color:#fff;background:#2563eb;font-weight:900;cursor:pointer
+    }
+
+    .review-message{
+      display:none;padding:15px;border-radius:12px;background:#f8fafc;color:#64748b;
+      border:1px solid #e2e8f0;font-size:14px
+    }
+    .review-message a{color:#2563eb;font-weight:800}
+
+    .reviews-list{display:grid;gap:12px}
+    .review-card{
+      padding:16px;border:1px solid #e2e8f0;border-radius:14px;background:#fff
+    }
+    .review-header{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .review-stars{font-size:13px}
+    .review-comment{margin:10px 0 7px;color:#334155;line-height:1.6}
+    .review-date{margin:0;color:#94a3b8;font-size:12px}
+
+    .seller-empty{
+      grid-column:1/-1;padding:48px 20px;text-align:center;border:1px dashed #cbd5e1;
+      border-radius:16px;background:#f8fafc;color:#64748b
+    }
+
+    .seller-footer{
+      display:flex;justify-content:space-between;align-items:center;gap:20px;
+      text-align:left;padding:30px max(24px,6vw)
+    }
+
+    @media(max-width:1000px){
+      .seller-listings-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .review-grid{grid-template-columns:1fr}
+    }
+
+    @media(max-width:760px){
+      .seller-navbar{align-items:stretch}
+      .seller-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+      .seller-hero{grid-template-columns:1fr}
+      .message-seller-btn{justify-self:start}
+      .seller-stats{grid-template-columns:1fr}
+      .seller-listings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .seller-footer{flex-direction:column;text-align:center}
+    }
+
+    @media(max-width:560px){
+      .seller-nav-actions{grid-template-columns:1fr}
+      .seller-page{width:94%;margin-top:20px}
+      .seller-hero,.seller-section{padding:20px 16px;border-radius:18px}
+      .seller-profile-main{align-items:flex-start;flex-direction:column}
+      .seller-section-header{align-items:flex-start;flex-direction:column}
+      .seller-listings-grid{grid-template-columns:1fr}
+      .seller-product-image{height:240px}
     }
   </style>
 </head>
+
 <body>
-
-<header class="navbar">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-
-  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
-
-  <a href="index.html" class="login-btn">Home</a>
-</header>
-
-<div id="businessRedirectNotice" class="redirect-notice" style="display:none;">
-  This seller has a business storefront.
-  <a id="businessRedirectLink" href="#">View business profile</a>
-</div>
-
-<section class="seller-profile-section" id="sellerProfileSection">
-
-  <div class="seller-profile-card">
-    <div class="seller-profile-avatar">👤</div>
-    <h1 id="sellerName">Loading...</h1>
-    <p id="sellerVerified"></p>
-    <p class="member-since" id="sellerMemberSince"></p>
-    <a href="#" class="message-seller-btn" id="messageSellerBtn" style="display:none;">💬 Message Seller</a>
-  </div>
-
-  <div class="seller-stats-row">
-    <div class="seller-stat-box">
-      <div class="seller-stat-value" id="statListingCount">-</div>
-      <div class="seller-stat-label">Active Listings</div>
-    </div>
-    <div class="seller-stat-box">
-      <div class="seller-stat-value" id="statAverageRating">-</div>
-      <div class="seller-stat-label">Average Rating</div>
-    </div>
-    <div class="seller-stat-box">
-      <div class="seller-stat-value" id="statReviewCount">-</div>
-      <div class="seller-stat-label">Reviews</div>
-    </div>
-  </div>
-
-  <div class="seller-listings-section">
-    <h2>Listings from this seller</h2>
-    <div class="seller-listings-grid" id="sellerListingsGrid">
-      <p>Loading listings...</p>
-    </div>
-  </div>
-
-  <div class="seller-reviews-section">
-    <h2>Reviews <span id="averageRating"></span></h2>
-
-    <div class="review-form-card" id="reviewFormCard" style="display:none;">
-      <h3>Leave a Review</h3>
-      <form id="reviewForm">
-        <label>Rating</label>
-        <select id="reviewRating" required>
-          <option value="">Select rating</option>
-          <option value="5">⭐⭐⭐⭐⭐ (5) Excellent</option>
-          <option value="4">⭐⭐⭐⭐ (4) Good</option>
-          <option value="3">⭐⭐⭐ (3) Average</option>
-          <option value="2">⭐⭐ (2) Poor</option>
-          <option value="1">⭐ (1) Terrible</option>
-        </select>
-
-        <label>Comment</label>
-        <textarea id="reviewComment" rows="3" placeholder="Share your experience with this seller..." required></textarea>
-
-        <button type="submit" class="post-btn">Submit Review</button>
-      </form>
+  <header class="navbar seller-navbar">
+    <div class="logo">
+      <a href="index.html" class="logo-link">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket">
+        <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+      </a>
     </div>
 
-    <p id="loginToReviewMsg" style="display:none; color:#64748b;">
-      <a href="login.html" style="color:#2563eb; font-weight:600;">Login</a> to leave a review.
-    </p>
-
-    <p id="ownProfileMsg" style="display:none; color:#64748b;">
-      This is your own profile — you can't review yourself.
-    </p>
-
-    <div class="reviews-list" id="reviewsList">
-      <p>Loading reviews...</p>
+    <div class="seller-nav-actions">
+      <a href="index.html" class="seller-nav-link">Home</a>
+      <a href="messages.html" class="seller-nav-link">Messages</a>
+      <a href="sell.html" class="seller-post-link">Post An Ad</a>
     </div>
-  </div>
+  </header>
 
-</section>
+  <main class="seller-page">
+    <div id="businessRedirectNotice" class="redirect-notice">
+      This seller has a business storefront.
+      <a id="businessRedirectLink" href="#">View business profile →</a>
+    </div>
 
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
+    <section class="seller-hero">
+      <div class="seller-profile-main">
+        <div class="seller-avatar">👤</div>
+        <div>
+          <h1 id="sellerName">Loading...</h1>
+          <span id="sellerVerified" class="seller-badge"></span>
+          <p id="sellerMemberSince" class="seller-member"></p>
+        </div>
+      </div>
 
-<script type="module">
-import { auth, db } from "./firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import {
-  doc,
-  getDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc,
-  serverTimestamp,
-  orderBy
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+      <a href="#" id="messageSellerBtn" class="message-seller-btn">💬 Message Seller</a>
+    </section>
 
-const params = new URLSearchParams(window.location.search);
-const sellerId = params.get("id");
+    <section class="seller-stats">
+      <article class="seller-stat">
+        <div id="statListingCount" class="seller-stat-value">-</div>
+        <div class="seller-stat-label">Active Listings</div>
+      </article>
 
-const businessRedirectNotice = document.getElementById("businessRedirectNotice");
-const businessRedirectLink = document.getElementById("businessRedirectLink");
+      <article class="seller-stat">
+        <div id="statAverageRating" class="seller-stat-value">-</div>
+        <div class="seller-stat-label">Average Rating</div>
+      </article>
 
-const sellerName = document.getElementById("sellerName");
-const sellerVerified = document.getElementById("sellerVerified");
-const sellerMemberSince = document.getElementById("sellerMemberSince");
-const sellerListingsGrid = document.getElementById("sellerListingsGrid");
-const averageRating = document.getElementById("averageRating");
-const reviewFormCard = document.getElementById("reviewFormCard");
-const reviewForm = document.getElementById("reviewForm");
-const loginToReviewMsg = document.getElementById("loginToReviewMsg");
-const ownProfileMsg = document.getElementById("ownProfileMsg");
-const reviewsList = document.getElementById("reviewsList");
-const messageSellerBtn = document.getElementById("messageSellerBtn");
+      <article class="seller-stat">
+        <div id="statReviewCount" class="seller-stat-value">-</div>
+        <div class="seller-stat-label">Reviews</div>
+      </article>
+    </section>
 
-const statListingCount = document.getElementById("statListingCount");
-const statAverageRating = document.getElementById("statAverageRating");
-const statReviewCount = document.getElementById("statReviewCount");
+    <section class="seller-section">
+      <div class="seller-section-header">
+        <div>
+          <h2>Seller Listings</h2>
+          <p>Browse active products currently available from this seller.</p>
+        </div>
+      </div>
 
-let currentUser = null;
-let currentUserName = "";
-let isOwnProfile = false;
+      <div id="sellerListingsGrid" class="seller-listings-grid">
+        <div class="seller-empty">Loading listings...</div>
+      </div>
+    </section>
 
-function safeText(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
+    <section class="seller-section">
+      <div class="seller-section-header">
+        <div>
+          <h2>Reviews <span id="averageRating"></span></h2>
+          <p>Read buyer experiences or leave feedback after dealing with this seller.</p>
+        </div>
+      </div>
 
-function starsFor(rating) {
-  const fullStars = "⭐".repeat(rating);
-  return fullStars;
-}
+      <div class="review-grid">
+        <div>
+          <div id="reviewFormCard" class="review-form-card">
+            <h3>Leave a Review</h3>
 
-async function loadSellerProfile() {
-  if (!sellerId) {
-    sellerName.textContent = "Seller not found";
-    sellerListingsGrid.innerHTML = "<p>No seller ID was provided.</p>";
-    return;
-  }
+            <form id="reviewForm">
+              <label for="reviewRating">Rating</label>
+              <select id="reviewRating" required>
+                <option value="">Select rating</option>
+                <option value="5">⭐⭐⭐⭐⭐ (5) Excellent</option>
+                <option value="4">⭐⭐⭐⭐ (4) Good</option>
+                <option value="3">⭐⭐⭐ (3) Average</option>
+                <option value="2">⭐⭐ (2) Poor</option>
+                <option value="1">⭐ (1) Terrible</option>
+              </select>
 
-  try {
-    const userDoc = await getDoc(doc(db, "users", sellerId));
+              <label for="reviewComment">Comment</label>
+              <textarea id="reviewComment" rows="4" placeholder="Share your experience with this seller..." required></textarea>
 
-    if (userDoc.exists()) {
-      const userData = userDoc.data();
-
-      // Existing users with no accountType field are treated as
-      // "personal" (no migration needed). Only accounts explicitly
-      // marked "business" get redirected to the storefront page.
-      const accountType = userData.accountType || "personal";
-
-      if (accountType === "business") {
-        businessRedirectLink.href = "business-profile.html?id=" + encodeURIComponent(sellerId);
-        businessRedirectNotice.style.display = "block";
-      }
-
-      sellerName.textContent = userData.name || "LoyaltyMarket Seller";
-
-      if (userData.verified === true) {
-        sellerVerified.textContent = "⭐ Verified Seller";
-      } else {
-        sellerVerified.textContent = "Unverified Seller";
-      }
-
-      if (userData.createdAt && userData.createdAt.seconds) {
-        const date = new Date(userData.createdAt.seconds * 1000);
-        sellerMemberSince.textContent = "Member since " + date.getFullYear();
-      } else {
-        sellerMemberSince.textContent = "Member";
-      }
-    } else {
-      sellerName.textContent = "LoyaltyMarket Seller";
-      sellerVerified.textContent = "Unverified Seller";
-      sellerMemberSince.textContent = "Member";
-    }
-
-    await loadSellerListings();
-    await loadReviews();
-
-  } catch (error) {
-    sellerName.textContent = "Could not load seller";
-    sellerListingsGrid.innerHTML = `<p>${safeText(error.message)}</p>`;
-  }
-}
-
-async function loadSellerListings() {
-  try {
-    const listingsQuery = query(
-      collection(db, "products"),
-      where("sellerId", "==", sellerId),
-      where("status", "==", "active")
-    );
-
-    const snapshot = await getDocs(listingsQuery);
-
-    statListingCount.textContent = snapshot.size;
-
-    if (!snapshot.empty && !isOwnProfile) {
-      const firstListingId = snapshot.docs[0].id;
-      messageSellerBtn.href =
-        "chat.html?product=" + encodeURIComponent(firstListingId) +
-        "&seller=" + encodeURIComponent(sellerId);
-      messageSellerBtn.style.display = "inline-block";
-    } else {
-      messageSellerBtn.style.display = "none";
-    }
-
-    if (snapshot.empty) {
-      sellerListingsGrid.innerHTML = "<p>This seller has no active listings right now.</p>";
-      return;
-    }
-
-    sellerListingsGrid.innerHTML = "";
-
-    snapshot.forEach((productDoc) => {
-      const product = productDoc.data();
-      const isFeatured = product.featured === true;
-
-      const image =
-        product.imageUrl ||
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
-
-      const card = document.createElement("a");
-      card.href = "product-detail.html?id=" + productDoc.id;
-      card.style.textDecoration = "none";
-      card.style.color = "inherit";
-
-      card.innerHTML = `
-        <div class="product-card">
-          <div class="product-image">
-            <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
+              <button type="submit" class="review-submit">Submit Review</button>
+            </form>
           </div>
-          <h3>${safeText(product.title || "Untitled Product")}${isFeatured ? '<span class="listing-featured-badge">⭐ Featured</span>' : ""}</h3>
-          <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
-          <p class="location">📍 ${safeText(product.city || "")}, ${safeText(product.county || "Liberia")}</p>
+
+          <p id="loginToReviewMsg" class="review-message">
+            <a href="login.html">Login</a> to leave a review.
+          </p>
+
+          <p id="ownProfileMsg" class="review-message">
+            This is your own profile — you cannot review yourself.
+          </p>
         </div>
-      `;
 
-      sellerListingsGrid.appendChild(card);
-    });
+        <div id="reviewsList" class="reviews-list">
+          <div class="seller-empty">Loading reviews...</div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  } catch (error) {
-    sellerListingsGrid.innerHTML = `<p>Could not load listings: ${safeText(error.message)}</p>`;
-  }
-}
+  <footer class="footer seller-footer">
+    <div>
+      <h2>🇱🇷 LoyaltyMarket</h2>
+      <p>You Get Market, We Get Buyer.</p>
+    </div>
+    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  </footer>
 
-async function loadReviews() {
-  try {
-    const reviewsQuery = query(
-      collection(db, "reviews"),
-      where("sellerId", "==", sellerId),
-      orderBy("createdAt", "desc")
-    );
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    const snapshot = await getDocs(reviewsQuery);
+    import {
+      doc,
+      getDoc,
+      collection,
+      query,
+      where,
+      getDocs,
+      addDoc,
+      serverTimestamp,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    if (snapshot.empty) {
-      averageRating.textContent = "";
-      statAverageRating.textContent = "—";
-      statReviewCount.textContent = "0";
-      reviewsList.innerHTML = "<p>No reviews yet. Be the first to review this seller.</p>";
-      return;
+    const params = new URLSearchParams(window.location.search);
+    const sellerId = params.get("id");
+
+    const businessRedirectNotice = document.getElementById("businessRedirectNotice");
+    const businessRedirectLink = document.getElementById("businessRedirectLink");
+    const sellerName = document.getElementById("sellerName");
+    const sellerVerified = document.getElementById("sellerVerified");
+    const sellerMemberSince = document.getElementById("sellerMemberSince");
+    const sellerListingsGrid = document.getElementById("sellerListingsGrid");
+    const averageRating = document.getElementById("averageRating");
+    const reviewFormCard = document.getElementById("reviewFormCard");
+    const reviewForm = document.getElementById("reviewForm");
+    const loginToReviewMsg = document.getElementById("loginToReviewMsg");
+    const ownProfileMsg = document.getElementById("ownProfileMsg");
+    const reviewsList = document.getElementById("reviewsList");
+    const messageSellerBtn = document.getElementById("messageSellerBtn");
+    const statListingCount = document.getElementById("statListingCount");
+    const statAverageRating = document.getElementById("statAverageRating");
+    const statReviewCount = document.getElementById("statReviewCount");
+
+    let currentUser = null;
+    let currentUserName = "";
+    let isOwnProfile = false;
+
+    function safeText(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    let totalStars = 0;
-    let reviewCount = 0;
-    reviewsList.innerHTML = "";
+    function starsFor(rating) {
+      return "⭐".repeat(rating);
+    }
 
-    snapshot.forEach((reviewDoc) => {
-      const review = reviewDoc.data();
-      const rating = Number(review.rating) || 0;
-
-      totalStars += rating;
-      reviewCount++;
-
-      const reviewCard = document.createElement("div");
-      reviewCard.className = "review-card";
-
-      let dateText = "";
-      if (review.createdAt && review.createdAt.seconds) {
-        const date = new Date(review.createdAt.seconds * 1000);
-        dateText = date.toLocaleDateString();
+    async function loadSellerProfile() {
+      if (!sellerId) {
+        sellerName.textContent = "Seller not found";
+        sellerVerified.textContent = "Unavailable";
+        sellerMemberSince.textContent = "";
+        sellerListingsGrid.innerHTML =
+          '<div class="seller-empty">No seller ID was provided.</div>';
+        return;
       }
 
-      reviewCard.innerHTML = `
-        <div class="review-header">
-          <strong>${safeText(review.reviewerName || "Anonymous Buyer")}</strong>
-          <span class="review-stars">${starsFor(rating)}</span>
-        </div>
-        <p class="review-comment">${safeText(review.comment || "")}</p>
-        <p class="review-date">${safeText(dateText)}</p>
-      `;
+      try {
+        const userDoc = await getDoc(doc(db, "users", sellerId));
 
-      reviewsList.appendChild(reviewCard);
-    });
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const accountType = userData.accountType || "personal";
 
-    const avg = (totalStars / reviewCount).toFixed(1);
-    averageRating.textContent = `(${avg} ⭐ from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
-    statAverageRating.textContent = avg + " ⭐";
-    statReviewCount.textContent = reviewCount;
+          if (accountType === "business") {
+            businessRedirectLink.href =
+              "business-profile.html?id=" + encodeURIComponent(sellerId);
+            businessRedirectNotice.style.display = "block";
+          }
 
-  } catch (error) {
-    reviewsList.innerHTML = `<p>Could not load reviews: ${safeText(error.message)}</p>`;
-  }
-}
+          sellerName.textContent =
+            userData.name || "LoyaltyMarket Seller";
 
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user;
+          if (userData.verified === true) {
+            sellerVerified.textContent = "⭐ Verified Seller";
+          } else {
+            sellerVerified.textContent = "Unverified Seller";
+            sellerVerified.style.background = "#e2e8f0";
+            sellerVerified.style.color = "#475569";
+          }
 
-    try {
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      currentUserName = userDoc.exists() ? (userDoc.data().name || user.email) : user.email;
-    } catch (error) {
-      currentUserName = user.email;
+          if (userData.createdAt && userData.createdAt.seconds) {
+            const date = new Date(userData.createdAt.seconds * 1000);
+            sellerMemberSince.textContent =
+              "Member since " + date.getFullYear();
+          } else {
+            sellerMemberSince.textContent = "LoyaltyMarket member";
+          }
+        } else {
+          sellerName.textContent = "LoyaltyMarket Seller";
+          sellerVerified.textContent = "Unverified Seller";
+          sellerMemberSince.textContent = "LoyaltyMarket member";
+        }
+
+        await loadSellerListings();
+        await loadReviews();
+
+      } catch (error) {
+        sellerName.textContent = "Could not load seller";
+        sellerListingsGrid.innerHTML =
+          `<div class="seller-empty">${safeText(error.message)}</div>`;
+      }
     }
 
-    if (user.uid === sellerId) {
-      isOwnProfile = true;
-      ownProfileMsg.style.display = "block";
-      reviewFormCard.style.display = "none";
-      loginToReviewMsg.style.display = "none";
-    } else {
-      isOwnProfile = false;
-      reviewFormCard.style.display = "block";
-      loginToReviewMsg.style.display = "none";
-      ownProfileMsg.style.display = "none";
+    async function loadSellerListings() {
+      try {
+        const listingsQuery = query(
+          collection(db, "products"),
+          where("sellerId", "==", sellerId),
+          where("status", "==", "active")
+        );
+
+        const snapshot = await getDocs(listingsQuery);
+        statListingCount.textContent = snapshot.size;
+
+        if (!snapshot.empty && !isOwnProfile) {
+          const firstListingId = snapshot.docs[0].id;
+
+          messageSellerBtn.href =
+            "chat.html?product=" + encodeURIComponent(firstListingId) +
+            "&seller=" + encodeURIComponent(sellerId);
+
+          messageSellerBtn.style.display = "inline-flex";
+        } else {
+          messageSellerBtn.style.display = "none";
+        }
+
+        if (snapshot.empty) {
+          sellerListingsGrid.innerHTML =
+            '<div class="seller-empty">This seller has no active listings right now.</div>';
+          return;
+        }
+
+        sellerListingsGrid.innerHTML = "";
+
+        snapshot.forEach((productDoc) => {
+          const product = productDoc.data();
+          const isFeatured = product.featured === true;
+
+          const image =
+            product.imageUrl ||
+            (Array.isArray(product.images) && product.images[0]) ||
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+
+          const card = document.createElement("a");
+          card.href =
+            "product-detail.html?id=" + encodeURIComponent(productDoc.id);
+          card.className = "seller-product-link";
+
+          card.innerHTML = `
+            <article class="seller-product-card">
+              <div class="seller-product-image">
+                <img
+                  src="${safeText(image)}"
+                  alt="${safeText(product.title || "Product")}"
+                >
+              </div>
+
+              <div class="seller-product-body">
+                <h3>
+                  ${safeText(product.title || "Untitled Product")}
+                  ${isFeatured
+                    ? '<span class="listing-featured-badge">⭐ Featured</span>'
+                    : ""}
+                </h3>
+
+                <p class="seller-price">
+                  US$${safeText(product.priceUsd || "0")}
+                  |
+                  L$${safeText(product.priceLrd || "0")}
+                </p>
+
+                <p class="seller-location">
+                  📍 ${safeText(product.city || "")},
+                  ${safeText(product.county || "Liberia")}
+                </p>
+              </div>
+            </article>
+          `;
+
+          sellerListingsGrid.appendChild(card);
+        });
+
+      } catch (error) {
+        sellerListingsGrid.innerHTML =
+          `<div class="seller-empty">Could not load listings: ${safeText(error.message)}</div>`;
+      }
     }
-  } else {
-    currentUser = null;
-    isOwnProfile = false;
-    reviewFormCard.style.display = "none";
-    loginToReviewMsg.style.display = "block";
-    ownProfileMsg.style.display = "none";
-  }
-});
 
-reviewForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
+    async function loadReviews() {
+      try {
+        const reviewsQuery = query(
+          collection(db, "reviews"),
+          where("sellerId", "==", sellerId),
+          orderBy("createdAt", "desc")
+        );
 
-  if (!currentUser) {
-    alert("You must be logged in to leave a review.");
-    return;
-  }
+        const snapshot = await getDocs(reviewsQuery);
 
-  const rating = document.getElementById("reviewRating").value;
-  const comment = document.getElementById("reviewComment").value.trim();
+        if (snapshot.empty) {
+          averageRating.textContent = "";
+          statAverageRating.textContent = "—";
+          statReviewCount.textContent = "0";
+          reviewsList.innerHTML =
+            '<div class="seller-empty">No reviews yet. Be the first to review this seller.</div>';
+          return;
+        }
 
-  if (!rating || !comment) {
-    alert("Please select a rating and write a comment.");
-    return;
-  }
+        let totalStars = 0;
+        let reviewCount = 0;
+        reviewsList.innerHTML = "";
 
-  try {
-    await addDoc(collection(db, "reviews"), {
-      sellerId: sellerId,
-      reviewerId: currentUser.uid,
-      reviewerName: currentUserName,
-      rating: Number(rating),
-      comment: comment,
-      createdAt: serverTimestamp()
+        snapshot.forEach((reviewDoc) => {
+          const review = reviewDoc.data();
+          const rating = Number(review.rating) || 0;
+
+          totalStars += rating;
+          reviewCount++;
+
+          const reviewCard = document.createElement("article");
+          reviewCard.className = "review-card";
+
+          let dateText = "";
+          if (review.createdAt && review.createdAt.seconds) {
+            const date = new Date(review.createdAt.seconds * 1000);
+            dateText = date.toLocaleDateString();
+          }
+
+          reviewCard.innerHTML = `
+            <div class="review-header">
+              <strong>${safeText(review.reviewerName || "Anonymous Buyer")}</strong>
+              <span class="review-stars">${starsFor(rating)}</span>
+            </div>
+
+            <p class="review-comment">
+              ${safeText(review.comment || "")}
+            </p>
+
+            <p class="review-date">${safeText(dateText)}</p>
+          `;
+
+          reviewsList.appendChild(reviewCard);
+        });
+
+        const avg = (totalStars / reviewCount).toFixed(1);
+
+        averageRating.textContent =
+          `(${avg} ⭐ from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
+
+        statAverageRating.textContent = avg + " ⭐";
+        statReviewCount.textContent = reviewCount;
+
+      } catch (error) {
+        reviewsList.innerHTML =
+          `<div class="seller-empty">Could not load reviews: ${safeText(error.message)}</div>`;
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+
+          currentUserName = userDoc.exists()
+            ? (userDoc.data().name || user.email)
+            : user.email;
+
+        } catch (error) {
+          currentUserName = user.email;
+        }
+
+        if (user.uid === sellerId) {
+          isOwnProfile = true;
+          ownProfileMsg.style.display = "block";
+          reviewFormCard.style.display = "none";
+          loginToReviewMsg.style.display = "none";
+        } else {
+          isOwnProfile = false;
+          reviewFormCard.style.display = "block";
+          loginToReviewMsg.style.display = "none";
+          ownProfileMsg.style.display = "none";
+        }
+      } else {
+        currentUser = null;
+        isOwnProfile = false;
+        reviewFormCard.style.display = "none";
+        loginToReviewMsg.style.display = "block";
+        ownProfileMsg.style.display = "none";
+      }
+
+      if (sellerId) {
+        await loadSellerListings();
+      }
     });
 
-    alert("Review submitted successfully!");
-    reviewForm.reset();
-    loadReviews();
+    reviewForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-  } catch (error) {
-    alert("Could not submit review: " + error.message);
-  }
-});
+      if (!currentUser) {
+        alert("You must be logged in to leave a review.");
+        return;
+      }
 
-loadSellerProfile();
-</script>
+      const rating = document.getElementById("reviewRating").value;
+      const comment =
+        document.getElementById("reviewComment").value.trim();
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
-</script>
+      if (!rating || !comment) {
+        alert("Please select a rating and write a comment.");
+        return;
+      }
 
+      try {
+        await addDoc(collection(db, "reviews"), {
+          sellerId,
+          reviewerId: currentUser.uid,
+          reviewerName: currentUserName,
+          rating: Number(rating),
+          comment,
+          createdAt: serverTimestamp()
+        });
+
+        alert("Review submitted successfully!");
+        reviewForm.reset();
+        await loadReviews();
+
+      } catch (error) {
+        alert("Could not submit review: " + error.message);
+      }
+    });
+
+    loadSellerProfile();
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch((error) =>
+          console.log("Service worker registration failed:", error)
+        );
+    }
+  </script>
 </body>
 </html>
