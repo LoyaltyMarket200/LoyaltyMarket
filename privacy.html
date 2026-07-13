@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Privacy Policy - LoyaltyMarket</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="512x512"
+    href="icons/icon-512.png"
+  >
+
+  <meta name="theme-color" content="#1e3a8a">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f6fb;
+      color: #26364a;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    .privacy-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      min-height: 68px;
+      padding: 12px 5%;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .privacy-logo {
+      color: #1e3a8a;
+      font-size: 20px;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .privacy-logo span {
+      color: #d97706;
+    }
+
+    .privacy-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .privacy-nav-links a {
+      padding: 9px 14px;
+      border-radius: 7px;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .privacy-nav-links a:hover {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .privacy-nav-links .post-ad-button {
+      background: #f97316;
+      color: #ffffff;
+    }
+
+    .privacy-nav-links .post-ad-button:hover {
+      background: #ea580c;
+      color: #ffffff;
+    }
+
+    .privacy-hero {
+      max-width: 1100px;
+      margin: 35px auto 20px;
+      padding: 38px 40px;
+      border-radius: 0 0 18px 18px;
+      background:
+        linear-gradient(
+          135deg,
+          #1e3a8a,
+          #2563eb
+        );
+      color: #ffffff;
+      box-shadow: 0 10px 28px rgba(30, 58, 138, 0.18);
+    }
+
+    .privacy-eyebrow {
+      margin: 0 0 2px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .privacy-hero h1 {
+      margin: 0 0 8px;
+      font-size: 42px;
+      line-height: 1.15;
+    }
+
+    .privacy-hero p {
+      max-width: 760px;
+      margin: 4px 0;
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .privacy-date {
+      margin-top: 12px !important;
+      font-size: 12px !important;
+      font-weight: 700;
+    }
+
+    .privacy-layout {
+      max-width: 1100px;
+      margin: 20px auto 55px;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .privacy-sidebar {
+      position: sticky;
+      top: 88px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .privacy-sidebar h3 {
+      margin: 0 0 12px;
+      color: #1e293b;
+      font-size: 15px;
+    }
+
+    .privacy-sidebar a {
+      display: block;
+      padding: 6px 3px;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .privacy-sidebar a:hover {
+      color: #2563eb;
+      transform: translateX(3px);
+    }
+
+    .privacy-content {
+      padding: 12px 30px 30px;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .privacy-intro {
+      margin: 8px 0 20px;
+      padding: 18px;
+      border-left: 4px solid #2563eb;
+      border-radius: 9px;
+      background: #eff6ff;
+      color: #334155;
+      font-size: 14px;
+    }
+
+    .privacy-section {
+      padding: 22px 0;
+      border-bottom: 1px solid #e2e8f0;
+      scroll-margin-top: 95px;
+    }
+
+    .privacy-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .privacy-section h2 {
+      margin: 0 0 8px;
+      color: #1e293b;
+      font-size: 22px;
+    }
+
+    .privacy-section h3 {
+      margin: 18px 0 5px;
+      color: #334155;
+      font-size: 16px;
+    }
+
+    .privacy-section p,
+    .privacy-section li {
+      color: #526174;
+      font-size: 14px;
+    }
+
+    .privacy-section ul {
+      margin: 10px 0;
+      padding-left: 22px;
+    }
+
+    .privacy-section li {
+      margin-bottom: 7px;
+    }
+
+    .privacy-contact-box {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      background: #eff6ff;
+    }
+
+    .privacy-contact-box strong {
+      color: #1e3a8a;
+    }
+
+    .privacy-contact-box a {
+      color: #1d4ed8;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .privacy-warning {
+      margin-top: 18px;
+      padding: 15px;
+      border: 1px solid #fde68a;
+      border-radius: 9px;
+      background: #fffbeb;
+      color: #854d0e;
+      font-size: 13px;
+    }
+
+    .privacy-footer {
+      padding: 28px 5%;
+      background: #172033;
+      color: #cbd5e1;
+    }
+
+    .privacy-footer-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .privacy-footer-brand {
+      margin: 0;
+      color: #60a5fa;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .privacy-footer-tagline {
+      margin: 4px 0 0;
+      font-size: 13px;
+    }
+
+    .privacy-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .privacy-footer-links a {
+      color: #cbd5e1;
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .privacy-footer-links a:hover {
+      color: #ffffff;
+    }
+
+    .privacy-copyright {
+      margin: 15px auto 0;
+      max-width: 1100px;
+      padding-top: 15px;
+      border-top: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    @media (max-width: 800px) {
+      .privacy-navbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .privacy-nav-links {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .privacy-hero {
+        margin-top: 20px;
+        padding: 30px 22px;
+      }
+
+      .privacy-hero h1 {
+        font-size: 32px;
+      }
+
+      .privacy-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .privacy-sidebar {
+        position: static;
+      }
+
+      .privacy-content {
+        padding: 10px 20px 25px;
+      }
+
+      .privacy-footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .privacy-copyright {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .privacy-nav-links a {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .privacy-hero h1 {
+        font-size: 28px;
+      }
+
+      .privacy-section h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="privacy-navbar">
+    <a href="index.html" class="privacy-logo">
+      <span>LR</span> LoyaltyMarket
+    </a>
+
+    <nav class="privacy-nav-links">
+      <a href="index.html">Home</a>
+      <a href="help.html">Help</a>
+      <a href="sell.html" class="post-ad-button">Post An Ad</a>
+    </nav>
+  </header>
+
+  <section class="privacy-hero">
+    <p class="privacy-eyebrow">LoyaltyMarket Policies</p>
+
+    <h1>Privacy Policy</h1>
+
+    <p>
+      This Privacy Policy explains how LoyaltyMarket collects, uses,
+      stores, and protects information when people use our marketplace.
+    </p>
+
+    <p class="privacy-date">
+      Effective date: July 13, 2026
+    </p>
+  </section>
+
+  <main class="privacy-layout">
+
+    <aside class="privacy-sidebar">
+      <h3>On This Page</h3>
+
+      <a href="#introduction">1. Introduction</a>
+      <a href="#information-collected">2. Information We Collect</a>
+      <a href="#information-use">3. How We Use Information</a>
+      <a href="#sharing">4. Information Sharing</a>
+      <a href="#messages">5. Messages and Transactions</a>
+      <a href="#cookies">6. Cookies and Technology</a>
+      <a href="#security">7. Data Security</a>
+      <a href="#retention">8. Data Retention</a>
+      <a href="#choices">9. Your Choices and Rights</a>
+      <a href="#children">10. Children's Privacy</a>
+      <a href="#external-links">11. External Links</a>
+      <a href="#changes">12. Policy Changes</a>
+      <a href="#contact">13. Contact Us</a>
+    </aside>
+
+    <article class="privacy-content">
+
+      <div class="privacy-intro">
+        By using LoyaltyMarket, you acknowledge that your information
+        may be processed as described in this Privacy Policy. Please
+        read this page carefully before creating an account, posting
+        an advertisement, contacting another user, or completing a
+        marketplace transaction.
+      </div>
+
+      <section id="introduction" class="privacy-section">
+        <h2>1. Introduction</h2>
+
+        <p>
+          LoyaltyMarket is an online marketplace designed to help
+          individuals and businesses in Liberia advertise, discover,
+          buy, sell, and discuss products and services.
+        </p>
+
+        <p>
+          This Privacy Policy applies to the LoyaltyMarket website,
+          mobile applications, services, features, and communications
+          operated by LoyaltyMarket.
+        </p>
+      </section>
+
+      <section id="information-collected" class="privacy-section">
+        <h2>2. Information We Collect</h2>
+
+        <h3>Information You Provide</h3>
+
+        <p>
+          We may collect information that you provide when creating
+          an account, completing your profile, posting an advertisement,
+          contacting support, or communicating with another user.
+        </p>
+
+        <ul>
+          <li>Your full name or business name.</li>
+          <li>Email address and telephone number.</li>
+          <li>Account password and login information.</li>
+          <li>Profile photo or business logo.</li>
+          <li>Product photographs, descriptions, prices, and locations.</li>
+          <li>Messages and communication sent through the platform.</li>
+          <li>Reports, complaints, feedback, and support requests.</li>
+        </ul>
+
+        <h3>Information Collected Automatically</h3>
+
+        <p>
+          When you use LoyaltyMarket, certain technical information
+          may be collected automatically.
+        </p>
+
+        <ul>
+          <li>Internet Protocol address.</li>
+          <li>Browser and device type.</li>
+          <li>Operating system.</li>
+          <li>Pages visited and features used.</li>
+          <li>Date, time, and duration of activity.</li>
+          <li>Approximate location based on device or network information.</li>
+        </ul>
+      </section>
+
+      <section id="information-use" class="privacy-section">
+        <h2>3. How We Use Information</h2>
+
+        <p>
+          LoyaltyMarket may use collected information to:
+        </p>
+
+        <ul>
+          <li>Create, maintain, and secure user accounts.</li>
+          <li>Display advertisements and seller information.</li>
+          <li>Connect buyers, sellers, and service providers.</li>
+          <li>Enable messages and marketplace communication.</li>
+          <li>Improve search results and user experience.</li>
+          <li>Detect fraud, scams, spam, abuse, and prohibited activity.</li>
+          <li>Investigate reports and enforce our Terms of Use.</li>
+          <li>Send account, safety, support, and service notifications.</li>
+          <li>Comply with lawful requests and legal obligations.</li>
+          <li>Improve and develop LoyaltyMarket services.</li>
+        </ul>
+      </section>
+
+      <section id="sharing" class="privacy-section">
+        <h2>4. Information Sharing</h2>
+
+        <p>
+          LoyaltyMarket does not sell users' personal information.
+          Information may be shared only when necessary to operate,
+          secure, improve, or legally protect the platform.
+        </p>
+
+        <p>
+          Information may be shared with:
+        </p>
+
+        <ul>
+          <li>
+            Other users when you publish an advertisement or choose
+            to share your contact information.
+          </li>
+
+          <li>
+            Service providers that assist with hosting, storage,
+            security, communication, analytics, or technical support.
+          </li>
+
+          <li>
+            Law-enforcement agencies, courts, regulators, or government
+            authorities when legally required.
+          </li>
+
+          <li>
+            Professional advisers where necessary to protect
+            LoyaltyMarket's legal or business interests.
+          </li>
+
+          <li>
+            A future owner or partner if LoyaltyMarket is involved in
+            a merger, acquisition, financing, or sale of business assets.
+          </li>
+        </ul>
+      </section>
+
+      <section id="messages" class="privacy-section">
+        <h2>5. Messages and Transactions</h2>
+
+        <p>
+          LoyaltyMarket may store or review marketplace messages when
+          reasonably necessary to provide support, investigate fraud,
+          respond to safety complaints, or enforce platform rules.
+        </p>
+
+        <p>
+          Buyers and sellers are responsible for deciding what personal
+          information they share with each other. Users should avoid
+          sharing passwords, verification codes, banking passwords,
+          or other sensitive information.
+        </p>
+
+        <p>
+          Unless LoyaltyMarket introduces an official payment service,
+          transactions and payments arranged between users occur
+          independently of LoyaltyMarket.
+        </p>
+      </section>
+
+      <section id="cookies" class="privacy-section">
+        <h2>6. Cookies and Similar Technology</h2>
+
+        <p>
+          LoyaltyMarket may use cookies, local storage, and similar
+          technologies to remember user preferences, maintain login
+          sessions, improve performance, understand usage, and protect
+          the platform.
+        </p>
+
+        <p>
+          Users may manage cookies through their browser settings.
+          Disabling some cookies may cause certain features to stop
+          working correctly.
+        </p>
+      </section>
+
+      <section id="security" class="privacy-section">
+        <h2>7. Data Security</h2>
+
+        <p>
+          LoyaltyMarket intends to use reasonable technical and
+          organizational safeguards to protect user information from
+          unauthorized access, alteration, misuse, loss, or disclosure.
+        </p>
+
+        <p>
+          However, no website, mobile application, storage system, or
+          internet transmission can be guaranteed to be completely
+          secure. Users are responsible for protecting their passwords,
+          devices, and account access.
+        </p>
+
+        <p>
+          Users should immediately report suspected account access,
+          scams, fraud, impersonation, or security incidents.
+        </p>
+      </section>
+
+      <section id="retention" class="privacy-section">
+        <h2>8. Data Retention</h2>
+
+        <p>
+          LoyaltyMarket may retain information for as long as reasonably
+          necessary to provide services, operate accounts, resolve
+          disputes, investigate abuse, prevent fraud, comply with legal
+          obligations, and enforce platform agreements.
+        </p>
+
+        <p>
+          Some information may remain in backups, safety records,
+          transaction records, or legal records after an account is
+          deleted where retention is reasonably necessary.
+        </p>
+      </section>
+
+      <section id="choices" class="privacy-section">
+        <h2>9. Your Choices and Rights</h2>
+
+        <p>
+          Depending on applicable law and available platform features,
+          users may request to:
+        </p>
+
+        <ul>
+          <li>Review or correct account information.</li>
+          <li>Update profile and contact details.</li>
+          <li>Remove or edit advertisements.</li>
+          <li>Change communication preferences.</li>
+          <li>Request account deletion.</li>
+          <li>Ask questions about personal information.</li>
+          <li>Report suspected misuse of personal information.</li>
+        </ul>
+
+        <p>
+          LoyaltyMarket may require identity or account verification
+          before completing certain privacy or account requests.
+        </p>
+      </section>
+
+      <section id="children" class="privacy-section">
+        <h2>10. Children's Privacy</h2>
+
+        <p>
+          LoyaltyMarket is not intended for children who are unable to
+          legally enter into an agreement. Minors may use the platform
+          only with appropriate permission and supervision from a
+          parent or legal guardian.
+        </p>
+
+        <p>
+          Parents or guardians who believe a child has submitted
+          personal information without appropriate permission should
+          contact LoyaltyMarket.
+        </p>
+      </section>
+
+      <section id="external-links" class="privacy-section">
+        <h2>11. External Links and Services</h2>
+
+        <p>
+          LoyaltyMarket advertisements or messages may contain links
+          to websites, payment providers, social-media platforms, or
+          services operated by third parties.
+        </p>
+
+        <p>
+          LoyaltyMarket does not control the privacy practices,
+          security, content, or services of independent third parties.
+          Users should review the privacy policies of those services
+          before providing information.
+        </p>
+      </section>
+
+      <section id="changes" class="privacy-section">
+        <h2>12. Changes to This Privacy Policy</h2>
+
+        <p>
+          LoyaltyMarket may update this Privacy Policy as the platform,
+          technology, legal requirements, or business practices change.
+        </p>
+
+        <p>
+          The effective date shown at the top of this page will be
+          updated when important changes are made. Continued use of
+          LoyaltyMarket after an update means that the revised policy
+          will apply to future use of the platform.
+        </p>
+      </section>
+
+      <section id="contact" class="privacy-section">
+        <h2>13. Contact Us</h2>
+
+        <p>
+          Questions, privacy requests, complaints, or reports about
+          personal information may be sent through LoyaltyMarket's
+          official support channels.
+        </p>
+
+        <div class="privacy-contact-box">
+          <strong>LoyaltyMarket Support</strong><br>
+
+          Email:
+          <a href="mailto:support@loyaltymarket.com">
+            support@loyaltymarket.com
+          </a>
+          <br>
+
+          Location: Liberia
+        </div>
+
+        <div class="privacy-warning">
+          <strong>Important:</strong>
+          This page is a practical draft for LoyaltyMarket and should
+          be reviewed by a qualified Liberian lawyer before the platform
+          begins handling sensitive information, online payments, or
+          large-scale commercial transactions.
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="privacy-footer">
+    <div class="privacy-footer-inner">
+
+      <div>
+        <p class="privacy-footer-brand">LoyaltyMarket</p>
+
+        <p class="privacy-footer-tagline">
+          We Get Market, We Get Buyer.
+        </p>
+      </div>
+
+      <div class="privacy-footer-links">
+        <a href="index.html">Home</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="help.html">Help</a>
+      </div>
+
+    </div>
+
+    <p class="privacy-copyright">
+      © 2026 LoyaltyMarket. All Rights Reserved.
+    </p>
+  </footer>
+
+</body>
+</html>
