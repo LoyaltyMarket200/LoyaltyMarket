@@ -1036,6 +1036,7 @@
 
       <button class="admin-section-tab-btn" data-section="boosts">
         Boost Requests
+        <span id="pendingBoostsBadge" class="report-count-badge" aria-label="Pending boost requests"></span>
       </button>
 
       <button class="admin-section-tab-btn" data-section="settings">
@@ -1302,6 +1303,7 @@
     const clearUserSearchBtn = document.getElementById("clearUserSearchBtn");
     const refreshBtn = document.getElementById("refreshBtn");
     const pendingReportsBadge = document.getElementById("pendingReportsBadge");
+    const pendingBoostsBadge = document.getElementById("pendingBoostsBadge");
 
     const sectionButtons = document.querySelectorAll(".admin-section-tab-btn");
     const reportFilterButtons = document.querySelectorAll(".admin-tab-btn[data-filter]");
@@ -1478,6 +1480,14 @@
         pendingReportsBadge.style.display = "none";
       }
       document.getElementById("statPendingBoosts").textContent = pendingBoosts.length;
+
+      if (pendingBoosts.length > 0) {
+        pendingBoostsBadge.textContent = pendingBoosts.length > 99 ? "99+" : String(pendingBoosts.length);
+        pendingBoostsBadge.style.display = "inline-flex";
+      } else {
+        pendingBoostsBadge.textContent = "";
+        pendingBoostsBadge.style.display = "none";
+      }
       document.getElementById("statActiveListings").textContent = activeListings.length;
       document.getElementById("statArchivedListings").textContent = archivedListings.length;
       document.getElementById("statSoldListings").textContent = soldListings.length;
