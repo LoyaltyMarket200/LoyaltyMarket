@@ -166,30 +166,411 @@
       font-weight: 700;
       text-decoration: none;
     }
+
+    /* ===== PROFESSIONAL PRODUCT DETAILS REDESIGN ===== */
+    body {
+      background: #f5f7fb;
+    }
+
+    .product-navbar {
+      min-height: 78px;
+      height: auto;
+      padding: 12px max(24px, 5vw);
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .product-navbar .logo-link img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .product-navbar .logo-text {
+      color: #0f2d67;
+      font-size: 21px;
+    }
+
+    .product-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .product-nav-link,
+    .product-post-btn {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .product-nav-link {
+      color: #334155;
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    .product-nav-link:hover {
+      color: #1e3a8a;
+      border-color: #bfdbfe;
+      background: #eff6ff;
+    }
+
+    .product-post-btn {
+      color: #fff;
+      background: #f97316;
+      box-shadow: 0 8px 18px rgba(249,115,22,.2);
+    }
+
+    .product-post-btn:hover {
+      background: #ea580c;
+    }
+
+    .product-hero-strip {
+      padding: 42px max(24px, 6vw);
+      color: #fff;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 30%),
+        linear-gradient(135deg, #0f2d67, #1d4ed8);
+    }
+
+    .product-hero-strip > div {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .product-kicker {
+      margin-bottom: 8px;
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .16em;
+    }
+
+    .product-hero-strip h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.1;
+    }
+
+    .product-hero-strip p:last-child {
+      color: #dbeafe;
+      font-size: 16px;
+    }
+
+    .breadcrumb {
+      width: min(1280px, 94%);
+      margin: 22px auto 0;
+      padding: 12px 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .product-detail {
+      width: min(1280px, 94%);
+      margin: 20px auto 70px;
+      grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr);
+      gap: 28px;
+    }
+
+    .product-detail-left {
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 12px 30px rgba(15,23,42,.07);
+    }
+
+    .main-image {
+      height: 560px;
+      border-radius: 16px;
+      box-shadow: none;
+    }
+
+    .thumbnail-strip {
+      margin-top: 14px;
+      padding: 4px 2px;
+    }
+
+    .thumbnail {
+      width: 86px;
+      height: 70px;
+      border-radius: 10px;
+    }
+
+    .product-detail-right {
+      padding: 28px;
+      border-radius: 22px;
+      box-shadow: 0 12px 30px rgba(15,23,42,.08);
+      position: sticky;
+      top: 100px;
+    }
+
+    .product-detail-right .badge {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .product-detail-right h1 {
+      font-size: clamp(29px, 4vw, 42px);
+      margin-bottom: 12px;
+    }
+
+    .detail-price {
+      color: #ea580c;
+      font-size: 29px;
+      font-weight: 900;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+    }
+
+    .detail-location,
+    .detail-condition {
+      padding: 10px 0;
+      margin: 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .detail-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 24px 0 12px;
+    }
+
+    .buy-now-btn,
+    .contact-btn,
+    .heart-btn {
+      min-height: 50px;
+      border-radius: 11px;
+      font-weight: 800;
+    }
+
+    .buy-now-btn {
+      background: #16a34a;
+      grid-column: span 2;
+    }
+
+    .buy-now-btn:hover {
+      background: #15803d;
+    }
+
+    .contact-btn {
+      background: #1d4ed8;
+    }
+
+    .heart-btn {
+      background: #fff;
+    }
+
+    .report-btn {
+      width: 100%;
+      margin-top: 0;
+      min-height: 44px;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .seller-card {
+      position: relative;
+      margin-top: 22px;
+      padding: 24px 18px 18px;
+      border-radius: 16px;
+      background: #f8fafc;
+    }
+
+    .seller-card-header {
+      position: absolute;
+      top: -11px;
+      left: 16px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #1e3a8a;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .05em;
+    }
+
+    .seller-avatar {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #dbeafe, #eff6ff);
+    }
+
+    .buyer-safety-card {
+      display: flex;
+      gap: 12px;
+      margin: 22px 0;
+      padding: 16px;
+      border: 1px solid #fed7aa;
+      border-radius: 14px;
+      background: #fff7ed;
+      color: #9a3412;
+    }
+
+    .buyer-safety-card > span {
+      font-size: 24px;
+    }
+
+    .buyer-safety-card strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .buyer-safety-card p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .product-description {
+      padding-top: 20px;
+    }
+
+    .product-description h3 {
+      font-size: 20px;
+    }
+
+    .modal-overlay {
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-box {
+      border-radius: 18px;
+      box-shadow: 0 20px 55px rgba(15,23,42,.24);
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      text-align: left;
+      padding: 34px max(24px, 6vw);
+    }
+
+    .product-footer h2 {
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 980px) {
+      .product-detail {
+        grid-template-columns: 1fr;
+      }
+
+      .product-detail-right {
+        position: static;
+      }
+
+      .main-image {
+        height: 500px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .product-navbar {
+        align-items: stretch;
+      }
+
+      .product-nav-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .product-hero-strip {
+        padding: 32px 20px;
+      }
+
+      .product-detail-left,
+      .product-detail-right {
+        padding: 16px;
+        border-radius: 17px;
+      }
+
+      .main-image {
+        height: 340px;
+      }
+
+      .detail-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .buy-now-btn {
+        grid-column: span 1;
+      }
+
+      .product-footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .product-nav-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .main-image {
+        height: 280px;
+      }
+
+      .product-detail-right h1 {
+        font-size: 28px;
+      }
+
+      .detail-price {
+        font-size: 23px;
+      }
+    }
+
   </style>
 </head>
 <body>
 
-<header class="navbar">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<header class="navbar product-navbar">
+  <div class="logo">
+    <a href="index.html" class="logo-link">
+      <img src="icons/icon-512.png" alt="LoyaltyMarket">
+      <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+    </a>
+  </div>
 
-  <input
-    type="text"
-    class="search-box"
-    placeholder="Search Products, Cars, Phones..."
-  >
-
-  <div class="nav-buttons">
-    <a href="index.html" class="login-btn">Home</a>
-    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link">
-      My Messages
+  <div class="product-nav-actions">
+    <a href="index.html" class="product-nav-link">Home</a>
+    <a href="messages.html" id="messagesBtn" class="product-nav-link nav-messages-link">
+      Messages
       <span id="unreadBadge" class="unread-badge">0</span>
     </a>
-    <a href="dashboard.html" class="register-btn">Dashboard</a>
-    <a href="sell.html" class="sell-btn">Sell Product</a>
+    <a href="dashboard.html" class="product-nav-link">Dashboard</a>
+    <a href="sell.html" class="product-post-btn">Post An Ad</a>
   </div>
 </header>
+
+<section class="product-hero-strip">
+  <div>
+    <p class="product-kicker">LOYALTYMARKET LISTING</p>
+    <h1>Find It. Check It. Make A Deal.</h1>
+    <p>Browse trusted listings from sellers and businesses across Liberia.</p>
+  </div>
+</section>
 
 <div class="breadcrumb">
   <a href="index.html">Home</a> &gt;
@@ -228,12 +609,21 @@
     <button id="reportBtn" class="report-btn" type="button">🚩 Report this listing</button>
 
     <div class="seller-card">
+      <div class="seller-card-header">Seller Details</div>
       <div class="seller-avatar">👤</div>
       <div class="seller-info">
         <h4>Seller Information</h4>
         <p><a id="sellerNameLink" href="#" style="color:#2563eb; text-decoration:none; font-weight:600;">Loading...</a></p>
         <p id="sellerEmail">Loading...</p>
         <p id="sellerPhone">Phone not listed</p>
+      </div>
+    </div>
+
+    <div class="buyer-safety-card">
+      <span>🛡️</span>
+      <div>
+        <strong>Deal Safely</strong>
+        <p>Inspect the item before paying. Meet in a public place and avoid sending deposits to unknown sellers.</p>
       </div>
     </div>
 
@@ -266,9 +656,11 @@
   </div>
 </div>
 
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
+<footer class="footer product-footer">
+  <div>
+    <h2>🇱🇷 LoyaltyMarket</h2>
+    <p>You Get Market, We Get Buyer.</p>
+  </div>
   <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
 </footer>
 
