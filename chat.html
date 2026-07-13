@@ -8,408 +8,775 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
+
   <style>
-    .chat-wrap {
-      max-width: 700px;
-      margin: 20px auto;
-      padding: 0 16px;
-    }
-    .chat-product-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 16px;
-    }
-    .chat-product-card img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .chat-product-info h4 {
-      margin: 0 0 4px 0;
-      font-size: 15px;
-      color: #111;
-    }
-    .chat-product-info p {
-      margin: 0;
-      font-size: 13px;
-      color: #059669;
-      font-weight: 600;
-    }
-    .chat-product-card a {
-      margin-left: auto;
-      font-size: 13px;
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 600;
-      white-space: nowrap;
+    * {
+      box-sizing: border-box;
     }
 
-    .chat-box {
+    body {
+      margin: 0;
+      background: #f5f7fb;
+      color: #0f172a;
+    }
+
+    .chat-navbar {
+      min-height: 78px;
+      height: auto;
+      padding: 12px max(24px, 5vw);
       background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      height: 420px;
-      overflow-y: auto;
-      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .chat-navbar .logo-link img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .chat-navbar .logo-text {
+      color: #0f2d67;
+      font-size: 21px;
+    }
+
+    .chat-nav-actions {
       display: flex;
-      flex-direction: column;
+      align-items: center;
       gap: 10px;
     }
 
-    .chat-bubble {
-      max-width: 75%;
-      padding: 10px 14px;
-      border-radius: 14px;
+    .chat-nav-link,
+    .chat-post-link {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
       font-size: 14px;
-      line-height: 1.4;
-      word-wrap: break-word;
+      font-weight: 800;
+      border: 1px solid transparent;
     }
+
+    .chat-nav-link {
+      color: #334155;
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    .chat-nav-link:hover {
+      color: #1e3a8a;
+      border-color: #bfdbfe;
+      background: #eff6ff;
+    }
+
+    .chat-post-link {
+      color: #fff;
+      background: #f97316;
+      box-shadow: 0 8px 18px rgba(249, 115, 22, .2);
+    }
+
+    .chat-page {
+      width: min(1180px, 94%);
+      margin: 32px auto 70px;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .chat-sidebar {
+      position: sticky;
+      top: 104px;
+      padding: 28px;
+      border-radius: 22px;
+      color: #fff;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 30%),
+        linear-gradient(145deg, #0f2d67, #1d4ed8 65%, #0ea5e9);
+      box-shadow: 0 18px 42px rgba(30,58,138,.2);
+    }
+
+    .chat-kicker {
+      margin-bottom: 10px;
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .16em;
+    }
+
+    .chat-sidebar h1 {
+      margin: 0 0 12px;
+      font-size: 34px;
+      line-height: 1.08;
+    }
+
+    .chat-sidebar > p {
+      color: #dbeafe;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .chat-safety-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .chat-safety-item {
+      display: flex;
+      gap: 11px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.17);
+      border-radius: 14px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .chat-safety-item span {
+      font-size: 22px;
+    }
+
+    .chat-safety-item strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 14px;
+    }
+
+    .chat-safety-item p {
+      margin: 0;
+      color: #dbeafe;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .chat-panel {
+      min-width: 0;
+      padding: 24px;
+      border: 1px solid #e2e8f0;
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 14px 34px rgba(15,23,42,.08);
+    }
+
+    .chat-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .back-link {
+      color: #2563eb;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .chat-status {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .chat-product-card {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background: #f8fafc;
+    }
+
+    .chat-product-card img {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 13px;
+      background: #e2e8f0;
+    }
+
+    .chat-product-info h4 {
+      margin: 0 0 5px;
+      font-size: 17px;
+      color: #0f172a;
+    }
+
+    .chat-product-info p {
+      margin: 0;
+      color: #ea580c;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .chat-product-card a {
+      color: #2563eb;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .chat-product-card a:hover {
+      text-decoration: underline;
+    }
+
+    .chat-box {
+      height: 480px;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      background:
+        linear-gradient(rgba(255,255,255,.92), rgba(255,255,255,.92)),
+        radial-gradient(circle at top left, #dbeafe 0, transparent 35%),
+        radial-gradient(circle at bottom right, #fef3c7 0, transparent 28%);
+    }
+
+    .chat-bubble {
+      max-width: 76%;
+      padding: 11px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.45;
+      word-break: break-word;
+      box-shadow: 0 4px 12px rgba(15,23,42,.06);
+    }
+
     .chat-bubble-mine {
       align-self: flex-end;
-      background: #2563eb;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
       color: #fff;
-      border-bottom-right-radius: 4px;
+      border-bottom-right-radius: 5px;
     }
+
     .chat-bubble-theirs {
       align-self: flex-start;
-      background: #f3f4f6;
-      color: #111;
-      border-bottom-left-radius: 4px;
+      background: #fff;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      border-bottom-left-radius: 5px;
     }
+
     .chat-bubble-time {
-      font-size: 11px;
-      opacity: 0.7;
-      margin-top: 4px;
       display: block;
+      margin-top: 5px;
+      font-size: 10px;
+      opacity: .72;
+      text-align: right;
+    }
+
+    .chat-input-area {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background: #f8fafc;
     }
 
     .chat-input-row {
       display: flex;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 10px;
     }
+
     .chat-input-row input {
       flex: 1;
+      min-height: 48px;
       padding: 12px 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 11px;
       font-size: 14px;
       font-family: inherit;
+      background: #fff;
     }
+
+    .chat-input-row input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37,99,235,.10);
+    }
+
     .chat-send-btn {
-      background: #2563eb;
-      color: #fff;
+      min-width: 110px;
       border: none;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #fff;
       padding: 12px 20px;
-      border-radius: 10px;
-      font-weight: 600;
+      font-weight: 900;
       cursor: pointer;
+      box-shadow: 0 8px 18px rgba(37,99,235,.18);
     }
+
+    .chat-send-btn:hover {
+      background: linear-gradient(135deg, #172554, #1d4ed8);
+    }
+
     .chat-send-btn:disabled {
-      opacity: 0.6;
+      opacity: .6;
       cursor: not-allowed;
     }
 
+    .chat-input-note {
+      margin: 8px 2px 0;
+      color: #94a3b8;
+      font-size: 11px;
+    }
+
     .chat-empty-state {
+      margin: auto;
       text-align: center;
-      color: #888;
-      margin-top: 60px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .chat-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      text-align: left;
+      padding: 30px max(24px, 6vw);
+    }
+
+    .chat-footer h2 {
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .chat-page {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .chat-navbar {
+        align-items: stretch;
+      }
+
+      .chat-nav-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .chat-page {
+        width: 94%;
+        margin-top: 20px;
+      }
+
+      .chat-sidebar,
+      .chat-panel {
+        padding: 20px 16px;
+        border-radius: 18px;
+      }
+
+      .chat-box {
+        height: 420px;
+      }
+
+      .chat-product-card {
+        grid-template-columns: 60px minmax(0, 1fr);
+      }
+
+      .chat-product-card img {
+        width: 60px;
+        height: 60px;
+      }
+
+      .chat-product-card a {
+        grid-column: 2;
+      }
+
+      .chat-footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .chat-nav-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-input-row {
+        flex-direction: column;
+      }
+
+      .chat-send-btn {
+        width: 100%;
+      }
+
+      .chat-bubble {
+        max-width: 88%;
+      }
     }
   </style>
 </head>
+
 <body>
-
-<header class="navbar">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-
-  <input
-    type="text"
-    class="search-box"
-    placeholder="Search Products, Cars, Phones..."
-  >
-
-  <div class="nav-buttons">
-    <a href="index.html" class="login-btn">Home</a>
-    <a href="messages.html" class="register-btn">My Messages</a>
-    <a href="dashboard.html" class="register-btn">Dashboard</a>
-  </div>
-</header>
-
-<div class="chat-wrap">
-
-  <a id="backToProductLink" href="#" style="display:inline-block; margin-bottom:12px; color:#2563eb; text-decoration:none; font-size:14px;">
-    ← Back to messages
-  </a>
-
-  <div class="chat-product-card" id="chatProductCard">
-    <img id="chatProductImage" src="" alt="">
-    <div class="chat-product-info">
-      <h4 id="chatProductTitle">Loading...</h4>
-      <p id="chatProductPrice"></p>
+  <header class="navbar chat-navbar">
+    <div class="logo">
+      <a href="index.html" class="logo-link">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket">
+        <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+      </a>
     </div>
-    <a id="chatProductLink" href="#">View Listing</a>
-  </div>
 
-  <div class="chat-box" id="chatBox">
-    <p class="chat-empty-state">Loading conversation...</p>
-  </div>
+    <div class="chat-nav-actions">
+      <a href="index.html" class="chat-nav-link">Home</a>
+      <a href="messages.html" class="chat-nav-link">My Messages</a>
+      <a href="sell.html" class="chat-post-link">Post An Ad</a>
+    </div>
+  </header>
 
-  <div class="chat-input-row">
-    <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
-    <button class="chat-send-btn" id="sendBtn">Send</button>
-  </div>
+  <main class="chat-page">
+    <aside class="chat-sidebar">
+      <p class="chat-kicker">DIRECT MESSAGING</p>
+      <h1>Talk Clearly. Deal Safely.</h1>
+      <p>
+        Ask questions, confirm product details, and agree on a safe meeting place before making a deal.
+      </p>
 
-</div>
-
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
-
-<script type="module">
-import { db, auth } from "./firebase.js";
-
-import {
-  doc,
-  getDoc,
-  collection,
-  addDoc,
-  updateDoc,
-  query,
-  where,
-  orderBy,
-  onSnapshot,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-import {
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-const params = new URLSearchParams(window.location.search);
-const productId = params.get("product");
-const sellerId = params.get("seller");
-
-const chatBox = document.getElementById("chatBox");
-const messageInput = document.getElementById("messageInput");
-const sendBtn = document.getElementById("sendBtn");
-const chatProductImage = document.getElementById("chatProductImage");
-const chatProductTitle = document.getElementById("chatProductTitle");
-const chatProductPrice = document.getElementById("chatProductPrice");
-const chatProductLink = document.getElementById("chatProductLink");
-const backToProductLink = document.getElementById("backToProductLink");
-
-let currentUser = null;
-let chatId = null;
-let otherUserId = null;
-let productTitle = "your listing";
-
-function safeText(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function buildChatId(productId, userA, userB) {
-  const sortedUsers = [userA, userB].sort();
-  return `${productId}_${sortedUsers[0]}_${sortedUsers[1]}`;
-}
-
-function formatTime(timestamp) {
-  if (!timestamp || !timestamp.toDate) {
-    return "";
-  }
-  return timestamp.toDate().toLocaleString([], {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-}
-
-function renderMessages(messages) {
-  if (messages.length === 0) {
-    chatBox.innerHTML = '<p class="chat-empty-state">Say hello to start the conversation.</p>';
-    return;
-  }
-
-  chatBox.innerHTML = messages
-    .map((message) => {
-      const isMine = message.senderId === currentUser.uid;
-      return `
-        <div class="chat-bubble ${isMine ? "chat-bubble-mine" : "chat-bubble-theirs"}">
-          ${safeText(message.text)}
-          <span class="chat-bubble-time">${formatTime(message.createdAt)}</span>
+      <div class="chat-safety-list">
+        <div class="chat-safety-item">
+          <span>🔍</span>
+          <div>
+            <strong>Ask For Details</strong>
+            <p>Confirm condition, location, price, and availability.</p>
+          </div>
         </div>
-      `;
-    })
-    .join("");
 
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
+        <div class="chat-safety-item">
+          <span>🛡️</span>
+          <div>
+            <strong>Avoid Deposits</strong>
+            <p>Do not send money before inspecting the item or confirming the service.</p>
+          </div>
+        </div>
 
-async function markMessagesAsRead(snapshotDocs) {
-  const unreadDocs = snapshotDocs.filter((docSnap) => {
-    const data = docSnap.data();
-    return data.receiverId === currentUser.uid && data.read === false;
-  });
+        <div class="chat-safety-item">
+          <span>🤝</span>
+          <div>
+            <strong>Meet In Public</strong>
+            <p>Choose a safe public location and tell someone where you are going.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
 
-  for (const docSnap of unreadDocs) {
-    try {
-      await updateDoc(docSnap.ref, { read: true });
-    } catch (error) {
-      // Marking as read is a nice-to-have; a failed update here
-      // shouldn't interrupt the rest of the chat experience.
+    <section class="chat-panel">
+      <div class="chat-topbar">
+        <a id="backToProductLink" href="messages.html" class="back-link">← Back To Messages</a>
+        <span class="chat-status">Secure Chat</span>
+      </div>
+
+      <div class="chat-product-card" id="chatProductCard">
+        <img id="chatProductImage" src="" alt="">
+        <div class="chat-product-info">
+          <h4 id="chatProductTitle">Loading...</h4>
+          <p id="chatProductPrice"></p>
+        </div>
+        <a id="chatProductLink" href="#">View Listing</a>
+      </div>
+
+      <div class="chat-box" id="chatBox">
+        <p class="chat-empty-state">Loading conversation...</p>
+      </div>
+
+      <div class="chat-input-area">
+        <div class="chat-input-row">
+          <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
+          <button class="chat-send-btn" id="sendBtn">Send</button>
+        </div>
+        <p class="chat-input-note">Press Enter to send your message.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer chat-footer">
+    <div>
+      <h2>🇱🇷 LoyaltyMarket</h2>
+      <p>You Get Market, We Get Buyer.</p>
+    </div>
+    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { db, auth } from "./firebase.js";
+
+    import {
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      updateDoc,
+      query,
+      where,
+      orderBy,
+      onSnapshot,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("product");
+    const sellerId = params.get("seller");
+
+    const chatBox = document.getElementById("chatBox");
+    const messageInput = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const chatProductImage = document.getElementById("chatProductImage");
+    const chatProductTitle = document.getElementById("chatProductTitle");
+    const chatProductPrice = document.getElementById("chatProductPrice");
+    const chatProductLink = document.getElementById("chatProductLink");
+    const backToProductLink = document.getElementById("backToProductLink");
+
+    let currentUser = null;
+    let chatId = null;
+    let otherUserId = null;
+    let productTitle = "your listing";
+
+    function safeText(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
-  }
-}
 
-async function loadProductInfo() {
-  try {
-    const productSnap = await getDoc(doc(db, "products", productId));
-
-    if (!productSnap.exists()) {
-      chatProductTitle.textContent = "Listing not found";
-      return;
+    function buildChatId(productId, userA, userB) {
+      const sortedUsers = [userA, userB].sort();
+      return `${productId}_${sortedUsers[0]}_${sortedUsers[1]}`;
     }
 
-    const product = productSnap.data();
+    function formatTime(timestamp) {
+      if (!timestamp || !timestamp.toDate) return "";
 
-    chatProductImage.src =
-      product.imageUrl ||
-      (product.images && product.images[0]) ||
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop";
+      return timestamp.toDate().toLocaleString([], {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
 
-    chatProductTitle.textContent = product.title || "Untitled Product";
-    chatProductPrice.textContent = `US$${product.priceUsd || "0"} | L$${product.priceLrd || "0"}`;
-    chatProductLink.href = "product-detail.html?id=" + encodeURIComponent(productId);
+    function renderMessages(messages) {
+      if (messages.length === 0) {
+        chatBox.innerHTML =
+          '<p class="chat-empty-state">Say hello to start the conversation.</p>';
+        return;
+      }
 
-    productTitle = product.title || "your listing";
+      chatBox.innerHTML = messages
+        .map((message) => {
+          const isMine = message.senderId === currentUser.uid;
 
-  } catch (error) {
-    chatProductTitle.textContent = "Could not load listing";
-  }
-}
+          return `
+            <div class="chat-bubble ${isMine ? "chat-bubble-mine" : "chat-bubble-theirs"}">
+              ${safeText(message.text)}
+              <span class="chat-bubble-time">${formatTime(message.createdAt)}</span>
+            </div>
+          `;
+        })
+        .join("");
 
-function listenForMessages() {
-  const messagesQuery = query(
-    collection(db, "messages"),
-    where("chatId", "==", chatId),
-    where("participants", "array-contains", currentUser.uid),
-    orderBy("createdAt", "asc")
-  );
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
-  onSnapshot(messagesQuery, (snapshot) => {
-    const messages = snapshot.docs.map((docSnap) => docSnap.data());
-    renderMessages(messages);
-    markMessagesAsRead(snapshot.docs);
-  }, (error) => {
-    chatBox.innerHTML = `<p class="chat-empty-state">Could not load messages: ${safeText(error.message)}</p>`;
-  });
-}
+    async function markMessagesAsRead(snapshotDocs) {
+      const unreadDocs = snapshotDocs.filter((docSnap) => {
+        const data = docSnap.data();
+        return data.receiverId === currentUser.uid && data.read === false;
+      });
 
-async function sendMessage() {
-  const text = messageInput.value.trim();
+      for (const docSnap of unreadDocs) {
+        try {
+          await updateDoc(docSnap.ref, { read: true });
+        } catch (error) {
+          console.warn("Could not mark message as read:", error.message);
+        }
+      }
+    }
 
-  if (!text) {
-    return;
-  }
+    async function loadProductInfo() {
+      try {
+        const productSnap = await getDoc(doc(db, "products", productId));
 
-  sendBtn.disabled = true;
+        if (!productSnap.exists()) {
+          chatProductTitle.textContent = "Listing not found";
+          return;
+        }
 
-  try {
-    await addDoc(collection(db, "messages"), {
-      chatId: chatId,
-      productId: productId,
-      senderId: currentUser.uid,
-      receiverId: otherUserId,
-      participants: [currentUser.uid, otherUserId],
-      text: text,
-      read: false,
-      createdAt: serverTimestamp()
+        const product = productSnap.data();
+
+        chatProductImage.src =
+          product.imageUrl ||
+          (product.images && product.images[0]) ||
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop";
+
+        chatProductTitle.textContent = product.title || "Untitled Product";
+        chatProductPrice.textContent =
+          `US$${product.priceUsd || "0"} | L$${product.priceLrd || "0"}`;
+
+        chatProductLink.href =
+          "product-detail.html?id=" + encodeURIComponent(productId);
+
+        productTitle = product.title || "your listing";
+
+      } catch (error) {
+        chatProductTitle.textContent = "Could not load listing";
+      }
+    }
+
+    function listenForMessages() {
+      const messagesQuery = query(
+        collection(db, "messages"),
+        where("chatId", "==", chatId),
+        where("participants", "array-contains", currentUser.uid),
+        orderBy("createdAt", "asc")
+      );
+
+      onSnapshot(
+        messagesQuery,
+        (snapshot) => {
+          const messages = snapshot.docs.map((docSnap) => docSnap.data());
+          renderMessages(messages);
+          markMessagesAsRead(snapshot.docs);
+        },
+        (error) => {
+          chatBox.innerHTML = `
+            <p class="chat-empty-state">
+              Could not load messages: ${safeText(error.message)}
+            </p>
+          `;
+        }
+      );
+    }
+
+    async function sendMessage() {
+      const text = messageInput.value.trim();
+
+      if (!text) return;
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Sending...";
+
+      try {
+        await addDoc(collection(db, "messages"), {
+          chatId: chatId,
+          productId: productId,
+          senderId: currentUser.uid,
+          receiverId: otherUserId,
+          participants: [currentUser.uid, otherUserId],
+          text: text,
+          read: false,
+          createdAt: serverTimestamp()
+        });
+
+        try {
+          await addDoc(collection(db, "notifications"), {
+            userId: otherUserId,
+            type: "message",
+            title: "New message about " + productTitle,
+            body: text.length > 60 ? text.slice(0, 60) + "..." : text,
+            link: "messages.html",
+            read: false,
+            createdAt: serverTimestamp()
+          });
+        } catch (notifyError) {
+          console.warn("Notification could not be created:", notifyError.message);
+        }
+
+        messageInput.value = "";
+
+      } catch (error) {
+        alert("Could not send message: " + error.message);
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = "Send";
+        messageInput.focus();
+      }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      if (!productId || !sellerId) {
+        chatBox.innerHTML =
+          '<p class="chat-empty-state">This chat link is missing information. Please go back and try again.</p>';
+        messageInput.disabled = true;
+        sendBtn.disabled = true;
+        return;
+      }
+
+      currentUser = user;
+      backToProductLink.href = "messages.html";
+
+      loadProductInfo();
+
+      if (currentUser.uid === sellerId) {
+        chatBox.innerHTML =
+          '<p class="chat-empty-state">You cannot message yourself about your own listing.</p>';
+        messageInput.disabled = true;
+        sendBtn.disabled = true;
+        return;
+      }
+
+      otherUserId = sellerId;
+      chatId = buildChatId(productId, currentUser.uid, sellerId);
+
+      listenForMessages();
     });
 
-    try {
-      await addDoc(collection(db, "notifications"), {
-        userId: otherUserId,
-        type: "message",
-        title: "New message about " + productTitle,
-        body: text.length > 60 ? text.slice(0, 60) + "..." : text,
-        link: "messages.html",
-        read: false,
-        createdAt: serverTimestamp()
-      });
-    } catch (notifyError) {
-      // Notification is a nice-to-have; don't block the message
-      // from sending if the notification write fails.
+    sendBtn.addEventListener("click", sendMessage);
+
+    messageInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch((error) =>
+          console.log("Service worker registration failed:", error)
+        );
     }
-
-    messageInput.value = "";
-
-  } catch (error) {
-    alert("Could not send message: " + error.message);
-  } finally {
-    sendBtn.disabled = false;
-    messageInput.focus();
-  }
-}
-
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  if (!productId || !sellerId) {
-    chatBox.innerHTML = '<p class="chat-empty-state">This chat link is missing information. Please go back and try again.</p>';
-    return;
-  }
-
-  currentUser = user;
-  backToProductLink.href = "messages.html";
-
-  loadProductInfo();
-
-  if (currentUser.uid === sellerId) {
-    chatBox.innerHTML = '<p class="chat-empty-state">You cannot message yourself about your own listing.</p>';
-    messageInput.disabled = true;
-    sendBtn.disabled = true;
-    return;
-  }
-
-  otherUserId = sellerId;
-  chatId = buildChatId(productId, currentUser.uid, sellerId);
-
-  listenForMessages();
-});
-
-sendBtn.addEventListener("click", sendMessage);
-
-messageInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    sendMessage();
-  }
-});
-</script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
-</script>
-
+  </script>
 </body>
 </html>
