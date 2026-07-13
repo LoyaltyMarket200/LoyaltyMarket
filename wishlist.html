@@ -8,229 +8,692 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f7fb;
+      color: #0f172a;
+    }
+
+    .wishlist-navbar {
+      min-height: 78px;
+      height: auto;
+      padding: 12px max(24px, 5vw);
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .wishlist-navbar .logo-link img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .wishlist-navbar .logo-text {
+      color: #0f2d67;
+      font-size: 21px;
+    }
+
+    .wishlist-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wishlist-nav-link,
+    .wishlist-post-link {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .wishlist-nav-link {
+      color: #334155;
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    .wishlist-nav-link:hover {
+      color: #1e3a8a;
+      border-color: #bfdbfe;
+      background: #eff6ff;
+    }
+
+    .wishlist-post-link {
+      color: #ffffff;
+      background: #f97316;
+      box-shadow: 0 8px 18px rgba(249, 115, 22, .2);
+    }
+
     .nav-messages-link {
       position: relative;
     }
+
     .unread-badge {
       position: absolute;
       top: -8px;
       right: -8px;
-      background: #dc2626;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
       min-width: 18px;
       height: 18px;
-      border-radius: 999px;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 0 4px;
+      border-radius: 999px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
     }
+
     .unread-badge.has-unread {
       display: flex;
     }
-  </style>
-</head>
-<body>
 
-<header class="navbar">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-
-  <input type="text" class="search-box" placeholder="Search Products, Cars, Phones...">
-
-  <div class="nav-buttons">
-    <a href="index.html" class="login-btn">Home</a>
-    <a href="messages.html" id="messagesBtn" class="register-btn nav-messages-link">
-      My Messages
-      <span id="unreadBadge" class="unread-badge">0</span>
-    </a>
-    <a href="dashboard.html" class="register-btn">Dashboard</a>
-    <a href="sell.html" class="sell-btn">Sell Product</a>
-  </div>
-</header>
-
-<section class="search-header">
-  <h2>❤️ My Wishlist</h2>
-  <p class="results-count" id="wishlist-count">Loading...</p>
-</section>
-
-<main class="search-results" id="wishlist-container">
-  <p>Loading your saved items...</p>
-</main>
-
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
-
-<script type="module">
-import { db, auth } from "./firebase.js";
-
-import {
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-  deleteDoc,
-  query,
-  where,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-import {
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-const unreadBadge = document.getElementById("unreadBadge");
-const container = document.getElementById("wishlist-container");
-const countText = document.getElementById("wishlist-count");
-
-function safeText(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function listenForUnreadMessages(userId) {
-  const unreadQuery = query(
-    collection(db, "messages"),
-    where("receiverId", "==", userId),
-    where("read", "==", false)
-  );
-
-  onSnapshot(unreadQuery, (snapshot) => {
-    const count = snapshot.size;
-
-    if (count > 0) {
-      unreadBadge.textContent = count > 9 ? "9+" : String(count);
-      unreadBadge.classList.add("has-unread");
-    } else {
-      unreadBadge.classList.remove("has-unread");
-    }
-  });
-}
-
-async function loadWishlist(userId) {
-  container.innerHTML = "<p>Loading your saved items...</p>";
-
-  try {
-    const wishlistItemsSnapshot = await getDocs(
-      collection(db, "wishlists", userId, "items")
-    );
-
-    if (wishlistItemsSnapshot.empty) {
-      countText.textContent = "0 items saved";
-      container.innerHTML =
-        '<p style="color:#64748b; padding:20px;">You haven\'t saved any products yet. Browse the <a href="index.html" style="color:#3b82f6;">marketplace</a> and tap the heart icon to save items here.</p>';
-      return;
+    .wishlist-page {
+      width: min(1240px, 94%);
+      margin: 32px auto 70px;
     }
 
-    const savedItems = [];
+    .wishlist-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 32px;
+      border-radius: 24px;
+      color: #ffffff;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 32%),
+        linear-gradient(135deg, #0f2d67, #1d4ed8);
+      box-shadow: 0 18px 42px rgba(30, 58, 138, .2);
+    }
 
-    wishlistItemsSnapshot.forEach((wishlistDoc) => {
-      savedItems.push({
-        productId: wishlistDoc.id,
-        ...wishlistDoc.data()
-      });
-    });
+    .wishlist-kicker {
+      margin-bottom: 8px;
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .16em;
+    }
 
-    const products = [];
+    .wishlist-hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.08;
+    }
 
-    for (const item of savedItems) {
-      const productRef = doc(db, "products", item.productId);
-      const productSnapshot = await getDoc(productRef);
+    .wishlist-hero p {
+      margin: 0;
+      color: #dbeafe;
+      font-size: 15px;
+      line-height: 1.6;
+    }
 
-      if (productSnapshot.exists()) {
-        products.push({
-          id: item.productId,
-          ...productSnapshot.data()
-        });
+    .wishlist-count-card {
+      min-width: 150px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 18px;
+      background: rgba(255,255,255,.10);
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .wishlist-count-card strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 30px;
+    }
+
+    .wishlist-count-card span {
+      color: #dbeafe;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .wishlist-content {
+      margin-top: 24px;
+      padding: 24px;
+      border: 1px solid #e2e8f0;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 14px 34px rgba(15,23,42,.07);
+    }
+
+    .wishlist-content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .wishlist-content-header h2 {
+      margin: 0 0 4px;
+      font-size: 26px;
+    }
+
+    .wishlist-content-header p {
+      margin: 0;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .browse-link {
+      color: #2563eb;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .browse-link:hover {
+      text-decoration: underline;
+    }
+
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .wishlist-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      border-radius: 17px;
+      background: #ffffff;
+      transition: .2s ease;
+    }
+
+    .wishlist-card:hover {
+      transform: translateY(-3px);
+      border-color: #bfdbfe;
+      box-shadow: 0 12px 26px rgba(37,99,235,.10);
+    }
+
+    .wishlist-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 3;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #f59e0b;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .wishlist-remove-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: none;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 6px 18px rgba(15,23,42,.14);
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .wishlist-remove-btn:hover {
+      background: #fef2f2;
+    }
+
+    .wishlist-card-link {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .wishlist-image {
+      height: 220px;
+      background: #f1f5f9;
+    }
+
+    .wishlist-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .wishlist-card-body {
+      padding: 16px;
+    }
+
+    .wishlist-card-body h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.35;
+      color: #0f172a;
+    }
+
+    .wishlist-price {
+      margin: 0 0 8px;
+      color: #ea580c;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .wishlist-location,
+    .wishlist-condition {
+      margin: 5px 0 0;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .wishlist-empty {
+      padding: 56px 24px;
+      text-align: center;
+      border: 1px dashed #cbd5e1;
+      border-radius: 18px;
+      background: #f8fafc;
+    }
+
+    .wishlist-empty span {
+      display: block;
+      margin-bottom: 14px;
+      font-size: 48px;
+    }
+
+    .wishlist-empty h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .wishlist-empty p {
+      margin: 0 0 18px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .wishlist-empty a {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 10px;
+      color: #fff;
+      background: #2563eb;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .wishlist-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      text-align: left;
+      padding: 30px max(24px, 6vw);
+    }
+
+    .wishlist-footer h2 {
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 1050px) {
+      .wishlist-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
-    if (products.length === 0) {
-      countText.textContent = "0 items saved";
-      container.innerHTML =
-        '<p style="color:#64748b; padding:20px;">You haven\'t saved any products yet. Browse the <a href="index.html" style="color:#3b82f6;">marketplace</a> and tap the heart icon to save items here.</p>';
-      return;
+    @media (max-width: 780px) {
+      .wishlist-navbar {
+        align-items: stretch;
+      }
+
+      .wishlist-nav-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .wishlist-hero {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .wishlist-count-card {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .wishlist-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .wishlist-footer {
+        flex-direction: column;
+        text-align: center;
+      }
     }
 
-    countText.textContent = products.length + " item(s) saved";
+    @media (max-width: 560px) {
+      .wishlist-nav-actions {
+        grid-template-columns: 1fr;
+      }
 
-    container.innerHTML = products
-      .map((product) => {
-        const image =
-          product.imageUrl ||
-          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+      .wishlist-page {
+        width: 94%;
+        margin-top: 20px;
+      }
 
-        const isFeatured = product.featured === true;
-        const detailUrl =
-          "product-detail.html?id=" + encodeURIComponent(product.id);
+      .wishlist-hero,
+      .wishlist-content {
+        padding: 20px 16px;
+        border-radius: 18px;
+      }
 
-        return `
-          <div class="product-card" data-product-id="${product.id}">
-            <span class="badge">${isFeatured ? "⭐ Featured" : "Saved"}</span>
-            <button class="heart active" data-remove-id="${product.id}">❤️</button>
-            <a href="${detailUrl}" style="text-decoration:none; color:inherit;">
-              <div class="product-image">
-                <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
-              </div>
-              <h3>${safeText(product.title || "Untitled Product")}</h3>
-              <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
-              <p class="location">📍 ${safeText(product.city || "")}, ${safeText(product.county || "Liberia")}</p>
-              <p class="condition">${safeText(product.condition || "Not listed")}</p>
-            </a>
-          </div>
-        `;
-      })
-      .join("");
+      .wishlist-content-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
 
-    document.querySelectorAll("[data-remove-id]").forEach((button) => {
-      button.addEventListener("click", async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+      .wishlist-grid {
+        grid-template-columns: 1fr;
+      }
 
-        const productId = button.getAttribute("data-remove-id");
+      .wishlist-image {
+        height: 240px;
+      }
+    }
+  </style>
+</head>
 
-        try {
-          await deleteDoc(doc(db, "wishlists", userId, "items", productId));
-          loadWishlist(userId);
-        } catch (error) {
-          alert("Could not remove item: " + error.message);
+<body>
+  <header class="navbar wishlist-navbar">
+    <div class="logo">
+      <a href="index.html" class="logo-link">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket">
+        <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+      </a>
+    </div>
+
+    <div class="wishlist-nav-actions">
+      <a href="index.html" class="wishlist-nav-link">Home</a>
+      <a href="messages.html" id="messagesBtn" class="wishlist-nav-link nav-messages-link">
+        Messages
+        <span id="unreadBadge" class="unread-badge">0</span>
+      </a>
+      <a href="dashboard.html" class="wishlist-nav-link">Dashboard</a>
+      <a href="sell.html" class="wishlist-post-link">Post An Ad</a>
+    </div>
+  </header>
+
+  <main class="wishlist-page">
+    <section class="wishlist-hero">
+      <div>
+        <p class="wishlist-kicker">SAVED FOR LATER</p>
+        <h1>My Wishlist</h1>
+        <p>Keep track of products you like and return when you are ready to make a deal.</p>
+      </div>
+
+      <div class="wishlist-count-card">
+        <strong id="wishlistCountNumber">0</strong>
+        <span id="wishlist-count">Loading...</span>
+      </div>
+    </section>
+
+    <section class="wishlist-content">
+      <div class="wishlist-content-header">
+        <div>
+          <h2>Saved Listings</h2>
+          <p>Tap the heart button to remove any item from your wishlist.</p>
+        </div>
+        <a href="index.html" class="browse-link">Browse Marketplace →</a>
+      </div>
+
+      <div id="wishlist-container" class="wishlist-grid">
+        <div class="wishlist-empty">
+          <span>❤️</span>
+          <h3>Loading your saved items...</h3>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer wishlist-footer">
+    <div>
+      <h2>🇱🇷 LoyaltyMarket</h2>
+      <p>You Get Market, We Get Buyer.</p>
+    </div>
+    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { db, auth } from "./firebase.js";
+
+    import {
+      collection,
+      getDocs,
+      doc,
+      getDoc,
+      deleteDoc,
+      query,
+      where,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const unreadBadge = document.getElementById("unreadBadge");
+    const container = document.getElementById("wishlist-container");
+    const countText = document.getElementById("wishlist-count");
+    const countNumber = document.getElementById("wishlistCountNumber");
+
+    function safeText(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function listenForUnreadMessages(userId) {
+      const unreadQuery = query(
+        collection(db, "messages"),
+        where("receiverId", "==", userId),
+        where("read", "==", false)
+      );
+
+      onSnapshot(unreadQuery, (snapshot) => {
+        const count = snapshot.size;
+
+        if (count > 0) {
+          unreadBadge.textContent = count > 9 ? "9+" : String(count);
+          unreadBadge.classList.add("has-unread");
+        } else {
+          unreadBadge.classList.remove("has-unread");
         }
       });
+    }
+
+    function showEmptyState() {
+      countNumber.textContent = "0";
+      countText.textContent = "0 items saved";
+      container.innerHTML = `
+        <div class="wishlist-empty" style="grid-column: 1 / -1;">
+          <span>❤️</span>
+          <h3>Your wishlist is empty</h3>
+          <p>Browse the marketplace and tap the heart icon to save products here.</p>
+          <a href="index.html">Browse Marketplace</a>
+        </div>
+      `;
+    }
+
+    async function loadWishlist(userId) {
+      container.innerHTML = `
+        <div class="wishlist-empty" style="grid-column: 1 / -1;">
+          <span>❤️</span>
+          <h3>Loading your saved items...</h3>
+        </div>
+      `;
+
+      try {
+        const wishlistItemsSnapshot = await getDocs(
+          collection(db, "wishlists", userId, "items")
+        );
+
+        if (wishlistItemsSnapshot.empty) {
+          showEmptyState();
+          return;
+        }
+
+        const savedItems = [];
+
+        wishlistItemsSnapshot.forEach((wishlistDoc) => {
+          savedItems.push({
+            productId: wishlistDoc.id,
+            ...wishlistDoc.data()
+          });
+        });
+
+        const products = [];
+
+        for (const item of savedItems) {
+          const productRef = doc(db, "products", item.productId);
+          const productSnapshot = await getDoc(productRef);
+
+          if (productSnapshot.exists()) {
+            products.push({
+              id: item.productId,
+              ...productSnapshot.data()
+            });
+          }
+        }
+
+        if (products.length === 0) {
+          showEmptyState();
+          return;
+        }
+
+        countNumber.textContent = String(products.length);
+        countText.textContent = products.length === 1
+          ? "1 item saved"
+          : products.length + " items saved";
+
+        container.innerHTML = products.map((product) => {
+          const image =
+            product.imageUrl ||
+            (Array.isArray(product.images) && product.images[0]) ||
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+
+          const isFeatured = product.featured === true;
+          const detailUrl =
+            "product-detail.html?id=" + encodeURIComponent(product.id);
+
+          return `
+            <article class="wishlist-card" data-product-id="${product.id}">
+              <span class="wishlist-badge">${isFeatured ? "⭐ Featured" : "Saved"}</span>
+
+              <button
+                type="button"
+                class="wishlist-remove-btn"
+                data-remove-id="${product.id}"
+                aria-label="Remove ${safeText(product.title || "product")} from wishlist"
+                title="Remove from wishlist"
+              >❤️</button>
+
+              <a href="${detailUrl}" class="wishlist-card-link">
+                <div class="wishlist-image">
+                  <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
+                </div>
+
+                <div class="wishlist-card-body">
+                  <h3>${safeText(product.title || "Untitled Product")}</h3>
+                  <p class="wishlist-price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
+                  <p class="wishlist-location">📍 ${safeText(product.city || "")}, ${safeText(product.county || "Liberia")}</p>
+                  <p class="wishlist-condition">${safeText(product.condition || "Not listed")}</p>
+                </div>
+              </a>
+            </article>
+          `;
+        }).join("");
+
+        document.querySelectorAll("[data-remove-id]").forEach((button) => {
+          button.addEventListener("click", async (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const productId = button.getAttribute("data-remove-id");
+
+            button.disabled = true;
+            button.textContent = "…";
+
+            try {
+              await deleteDoc(doc(db, "wishlists", userId, "items", productId));
+              await loadWishlist(userId);
+            } catch (error) {
+              button.disabled = false;
+              button.textContent = "❤️";
+              alert("Could not remove item: " + error.message);
+            }
+          });
+        });
+
+      } catch (error) {
+        countNumber.textContent = "0";
+        countText.textContent = "Unable to load wishlist";
+        container.innerHTML = `
+          <div class="wishlist-empty" style="grid-column: 1 / -1;">
+            <span>⚠️</span>
+            <h3>Could not load your wishlist</h3>
+            <p>${safeText(error.message)}</p>
+          </div>
+        `;
+      }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        listenForUnreadMessages(user.uid);
+        loadWishlist(user.uid);
+      } else {
+        window.location.href = "login.html";
+      }
     });
+  </script>
 
-  } catch (error) {
-    countText.textContent = "Unable to load wishlist";
-    container.innerHTML = `<p style="color:#64748b; padding:20px;">Could not load your saved items: ${safeText(error.message)}</p>`;
-  }
-}
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    listenForUnreadMessages(user.uid);
-    loadWishlist(user.uid);
-  } else {
-    window.location.href = "login.html";
-  }
-});
-</script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
-</script>
-
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch((error) =>
+          console.log("Service worker registration failed:", error)
+        );
+    }
+  </script>
 </body>
 </html>
