@@ -2599,7 +2599,78 @@ body {
     margin: 4px 0;
     font-size: 15px;
   }
+}
 
+/* ==================================================
+   JIJI-STYLE CATEGORY ICON GRID (MOBILE)
+   Overrides the plain list with a 4-column icon grid
+================================================== */
+@media (max-width: 680px) {
+  .homepage .category-sidebar-list,
+  .category-sidebar-list {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 18px 10px !important;
+    padding: 4px 0 !important;
+  }
+
+  .homepage .category-sidebar-list li,
+  .category-sidebar-list li {
+    border: 0 !important;
+  }
+
+  .homepage .category-sidebar-link,
+  .category-sidebar-link {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  .homepage .category-sidebar-link > span:first-child,
+  .category-sidebar-link > span:first-child {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .homepage .category-sidebar-icon,
+  .category-sidebar-icon {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 12px !important;
+    background: #eef2f6 !important;
+    font-size: 26px !important;
+  }
+
+  .homepage .category-sidebar-link > span:first-child > span:last-child,
+  .category-sidebar-link > span:first-child > span:last-child {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    line-height: 1.25 !important;
+  }
+
+  .homepage .category-sidebar-count,
+  .category-sidebar-count {
+    display: none !important;
+  }
+
+  .sidebar-title-row {
+    padding: 4px 2px 14px !important;
+    background: transparent !important;
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 680px) {
   .product-card .price {
     margin: 2px 0 6px;
     font-size: 17px;
