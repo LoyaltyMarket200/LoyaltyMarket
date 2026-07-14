@@ -561,7 +561,8 @@
   import { auth, db, storage } from "./firebase.js";
 
   import {
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
   } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
   import {
@@ -571,6 +572,8 @@
     query,
     where,
     getDocs,
+    getDoc,
+    doc,
     Timestamp
   } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
@@ -584,7 +587,11 @@
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
   const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
+  const ADMIN_EMAILS = ["princeteah200@gmail.com"];
+
   let currentUser = null;
+  let listingAccessReady = false;
+  let listingAllowed = false;
   let productFiles = [];
   let serviceFiles = [];
 
@@ -626,7 +633,51 @@
   const serviceDescriptionInput = document.getElementById("serviceDescription");
   const servicePhoneInput = document.getElementById("servicePhone");
 
-  onAuthStateChanged(auth, (user) => {
+  postBtn.disabled = true;
+  postBtn.textContent = "Checking Account...";
+
+  async function verifyListingAccess(user) {
+    const email = String(user.email || "").toLowerCase();
+    const isAdmin = ADMIN_EMAILS.includes(email);
+
+    try {
+      const [userSnapshot, settingsSnapshot] = await Promise.all([
+        getDoc(doc(db, "users", user.uid)),
+        getDoc(doc(db, "settings", "marketplace"))
+      ]);
+
+      const userData = userSnapshot.exists() ? userSnapshot.data() : {};
+      const settings = settingsSnapshot.exists() ? settingsSnapshot.data() : {};
+
+      if (userData.suspended === true && !isAdmin) {
+        await signOut(auth);
+        alert("Your LoyaltyMarket account has been suspended. You cannot post listings.");
+        window.location.href = "login.html";
+        return false;
+      }
+
+      if (settings.maintenanceMode === true && !isAdmin) {
+        alert("LoyaltyMarket is under maintenance. New listings are temporarily unavailable.");
+        window.location.href = "dashboard.html";
+        return false;
+      }
+
+      if (settings.allowNewListings === false && !isAdmin) {
+        alert("New listings are temporarily paused by LoyaltyMarket.");
+        window.location.href = "dashboard.html";
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Listing access check failed:", error);
+      alert("We could not verify your listing access. Please try again.");
+      window.location.href = "dashboard.html";
+      return false;
+    }
+  }
+
+  onAuthStateChanged(auth, async (user) => {
     if (!user) {
       alert("Please login before posting a listing.");
       window.location.href = "login.html";
@@ -634,6 +685,13 @@
     }
 
     currentUser = user;
+    listingAllowed = await verifyListingAccess(user);
+    listingAccessReady = true;
+
+    if (listingAllowed) {
+      postBtn.disabled = false;
+      postBtn.textContent = getSelectedListingType() === "service" ? "Post Service" : "Post Product";
+    }
   });
 
   function getSelectedListingType() {
@@ -913,10 +971,13 @@
   sellForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    if (!currentUser) {
-      alert("You must login first.");
+    if (!listingAccessReady || !currentUser) {
+      alert("Please wait while we verify your account.");
       return;
     }
+
+    listingAllowed = await verifyListingAccess(currentUser);
+    if (!listingAllowed) return;
 
     const listingType = getSelectedListingType();
     postBtn.disabled = true;
