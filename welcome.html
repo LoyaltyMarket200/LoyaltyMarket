@@ -4,202 +4,303 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome - LoyaltyMarket</title>
+
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#1e3a8a">
+
+  <meta name="theme-color" content="#0f2d67">
+  <meta
+    name="description"
+    content="Buy, sell, and discover trusted products and services across Liberia."
+  >
 
   <style>
+    :root {
+      --navy: #0f2d67;
+      --blue: #1d4ed8;
+      --blue-dark: #123b8d;
+      --orange: #f97316;
+      --orange-dark: #ea580c;
+      --green: #16a34a;
+      --green-dark: #15803d;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --surface: #ffffff;
+      --soft: #f8fafc;
+      --shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--ink);
       background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(249, 115, 22, 0.08), transparent 26%),
+        radial-gradient(circle at 8% 12%, rgba(37, 99, 235, 0.11), transparent 26%),
+        radial-gradient(circle at 92% 88%, rgba(249, 115, 22, 0.10), transparent 24%),
         #f8fafc;
-      color: #0f172a;
     }
 
-    .welcome-page {
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .welcome-shell {
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: minmax(0, 1.08fr) minmax(460px, 0.92fr);
     }
 
-    .welcome-visual {
+    .brand-panel {
       position: relative;
       overflow: hidden;
-      padding: 44px;
+      min-height: 100vh;
+      padding: 42px clamp(28px, 5vw, 72px);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      color: #fff;
+      color: #ffffff;
       background:
-        radial-gradient(circle at 22% 18%, rgba(255,255,255,.18), transparent 20%),
-        radial-gradient(circle at 78% 78%, rgba(255,255,255,.12), transparent 18%),
-        linear-gradient(145deg, #0f2d67, #1d4ed8 64%, #0ea5e9);
+        linear-gradient(135deg, rgba(15, 45, 103, 0.97), rgba(29, 78, 216, 0.94)),
+        url("icons/icon-512.png") center / 360px no-repeat;
     }
 
-    .visual-top {
+    .brand-panel::before,
+    .brand-panel::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .brand-panel::before {
+      width: 420px;
+      height: 420px;
+      top: -210px;
+      right: -120px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .brand-panel::after {
+      width: 300px;
+      height: 300px;
+      left: -150px;
+      bottom: -120px;
+      background: rgba(14,165,233,0.18);
+    }
+
+    .brand-header,
+    .brand-main,
+    .brand-footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-header {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .visual-top img {
+    .brand-logo {
       width: 58px;
       height: 58px;
-      object-fit: contain;
-      border-radius: 14px;
-      background: #fff;
       padding: 5px;
+      border-radius: 16px;
+      object-fit: contain;
+      background: #ffffff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
     }
 
-    .visual-brand {
+    .brand-name {
       font-size: 24px;
       font-weight: 900;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.025em;
     }
 
-    .visual-brand span {
-      color: #f59e0b;
-    }
-
-    .visual-center {
-      max-width: 620px;
-      margin: auto 0;
-    }
-
-    .visual-kicker {
+    .brand-name span {
       color: #fbbf24;
+    }
+
+    .brand-main {
+      width: min(660px, 100%);
+      margin: auto 0;
+      padding: 48px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      color: #fde68a;
       font-size: 12px;
       font-weight: 900;
-      letter-spacing: .18em;
-      margin-bottom: 14px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
     }
 
-    .visual-center h1 {
-      font-size: clamp(42px, 6vw, 72px);
-      line-height: 1.03;
-      margin-bottom: 18px;
+    .brand-main h1 {
+      max-width: 640px;
+      font-size: clamp(44px, 5.6vw, 78px);
+      line-height: 1.01;
+      letter-spacing: -0.045em;
+      margin-bottom: 22px;
     }
 
-    .visual-center p {
-      max-width: 540px;
+    .brand-main > p {
+      max-width: 560px;
       color: #dbeafe;
       font-size: 18px;
-      line-height: 1.7;
+      line-height: 1.75;
     }
 
-    .visual-items {
+    .trust-row {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 28px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 34px;
     }
 
-    .visual-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .trust-card {
+      min-height: 112px;
       padding: 16px;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 16px;
-      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.09);
       backdrop-filter: blur(8px);
     }
 
-    .visual-item span {
-      font-size: 28px;
-    }
-
-    .visual-item strong {
+    .trust-card span {
       display: block;
-      margin-bottom: 3px;
-      font-size: 15px;
+      margin-bottom: 10px;
+      font-size: 25px;
     }
 
-    .visual-item p {
-      font-size: 12px;
+    .trust-card strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .trust-card p {
       color: #dbeafe;
-      line-height: 1.4;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
-    .visual-footer {
+    .brand-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
       color: #bfdbfe;
       font-size: 13px;
       font-weight: 700;
     }
 
-    .welcome-content {
+    .liberia-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-panel {
       position: relative;
+      min-height: 100vh;
+      padding: 34px clamp(20px, 4vw, 54px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 44px 24px;
-      background: rgba(255,255,255,.88);
+      background: rgba(255,255,255,0.90);
+      backdrop-filter: blur(10px);
     }
 
-    .skip-link {
+    .skip-button {
       position: absolute;
       top: 28px;
       right: 32px;
-      border: none;
+      border: 0;
       background: transparent;
-      color: #64748b;
-      font-size: 15px;
+      color: var(--muted);
+      font-size: 14px;
       font-weight: 800;
       cursor: pointer;
     }
 
-    .skip-link:hover {
-      color: #1e3a8a;
+    .skip-button:hover {
+      color: var(--navy);
     }
 
-    .welcome-card {
-      width: min(560px, 100%);
+    .action-card {
+      width: min(580px, 100%);
       padding: 38px;
-      border: 1px solid #e2e8f0;
-      border-radius: 24px;
-      background: #fff;
-      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.10);
+      border: 1px solid rgba(226,232,240,0.95);
+      border-radius: 28px;
+      background: rgba(255,255,255,0.97);
+      box-shadow: var(--shadow);
     }
 
-    .mobile-logo {
+    .mobile-brand {
       display: none;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 24px;
     }
 
-    .mobile-logo img {
-      width: 50px;
-      height: 50px;
+    .mobile-brand img {
+      width: 52px;
+      height: 52px;
       object-fit: contain;
     }
 
-    .mobile-logo strong {
-      font-size: 20px;
-      color: #0f2d67;
+    .mobile-brand strong {
+      color: var(--navy);
+      font-size: 21px;
+      font-weight: 900;
     }
 
-    .welcome-card h2 {
-      font-size: clamp(32px, 5vw, 48px);
-      line-height: 1.1;
+    .mobile-brand strong span {
+      color: var(--orange);
+    }
+
+    .small-label {
+      margin-bottom: 10px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .action-card h2 {
+      max-width: 470px;
       margin-bottom: 12px;
-      color: #0f172a;
+      font-size: clamp(34px, 4.6vw, 50px);
+      line-height: 1.06;
+      letter-spacing: -0.035em;
     }
 
-    .welcome-subtitle {
-      color: #64748b;
-      font-size: 17px;
-      line-height: 1.6;
+    .intro {
+      max-width: 470px;
       margin-bottom: 28px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
     }
 
     .choice-list {
@@ -209,230 +310,330 @@
 
     .choice-button {
       width: 100%;
-      display: flex;
+      min-height: 92px;
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr) auto;
       align-items: center;
       gap: 16px;
-      padding: 18px 20px;
-      border: 2px solid #e2e8f0;
-      border-radius: 15px;
-      background: #fff;
-      color: #0f172a;
+      padding: 16px 18px;
+      border: 1.5px solid var(--line);
+      border-radius: 18px;
+      background: #ffffff;
+      color: var(--ink);
       text-align: left;
       cursor: pointer;
-      transition: .2s ease;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
 
     .choice-button:hover {
-      transform: translateY(-2px);
-      border-color: #2563eb;
-      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.10);
+      transform: translateY(-3px);
+      border-color: #93c5fd;
+      box-shadow: 0 14px 32px rgba(37, 99, 235, 0.11);
     }
 
-    .choice-button .choice-icon {
-      width: 52px;
-      height: 52px;
-      flex-shrink: 0;
+    .choice-button:focus-visible {
+      outline: 4px solid rgba(37, 99, 235, 0.16);
+      outline-offset: 2px;
+    }
+
+    .choice-icon {
+      width: 54px;
+      height: 54px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
-      background: #eff6ff;
+      border-radius: 16px;
       font-size: 27px;
     }
 
-    .choice-button.sell .choice-icon {
+    .buy .choice-icon {
+      background: #eff6ff;
+      color: var(--blue);
+    }
+
+    .sell .choice-icon {
       background: #fff7ed;
+      color: var(--orange);
     }
 
-    .choice-button.service .choice-icon {
+    .service .choice-icon {
       background: #ecfdf5;
-    }
-
-    .choice-copy {
-      flex: 1;
+      color: var(--green);
     }
 
     .choice-copy strong {
       display: block;
+      margin-bottom: 5px;
       font-size: 17px;
-      margin-bottom: 4px;
     }
 
     .choice-copy span {
-      color: #64748b;
+      display: block;
+      color: var(--muted);
       font-size: 13px;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .choice-arrow {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #f8fafc;
       color: #94a3b8;
       font-size: 22px;
       font-weight: 900;
+      transition: .18s ease;
     }
 
-    .terms {
-      margin-top: 24px;
+    .choice-button:hover .choice-arrow {
+      transform: translateX(3px);
+      background: #eff6ff;
+      color: var(--blue);
+    }
+
+    .account-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .account-link {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .account-link.sign-in {
+      border: 1px solid #cbd5e1;
+      color: var(--navy);
+      background: #ffffff;
+    }
+
+    .account-link.register {
+      color: #ffffff;
+      background: var(--navy);
+    }
+
+    .account-link:hover {
+      transform: translateY(-1px);
+    }
+
+    .legal {
+      margin-top: 22px;
       color: #94a3b8;
       font-size: 12px;
       line-height: 1.6;
       text-align: center;
     }
 
-    .terms a {
-      color: #2563eb;
+    .legal a {
+      color: var(--blue);
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    .terms a:hover {
+    .legal a:hover {
       text-decoration: underline;
     }
 
-    @media (max-width: 900px) {
-      .welcome-page {
+    @media (max-width: 980px) {
+      .welcome-shell {
         grid-template-columns: 1fr;
       }
 
-      .welcome-visual {
+      .brand-panel {
         display: none;
       }
 
-      .welcome-content {
-        min-height: 100vh;
+      .mobile-brand {
+        display: flex;
       }
 
-      .mobile-logo {
-        display: flex;
+      .action-panel {
+        min-height: 100vh;
       }
     }
 
     @media (max-width: 560px) {
-      .welcome-content {
-        padding: 80px 16px 28px;
+      .action-panel {
+        align-items: flex-start;
+        padding: 76px 14px 24px;
       }
 
-      .skip-link {
-        top: 22px;
-        right: 20px;
+      .skip-button {
+        top: 20px;
+        right: 18px;
       }
 
-      .welcome-card {
-        padding: 26px 20px;
-        border-radius: 18px;
+      .action-card {
+        padding: 24px 18px;
+        border-radius: 22px;
       }
 
-      .welcome-card h2 {
+      .action-card h2 {
         font-size: 34px;
       }
 
       .choice-button {
-        padding: 15px;
+        min-height: 84px;
+        grid-template-columns: 48px minmax(0, 1fr) auto;
+        gap: 12px;
+        padding: 14px;
       }
 
-      .choice-button .choice-icon {
+      .choice-icon {
         width: 46px;
         height: 46px;
+        border-radius: 14px;
+        font-size: 23px;
+      }
+
+      .choice-copy strong {
+        font-size: 15px;
+      }
+
+      .choice-copy span {
+        font-size: 12px;
+      }
+
+      .choice-arrow {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .account-links {
+        grid-template-columns: 1fr;
+      }
+
+      .choice-button {
+        grid-template-columns: 44px minmax(0, 1fr);
+      }
+
+      .choice-arrow {
+        display: none;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="welcome-page">
-    <section class="welcome-visual">
-      <div class="visual-top">
-        <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
-        <div class="visual-brand"><span>LR</span> LoyaltyMarket</div>
+  <main class="welcome-shell">
+    <section class="brand-panel" aria-label="LoyaltyMarket introduction">
+      <div class="brand-header">
+        <img
+          src="icons/icon-512.png"
+          alt="LoyaltyMarket logo"
+          class="brand-logo"
+        >
+        <div class="brand-name"><span>LR</span> LoyaltyMarket</div>
       </div>
 
-      <div class="visual-center">
-        <p class="visual-kicker">MADE FOR LIBERIA</p>
-        <h1>You Get Market, We Get Buyer.</h1>
+      <div class="brand-main">
+        <div class="eyebrow">🇱🇷 Built For Liberia</div>
+
+        <h1>You Get Market. We Get Buyer.</h1>
+
         <p>
-          Buy, sell, find services, and connect with trusted people and businesses across Liberia.
+          Discover products, reach serious buyers, promote your services,
+          and connect with trusted people and businesses across Liberia.
         </p>
 
-        <div class="visual-items">
-          <div class="visual-item">
-            <span>🏠</span>
-            <div>
-              <strong>Property</strong>
-              <p>Find homes, land, rentals, and commercial spaces.</p>
-            </div>
-          </div>
+        <div class="trust-row">
+          <article class="trust-card">
+            <span>🛍️</span>
+            <strong>Buy With Choice</strong>
+            <p>Explore products, property, vehicles, jobs, and services.</p>
+          </article>
 
-          <div class="visual-item">
-            <span>🚗</span>
-            <div>
-              <strong>Vehicles</strong>
-              <p>Browse cars, bikes, spare parts, and services.</p>
-            </div>
-          </div>
+          <article class="trust-card">
+            <span>📣</span>
+            <strong>Reach More Buyers</strong>
+            <p>Post your listing and grow your customer base.</p>
+          </article>
 
-          <div class="visual-item">
-            <span>📱</span>
-            <div>
-              <strong>Products</strong>
-              <p>Discover phones, electronics, fashion, and more.</p>
-            </div>
-          </div>
-
-          <div class="visual-item">
-            <span>🛠️</span>
-            <div>
-              <strong>Services</strong>
-              <p>Hire skilled people and trusted local businesses.</p>
-            </div>
-          </div>
+          <article class="trust-card">
+            <span>🤝</span>
+            <strong>Connect Directly</strong>
+            <p>Message sellers and service providers with confidence.</p>
+          </article>
         </div>
       </div>
 
-      <p class="visual-footer">Liberia's trusted online marketplace.</p>
+      <div class="brand-footer">
+        <span class="liberia-tag">🇱🇷 Liberia's Online Marketplace</span>
+        <span>Safe • Simple • Local</span>
+      </div>
     </section>
 
-    <section class="welcome-content">
-      <button type="button" class="skip-link" id="skipBtn">Skip</button>
+    <section class="action-panel">
+      <button type="button" class="skip-button" id="skipBtn">
+        Skip For Now
+      </button>
 
-      <div class="welcome-card">
-        <div class="mobile-logo">
+      <div class="action-card">
+        <div class="mobile-brand">
           <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
-          <strong>LR LoyaltyMarket</strong>
+          <strong><span>LR</span> LoyaltyMarket</strong>
         </div>
 
-        <h2>What You Come For Today?</h2>
-        <p class="welcome-subtitle">
-          Choose what you want to do so we can take you to the right place.
+        <p class="small-label">Welcome To LoyaltyMarket</p>
+
+        <h2>What Would You Like To Do?</h2>
+
+        <p class="intro">
+          Choose an option below and we will take you directly to the right place.
         </p>
 
         <div class="choice-list">
           <button type="button" class="choice-button buy" id="buyBtn">
             <span class="choice-icon">🛍️</span>
+
             <span class="choice-copy">
-              <strong>I Come To Buy</strong>
+              <strong>I Want To Buy</strong>
               <span>Browse products, vehicles, property, jobs, and services.</span>
             </span>
+
             <span class="choice-arrow">›</span>
           </button>
 
           <button type="button" class="choice-button sell" id="sellBtn">
             <span class="choice-icon">💰</span>
+
             <span class="choice-copy">
-              <strong>I Come To Sell</strong>
-              <span>Post a product and connect with buyers across Liberia.</span>
+              <strong>I Want To Sell</strong>
+              <span>Post an item and connect with buyers across Liberia.</span>
             </span>
+
             <span class="choice-arrow">›</span>
           </button>
 
           <button type="button" class="choice-button service" id="serviceBtn">
             <span class="choice-icon">🛠️</span>
+
             <span class="choice-copy">
-              <strong>I Come To Offer Service</strong>
+              <strong>I Want To Offer A Service</strong>
               <span>Promote your skills, profession, or local business.</span>
             </span>
+
             <span class="choice-arrow">›</span>
           </button>
         </div>
 
-        <p class="terms">
+        <div class="account-links">
+          <a href="login.html" class="account-link sign-in">Sign In</a>
+          <a href="register.html" class="account-link register">Create Account</a>
+        </div>
+
+        <p class="legal">
           By continuing, you agree to the
           <a href="terms.html">Terms and Conditions</a>
           and
@@ -470,7 +671,9 @@
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("service-worker.js")
-        .catch((error) => console.log("Service worker registration failed:", error));
+        .catch((error) => {
+          console.log("Service worker registration failed:", error);
+        });
     }
   </script>
 </body>

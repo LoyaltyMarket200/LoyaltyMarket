@@ -62,14 +62,80 @@
       background:#fbbf24;color:#78350f;font-size:12px;font-weight:900
     }
     .seller-member{margin:8px 0 0;color:#dbeafe;font-size:13px}
+
+    .seller-action-buttons{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-width:190px;
+    }
+
+    .message-seller-btn,
+    .follow-seller-btn,
+    .invite-seller-btn{
+      min-height:46px;
+      align-items:center;
+      justify-content:center;
+      padding:11px 20px;
+      border-radius:11px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
     .message-seller-btn{
-      display:none;min-height:46px;align-items:center;justify-content:center;
-      padding:11px 20px;border-radius:11px;color:#fff;background:#f97316;
-      text-decoration:none;font-weight:900;white-space:nowrap
+      display:none;
+      color:#fff;
+      background:#f97316;
+      text-decoration:none;
+    }
+
+    .follow-seller-btn,
+    .invite-seller-btn{
+      width:100%;
+      border:2px solid #fff;
+      cursor:pointer;
+      font:inherit;
+      font-weight:900;
+      transition:.2s ease;
+    }
+
+    .follow-seller-btn{
+      display:none;
+      color:#1e3a8a;
+      background:#fff;
+    }
+
+    .invite-seller-btn{
+      display:block;
+      color:#fff;
+      background:rgba(255,255,255,.12);
+      border-color:rgba(255,255,255,.55);
+    }
+
+    .follow-seller-btn:hover{
+      transform:translateY(-2px);
+      background:#eff6ff;
+    }
+
+    .invite-seller-btn:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.22);
+    }
+
+    .follow-seller-btn.following{
+      border-color:#bbf7d0;
+      background:#dcfce7;
+      color:#166534;
+    }
+
+    .follow-seller-btn:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+      transform:none;
     }
 
     .seller-stats{
-      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;
+      display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;
       margin-top:22px
     }
     .seller-stat{
@@ -156,14 +222,15 @@
     @media(max-width:1000px){
       .seller-listings-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
       .review-grid{grid-template-columns:1fr}
+      .seller-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
 
     @media(max-width:760px){
       .seller-navbar{align-items:stretch}
       .seller-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
       .seller-hero{grid-template-columns:1fr}
-      .message-seller-btn{justify-self:start}
-      .seller-stats{grid-template-columns:1fr}
+      .seller-action-buttons{width:100%;min-width:0}
+      .seller-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
       .seller-listings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .seller-footer{flex-direction:column;text-align:center}
     }
@@ -174,6 +241,7 @@
       .seller-hero,.seller-section{padding:20px 16px;border-radius:18px}
       .seller-profile-main{align-items:flex-start;flex-direction:column}
       .seller-section-header{align-items:flex-start;flex-direction:column}
+      .seller-stats{grid-template-columns:1fr}
       .seller-listings-grid{grid-template-columns:1fr}
       .seller-product-image{height:240px}
     }
@@ -212,13 +280,22 @@
         </div>
       </div>
 
-      <a href="#" id="messageSellerBtn" class="message-seller-btn">💬 Message Seller</a>
+      <div class="seller-action-buttons">
+        <a href="#" id="messageSellerBtn" class="message-seller-btn">💬 Message Seller</a>
+        <button type="button" id="followSellerBtn" class="follow-seller-btn">➕ Follow Seller</button>
+        <button type="button" id="inviteSellerBtn" class="invite-seller-btn">📤 Invite Friends</button>
+      </div>
     </section>
 
     <section class="seller-stats">
       <article class="seller-stat">
         <div id="statListingCount" class="seller-stat-value">-</div>
         <div class="seller-stat-label">Active Listings</div>
+      </article>
+
+      <article class="seller-stat">
+        <div id="statFollowerCount" class="seller-stat-value">0</div>
+        <div class="seller-stat-label">Followers</div>
       </article>
 
       <article class="seller-stat">
@@ -302,6 +379,7 @@
 
   <script type="module">
     import { auth, db } from "./firebase.js";
+
     import {
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
@@ -309,6 +387,8 @@
     import {
       doc,
       getDoc,
+      setDoc,
+      deleteDoc,
       collection,
       query,
       where,
@@ -334,13 +414,17 @@
     const ownProfileMsg = document.getElementById("ownProfileMsg");
     const reviewsList = document.getElementById("reviewsList");
     const messageSellerBtn = document.getElementById("messageSellerBtn");
+    const followSellerBtn = document.getElementById("followSellerBtn");
+    const inviteSellerBtn = document.getElementById("inviteSellerBtn");
     const statListingCount = document.getElementById("statListingCount");
+    const statFollowerCount = document.getElementById("statFollowerCount");
     const statAverageRating = document.getElementById("statAverageRating");
     const statReviewCount = document.getElementById("statReviewCount");
 
     let currentUser = null;
     let currentUserName = "";
     let isOwnProfile = false;
+    let alreadyFollowing = false;
 
     function safeText(value) {
       return String(value || "")
@@ -355,6 +439,77 @@
       return "⭐".repeat(rating);
     }
 
+    function getFollowDocumentId(followerId) {
+      return `${sellerId}_${followerId}`;
+    }
+
+    function updateFollowButton() {
+      if (!sellerId) {
+        followSellerBtn.style.display = "none";
+        return;
+      }
+
+      if (!currentUser) {
+        followSellerBtn.style.display = "block";
+        followSellerBtn.classList.remove("following");
+        followSellerBtn.textContent = "🔐 Login To Follow";
+        return;
+      }
+
+      if (currentUser.uid === sellerId) {
+        followSellerBtn.style.display = "none";
+        return;
+      }
+
+      followSellerBtn.style.display = "block";
+
+      if (alreadyFollowing) {
+        followSellerBtn.classList.add("following");
+        followSellerBtn.textContent = "✓ Following";
+      } else {
+        followSellerBtn.classList.remove("following");
+        followSellerBtn.textContent = "➕ Follow Seller";
+      }
+    }
+
+    async function loadFollowerCount() {
+      if (!sellerId) return;
+
+      try {
+        const followersQuery = query(
+          collection(db, "followers"),
+          where("sellerId", "==", sellerId)
+        );
+
+        const snapshot = await getDocs(followersQuery);
+        statFollowerCount.textContent = snapshot.size;
+      } catch (error) {
+        console.error("Could not load follower count:", error);
+        statFollowerCount.textContent = "—";
+      }
+    }
+
+    async function checkFollowingStatus() {
+      if (!sellerId) return;
+
+      if (!currentUser || currentUser.uid === sellerId) {
+        alreadyFollowing = false;
+        updateFollowButton();
+        return;
+      }
+
+      try {
+        const followId = getFollowDocumentId(currentUser.uid);
+        const followSnapshot = await getDoc(doc(db, "followers", followId));
+        alreadyFollowing = followSnapshot.exists();
+      } catch (error) {
+        console.error("Could not check follow status:", error);
+        alreadyFollowing = false;
+      }
+
+      updateFollowButton();
+    }
+
     async function loadSellerProfile() {
       if (!sellerId) {
         sellerName.textContent = "Seller not found";
@@ -362,6 +517,7 @@
         sellerMemberSince.textContent = "";
         sellerListingsGrid.innerHTML =
           '<div class="seller-empty">No seller ID was provided.</div>';
+        followSellerBtn.style.display = "none";
         return;
       }
 
@@ -402,8 +558,11 @@
           sellerMemberSince.textContent = "LoyaltyMarket member";
         }
 
-        await loadSellerListings();
-        await loadReviews();
+        await Promise.all([
+          loadSellerListings(),
+          loadReviews(),
+          loadFollowerCount()
+        ]);
 
       } catch (error) {
         sellerName.textContent = "Could not load seller";
@@ -566,6 +725,98 @@
       }
     }
 
+
+    inviteSellerBtn.addEventListener("click", async () => {
+      if (!sellerId) {
+        alert("Seller information could not be found.");
+        return;
+      }
+
+      const sellerDisplayName =
+        sellerName.textContent && sellerName.textContent !== "Loading..."
+          ? sellerName.textContent
+          : "this seller";
+
+      const profileUrl = new URL(window.location.href);
+      profileUrl.searchParams.set("id", sellerId);
+
+      const shareData = {
+        title: `${sellerDisplayName} on LoyaltyMarket`,
+        text: `Check out ${sellerDisplayName} on LoyaltyMarket and follow their latest listings.`,
+        url: profileUrl.toString()
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          return;
+        }
+
+        await navigator.clipboard.writeText(
+          `${shareData.text}\n${shareData.url}`
+        );
+
+        alert("Seller profile link copied. You can paste it into WhatsApp.");
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          prompt(
+            "Copy this seller profile link and share it:",
+            profileUrl.toString()
+          );
+        }
+      }
+    });
+
+    followSellerBtn.addEventListener("click", async () => {
+      if (!sellerId) {
+        alert("Seller information could not be found.");
+        return;
+      }
+
+      if (!currentUser) {
+        window.location.href =
+          "login.html?redirect=" +
+          encodeURIComponent(window.location.href);
+        return;
+      }
+
+      if (currentUser.uid === sellerId) {
+        alert("You cannot follow your own account.");
+        return;
+      }
+
+      followSellerBtn.disabled = true;
+      followSellerBtn.textContent = "Please Wait...";
+
+      const followId = getFollowDocumentId(currentUser.uid);
+      const followRef = doc(db, "followers", followId);
+
+      try {
+        if (alreadyFollowing) {
+          await deleteDoc(followRef);
+          alreadyFollowing = false;
+        } else {
+          await setDoc(followRef, {
+            sellerId,
+            followerId: currentUser.uid,
+            createdAt: serverTimestamp()
+          });
+
+          alreadyFollowing = true;
+        }
+
+        updateFollowButton();
+        await loadFollowerCount();
+
+      } catch (error) {
+        console.error(error);
+        alert("Could not update follow status: " + error.message);
+        updateFollowButton();
+      } finally {
+        followSellerBtn.disabled = false;
+      }
+    });
+
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
@@ -599,6 +850,9 @@
         loginToReviewMsg.style.display = "block";
         ownProfileMsg.style.display = "none";
       }
+
+      updateFollowButton();
+      await checkFollowingStatus();
 
       if (sellerId) {
         await loadSellerListings();
