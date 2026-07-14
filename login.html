@@ -25,8 +25,8 @@
     }
 
     .navbar {
-      min-height: 78px;
-      padding: 12px max(24px, 5vw);
+      min-height: 62px;
+      padding: 10px max(20px, 4vw);
       background: #ffffff;
       border-bottom: 1px solid #e5e7eb;
       display: flex;
@@ -38,32 +38,33 @@
     .logo-link {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       text-decoration: none;
     }
 
     .logo-link img {
-      width: 48px;
-      height: 48px;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
     }
 
     .logo-text {
       color: #0f2d67;
-      font-size: 21px;
+      font-size: 16px;
       font-weight: 900;
     }
 
     .nav-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
     }
 
     .nav-actions a {
-      padding: 10px 16px;
-      border-radius: 10px;
+      padding: 8px 13px;
+      border-radius: 8px;
       text-decoration: none;
       font-weight: 800;
+      font-size: 13px;
     }
 
     .home-link {
@@ -78,57 +79,64 @@
     }
 
     .page {
-      min-height: calc(100vh - 78px);
+      min-height: calc(100vh - 62px);
       display: grid;
       grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      padding: 28px 24px;
+      background: #f5f7fb;
+      align-items: stretch;
     }
 
     .visual {
-      padding: 52px;
+      padding: 32px;
       color: #ffffff;
       background: linear-gradient(145deg, #0f2d67, #1d4ed8 65%, #0ea5e9);
       display: flex;
       flex-direction: column;
       justify-content: center;
+      border-radius: 16px;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.10);
     }
 
     .visual h1 {
-      margin: 0 0 18px;
-      font-size: clamp(42px, 6vw, 72px);
-      line-height: 1.03;
+      margin: 0 0 12px;
+      font-size: clamp(26px, 3.2vw, 40px);
+      line-height: 1.15;
     }
 
     .visual p {
       margin: 0;
       color: #dbeafe;
-      font-size: 18px;
-      line-height: 1.7;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
     .form-side {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 42px 24px;
+      padding: 0;
     }
 
     .card {
-      width: min(500px, 100%);
-      padding: 38px;
+      width: min(400px, 100%);
+      padding: 26px;
       border: 1px solid #e2e8f0;
-      border-radius: 24px;
+      border-radius: 16px;
       background: #ffffff;
-      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.10);
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
     }
 
     .card h2 {
-      margin: 0 0 8px;
-      font-size: 34px;
+      margin: 0 0 6px;
+      font-size: 22px;
     }
 
     .subtitle {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       color: #64748b;
+      font-size: 13px;
     }
 
     form {
@@ -137,8 +145,8 @@
     }
 
     label {
-      margin: 14px 0 7px;
-      font-size: 14px;
+      margin: 10px 0 5px;
+      font-size: 12px;
       font-weight: 800;
     }
 
@@ -146,29 +154,30 @@
     input[type="password"],
     input[type="text"] {
       width: 100%;
-      min-height: 50px;
-      padding: 13px 14px;
+      min-height: 42px;
+      padding: 10px 12px;
       border: 1px solid #cbd5e1;
-      border-radius: 11px;
+      border-radius: 9px;
       font: inherit;
+      font-size: 14px;
     }
 
     input:focus {
       outline: none;
       border-color: #2563eb;
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
     }
 
     .show-password-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 7px;
+      margin-top: 9px;
     }
 
     .show-password-row input {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       margin: 0;
       accent-color: #2563eb;
       cursor: pointer;
@@ -178,7 +187,7 @@
       margin: 0;
       color: #334155;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
     }
 
@@ -186,21 +195,22 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 15px;
-      margin: 18px 0;
+      gap: 12px;
+      margin: 14px 0;
     }
 
     .remember {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       margin: 0;
       cursor: pointer;
+      font-size: 13px;
     }
 
     .remember input {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       min-height: auto;
       margin: 0;
       accent-color: #2563eb;
@@ -211,6 +221,7 @@
       color: #2563eb;
       text-decoration: none;
       font-weight: 800;
+      font-size: 13px;
     }
 
     .forgot:hover {
@@ -218,12 +229,12 @@
     }
 
     button {
-      min-height: 52px;
+      min-height: 44px;
       border: 0;
-      border-radius: 12px;
+      border-radius: 10px;
       background: linear-gradient(135deg, #1e3a8a, #2563eb);
       color: #ffffff;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 900;
       cursor: pointer;
     }
@@ -235,9 +246,10 @@
 
     .message {
       display: none;
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: 10px;
+      margin-top: 11px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 13px;
     }
 
     .message.error {
@@ -255,8 +267,9 @@
     }
 
     .create-account-text {
-      margin: 20px 0 0;
+      margin: 16px 0 0;
       color: #334155;
+      font-size: 13px;
     }
 
     .create-account-text a {
@@ -268,12 +281,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 30px max(24px, 6vw);
+      padding: 22px max(20px, 5vw);
+    }
+
+    .footer h2 {
+      font-size: 18px;
+      margin: 0 0 4px;
+    }
+
+    .footer p {
+      font-size: 13px;
+      margin: 0;
     }
 
     @media (max-width: 900px) {
       .page {
         grid-template-columns: 1fr;
+        padding: 20px 16px;
       }
 
       .visual {
@@ -297,7 +321,7 @@
       }
 
       .card {
-        padding: 28px 20px;
+        padding: 22px 18px;
       }
 
       .options {
