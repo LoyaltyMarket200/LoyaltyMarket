@@ -6,18 +6,26 @@
       window.location.replace("welcome.html");
     }
   </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>LoyaltyMarket - Liberia's Marketplace</title>
+
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
+
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+
   <meta name="theme-color" content="#1e3a8a">
 </head>
+
 <body class="homepage">
   <div class="top-strip">
     <div class="site-shell top-strip-inner">
       <p>🇱🇷 Liberia's trusted online marketplace</p>
+
       <div class="top-strip-links">
         <a href="safety.html">Safety Tips</a>
         <a href="business-profile.html">Verified Businesses</a>
@@ -30,7 +38,11 @@
     <div class="site-shell navbar-inner">
       <a href="index.html" class="logo-link" aria-label="LoyaltyMarket home">
         <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
-        <span class="logo-text"><span class="lr-tag">LR</span><span data-marketplace-name>LoyaltyMarket</span></span>
+
+        <span class="logo-text">
+          <span class="lr-tag">LR</span>
+          <span data-marketplace-name>LoyaltyMarket</span>
+        </span>
       </a>
 
       <p class="navbar-tagline">You Get Market, We Get Buyer.</p>
@@ -38,9 +50,29 @@
       <nav class="nav-buttons" aria-label="Main navigation">
         <a href="login.html" id="loginBtn" class="nav-text-link">Sign In</a>
         <a href="register.html" id="registerBtn" class="nav-text-link">Register</a>
-        <a href="dashboard.html" id="dashboardBtn" class="nav-text-link" style="display:none;">Dashboard</a>
-        <a href="messages.html" id="messagesBtn" class="nav-text-link nav-messages-link" style="display:none;">Messages<span id="unreadBadge" class="unread-badge">0</span></a>
-        <a href="sell.html" id="navSellBtn" class="sell-btn nav-sell-btn">Post An Ad</a>
+
+        <a
+          href="dashboard.html"
+          id="dashboardBtn"
+          class="nav-text-link"
+          style="display:none;"
+        >
+          Dashboard
+        </a>
+
+        <a
+          href="messages.html"
+          id="messagesBtn"
+          class="nav-text-link nav-messages-link"
+          style="display:none;"
+        >
+          Messages
+          <span id="unreadBadge" class="unread-badge">0</span>
+        </a>
+
+        <a href="sell.html" id="navSellBtn" class="sell-btn nav-sell-btn">
+          Post An Ad
+        </a>
       </nav>
     </div>
   </header>
@@ -49,7 +81,12 @@
 
   <section id="maintenanceScreen" class="maintenance-screen">
     <div class="maintenance-card">
-      <h1>🛠️ <span data-marketplace-name>LoyaltyMarket</span> Is Under Maintenance</h1>
+      <h1>
+        🛠️
+        <span data-marketplace-name>LoyaltyMarket</span>
+        Is Under Maintenance
+      </h1>
+
       <p>We are making important improvements. Please check back shortly.</p>
       <p id="maintenanceSupportText"></p>
     </div>
@@ -60,14 +97,20 @@
       <div class="site-shell hero-inner">
         <div class="hero-copy">
           <span class="hero-eyebrow">Made For Liberia</span>
+
           <h1>What Are You Looking For?</h1>
-          <p>Discover products, vehicles, property, jobs and trusted services from sellers across Liberia.</p>
+
+          <p>
+            Discover products, vehicles, property, jobs and trusted services
+            from sellers across Liberia.
+          </p>
         </div>
 
         <div class="hero-search-panel">
           <div class="hero-search-row">
             <div class="search-field location-field">
               <span aria-hidden="true">📍</span>
+
               <select id="countyFilter" aria-label="Select county">
                 <option value="">All Liberia</option>
                 <option value="Montserrado">Montserrado</option>
@@ -87,11 +130,25 @@
                 <option value="Sinoe">Sinoe</option>
               </select>
             </div>
+
             <div class="search-field keyword-field">
               <span aria-hidden="true">🔎</span>
-              <input type="text" id="searchInput" placeholder="Search products, cars, phones, services..." autocomplete="off">
+
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search products, cars, phones, services..."
+                autocomplete="off"
+              >
             </div>
-            <button class="hero-search-btn" id="applyFiltersBtn" type="button">Search</button>
+
+            <button
+              class="hero-search-btn"
+              id="applyFiltersBtn"
+              type="button"
+            >
+              Search
+            </button>
           </div>
 
           <div class="advanced-filter-row">
@@ -113,6 +170,7 @@
               <option value="Babies & Kids">Babies &amp; Kids</option>
               <option value="Sports & Leisure">Sports &amp; Leisure</option>
             </select>
+
             <select id="priceFilter" aria-label="Select price range">
               <option value="">Any Price</option>
               <option value="100">Under US$100</option>
@@ -120,6 +178,7 @@
               <option value="1000">Under US$1,000</option>
               <option value="over1000">Over US$1,000</option>
             </select>
+
             <select id="conditionFilter" aria-label="Select condition">
               <option value="">Any Condition</option>
               <option value="Brand New">Brand New</option>
@@ -135,19 +194,38 @@
       <div class="site-shell quick-links-grid">
         <a href="sell.html" id="heroSellBtn" class="quick-link-card">
           <span class="quick-link-icon">📸</span>
-          <span><strong>How To Sell</strong><small>Post your first listing</small></span>
+
+          <span>
+            <strong>How To Sell</strong>
+            <small>Post your first listing</small>
+          </span>
         </a>
+
         <a href="safety.html" class="quick-link-card">
           <span class="quick-link-icon">🛡️</span>
-          <span><strong>Buy Safely</strong><small>Smart marketplace tips</small></span>
+
+          <span>
+            <strong>Buy Safely</strong>
+            <small>Smart marketplace tips</small>
+          </span>
         </a>
+
         <a href="#services" class="quick-link-card">
           <span class="quick-link-icon">🧰</span>
-          <span><strong>Find A Service</strong><small>Hire trusted professionals</small></span>
+
+          <span>
+            <strong>Find A Service</strong>
+            <small>Hire trusted professionals</small>
+          </span>
         </a>
+
         <a href="category-jobs.html" class="quick-link-card">
           <span class="quick-link-icon">💼</span>
-          <span><strong>Find A Job</strong><small>Explore new opportunities</small></span>
+
+          <span>
+            <strong>Find A Job</strong>
+            <small>Explore new opportunities</small>
+          </span>
         </a>
       </div>
     </section>
@@ -158,6 +236,7 @@
           <h2>Browse Categories</h2>
           <span>Explore</span>
         </div>
+
         <ul class="category-sidebar-list">
           <li><a href="category-vehicles.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">🚗</span><span>Vehicles</span></span><span class="category-sidebar-count" data-category="Vehicles">0</span></a></li>
           <li><a href="category-property.html" class="category-sidebar-link"><span><span class="category-sidebar-icon">🏠</span><span>Property</span></span><span class="category-sidebar-count" data-category="Property">0</span></a></li>
@@ -182,9 +261,15 @@
             <h2>Latest Listings</h2>
             <p class="results-count-line" id="resultsCountLine"></p>
           </div>
-          <a href="search.html" class="view-all-link">View All Listings →</a>
+
+          <a href="search.html" class="view-all-link">
+            View All Listings →
+          </a>
         </div>
-        <div class="product-grid" id="productGrid"><p>Loading products...</p></div>
+
+        <div class="product-grid" id="productGrid">
+          <p>Loading products...</p>
+        </div>
       </main>
     </section>
 
@@ -196,8 +281,16 @@
             <h2>Find Trusted Services Across Liberia</h2>
             <p>Connect with professionals and local businesses ready to help.</p>
           </div>
-          <a href="#products" data-filter-category="Services" class="view-all-link">Browse All Services →</a>
+
+          <a
+            href="#products"
+            data-filter-category="Services"
+            class="view-all-link"
+          >
+            Browse All Services →
+          </a>
         </div>
+
         <div class="services-grid">
           <a href="#products" data-filter-category="Services" class="service-card"><span>🔧</span><h3>Mechanics</h3><p>Repairs, diagnostics and vehicle maintenance.</p></a>
           <a href="#products" data-filter-category="Repair & Construction" class="service-card"><span>🏗️</span><h3>Builders &amp; Repairs</h3><p>Construction, plumbing, electrical and carpentry.</p></a>
@@ -213,68 +306,966 @@
       <div class="site-shell trust-grid">
         <div class="trust-copy">
           <span class="section-kicker">Trade With Confidence</span>
+
           <h2>A Marketplace Built For Liberia</h2>
-          <p>LoyaltyMarket brings buyers, sellers and service providers together with verification, reviews and safer marketplace tools.</p>
-          <a href="register.html" class="primary-cta">Create Free Account</a>
+
+          <p>
+            LoyaltyMarket brings buyers, sellers and service providers together
+            with verification, reviews and safer marketplace tools.
+          </p>
+
+          <a href="register.html" class="primary-cta">
+            Create Free Account
+          </a>
         </div>
+
         <div class="trust-points">
-          <article><span>✓</span><div><h3>Verified Sellers &amp; Businesses</h3><p>Look for verification badges before making a deal.</p></div></article>
-          <article><span>✓</span><div><h3>USD &amp; Liberian Dollar Prices</h3><p>Compare listings in the currencies people use every day.</p></div></article>
-          <article><span>✓</span><div><h3>Direct Buyer–Seller Messaging</h3><p>Ask questions and agree on the details before meeting.</p></div></article>
+          <article>
+            <span>✓</span>
+
+            <div>
+              <h3>Verified Sellers &amp; Businesses</h3>
+              <p>Look for verification badges before making a deal.</p>
+            </div>
+          </article>
+
+          <article>
+            <span>✓</span>
+
+            <div>
+              <h3>USD &amp; Liberian Dollar Prices</h3>
+              <p>Compare listings in the currencies people use every day.</p>
+            </div>
+          </article>
+
+          <article>
+            <span>✓</span>
+
+            <div>
+              <h3>Direct Buyer–Seller Messaging</h3>
+              <p>Ask questions and agree on the details before meeting.</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
   </div>
 
-  <footer class="footer marketplace-footer">
-    <div class="footer-skyline" aria-hidden="true"></div>
-    <div class="site-shell footer-grid">
-      <div class="footer-brand">
-        <a href="index.html" class="logo-link footer-logo">
-          <img src="icons/icon-512.png" alt="">
-          <span class="logo-text"><span class="lr-tag">LR</span><span data-marketplace-name>LoyaltyMarket</span></span>
-        </a>
-        <p>Buy, sell and discover trusted services across Liberia.</p>
-        <p id="footerSupport" class="footer-support"></p>
+  <!-- PROFESSIONAL LOYALTYMARKET FOOTER -->
+  <footer class="lm-footer" id="marketplaceFooter">
+    <button
+      type="button"
+      id="mobileFooterToggle"
+      class="lm-footer-toggle"
+      aria-expanded="false"
+      aria-controls="mobileFooterContent"
+    >
+      <span class="lm-footer-toggle-brand">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+
+        <span>
+          <span class="lm-footer-toggle-lr">LR</span>
+          <span data-marketplace-name>LoyaltyMarket</span>
+        </span>
+      </span>
+
+      <span class="lm-footer-toggle-label">Explore LoyaltyMarket</span>
+      <span class="lm-footer-arrow" aria-hidden="true">⌄</span>
+    </button>
+
+    <div id="mobileFooterContent" class="lm-footer-content">
+      <div class="lm-skyline-wrap" aria-label="Liberia-inspired skyline">
+        <div class="lm-skyline site-shell">
+          <div class="lm-building lm-building-one"></div>
+          <div class="lm-building lm-building-two"></div>
+          <div class="lm-capitol">
+            <span class="lm-capitol-dome"></span>
+            <span class="lm-capitol-roof"></span>
+            <span class="lm-capitol-body">
+              <i></i><i></i><i></i><i></i><i></i>
+            </span>
+          </div>
+          <div class="lm-building lm-building-three"></div>
+          <div class="lm-building lm-building-four"></div>
+          <div class="lm-building lm-building-five"></div>
+        </div>
       </div>
-      <div><h3>Marketplace</h3><a href="index.html#products">Browse Listings</a><a href="sell.html">Post An Ad</a><a href="business-profile.html">Business Accounts</a><a href="category-jobs.html">Jobs</a></div>
-      <div><h3>Support</h3><a href="safety.html">Safety Tips</a><a href="contact.html">Contact Us</a><a href="faq.html">Help Center</a><a href="report.html">Report A Problem</a></div>
-      <div><h3>Legal</h3><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a><a href="prohibited-items.html">Prohibited Items</a><a href="community-rules.html">Community Rules</a></div>
-      <div><h3>Follow LoyaltyMarket</h3><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">YouTube</a><a href="#">TikTok</a></div>
+
+      <div class="lm-footer-main">
+        <div class="site-shell lm-footer-grid">
+          <section class="lm-footer-brand">
+            <a href="index.html" class="lm-footer-logo">
+              <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+
+              <span>
+                <span class="lm-footer-lr">LR</span>
+                <span data-marketplace-name>LoyaltyMarket</span>
+              </span>
+            </a>
+
+            <p class="lm-footer-description">
+              Liberia's trusted marketplace for products, vehicles,
+              property, jobs and professional services.
+            </p>
+
+            <div class="lm-footer-support">
+              <p id="footerSupport"></p>
+
+              <a href="contact.html" class="lm-footer-help-button">
+                Contact Support
+              </a>
+            </div>
+
+            <div class="lm-footer-app">
+              <strong>LoyaltyMarket Mobile App</strong>
+              <span>Android and iPhone apps coming soon.</span>
+            </div>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Marketplace</h3>
+            <a href="index.html#products">Browse Listings</a>
+            <a href="sell.html">Post An Ad</a>
+            <a href="business-profile.html">Business Accounts</a>
+            <a href="category-jobs.html">Jobs</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Support</h3>
+            <a href="safety.html">Safety Tips</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="faq.html">Help Center</a>
+            <a href="report.html">Report A Problem</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Legal</h3>
+            <a href="terms.html">Terms &amp; Conditions</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="prohibited-items.html">Prohibited Items</a>
+            <a href="community-rules.html">Community Rules</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Follow Us</h3>
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">YouTube</a>
+            <a href="#">TikTok</a>
+          </section>
+        </div>
+
+        <div class="site-shell lm-county-section">
+          <div class="lm-county-heading">
+            <div>
+              <span class="lm-country-flag">🇱🇷</span>
+
+              <span>
+                <strong>Browse Across Liberia</strong>
+                <small>Serving buyers and sellers in all 15 counties</small>
+              </span>
+            </div>
+          </div>
+
+          <div class="lm-county-list">
+            <button type="button" data-footer-county="Bomi">Bomi</button>
+            <button type="button" data-footer-county="Bong">Bong</button>
+            <button type="button" data-footer-county="Gbarpolu">Gbarpolu</button>
+            <button type="button" data-footer-county="Grand Bassa">Grand Bassa</button>
+            <button type="button" data-footer-county="Grand Cape Mount">Grand Cape Mount</button>
+            <button type="button" data-footer-county="Grand Gedeh">Grand Gedeh</button>
+            <button type="button" data-footer-county="Grand Kru">Grand Kru</button>
+            <button type="button" data-footer-county="Lofa">Lofa</button>
+            <button type="button" data-footer-county="Margibi">Margibi</button>
+            <button type="button" data-footer-county="Maryland">Maryland</button>
+            <button type="button" data-footer-county="Montserrado">Montserrado</button>
+            <button type="button" data-footer-county="Nimba">Nimba</button>
+            <button type="button" data-footer-county="River Cess">River Cess</button>
+            <button type="button" data-footer-county="River Gee">River Gee</button>
+            <button type="button" data-footer-county="Sinoe">Sinoe</button>
+          </div>
+        </div>
+
+        <div class="lm-footer-bottom">
+          <div class="site-shell lm-footer-bottom-inner">
+            <p>
+              &copy; 2026
+              <span data-marketplace-name>LoyaltyMarket</span>.
+              All Rights Reserved.
+            </p>
+
+            <p>Made For Liberia 🇱🇷</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="site-shell footer-bottom"><p>&copy; 2026 <span data-marketplace-name>LoyaltyMarket</span>. All Rights Reserved.</p><p>Made For Liberia 🇱🇷</p></div>
   </footer>
-<script src="script.js"></script>
-<script type="module">
-import { db, auth } from "./firebase.js";
-import { collection,getDocs,doc,getDoc,query,orderBy,where,onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-const DEFAULT_SETTINGS={marketplaceName:"LoyaltyMarket",supportEmail:"princeteah200@gmail.com",supportPhone:"+231 88 147 1694",usdToLrdRate:180,allowNewListings:true,allowNewRegistrations:true,maintenanceMode:false};
-const productGrid=document.getElementById("productGrid"),resultsCountLine=document.getElementById("resultsCountLine"),loginBtn=document.getElementById("loginBtn"),registerBtn=document.getElementById("registerBtn"),dashboardBtn=document.getElementById("dashboardBtn"),messagesBtn=document.getElementById("messagesBtn"),unreadBadge=document.getElementById("unreadBadge"),categoryCountEls=document.querySelectorAll(".category-sidebar-count"),searchInput=document.getElementById("searchInput"),countyFilter=document.getElementById("countyFilter"),categoryFilter=document.getElementById("categoryFilter"),priceFilter=document.getElementById("priceFilter"),conditionFilter=document.getElementById("conditionFilter"),applyFiltersBtn=document.getElementById("applyFiltersBtn"),siteNotice=document.getElementById("siteNotice"),normalSiteContent=document.getElementById("normalSiteContent"),maintenanceScreen=document.getElementById("maintenanceScreen"),maintenanceSupportText=document.getElementById("maintenanceSupportText"),footerSupport=document.getElementById("footerSupport"),navSellBtn=document.getElementById("navSellBtn"),heroSellBtn=document.getElementById("heroSellBtn");
-let allProducts=[],marketplaceSettings={...DEFAULT_SETTINGS},unsubscribeUnreadMessages=null;const sellerNameCache={};
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mobile-bottom-link active">
+      <span class="mobile-bottom-icon">⌂</span>
+      <span>Home</span>
+    </a>
 
-// Listings with these statuses are hidden from public browsing:
-// "archived" (seller archived it), "pending_review" (flagged by the
-// rule-based scam checks and awaiting admin approval), and
-// "rejected" (an admin reviewed it and rejected it).
-const HIDDEN_STATUSES=["archived","pending_review","rejected"];
+    <a href="wishlist.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">♡</span>
+      <span>Saved</span>
+    </a>
 
-function safeText(value){return String(value??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function formatMoney(value){const number=Number(value);return Number.isFinite(number)?number.toLocaleString(undefined,{maximumFractionDigits:2}):"0"}
-async function loadMarketplaceSettings(){try{const snapshot=await getDoc(doc(db,"settings","marketplace"));if(snapshot.exists())marketplaceSettings={...DEFAULT_SETTINGS,...snapshot.data()}}catch(error){console.error("Could not load marketplace settings:",error)}applyMarketplaceSettings()}
-function applyMarketplaceSettings(){const name=marketplaceSettings.marketplaceName||"LoyaltyMarket";document.title=`${name} - Liberia's Marketplace`;document.querySelectorAll("[data-marketplace-name]").forEach(el=>el.textContent=name);const support=[marketplaceSettings.supportEmail,marketplaceSettings.supportPhone].filter(Boolean);const supportText=support.length?`Support: ${support.join(" | ")}`:"";footerSupport.textContent=supportText;maintenanceSupportText.textContent=supportText;const listingsAllowed=marketplaceSettings.allowNewListings!==false;[navSellBtn,heroSellBtn].forEach(link=>{link.classList.toggle("disabled-link",!listingsAllowed);link.setAttribute("aria-disabled",String(!listingsAllowed))});siteNotice.textContent="New listings are temporarily paused by the marketplace administrator.";siteNotice.style.display=listingsAllowed?"none":"block";const registrationsAllowed=marketplaceSettings.allowNewRegistrations!==false;registerBtn.classList.toggle("disabled-link",!registrationsAllowed);registerBtn.style.display=registrationsAllowed?registerBtn.style.display:"none";const maintenance=marketplaceSettings.maintenanceMode===true;maintenanceScreen.style.display=maintenance?"flex":"none";normalSiteContent.style.display=maintenance?"none":"block";if(maintenance)siteNotice.style.display="none"}
-async function getSellerName(sellerId){if(!sellerId)return"";if(sellerNameCache[sellerId]!==undefined)return sellerNameCache[sellerId];try{const snapshot=await getDoc(doc(db,"users",sellerId));const name=snapshot.exists()?(snapshot.data().name||""):"";sellerNameCache[sellerId]=name;return name}catch{sellerNameCache[sellerId]="";return""}}
-function renderProducts(products){productGrid.innerHTML="";resultsCountLine.textContent=products.length===1?"Showing 1 product":`Showing ${products.length} products`;if(!products.length){productGrid.innerHTML='<div style="background:white;padding:30px;border-radius:14px"><h3>No products found</h3><p style="margin-top:8px;color:#64748b">Try adjusting your search or filters.</p></div>';return}const rate=Number(marketplaceSettings.usdToLrdRate)||180;products.forEach(({id,data:product})=>{const image=product.imageUrl||"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",title=product.title||"Untitled Product",priceUsd=Number(product.priceUsd||0),savedLrd=Number(product.priceLrd),priceLrd=Number.isFinite(savedLrd)&&savedLrd>0?savedLrd:Math.round(priceUsd*rate),city=product.city||"Liberia",county=product.county||"",condition=product.condition||"Used",featured=product.featured===true;const link=document.createElement("a");link.href="product-detail.html?id="+encodeURIComponent(id);link.style.textDecoration="none";link.style.color="inherit";link.innerHTML=`<div class="product-card"><span class="badge ${featured?"badge-featured":""}">${featured?"⭐ Featured":"New"}</span><button class="heart" type="button" data-product-id="${safeText(id)}">♡</button><div class="product-image"><img src="${safeText(image)}" alt="${safeText(title)}" loading="lazy"></div><h3>${safeText(title)}</h3><p class="price">US$${safeText(formatMoney(priceUsd))} | L$${safeText(formatMoney(priceLrd))}</p><p class="location">📍 ${safeText(city)}${county?`, ${safeText(county)}`:""}</p><p class="condition">${safeText(condition)}</p></div>`;productGrid.appendChild(link)});window.initWishlistButtons?.()}
-async function applyFiltersAndSearch(){const searchTerm=searchInput.value.trim().toLowerCase(),selectedCounty=countyFilter.value,selectedCategory=categoryFilter.value,selectedPrice=priceFilter.value,selectedCondition=conditionFilter.value,results=[];for(const item of allProducts){const product=item.data,title=String(product.title||"").toLowerCase(),description=String(product.description||"").toLowerCase(),county=String(product.county||""),city=String(product.city||"").toLowerCase(),category=String(product.category||""),condition=String(product.condition||""),price=Number(product.priceUsd||0);let matchesSearch=true;if(searchTerm){const sellerName=(await getSellerName(product.sellerId)).toLowerCase();matchesSearch=title.includes(searchTerm)||description.includes(searchTerm)||county.toLowerCase().includes(searchTerm)||city.includes(searchTerm)||category.toLowerCase().includes(searchTerm)||sellerName.includes(searchTerm)}const matchesCounty=!selectedCounty||county===selectedCounty,matchesCategory=!selectedCategory||category===selectedCategory,matchesCondition=!selectedCondition||condition===selectedCondition;let matchesPrice=true;if(selectedPrice==="100")matchesPrice=price<100;else if(selectedPrice==="500")matchesPrice=price<500;else if(selectedPrice==="1000")matchesPrice=price<1000;else if(selectedPrice==="over1000")matchesPrice=price>=1000;if(matchesSearch&&matchesCounty&&matchesCategory&&matchesCondition&&matchesPrice)results.push(item)}results.sort((a,b)=>(b.data.featured===true?1:0)-(a.data.featured===true?1:0));renderProducts(results)}
-async function loadProducts(){try{const snapshot=await getDocs(query(collection(db,"products"),orderBy("createdAt","desc")));allProducts=snapshot.docs.map(d=>({id:d.id,data:d.data()})).filter(item=>!HIDDEN_STATUSES.includes(item.data.status));await applyFiltersAndSearch();loadCategoryCounts()}catch(error){console.error(error);productGrid.innerHTML="<p>Could not load products. Please try again.</p>"}}
-function loadCategoryCounts(){const counts={Phones:0,Electronics:0,Vehicles:0,Property:0,Fashion:0,Jobs:0,Services:0,"Home & Appliances":0,"Beauty & Personal Care":0,"Repair & Construction":0,"Commercial Equipment & Tools":0,"Agriculture & Farming":0,"Animals & Pets":0,"Babies & Kids":0,"Sports & Leisure":0};allProducts.forEach(({data})=>{if(!HIDDEN_STATUSES.includes(data.status)&&Object.hasOwn(counts,data.category))counts[data.category]++});categoryCountEls.forEach(el=>el.textContent=String(counts[el.dataset.category]||0))}
-function listenForUnreadMessages(userId){unsubscribeUnreadMessages?.();const unreadQuery=query(collection(db,"messages"),where("receiverId","==",userId),where("read","==",false));unsubscribeUnreadMessages=onSnapshot(unreadQuery,snapshot=>{const count=snapshot.size;if(count){unreadBadge.textContent=count>9?"9+":String(count);unreadBadge.classList.add("has-unread")}else unreadBadge.classList.remove("has-unread")},error=>console.error(error))}
-onAuthStateChanged(auth,user=>{if(user){loginBtn.style.display="none";registerBtn.style.display="none";dashboardBtn.style.display="inline-block";messagesBtn.style.display="inline-block";listenForUnreadMessages(user.uid)}else{loginBtn.style.display="inline-block";registerBtn.style.display=marketplaceSettings.allowNewRegistrations===false?"none":"inline-block";dashboardBtn.style.display="none";messagesBtn.style.display="none";unreadBadge.classList.remove("has-unread");unsubscribeUnreadMessages?.();unsubscribeUnreadMessages=null}})
-let timer=null;searchInput.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(applyFiltersAndSearch,250)});[countyFilter,categoryFilter,priceFilter,conditionFilter].forEach(el=>el.addEventListener("change",applyFiltersAndSearch));applyFiltersBtn.addEventListener("click",event=>{event.preventDefault();applyFiltersAndSearch()});registerBtn.addEventListener("click",event=>{if(marketplaceSettings.allowNewRegistrations===false){event.preventDefault();alert("New registrations are temporarily paused.")}});[navSellBtn,heroSellBtn].forEach(link=>link.addEventListener("click",event=>{if(marketplaceSettings.allowNewListings===false){event.preventDefault();alert("New listings are temporarily paused.")}}));
-document.querySelectorAll("[data-filter-category]").forEach(link=>link.addEventListener("click",event=>{event.preventDefault();const selected=link.dataset.filterCategory||"";categoryFilter.value=selected;document.getElementById("products")?.scrollIntoView({behavior:"smooth"});applyFiltersAndSearch()}));
-async function startHomepage(){await loadMarketplaceSettings();if(marketplaceSettings.maintenanceMode!==true)await loadProducts()}startHomepage();
-</script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").then(()=>console.log("Service worker registered")).catch(error=>console.log("Service worker registration failed:",error))}</script>
+    <a href="sell.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">⊞</span>
+      <span>Sell</span>
+    </a>
+
+    <a href="messages.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">▤</span>
+      <span>Messages</span>
+    </a>
+
+    <a href="dashboard.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">♙</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <script src="script.js"></script>
+
+  <script type="module">
+    import { db, auth } from "./firebase.js";
+
+    import {
+      collection,
+      getDocs,
+      doc,
+      getDoc,
+      query,
+      orderBy,
+      where,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const DEFAULT_SETTINGS = {
+      marketplaceName: "LoyaltyMarket",
+      supportEmail: "princeteah200@gmail.com",
+      supportPhone: "+231 88 147 1694",
+      usdToLrdRate: 180,
+      allowNewListings: true,
+      allowNewRegistrations: true,
+      maintenanceMode: false
+    };
+
+    const productGrid = document.getElementById("productGrid");
+    const resultsCountLine = document.getElementById("resultsCountLine");
+    const loginBtn = document.getElementById("loginBtn");
+    const registerBtn = document.getElementById("registerBtn");
+    const dashboardBtn = document.getElementById("dashboardBtn");
+    const messagesBtn = document.getElementById("messagesBtn");
+    const unreadBadge = document.getElementById("unreadBadge");
+    const categoryCountEls = document.querySelectorAll(".category-sidebar-count");
+    const searchInput = document.getElementById("searchInput");
+    const countyFilter = document.getElementById("countyFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const priceFilter = document.getElementById("priceFilter");
+    const conditionFilter = document.getElementById("conditionFilter");
+    const applyFiltersBtn = document.getElementById("applyFiltersBtn");
+    const siteNotice = document.getElementById("siteNotice");
+    const normalSiteContent = document.getElementById("normalSiteContent");
+    const maintenanceScreen = document.getElementById("maintenanceScreen");
+    const maintenanceSupportText = document.getElementById("maintenanceSupportText");
+    const footerSupport = document.getElementById("footerSupport");
+    const navSellBtn = document.getElementById("navSellBtn");
+    const heroSellBtn = document.getElementById("heroSellBtn");
+
+    let allProducts = [];
+    let marketplaceSettings = { ...DEFAULT_SETTINGS };
+    let unsubscribeUnreadMessages = null;
+
+    const sellerNameCache = {};
+
+    const HIDDEN_STATUSES = [
+      "archived",
+      "pending_review",
+      "rejected"
+    ];
+
+    function safeText(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatMoney(value) {
+      const number = Number(value);
+
+      return Number.isFinite(number)
+        ? number.toLocaleString(
+            undefined,
+            { maximumFractionDigits: 2 }
+          )
+        : "0";
+    }
+
+    async function loadMarketplaceSettings() {
+      try {
+        const snapshot = await getDoc(
+          doc(db, "settings", "marketplace")
+        );
+
+        if (snapshot.exists()) {
+          marketplaceSettings = {
+            ...DEFAULT_SETTINGS,
+            ...snapshot.data()
+          };
+        }
+      } catch (error) {
+        console.error(
+          "Could not load marketplace settings:",
+          error
+        );
+      }
+
+      applyMarketplaceSettings();
+    }
+
+    function applyMarketplaceSettings() {
+      const name =
+        marketplaceSettings.marketplaceName ||
+        "LoyaltyMarket";
+
+      document.title =
+        `${name} - Liberia's Marketplace`;
+
+      document
+        .querySelectorAll("[data-marketplace-name]")
+        .forEach((element) => {
+          element.textContent = name;
+        });
+
+      const support = [
+        marketplaceSettings.supportEmail,
+        marketplaceSettings.supportPhone
+      ].filter(Boolean);
+
+      const supportText = support.length
+        ? `Support: ${support.join(" | ")}`
+        : "";
+
+      footerSupport.textContent = supportText;
+      maintenanceSupportText.textContent = supportText;
+
+      const listingsAllowed =
+        marketplaceSettings.allowNewListings !== false;
+
+      [navSellBtn, heroSellBtn].forEach((link) => {
+        link.classList.toggle(
+          "disabled-link",
+          !listingsAllowed
+        );
+
+        link.setAttribute(
+          "aria-disabled",
+          String(!listingsAllowed)
+        );
+      });
+
+      siteNotice.textContent =
+        "New listings are temporarily paused by the marketplace administrator.";
+
+      siteNotice.style.display =
+        listingsAllowed ? "none" : "block";
+
+      const registrationsAllowed =
+        marketplaceSettings.allowNewRegistrations !== false;
+
+      registerBtn.classList.toggle(
+        "disabled-link",
+        !registrationsAllowed
+      );
+
+      registerBtn.style.display =
+        registrationsAllowed
+          ? registerBtn.style.display
+          : "none";
+
+      const maintenance =
+        marketplaceSettings.maintenanceMode === true;
+
+      maintenanceScreen.style.display =
+        maintenance ? "flex" : "none";
+
+      normalSiteContent.style.display =
+        maintenance ? "none" : "block";
+
+      if (maintenance) {
+        siteNotice.style.display = "none";
+      }
+    }
+
+    async function getSellerName(sellerId) {
+      if (!sellerId) {
+        return "";
+      }
+
+      if (
+        sellerNameCache[sellerId] !== undefined
+      ) {
+        return sellerNameCache[sellerId];
+      }
+
+      try {
+        const snapshot = await getDoc(
+          doc(db, "users", sellerId)
+        );
+
+        const name = snapshot.exists()
+          ? snapshot.data().name || ""
+          : "";
+
+        sellerNameCache[sellerId] = name;
+
+        return name;
+      } catch {
+        sellerNameCache[sellerId] = "";
+        return "";
+      }
+    }
+
+    function renderProducts(products) {
+      productGrid.innerHTML = "";
+
+      resultsCountLine.textContent =
+        products.length === 1
+          ? "Showing 1 product"
+          : `Showing ${products.length} products`;
+
+      if (!products.length) {
+        productGrid.innerHTML = `
+          <div style="background:white;padding:30px;border-radius:14px">
+            <h3>No products found</h3>
+            <p style="margin-top:8px;color:#64748b">
+              Try adjusting your search or filters.
+            </p>
+          </div>
+        `;
+
+        return;
+      }
+
+      const rate =
+        Number(marketplaceSettings.usdToLrdRate) ||
+        180;
+
+      products.forEach(({ id, data: product }) => {
+        const image =
+          product.imageUrl ||
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+
+        const title =
+          product.title ||
+          "Untitled Product";
+
+        const priceUsd =
+          Number(product.priceUsd || 0);
+
+        const savedLrd =
+          Number(product.priceLrd);
+
+        const priceLrd =
+          Number.isFinite(savedLrd) &&
+          savedLrd > 0
+            ? savedLrd
+            : Math.round(priceUsd * rate);
+
+        const city =
+          product.city ||
+          "Liberia";
+
+        const county =
+          product.county ||
+          "";
+
+        const condition =
+          product.condition ||
+          "Used";
+
+        const featured =
+          product.featured === true;
+
+        const link =
+          document.createElement("a");
+
+        link.href =
+          "product-detail.html?id=" +
+          encodeURIComponent(id);
+
+        link.style.textDecoration = "none";
+        link.style.color = "inherit";
+
+        link.innerHTML = `
+          <div class="product-card">
+            <span class="badge ${featured ? "badge-featured" : ""}">
+              ${featured ? "⭐ Featured" : "New"}
+            </span>
+
+            <button
+              class="heart"
+              type="button"
+              data-product-id="${safeText(id)}"
+            >
+              ♡
+            </button>
+
+            <div class="product-image">
+              <img
+                src="${safeText(image)}"
+                alt="${safeText(title)}"
+                loading="lazy"
+              >
+            </div>
+
+            <h3>${safeText(title)}</h3>
+
+            <p class="price">
+              US$${safeText(formatMoney(priceUsd))}
+              |
+              L$${safeText(formatMoney(priceLrd))}
+            </p>
+
+            <p class="location">
+              📍 ${safeText(city)}
+              ${county ? `, ${safeText(county)}` : ""}
+            </p>
+
+            <p class="condition">
+              ${safeText(condition)}
+            </p>
+          </div>
+        `;
+
+        productGrid.appendChild(link);
+      });
+
+      window.initWishlistButtons?.();
+    }
+
+    async function applyFiltersAndSearch() {
+      const searchTerm =
+        searchInput.value.trim().toLowerCase();
+
+      const selectedCounty =
+        countyFilter.value;
+
+      const selectedCategory =
+        categoryFilter.value;
+
+      const selectedPrice =
+        priceFilter.value;
+
+      const selectedCondition =
+        conditionFilter.value;
+
+      const results = [];
+
+      for (const item of allProducts) {
+        const product = item.data;
+
+        const title =
+          String(product.title || "").toLowerCase();
+
+        const description =
+          String(product.description || "").toLowerCase();
+
+        const county =
+          String(product.county || "");
+
+        const city =
+          String(product.city || "").toLowerCase();
+
+        const category =
+          String(product.category || "");
+
+        const condition =
+          String(product.condition || "");
+
+        const price =
+          Number(product.priceUsd || 0);
+
+        let matchesSearch = true;
+
+        if (searchTerm) {
+          const sellerName =
+            (await getSellerName(product.sellerId))
+              .toLowerCase();
+
+          matchesSearch =
+            title.includes(searchTerm) ||
+            description.includes(searchTerm) ||
+            county.toLowerCase().includes(searchTerm) ||
+            city.includes(searchTerm) ||
+            category.toLowerCase().includes(searchTerm) ||
+            sellerName.includes(searchTerm);
+        }
+
+        const matchesCounty =
+          !selectedCounty ||
+          county === selectedCounty;
+
+        const matchesCategory =
+          !selectedCategory ||
+          category === selectedCategory;
+
+        const matchesCondition =
+          !selectedCondition ||
+          condition === selectedCondition;
+
+        let matchesPrice = true;
+
+        if (selectedPrice === "100") {
+          matchesPrice = price < 100;
+        } else if (selectedPrice === "500") {
+          matchesPrice = price < 500;
+        } else if (selectedPrice === "1000") {
+          matchesPrice = price < 1000;
+        } else if (selectedPrice === "over1000") {
+          matchesPrice = price >= 1000;
+        }
+
+        if (
+          matchesSearch &&
+          matchesCounty &&
+          matchesCategory &&
+          matchesCondition &&
+          matchesPrice
+        ) {
+          results.push(item);
+        }
+      }
+
+      results.sort(
+        (a, b) =>
+          (b.data.featured === true ? 1 : 0) -
+          (a.data.featured === true ? 1 : 0)
+      );
+
+      renderProducts(results);
+    }
+
+    async function loadProducts() {
+      try {
+        const snapshot = await getDocs(
+          query(
+            collection(db, "products"),
+            orderBy("createdAt", "desc")
+          )
+        );
+
+        allProducts =
+          snapshot.docs
+            .map((documentSnapshot) => ({
+              id: documentSnapshot.id,
+              data: documentSnapshot.data()
+            }))
+            .filter(
+              (item) =>
+                !HIDDEN_STATUSES.includes(
+                  item.data.status
+                )
+            );
+
+        await applyFiltersAndSearch();
+        loadCategoryCounts();
+      } catch (error) {
+        console.error(error);
+
+        productGrid.innerHTML =
+          "<p>Could not load products. Please try again.</p>";
+      }
+    }
+
+    function loadCategoryCounts() {
+      const counts = {
+        Phones: 0,
+        Electronics: 0,
+        Vehicles: 0,
+        Property: 0,
+        Fashion: 0,
+        Jobs: 0,
+        Services: 0,
+        "Home & Appliances": 0,
+        "Beauty & Personal Care": 0,
+        "Repair & Construction": 0,
+        "Commercial Equipment & Tools": 0,
+        "Agriculture & Farming": 0,
+        "Animals & Pets": 0,
+        "Babies & Kids": 0,
+        "Sports & Leisure": 0
+      };
+
+      allProducts.forEach(({ data }) => {
+        if (
+          !HIDDEN_STATUSES.includes(data.status) &&
+          Object.hasOwn(counts, data.category)
+        ) {
+          counts[data.category] += 1;
+        }
+      });
+
+      categoryCountEls.forEach((element) => {
+        element.textContent =
+          String(
+            counts[element.dataset.category] ||
+            0
+          );
+      });
+    }
+
+    function listenForUnreadMessages(userId) {
+      unsubscribeUnreadMessages?.();
+
+      const unreadQuery = query(
+        collection(db, "messages"),
+        where("receiverId", "==", userId),
+        where("read", "==", false)
+      );
+
+      unsubscribeUnreadMessages = onSnapshot(
+        unreadQuery,
+        (snapshot) => {
+          const count = snapshot.size;
+
+          if (count) {
+            unreadBadge.textContent =
+              count > 9
+                ? "9+"
+                : String(count);
+
+            unreadBadge.classList.add(
+              "has-unread"
+            );
+          } else {
+            unreadBadge.classList.remove(
+              "has-unread"
+            );
+          }
+        },
+        (error) => console.error(error)
+      );
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginBtn.style.display = "none";
+        registerBtn.style.display = "none";
+        dashboardBtn.style.display = "inline-block";
+        messagesBtn.style.display = "inline-block";
+
+        listenForUnreadMessages(user.uid);
+      } else {
+        loginBtn.style.display = "inline-block";
+
+        registerBtn.style.display =
+          marketplaceSettings.allowNewRegistrations === false
+            ? "none"
+            : "inline-block";
+
+        dashboardBtn.style.display = "none";
+        messagesBtn.style.display = "none";
+
+        unreadBadge.classList.remove(
+          "has-unread"
+        );
+
+        unsubscribeUnreadMessages?.();
+        unsubscribeUnreadMessages = null;
+      }
+    });
+
+    let timer = null;
+
+    searchInput.addEventListener(
+      "input",
+      () => {
+        clearTimeout(timer);
+
+        timer = setTimeout(
+          applyFiltersAndSearch,
+          250
+        );
+      }
+    );
+
+    [
+      countyFilter,
+      categoryFilter,
+      priceFilter,
+      conditionFilter
+    ].forEach((element) => {
+      element.addEventListener(
+        "change",
+        applyFiltersAndSearch
+      );
+    });
+
+    applyFiltersBtn.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+        applyFiltersAndSearch();
+      }
+    );
+
+    registerBtn.addEventListener(
+      "click",
+      (event) => {
+        if (
+          marketplaceSettings.allowNewRegistrations === false
+        ) {
+          event.preventDefault();
+
+          alert(
+            "New registrations are temporarily paused."
+          );
+        }
+      }
+    );
+
+    [navSellBtn, heroSellBtn].forEach((link) => {
+      link.addEventListener(
+        "click",
+        (event) => {
+          if (
+            marketplaceSettings.allowNewListings === false
+          ) {
+            event.preventDefault();
+
+            alert(
+              "New listings are temporarily paused."
+            );
+          }
+        }
+      );
+    });
+
+    document
+      .querySelectorAll("[data-filter-category]")
+      .forEach((link) => {
+        link.addEventListener(
+          "click",
+          (event) => {
+            event.preventDefault();
+
+            const selected =
+              link.dataset.filterCategory ||
+              "";
+
+            categoryFilter.value =
+              selected;
+
+            document
+              .getElementById("products")
+              ?.scrollIntoView({
+                behavior: "smooth"
+              });
+
+            applyFiltersAndSearch();
+          }
+        );
+      });
+
+    document
+      .querySelectorAll("[data-footer-county]")
+      .forEach((button) => {
+        button.addEventListener(
+          "click",
+          () => {
+            countyFilter.value =
+              button.dataset.footerCounty ||
+              "";
+
+            document
+              .getElementById("products")
+              ?.scrollIntoView({
+                behavior: "smooth"
+              });
+
+            applyFiltersAndSearch();
+          }
+        );
+      });
+
+    async function startHomepage() {
+      await loadMarketplaceSettings();
+
+      if (
+        marketplaceSettings.maintenanceMode !== true
+      ) {
+        await loadProducts();
+      }
+    }
+
+    startHomepage();
+  </script>
+
+  <script>
+    const mobileFooterToggle =
+      document.getElementById(
+        "mobileFooterToggle"
+      );
+
+    const mobileFooterContent =
+      document.getElementById(
+        "mobileFooterContent"
+      );
+
+    if (
+      mobileFooterToggle &&
+      mobileFooterContent
+    ) {
+      mobileFooterToggle.addEventListener(
+        "click",
+        () => {
+          const isOpen =
+            mobileFooterContent.classList.toggle(
+              "footer-open"
+            );
+
+          mobileFooterToggle.classList.toggle(
+            "footer-toggle-open",
+            isOpen
+          );
+
+          mobileFooterToggle.setAttribute(
+            "aria-expanded",
+            String(isOpen)
+          );
+        }
+      );
+    }
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .then(() =>
+          console.log(
+            "Service worker registered"
+          )
+        )
+        .catch((error) =>
+          console.log(
+            "Service worker registration failed:",
+            error
+          )
+        );
+    }
+  </script>
 </body>
 </html>
