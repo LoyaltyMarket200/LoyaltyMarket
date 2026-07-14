@@ -1773,8 +1773,8 @@ body {
   gap: 28px;
 }
 
-.marketplace-navbar .logo-link img { width: 48px; height: 48px; object-fit: contain; }
-.marketplace-navbar .logo-text { color: #fff; font-size: 22px; }
+.marketplace-navbar .logo-link img { width: 40px; height: 40px; object-fit: contain; }
+.marketplace-navbar .logo-text { color: #fff; font-size: 17px; }
 .marketplace-navbar .lr-tag { color: #fbbf24; }
 .navbar-tagline { flex: 1; text-align: center; color: #bfdbfe; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-size: 13px; }
 .marketplace-navbar .nav-buttons { width: auto; align-items: center; flex-wrap: nowrap; }
@@ -1792,14 +1792,14 @@ body {
     radial-gradient(circle at 15% 15%, rgba(255,255,255,.16), transparent 26%),
     linear-gradient(135deg, #1e3a8a 0%, #2563eb 58%, #0ea5e9 100%);
   color: #fff;
-  padding: 64px 0 78px;
+  padding: 38px 0 46px;
 }
 
 .hero-inner { max-width: 1050px; text-align: center; }
 .hero-copy { max-width: 780px; margin: 0 auto 30px; }
-.hero-eyebrow, .section-kicker { display: inline-block; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .14em; color: #fbbf24; margin-bottom: 10px; }
-.hero-copy h1 { margin: 0 0 14px; font-size: clamp(38px, 5vw, 62px); line-height: 1.05; }
-.hero-copy p { margin: 0; color: #dbeafe; font-size: clamp(16px, 2vw, 20px); line-height: 1.65; }
+.hero-eyebrow, .section-kicker { display: inline-block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: #fbbf24; margin-bottom: 8px; }
+.hero-copy h1 { margin: 0 0 12px; font-size: clamp(24px, 3vw, 38px); line-height: 1.15; }
+.hero-copy p { margin: 0; color: #dbeafe; font-size: clamp(13px, 1.3vw, 16px); line-height: 1.6; }
 
 .hero-search-panel { background: rgba(255,255,255,.98); padding: 14px; border-radius: 16px; box-shadow: 0 24px 50px rgba(15,31,61,.24); }
 .hero-search-row { display: grid; grid-template-columns: 240px 1fr 140px; gap: 10px; }
@@ -1838,12 +1838,22 @@ body {
 .view-all-link { color: var(--lm-blue-2); text-decoration: none; font-weight: 800; white-space: nowrap; }
 .view-all-link:hover { color: var(--lm-orange-dark); }
 
-.homepage .browse-main .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 17px; }
-.homepage .product-card { border-radius: 12px; border: 1px solid var(--lm-border); box-shadow: 0 4px 16px rgba(15,31,61,.07); }
-.homepage .product-card .product-image { height: 210px; }
-.homepage .product-card h3 { min-height: 42px; }
-.homepage .product-card .price { color: var(--lm-green); }
+.homepage .browse-main .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.homepage .product-card { border-radius: 10px; border: 1px solid var(--lm-border); box-shadow: 0 3px 10px rgba(15,31,61,.06); }
+.homepage .product-card .product-image { height: 140px; }
+.homepage .product-card h3 { min-height: 32px; margin: 10px 10px 4px; font-size: 13px; font-weight: 600; line-height: 1.3; }
+.homepage .product-card .price { color: var(--lm-green); margin: 0 10px 4px; font-size: 14px; }
+.homepage .product-card .location { margin: 0 10px 4px; font-size: 11px; }
+.homepage .product-card .condition { margin: 0 10px 10px; padding: 3px 7px; font-size: 10px; }
 .homepage .product-card:hover { border-color: #93c5fd; }
+
+@media (min-width: 1250px) {
+  .homepage .browse-main .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1550px) {
+  .homepage .browse-main .product-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
 
 .services-showcase { padding: 70px 0; background: #fff; border-block: 1px solid var(--lm-border); }
 .services-heading { align-items: center; }
@@ -1924,8 +1934,8 @@ body {
   .category-sidebar-list { grid-template-columns: 1fr; }
   .section-heading-row { align-items: flex-start; flex-direction: column; }
   .homepage .browse-main .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
-  .homepage .product-card .product-image { height: 155px; }
-  .homepage .product-card h3 { min-height: auto; }
+  .homepage .product-card .product-image { height: 130px; }
+  .homepage .product-card h3 { min-height: auto; font-size: 13px; }
   .services-grid { grid-template-columns: 1fr; }
   .service-card { min-height: 160px; }
   .footer-grid { grid-template-columns: 1fr; }
