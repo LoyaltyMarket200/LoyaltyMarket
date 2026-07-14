@@ -1990,4 +1990,9 @@ body {
     width: 100%;
     flex-basis: auto;
   }
+}/* REAL CATEGORY IMAGES */
+.category-sidebar-icon img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
 }
