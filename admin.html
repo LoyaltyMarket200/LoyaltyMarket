@@ -304,6 +304,7 @@
     .status-reviewed { background: #dbeafe; color: #1e40af; }
     .status-dismissed { background: #e2e8f0; color: #475569; }
     .status-active { background: #dcfce7; color: #166534; }
+    .status-expired { background: #e2e8f0; color: #475569; }
     .status-rejected { background: #fee2e2; color: #b91c1c; }
     .status-pending_review { background: #fef3c7; color: #92400e; }
 
@@ -1135,6 +1136,7 @@
         <button class="admin-tab-btn active" data-boost-filter="pending">Pending</button>
         <button class="admin-tab-btn" data-boost-filter="active">Active</button>
         <button class="admin-tab-btn" data-boost-filter="rejected">Rejected</button>
+        <button class="admin-tab-btn" data-boost-filter="expired">Expired</button>
         <button class="admin-tab-btn" data-boost-filter="all">All</button>
       </div>
 
@@ -1678,6 +1680,56 @@
       `;
     }
 
+    function getBoostDurationDays(product) {
+      const explicitDays = Number(product.boostDurationDays);
+      if (Number.isFinite(explicitDays) && explicitDays > 0) return explicitDays;
+
+      const plan = String(product.boostPlan || "").toLowerCase();
+      if (plan.includes("14")) return 14;
+      if (plan.includes("7")) return 7;
+      return 3;
+    }
+
+    function getBoostExpiryMilliseconds(product) {
+      const storedExpiry = timestampToMilliseconds(product.boostExpiresAt);
+      if (storedExpiry) return storedExpiry;
+
+      const activatedAt = timestampToMilliseconds(product.boostActivatedAt);
+      if (!activatedAt) return 0;
+
+      return activatedAt + getBoostDurationDays(product) * 24 * 60 * 60 * 1000;
+    }
+
+    async function expireFinishedBoosts(products) {
+      const now = Date.now();
+      const updates = [];
+
+      products.forEach((product) => {
+        if (product.boostStatus !== "active") return;
+
+        const expiryMilliseconds = getBoostExpiryMilliseconds(product);
+        if (!expiryMilliseconds || expiryMilliseconds > now) return;
+
+        const expiredAt = Timestamp.fromMillis(expiryMilliseconds);
+
+        updates.push(
+          updateDoc(doc(db, "products", product.id), {
+            boostStatus: "expired",
+            featured: false,
+            boostExpiresAt: expiredAt,
+            boostExpiredAt: Timestamp.now()
+          })
+        );
+
+        product.boostStatus = "expired";
+        product.featured = false;
+        product.boostExpiresAt = expiredAt;
+        product.boostExpiredAt = Timestamp.now();
+      });
+
+      if (updates.length) await Promise.all(updates);
+    }
+
     async function loadAllData() {
       clearMessages();
       refreshBtn.disabled = true;
@@ -1700,6 +1752,7 @@
           ...snapshot.data()
         }));
 
+        await expireFinishedBoosts(allProductsCache);
         allBoostProducts = allProductsCache.filter((product) => Boolean(product.boostStatus));
 
         allUsers.sort((a, b) =>
@@ -2346,6 +2399,8 @@
 
             <div class="report-meta">
               Requested: ${formatDate(product.boostRequestedAt)}
+              ${product.boostActivatedAt ? `<br>Activated: ${formatDate(product.boostActivatedAt)}` : ""}
+              ${product.boostExpiresAt ? `<br>Expires: ${formatDate(product.boostExpiresAt)}` : ""}
               <br>
               Seller ID: ${safeText(product.sellerId || "Unknown")}
               <br>
@@ -2390,14 +2445,25 @@
         if (action === "activate") {
           if (!confirm(`Confirm payment for "${product.title || "this listing"}"?`)) return;
 
+          const activatedAt = Timestamp.now();
+          const durationDays = getBoostDurationDays(product);
+          const boostExpiresAt = Timestamp.fromMillis(
+            activatedAt.toMillis() + durationDays * 24 * 60 * 60 * 1000
+          );
+
           await updateDoc(doc(db, "products", productId), {
             boostStatus: "active",
             featured: true,
-            boostActivatedAt: Timestamp.now()
+            boostActivatedAt: activatedAt,
+            boostExpiresAt,
+            boostExpiredAt: null
           });
 
           product.boostStatus = "active";
           product.featured = true;
+          product.boostActivatedAt = activatedAt;
+          product.boostExpiresAt = boostExpiresAt;
+          product.boostExpiredAt = null;
         }
 
         if (action === "reject") {

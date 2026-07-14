@@ -29,6 +29,16 @@
       border-radius: 20px;
       margin-left: 6px;
     }
+    .boost-expired-badge {
+      display: inline-block;
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 6px;
+    }
     .feature-btn {
       background: #fff;
       border: 1px solid #d97706;
@@ -703,6 +713,63 @@ async function loadUserProfile() {
   }
 }
 
+function timestampToMilliseconds(timestamp) {
+  if (!timestamp) return 0;
+  if (typeof timestamp.toMillis === "function") return timestamp.toMillis();
+  if (typeof timestamp.toDate === "function") return timestamp.toDate().getTime();
+  if (typeof timestamp.seconds === "number") return timestamp.seconds * 1000;
+  const value = new Date(timestamp).getTime();
+  return Number.isNaN(value) ? 0 : value;
+}
+
+function getBoostDurationDays(product) {
+  const explicitDays = Number(product.boostDurationDays);
+  if (Number.isFinite(explicitDays) && explicitDays > 0) return explicitDays;
+  const plan = String(product.boostPlan || "").toLowerCase();
+  if (plan.includes("14")) return 14;
+  if (plan.includes("7")) return 7;
+  return 3;
+}
+
+function getBoostExpiryMilliseconds(product) {
+  const storedExpiry = timestampToMilliseconds(product.boostExpiresAt);
+  if (storedExpiry) return storedExpiry;
+  const activatedAt = timestampToMilliseconds(product.boostActivatedAt);
+  return activatedAt
+    ? activatedAt + getBoostDurationDays(product) * 24 * 60 * 60 * 1000
+    : 0;
+}
+
+function formatBoostExpiry(product) {
+  const expiry = getBoostExpiryMilliseconds(product);
+  return expiry ? new Date(expiry).toLocaleString() : "";
+}
+
+async function expireMyFinishedBoosts(products) {
+  const now = Date.now();
+  const updates = [];
+
+  products.forEach((product) => {
+    if (product.boostStatus !== "active") return;
+    const expiry = getBoostExpiryMilliseconds(product);
+    if (!expiry || expiry > now) return;
+
+    const expiresAt = Timestamp.fromMillis(expiry);
+    updates.push(updateDoc(doc(db, "products", product.id), {
+      boostStatus: "expired",
+      featured: false,
+      boostExpiresAt: expiresAt,
+      boostExpiredAt: Timestamp.now()
+    }));
+
+    product.boostStatus = "expired";
+    product.featured = false;
+    product.boostExpiresAt = expiresAt;
+  });
+
+  if (updates.length) await Promise.all(updates);
+}
+
 function updateDashboardStats() {
   totalListingsStat.textContent = String(allMyProducts.length);
   activeListingsStat.textContent = String(allMyProducts.filter((product) => product.status !== "sold" && product.status !== "archived").length);
@@ -731,11 +798,12 @@ function renderListings() {
 
   productsToShow.forEach((product) => {
     const productId = product.id;
-    const isFeatured = product.featured === true;
-    const isSold = product.status === "sold";
-    const isArchived = product.status === "archived";
     const isBoostPending = product.boostStatus === "pending";
     const isBoostActive = product.boostStatus === "active";
+    const isBoostExpired = product.boostStatus === "expired";
+    const isFeatured = product.featured === true && !isBoostExpired;
+    const isSold = product.status === "sold";
+    const isArchived = product.status === "archived";
 
     const image =
       product.imageUrl ||
@@ -757,10 +825,13 @@ function renderListings() {
     if (isBoostPending) {
       boostBadgeHtml = '<span class="boost-pending-badge">⏳ Boost Pending</span>';
     } else if (isBoostActive) {
-      boostBadgeHtml = '<span class="boost-pending-badge">🚀 Boosted</span>';
+      const expiryText = formatBoostExpiry(product);
+      boostBadgeHtml = `<span class="boost-pending-badge" title="Expires ${safeText(expiryText)}">🚀 Boosted</span>`;
+    } else if (isBoostExpired) {
+      boostBadgeHtml = '<span class="boost-expired-badge">Boost Expired</span>';
     }
 
-    let boostButtonLabel = "🚀 Boost";
+    let boostButtonLabel = isBoostExpired ? "🚀 Boost Again" : "🚀 Boost";
     if (isBoostPending) {
       boostButtonLabel = "⏳ Boost Pending";
     } else if (isBoostActive) {
@@ -1048,6 +1119,7 @@ async function loadMyListings() {
       allMyProducts.push({ id: productDoc.id, ...productDoc.data() });
     });
 
+    await expireMyFinishedBoosts(allMyProducts);
     renderListings();
 
   } catch (error) {
