@@ -1,13 +1,626 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Login - LoyaltyMarket</title><link rel="stylesheet" href="style.css"><link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png"><meta name="theme-color" content="#1e3a8a"><style>
-*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#0f172a;font-family:Arial,sans-serif}.navbar{min-height:78px;padding:12px max(24px,5vw);background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;gap:16px}.logo-link{display:flex;align-items:center;gap:10px;text-decoration:none}.logo-link img{width:48px;height:48px}.logo-text{color:#0f2d67;font-size:21px;font-weight:900}.nav-actions{display:flex;gap:10px}.nav-actions a{padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:800}.home-link{background:#f8fafc;color:#334155;border:1px solid #e2e8f0}.register-link{background:#f97316;color:#fff}.page{min-height:calc(100vh - 78px);display:grid;grid-template-columns:1.05fr .95fr}.visual{padding:52px;color:#fff;background:linear-gradient(145deg,#0f2d67,#1d4ed8 65%,#0ea5e9);display:flex;flex-direction:column;justify-content:center}.visual h1{font-size:clamp(42px,6vw,72px);line-height:1.03}.visual p{color:#dbeafe;font-size:18px;line-height:1.7}.form-side{display:flex;align-items:center;justify-content:center;padding:42px 24px}.card{width:min(500px,100%);padding:38px;border:1px solid #e2e8f0;border-radius:24px;background:#fff;box-shadow:0 22px 55px rgba(15,23,42,.10)}.card h2{font-size:34px;margin:0 0 8px}.subtitle{color:#64748b}form{display:flex;flex-direction:column}label{margin:14px 0 7px;font-size:14px;font-weight:800}input{width:100%;min-height:50px;padding:13px 14px;border:1px solid #cbd5e1;border-radius:11px;font:inherit}.options{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:18px 0}.remember{display:flex;align-items:center;gap:7px;margin:0}.remember input{width:auto;min-height:auto}.forgot{color:#2563eb;text-decoration:none;font-weight:800}button{min-height:52px;border:0;border-radius:12px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;font-size:16px;font-weight:900;cursor:pointer}button:disabled{opacity:.65}.message{display:none;margin-top:14px;padding:12px 14px;border-radius:10px}.message.error{display:block;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.message.success{display:block;background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}.footer{display:flex;justify-content:space-between;align-items:center;padding:30px max(24px,6vw)}@media(max-width:900px){.page{grid-template-columns:1fr}.visual{display:none}}@media(max-width:600px){.navbar{flex-direction:column;align-items:stretch}.nav-actions{display:grid;grid-template-columns:1fr 1fr}.card{padding:28px 20px}.options{flex-direction:column;align-items:flex-start}.footer{flex-direction:column;text-align:center}}
-</style></head><body>
-<header class="navbar"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="LoyaltyMarket"><span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span></a><div class="nav-actions"><a class="home-link" href="index.html">Home</a><a class="register-link" href="register.html">Create Account</a></div></header>
-<main class="page"><section class="visual"><h1>You Get Market, We Get Buyer.</h1><p>Sign in securely to manage listings, messages, orders, wishlist, and sales.</p></section><section class="form-side"><div class="card"><h2>Welcome Back</h2><p class="subtitle">Login to your LoyaltyMarket account.</p><form id="loginForm"><label for="email">Email Address</label><input id="email" type="email" required autocomplete="email"><label for="password">Password</label><input id="password" type="password" required autocomplete="current-password"><div class="options"><label class="remember"><input id="rememberMe" type="checkbox">Remember Me</label><a href="#" class="forgot" id="forgotPasswordLink">Forgot Password?</a></div><button id="loginBtn" type="submit">Login</button><div id="loginMessage" class="message"></div></form><p>Don't Have An Account? <a href="register.html">Create One</a></p></div></section></main>
-<footer class="footer"><div><h2>🇱🇷 LoyaltyMarket</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 LoyaltyMarket.</p></footer>
-<script type="module">
-import {auth,db} from './firebase.js';import {signInWithEmailAndPassword,sendPasswordResetEmail,setPersistence,browserLocalPersistence,browserSessionPersistence,signOut} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';import {doc,getDoc,setDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
-const ADMIN_EMAILS=['princeteah200@gmail.com'];const form=document.getElementById('loginForm'),btn=document.getElementById('loginBtn'),msg=document.getElementById('loginMessage'),remember=document.getElementById('rememberMe'),forgot=document.getElementById('forgotPasswordLink'),emailInput=document.getElementById('email'),passwordInput=document.getElementById('password');function show(text,type){msg.textContent=text;msg.className='message '+type}function friendly(code){return {'auth/invalid-credential':'The email or password is incorrect.','auth/user-not-found':'No account was found with that email.','auth/wrong-password':'The email or password is incorrect.','auth/invalid-email':'Enter a valid email address.','auth/user-disabled':'This Firebase account has been disabled.','auth/too-many-requests':'Too many attempts. Please wait.','auth/network-request-failed':'Check your internet connection.'}[code]||'Could not log in. Please try again.'}async function settings(){try{const s=await getDoc(doc(db,'settings','marketplace'));return s.exists()?s.data():{}}catch{return {}}}
-form.addEventListener('submit',async e=>{e.preventDefault();const email=emailInput.value.trim().toLowerCase(),password=passwordInput.value;btn.disabled=true;btn.textContent='Logging In...';msg.className='message';try{await setPersistence(auth,remember.checked?browserLocalPersistence:browserSessionPersistence);const c=await signInWithEmailAndPassword(auth,email,password);const user=c.user,isAdmin=ADMIN_EMAILS.includes((user.email||'').toLowerCase());const [market,userSnap]=await Promise.all([settings(),getDoc(doc(db,'users',user.uid))]);if(market.maintenanceMode===true&&!isAdmin){await signOut(auth);show('LoyaltyMarket is temporarily under maintenance. Please try again later.','error');return}let profile=userSnap.exists()?userSnap.data():null;if(!profile){profile={accountType:'personal',name:user.displayName||'',email:user.email||email,phone:'',verified:false,businessVerified:false,suspended:false,role:isAdmin?'admin':'user',profileComplete:false,createdAt:serverTimestamp(),updatedAt:serverTimestamp()};await setDoc(doc(db,'users',user.uid),profile,{merge:true})}if(profile.suspended===true&&!isAdmin){await signOut(auth);show('Your account has been suspended. Contact support.','error');return}show('Login successful. Opening your account...','success');setTimeout(()=>location.href=isAdmin?'admin.html':'dashboard.html',500)}catch(error){show(friendly(error.code),'error')}finally{btn.disabled=false;btn.textContent='Login'}});
-forgot.addEventListener('click',async e=>{e.preventDefault();const email=emailInput.value.trim();if(!email){show('Enter your email first.','error');return}forgot.style.pointerEvents='none';forgot.textContent='Sending...';try{await sendPasswordResetEmail(auth,email);show('Password reset email sent.','success')}catch(error){show(friendly(error.code),'error')}finally{forgot.style.pointerEvents='auto';forgot.textContent='Forgot Password?'}});
-</script></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login - LoyaltyMarket</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+
+  <meta name="theme-color" content="#1e3a8a">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f7fb;
+      color: #0f172a;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      min-height: 78px;
+      padding: 12px max(24px, 5vw);
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-link img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .logo-text {
+      color: #0f2d67;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-actions a {
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .home-link {
+      background: #f8fafc;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+    }
+
+    .register-link {
+      background: #f97316;
+      color: #ffffff;
+    }
+
+    .page {
+      min-height: calc(100vh - 78px);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .visual {
+      padding: 52px;
+      color: #ffffff;
+      background: linear-gradient(145deg, #0f2d67, #1d4ed8 65%, #0ea5e9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .visual h1 {
+      margin: 0 0 18px;
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 1.03;
+    }
+
+    .visual p {
+      margin: 0;
+      color: #dbeafe;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .form-side {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 42px 24px;
+    }
+
+    .card {
+      width: min(500px, 100%);
+      padding: 38px;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.10);
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 34px;
+    }
+
+    .subtitle {
+      margin: 0 0 10px;
+      color: #64748b;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin: 14px 0 7px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      min-height: 50px;
+      padding: 13px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 11px;
+      font: inherit;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+    }
+
+    .show-password-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .show-password-row input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: #2563eb;
+      cursor: pointer;
+    }
+
+    .show-password-row label {
+      margin: 0;
+      color: #334155;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin: 18px 0;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .remember input {
+      width: 18px;
+      height: 18px;
+      min-height: auto;
+      margin: 0;
+      accent-color: #2563eb;
+      cursor: pointer;
+    }
+
+    .forgot {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .forgot:hover {
+      text-decoration: underline;
+    }
+
+    button {
+      min-height: 52px;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+    }
+
+    .message.error {
+      display: block;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .message.success {
+      display: block;
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .create-account-text {
+      margin: 20px 0 0;
+      color: #334155;
+    }
+
+    .create-account-text a {
+      color: #7e22ce;
+      font-weight: 800;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px max(24px, 6vw);
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .visual {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-actions a {
+        text-align: center;
+      }
+
+      .card {
+        padding: 28px 20px;
+      }
+
+      .options {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <a href="index.html" class="logo-link">
+      <img src="icons/icon-512.png" alt="LoyaltyMarket">
+      <span class="logo-text">
+        <span class="lr-tag">LR</span>LoyaltyMarket
+      </span>
+    </a>
+
+    <div class="nav-actions">
+      <a class="home-link" href="index.html">Home</a>
+      <a class="register-link" href="register.html">Create Account</a>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="visual">
+      <h1>You Get Market, We Get Buyer.</h1>
+      <p>
+        Sign in securely to manage listings, messages, orders, wishlist, and sales.
+      </p>
+    </section>
+
+    <section class="form-side">
+      <div class="card">
+        <h2>Welcome Back</h2>
+
+        <p class="subtitle">
+          Login to your LoyaltyMarket account.
+        </p>
+
+        <form id="loginForm">
+          <label for="email">Email Address</label>
+
+          <input
+            id="email"
+            type="email"
+            required
+            autocomplete="email"
+          >
+
+          <label for="password">Password</label>
+
+          <input
+            id="password"
+            type="password"
+            required
+            autocomplete="current-password"
+          >
+
+          <div class="show-password-row">
+            <input
+              id="showPassword"
+              type="checkbox"
+            >
+
+            <label for="showPassword">
+              Show Password
+            </label>
+          </div>
+
+          <div class="options">
+            <label class="remember">
+              <input id="rememberMe" type="checkbox">
+              Remember Me
+            </label>
+
+            <a href="#" class="forgot" id="forgotPasswordLink">
+              Forgot Password?
+            </a>
+          </div>
+
+          <button id="loginBtn" type="submit">
+            Login
+          </button>
+
+          <div id="loginMessage" class="message"></div>
+        </form>
+
+        <p class="create-account-text">
+          Don't Have An Account?
+          <a href="register.html">Create One</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <h2>🇱🇷 LoyaltyMarket</h2>
+      <p>You Get Market, We Get Buyer.</p>
+    </div>
+
+    <p>&copy; 2026 LoyaltyMarket.</p>
+  </footer>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+
+    import {
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    import {
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const ADMIN_EMAILS = [
+      "princeteah200@gmail.com"
+    ];
+
+    const form = document.getElementById("loginForm");
+    const btn = document.getElementById("loginBtn");
+    const msg = document.getElementById("loginMessage");
+    const remember = document.getElementById("rememberMe");
+    const forgot = document.getElementById("forgotPasswordLink");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const showPassword = document.getElementById("showPassword");
+
+    function show(text, type) {
+      msg.textContent = text;
+      msg.className = "message " + type;
+    }
+
+    function friendly(code) {
+      return {
+        "auth/invalid-credential": "The email or password is incorrect.",
+        "auth/user-not-found": "No account was found with that email.",
+        "auth/wrong-password": "The email or password is incorrect.",
+        "auth/invalid-email": "Enter a valid email address.",
+        "auth/user-disabled": "This Firebase account has been disabled.",
+        "auth/too-many-requests": "Too many attempts. Please wait.",
+        "auth/network-request-failed": "Check your internet connection."
+      }[code] || "Could not log in. Please try again.";
+    }
+
+    async function settings() {
+      try {
+        const snapshot = await getDoc(
+          doc(db, "settings", "marketplace")
+        );
+
+        return snapshot.exists()
+          ? snapshot.data()
+          : {};
+      } catch {
+        return {};
+      }
+    }
+
+    showPassword.addEventListener("change", () => {
+      passwordInput.type = showPassword.checked
+        ? "text"
+        : "password";
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+
+      btn.disabled = true;
+      btn.textContent = "Logging In...";
+      msg.className = "message";
+
+      try {
+        await setPersistence(
+          auth,
+          remember.checked
+            ? browserLocalPersistence
+            : browserSessionPersistence
+        );
+
+        const credential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const user = credential.user;
+
+        const isAdmin = ADMIN_EMAILS.includes(
+          (user.email || "").toLowerCase()
+        );
+
+        const [market, userSnapshot] = await Promise.all([
+          settings(),
+          getDoc(doc(db, "users", user.uid))
+        ]);
+
+        if (market.maintenanceMode === true && !isAdmin) {
+          await signOut(auth);
+
+          show(
+            "LoyaltyMarket is temporarily under maintenance. Please try again later.",
+            "error"
+          );
+
+          return;
+        }
+
+        let profile = userSnapshot.exists()
+          ? userSnapshot.data()
+          : null;
+
+        if (!profile) {
+          profile = {
+            accountType: "personal",
+            name: user.displayName || "",
+            email: user.email || email,
+            phone: "",
+            verified: false,
+            businessVerified: false,
+            suspended: false,
+            role: isAdmin ? "admin" : "user",
+            profileComplete: false,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          };
+
+          await setDoc(
+            doc(db, "users", user.uid),
+            profile,
+            { merge: true }
+          );
+        }
+
+        if (profile.suspended === true && !isAdmin) {
+          await signOut(auth);
+
+          show(
+            "Your account has been suspended. Contact support.",
+            "error"
+          );
+
+          return;
+        }
+
+        show(
+          "Login successful. Opening your account...",
+          "success"
+        );
+
+        setTimeout(() => {
+          window.location.href = isAdmin
+            ? "admin.html"
+            : "dashboard.html";
+        }, 500);
+
+      } catch (error) {
+        show(
+          friendly(error.code),
+          "error"
+        );
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Login";
+      }
+    });
+
+    forgot.addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        show(
+          "Enter your email first.",
+          "error"
+        );
+
+        return;
+      }
+
+      forgot.style.pointerEvents = "none";
+      forgot.textContent = "Sending...";
+
+      try {
+        await sendPasswordResetEmail(
+          auth,
+          email
+        );
+
+        show(
+          "Password reset email sent. Check your Inbox and Spam folder.",
+          "success"
+        );
+
+      } catch (error) {
+        show(
+          friendly(error.code),
+          "error"
+        );
+      } finally {
+        forgot.style.pointerEvents = "auto";
+        forgot.textContent = "Forgot Password?";
+      }
+    });
+  </script>
+</body>
+</html>
