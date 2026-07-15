@@ -1,11 +1,11 @@
 /* ==================================================
-   LOYALTYMARKET FOOTER — JIJI-STYLE GREEN FOOTER
+   LOYALTYMARKET FOOTER — JIJI-STYLE FOOTER (BRAND COLORS)
    DESKTOP + MOBILE
 ================================================== */
 
 :root {
-  --lm-footer-green: #00a651;
-  --lm-footer-green-dark: #00863f;
+  --lm-footer-green: #0f2d67;
+  --lm-footer-green-dark: #123b8d;
   --lm-footer-white: #ffffff;
   --lm-footer-text: rgba(255, 255, 255, 0.92);
   --lm-footer-muted: rgba(255, 255, 255, 0.72);
@@ -112,7 +112,7 @@
 }
 
 .lm-footer-help-button:hover {
-  background: #f0fdf4;
+  background: #eff6ff;
 }
 
 .lm-footer-app {
