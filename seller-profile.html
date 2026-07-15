@@ -57,11 +57,18 @@
       font-size:32px;flex-shrink:0
     }
     .seller-hero h1{margin:0 0 6px;font-size:clamp(22px,3.5vw,34px);line-height:1.1}
+    .seller-badge-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
     .seller-badge{
       display:inline-flex;padding:5px 10px;border-radius:999px;
       background:#fbbf24;color:#78350f;font-size:11px;font-weight:900
     }
+    .seller-years-badge{
+      display:inline-flex;padding:5px 10px;border-radius:999px;
+      background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);
+      color:#fff;font-size:11px;font-weight:800
+    }
     .seller-member{margin:6px 0 0;color:#dbeafe;font-size:12px}
+    .seller-location-line{margin:4px 0 0;color:#dbeafe;font-size:12px;display:none}
 
     .seller-action-buttons{
       display:flex;
@@ -70,6 +77,7 @@
       min-width:170px;
     }
 
+    .call-seller-btn,
     .message-seller-btn,
     .follow-seller-btn,
     .invite-seller-btn{
@@ -81,6 +89,13 @@
       font-weight:900;
       font-size:13px;
       white-space:nowrap;
+    }
+
+    .call-seller-btn{
+      display:none;
+      color:#fff;
+      background:#1d4ed8;
+      text-decoration:none;
     }
 
     .message-seller-btn{
@@ -118,9 +133,11 @@
       background:#eff6ff;
     }
 
-    .invite-seller-btn:hover{
+    .invite-seller-btn:hover,
+    .call-seller-btn:hover,
+    .message-seller-btn:hover{
       transform:translateY(-2px);
-      background:rgba(255,255,255,.22);
+      filter:brightness(1.06);
     }
 
     .follow-seller-btn.following{
@@ -146,8 +163,21 @@
     .seller-stat-value{font-size:20px;font-weight:900;color:#1e3a8a}
     .seller-stat-label{margin-top:4px;color:#64748b;font-size:11px;font-weight:700}
 
+    /* TABS */
+    .seller-tabs{
+      display:flex;gap:6px;margin-top:20px;padding:5px;border-radius:12px;
+      background:#eef2f6;width:fit-content;max-width:100%;overflow-x:auto
+    }
+    .seller-tab{
+      flex-shrink:0;border:0;background:transparent;padding:10px 16px;border-radius:9px;
+      font-size:13px;font-weight:800;color:#475569;cursor:pointer;white-space:nowrap
+    }
+    .seller-tab.active{background:#fff;color:#1e3a8a;box-shadow:0 4px 12px rgba(15,23,42,.08)}
+    .seller-tab-panel{display:none}
+    .seller-tab-panel.active{display:block}
+
     .seller-section{
-      margin-top:18px;padding:18px;border:1px solid #e2e8f0;border-radius:16px;
+      margin-top:14px;padding:18px;border:1px solid #e2e8f0;border-radius:16px;
       background:#fff;box-shadow:0 10px 26px rgba(15,23,42,.06)
     }
     .seller-section-header{
@@ -156,6 +186,18 @@
     }
     .seller-section-header h2{margin:0 0 4px;font-size:20px}
     .seller-section-header p{margin:0;color:#64748b;font-size:12px}
+
+    /* CATEGORY BREAKDOWN */
+    .category-breakdown-row{
+      display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px
+    }
+    .category-tile{
+      flex-shrink:0;min-width:96px;padding:10px 12px;border:1.5px solid #e2e8f0;
+      border-radius:12px;background:#f8fafc;cursor:pointer;text-align:left;font:inherit
+    }
+    .category-tile.active{border-color:#1d4ed8;background:#eff6ff}
+    .category-tile-count{display:block;font-size:13px;font-weight:900;color:#1e3a8a}
+    .category-tile-label{display:block;font-size:11px;color:#64748b;margin-top:2px;line-height:1.3}
 
     .seller-listings-grid{
       display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px
@@ -175,10 +217,6 @@
     .listing-featured-badge{
       display:inline-flex;margin-left:5px;padding:2px 6px;border-radius:999px;
       background:#fef3c7;color:#92400e;font-size:9px;font-weight:900
-    }
-    .seller-verified-pill{
-      display:inline-flex;margin-left:5px;padding:2px 6px;border-radius:999px;
-      background:#eff6ff;color:#1d4ed8;font-size:9px;font-weight:900
     }
 
     .review-grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px}
@@ -215,6 +253,14 @@
     .review-comment{margin:9px 0 6px;color:#334155;line-height:1.55;font-size:13px}
     .review-date{margin:0;color:#94a3b8;font-size:11px}
 
+    /* ABOUT TAB */
+    .about-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .about-row{
+      padding:14px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc
+    }
+    .about-row-label{display:block;font-size:11px;color:#64748b;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+    .about-row-value{display:block;font-size:14px;color:#0f172a;font-weight:700}
+
     .seller-empty{
       grid-column:1/-1;padding:40px 20px;text-align:center;border:1px dashed #cbd5e1;
       border-radius:14px;background:#f8fafc;color:#64748b;font-size:13px
@@ -229,6 +275,7 @@
       .seller-listings-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
       .review-grid{grid-template-columns:1fr}
       .seller-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .about-grid{grid-template-columns:1fr}
     }
 
     @media(max-width:760px){
@@ -284,12 +331,17 @@
         <div class="seller-avatar">👤</div>
         <div>
           <h1 id="sellerName">Loading...</h1>
-          <span id="sellerVerified" class="seller-badge"></span>
+          <div class="seller-badge-row">
+            <span id="sellerVerified" class="seller-badge"></span>
+            <span id="sellerYearsBadge" class="seller-years-badge" style="display:none;"></span>
+          </div>
           <p id="sellerMemberSince" class="seller-member"></p>
+          <p id="sellerLocationLine" class="seller-location-line"></p>
         </div>
       </div>
 
       <div class="seller-action-buttons">
+        <a href="#" id="callSellerBtn" class="call-seller-btn">📞 Call Seller</a>
         <a href="#" id="messageSellerBtn" class="message-seller-btn">💬 Message Seller</a>
         <button type="button" id="followSellerBtn" class="follow-seller-btn">➕ Follow Seller</button>
         <button type="button" id="inviteSellerBtn" class="invite-seller-btn">📤 Invite Friends</button>
@@ -318,61 +370,120 @@
       </article>
     </section>
 
-    <section class="seller-section">
-      <div class="seller-section-header">
-        <div>
-          <h2>Seller Listings</h2>
-          <p>Browse active products currently available from this seller.</p>
-        </div>
-      </div>
+    <div class="seller-tabs">
+      <button type="button" class="seller-tab active" data-tab="adverts">
+        Adverts <span id="tabAdvertsCount"></span>
+      </button>
+      <button type="button" class="seller-tab" data-tab="feedbacks">
+        Feedbacks <span id="tabFeedbacksCount"></span>
+      </button>
+      <button type="button" class="seller-tab" data-tab="about">About Seller</button>
+    </div>
 
-      <div id="sellerListingsGrid" class="seller-listings-grid">
-        <div class="seller-empty">Loading listings...</div>
+    <section id="advertsPanel" class="seller-tab-panel active">
+      <div class="seller-section">
+        <div class="seller-section-header">
+          <div>
+            <h2>Seller Listings</h2>
+            <p>Browse active products currently available from this seller.</p>
+          </div>
+        </div>
+
+        <div id="categoryBreakdownRow" class="category-breakdown-row"></div>
+
+        <div id="sellerListingsGrid" class="seller-listings-grid">
+          <div class="seller-empty">Loading listings...</div>
+        </div>
       </div>
     </section>
 
-    <section class="seller-section">
-      <div class="seller-section-header">
-        <div>
-          <h2>Reviews <span id="averageRating"></span></h2>
-          <p>Read buyer experiences or leave feedback after dealing with this seller.</p>
+    <section id="feedbacksPanel" class="seller-tab-panel">
+      <div class="seller-section">
+        <div class="seller-section-header">
+          <div>
+            <h2>Reviews <span id="averageRating"></span></h2>
+            <p>Read buyer experiences or leave feedback after dealing with this seller.</p>
+          </div>
         </div>
-      </div>
 
-      <div class="review-grid">
-        <div>
-          <div id="reviewFormCard" class="review-form-card">
-            <h3>Leave a Review</h3>
+        <div class="review-grid">
+          <div>
+            <div id="reviewFormCard" class="review-form-card">
+              <h3>Leave a Review</h3>
 
-            <form id="reviewForm">
-              <label for="reviewRating">Rating</label>
-              <select id="reviewRating" required>
-                <option value="">Select rating</option>
-                <option value="5">⭐⭐⭐⭐⭐ (5) Excellent</option>
-                <option value="4">⭐⭐⭐⭐ (4) Good</option>
-                <option value="3">⭐⭐⭐ (3) Average</option>
-                <option value="2">⭐⭐ (2) Poor</option>
-                <option value="1">⭐ (1) Terrible</option>
-              </select>
+              <form id="reviewForm">
+                <label for="reviewRating">Rating</label>
+                <select id="reviewRating" required>
+                  <option value="">Select rating</option>
+                  <option value="5">⭐⭐⭐⭐⭐ (5) Excellent</option>
+                  <option value="4">⭐⭐⭐⭐ (4) Good</option>
+                  <option value="3">⭐⭐⭐ (3) Average</option>
+                  <option value="2">⭐⭐ (2) Poor</option>
+                  <option value="1">⭐ (1) Terrible</option>
+                </select>
 
-              <label for="reviewComment">Comment</label>
-              <textarea id="reviewComment" rows="4" placeholder="Share your experience with this seller..." required></textarea>
+                <label for="reviewComment">Comment</label>
+                <textarea id="reviewComment" rows="4" placeholder="Share your experience with this seller..." required></textarea>
 
-              <button type="submit" class="review-submit">Submit Review</button>
-            </form>
+                <button type="submit" class="review-submit">Submit Review</button>
+              </form>
+            </div>
+
+            <p id="loginToReviewMsg" class="review-message">
+              <a href="login.html">Login</a> to leave a review.
+            </p>
+
+            <p id="ownProfileMsg" class="review-message">
+              This is your own profile — you cannot review yourself.
+            </p>
           </div>
 
-          <p id="loginToReviewMsg" class="review-message">
-            <a href="login.html">Login</a> to leave a review.
-          </p>
+          <div id="reviewsList" class="reviews-list">
+            <div class="seller-empty">Loading reviews...</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <p id="ownProfileMsg" class="review-message">
-            This is your own profile — you cannot review yourself.
-          </p>
+    <section id="aboutPanel" class="seller-tab-panel">
+      <div class="seller-section">
+        <div class="seller-section-header">
+          <div>
+            <h2>About This Seller</h2>
+            <p>Basic details shared by the seller.</p>
+          </div>
         </div>
 
-        <div id="reviewsList" class="reviews-list">
-          <div class="seller-empty">Loading reviews...</div>
+        <div class="about-grid">
+          <div class="about-row">
+            <span class="about-row-label">Name</span>
+            <span id="aboutName" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Status</span>
+            <span id="aboutStatus" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Member Since</span>
+            <span id="aboutMemberSince" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Location</span>
+            <span id="aboutLocation" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Phone</span>
+            <span id="aboutPhone" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Total Active Listings</span>
+            <span id="aboutListingCount" class="about-row-value">—</span>
+          </div>
         </div>
       </div>
     </section>
@@ -414,14 +525,18 @@
     const businessRedirectLink = document.getElementById("businessRedirectLink");
     const sellerName = document.getElementById("sellerName");
     const sellerVerified = document.getElementById("sellerVerified");
+    const sellerYearsBadge = document.getElementById("sellerYearsBadge");
     const sellerMemberSince = document.getElementById("sellerMemberSince");
+    const sellerLocationLine = document.getElementById("sellerLocationLine");
     const sellerListingsGrid = document.getElementById("sellerListingsGrid");
+    const categoryBreakdownRow = document.getElementById("categoryBreakdownRow");
     const averageRating = document.getElementById("averageRating");
     const reviewFormCard = document.getElementById("reviewFormCard");
     const reviewForm = document.getElementById("reviewForm");
     const loginToReviewMsg = document.getElementById("loginToReviewMsg");
     const ownProfileMsg = document.getElementById("ownProfileMsg");
     const reviewsList = document.getElementById("reviewsList");
+    const callSellerBtn = document.getElementById("callSellerBtn");
     const messageSellerBtn = document.getElementById("messageSellerBtn");
     const followSellerBtn = document.getElementById("followSellerBtn");
     const inviteSellerBtn = document.getElementById("inviteSellerBtn");
@@ -429,11 +544,22 @@
     const statFollowerCount = document.getElementById("statFollowerCount");
     const statAverageRating = document.getElementById("statAverageRating");
     const statReviewCount = document.getElementById("statReviewCount");
+    const tabAdvertsCount = document.getElementById("tabAdvertsCount");
+    const tabFeedbacksCount = document.getElementById("tabFeedbacksCount");
+
+    const aboutName = document.getElementById("aboutName");
+    const aboutStatus = document.getElementById("aboutStatus");
+    const aboutMemberSince = document.getElementById("aboutMemberSince");
+    const aboutLocation = document.getElementById("aboutLocation");
+    const aboutPhone = document.getElementById("aboutPhone");
+    const aboutListingCount = document.getElementById("aboutListingCount");
 
     let currentUser = null;
     let currentUserName = "";
     let isOwnProfile = false;
     let alreadyFollowing = false;
+    let sellerListingsCache = [];
+    let activeCategoryFilter = null;
 
     function safeText(value) {
       return String(value || "")
@@ -451,6 +577,23 @@
     function getFollowDocumentId(followerId) {
       return `${sellerId}_${followerId}`;
     }
+
+    // TABS
+    document.querySelectorAll(".seller-tab").forEach((tabButton) => {
+      tabButton.addEventListener("click", () => {
+        document.querySelectorAll(".seller-tab").forEach((btn) =>
+          btn.classList.remove("active")
+        );
+        document.querySelectorAll(".seller-tab-panel").forEach((panel) =>
+          panel.classList.remove("active")
+        );
+
+        tabButton.classList.add("active");
+
+        const target = tabButton.dataset.tab;
+        document.getElementById(target + "Panel").classList.add("active");
+      });
+    });
 
     function updateFollowButton() {
       if (!sellerId) {
@@ -543,26 +686,70 @@
             businessRedirectNotice.style.display = "block";
           }
 
-          sellerName.textContent =
-            userData.name || "LoyaltyMarket Seller";
+          const displayName = userData.name || "LoyaltyMarket Seller";
+          sellerName.textContent = displayName;
+          aboutName.textContent = displayName;
 
-          if (userData.verified === true) {
+          const isVerified = userData.verified === true;
+
+          if (isVerified) {
             sellerVerified.textContent = "⭐ Verified Seller";
+            aboutStatus.textContent = "Verified Seller";
           } else {
             sellerVerified.textContent = "Unverified Seller";
             sellerVerified.style.background = "#e2e8f0";
             sellerVerified.style.color = "#475569";
+            aboutStatus.textContent = "Unverified Seller";
           }
 
           if (userData.createdAt && userData.createdAt.seconds) {
-            const date = new Date(userData.createdAt.seconds * 1000);
-            sellerMemberSince.textContent =
-              "Member since " + date.getFullYear();
+            const joinDate = new Date(userData.createdAt.seconds * 1000);
+            const joinYear = joinDate.getFullYear();
+            const yearsOn = new Date().getFullYear() - joinYear;
+
+            sellerMemberSince.textContent = "Member since " + joinYear;
+            aboutMemberSince.textContent = joinDate.toLocaleDateString();
+
+            if (yearsOn >= 1) {
+              sellerYearsBadge.textContent =
+                yearsOn + (yearsOn === 1 ? "+ year on LoyaltyMarket" : "+ years on LoyaltyMarket");
+              sellerYearsBadge.style.display = "inline-flex";
+            } else {
+              sellerYearsBadge.textContent = "New on LoyaltyMarket";
+              sellerYearsBadge.style.display = "inline-flex";
+            }
           } else {
             sellerMemberSince.textContent = "LoyaltyMarket member";
+            aboutMemberSince.textContent = "—";
           }
+
+          const locationText = [
+            userData.businessCity,
+            userData.businessCounty
+          ].filter(Boolean).join(", ");
+
+          if (locationText) {
+            sellerLocationLine.textContent = "📍 " + locationText;
+            sellerLocationLine.style.display = "block";
+            aboutLocation.textContent = locationText;
+          } else {
+            aboutLocation.textContent = "Not provided";
+          }
+
+          if (userData.phone) {
+            aboutPhone.textContent = userData.phone;
+
+            if (!isOwnProfile) {
+              callSellerBtn.href = "tel:" + userData.phone.replace(/\s+/g, "");
+              callSellerBtn.style.display = "inline-flex";
+            }
+          } else {
+            aboutPhone.textContent = "Not provided";
+          }
+
         } else {
           sellerName.textContent = "LoyaltyMarket Seller";
+          aboutName.textContent = "LoyaltyMarket Seller";
           sellerVerified.textContent = "Unverified Seller";
           sellerMemberSince.textContent = "LoyaltyMarket member";
         }
@@ -580,6 +767,108 @@
       }
     }
 
+    function renderCategoryBreakdown() {
+      const counts = {};
+
+      sellerListingsCache.forEach(({ data }) => {
+        const category = data.category || "Other";
+        counts[category] = (counts[category] || 0) + 1;
+      });
+
+      const categories = Object.keys(counts);
+
+      if (categories.length <= 1) {
+        categoryBreakdownRow.innerHTML = "";
+        return;
+      }
+
+      let html = `
+        <button type="button" class="category-tile ${activeCategoryFilter === null ? "active" : ""}" data-category="">
+          <span class="category-tile-count">${sellerListingsCache.length} ads</span>
+          <span class="category-tile-label">All categories</span>
+        </button>
+      `;
+
+      categories.forEach((category) => {
+        html += `
+          <button type="button" class="category-tile ${activeCategoryFilter === category ? "active" : ""}" data-category="${safeText(category)}">
+            <span class="category-tile-count">${counts[category]} ad${counts[category] === 1 ? "" : "s"}</span>
+            <span class="category-tile-label">${safeText(category)}</span>
+          </button>
+        `;
+      });
+
+      categoryBreakdownRow.innerHTML = html;
+
+      categoryBreakdownRow.querySelectorAll(".category-tile").forEach((tile) => {
+        tile.addEventListener("click", () => {
+          activeCategoryFilter = tile.dataset.category || null;
+          renderCategoryBreakdown();
+          renderListingsGrid();
+        });
+      });
+    }
+
+    function renderListingsGrid() {
+      const filtered = activeCategoryFilter
+        ? sellerListingsCache.filter(({ data }) => data.category === activeCategoryFilter)
+        : sellerListingsCache;
+
+      if (!filtered.length) {
+        sellerListingsGrid.innerHTML =
+          '<div class="seller-empty">No listings in this category.</div>';
+        return;
+      }
+
+      sellerListingsGrid.innerHTML = "";
+
+      filtered.forEach(({ id, data: product }) => {
+        const isFeatured = product.featured === true;
+
+        const image =
+          product.imageUrl ||
+          (Array.isArray(product.images) && product.images[0]) ||
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+
+        const card = document.createElement("a");
+        card.href = "product-detail.html?id=" + encodeURIComponent(id);
+        card.className = "seller-product-link";
+
+        card.innerHTML = `
+          <article class="seller-product-card">
+            <div class="seller-product-image">
+              <img
+                src="${safeText(image)}"
+                alt="${safeText(product.title || "Product")}"
+              >
+            </div>
+
+            <div class="seller-product-body">
+              <h3>
+                ${safeText(product.title || "Untitled Product")}
+                ${isFeatured
+                  ? '<span class="listing-featured-badge">⭐ Featured</span>'
+                  : ""}
+              </h3>
+
+              <p class="seller-price">
+                US$${safeText(product.priceUsd || "0")}
+                |
+                L$${safeText(product.priceLrd || "0")}
+              </p>
+
+              <p class="seller-location">
+                📍 ${safeText(product.city || "")},
+                ${safeText(product.county || "Liberia")}
+              </p>
+            </div>
+          </article>
+        `;
+
+        sellerListingsGrid.appendChild(card);
+      });
+    }
+
     async function loadSellerListings() {
       try {
         const listingsQuery = query(
@@ -589,7 +878,15 @@
         );
 
         const snapshot = await getDocs(listingsQuery);
+
+        sellerListingsCache = snapshot.docs.map((productDoc) => ({
+          id: productDoc.id,
+          data: productDoc.data()
+        }));
+
         statListingCount.textContent = snapshot.size;
+        aboutListingCount.textContent = snapshot.size;
+        tabAdvertsCount.textContent = snapshot.size ? `(${snapshot.size})` : "";
 
         if (!snapshot.empty && !isOwnProfile) {
           const firstListingId = snapshot.docs[0].id;
@@ -606,58 +903,12 @@
         if (snapshot.empty) {
           sellerListingsGrid.innerHTML =
             '<div class="seller-empty">This seller has no active listings right now.</div>';
+          categoryBreakdownRow.innerHTML = "";
           return;
         }
 
-        sellerListingsGrid.innerHTML = "";
-
-        snapshot.forEach((productDoc) => {
-          const product = productDoc.data();
-          const isFeatured = product.featured === true;
-
-          const image =
-            product.imageUrl ||
-            (Array.isArray(product.images) && product.images[0]) ||
-            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
-
-          const card = document.createElement("a");
-          card.href =
-            "product-detail.html?id=" + encodeURIComponent(productDoc.id);
-          card.className = "seller-product-link";
-
-          card.innerHTML = `
-            <article class="seller-product-card">
-              <div class="seller-product-image">
-                <img
-                  src="${safeText(image)}"
-                  alt="${safeText(product.title || "Product")}"
-                >
-              </div>
-
-              <div class="seller-product-body">
-                <h3>
-                  ${safeText(product.title || "Untitled Product")}
-                  ${isFeatured
-                    ? '<span class="listing-featured-badge">⭐ Featured</span>'
-                    : ""}
-                </h3>
-
-                <p class="seller-price">
-                  US$${safeText(product.priceUsd || "0")}
-                  |
-                  L$${safeText(product.priceLrd || "0")}
-                </p>
-
-                <p class="seller-location">
-                  📍 ${safeText(product.city || "")},
-                  ${safeText(product.county || "Liberia")}
-                </p>
-              </div>
-            </article>
-          `;
-
-          sellerListingsGrid.appendChild(card);
-        });
+        renderCategoryBreakdown();
+        renderListingsGrid();
 
       } catch (error) {
         sellerListingsGrid.innerHTML =
@@ -674,6 +925,8 @@
         );
 
         const snapshot = await getDocs(reviewsQuery);
+
+        tabFeedbacksCount.textContent = snapshot.size ? `(${snapshot.size})` : "";
 
         if (snapshot.empty) {
           averageRating.textContent = "";
@@ -846,6 +1099,7 @@
           ownProfileMsg.style.display = "block";
           reviewFormCard.style.display = "none";
           loginToReviewMsg.style.display = "none";
+          callSellerBtn.style.display = "none";
         } else {
           isOwnProfile = false;
           reviewFormCard.style.display = "block";
