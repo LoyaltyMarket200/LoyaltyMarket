@@ -602,6 +602,7 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  setDoc,
   addDoc,
   updateDoc,
   serverTimestamp,
@@ -1192,6 +1193,10 @@ async function verifyDashboardAccess(user) {
   }
 }
 
+function touchLastActive(userId) {
+  setDoc(doc(db, "users", userId), { lastActiveAt: serverTimestamp() }, { merge: true }).catch(() => {});
+}
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "login.html";
@@ -1202,6 +1207,7 @@ onAuthStateChanged(auth, async (user) => {
   if (!allowed) return;
 
   currentUser = user;
+  touchLastActive(user.uid);
   await loadUserProfile();
   await loadMyListings();
   listenForUnreadMessages();

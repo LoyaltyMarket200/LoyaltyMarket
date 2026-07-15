@@ -531,6 +531,7 @@
     import {
       doc,
       getDoc,
+      setDoc,
       collection,
       query,
       where,
@@ -919,6 +920,10 @@
       }
     }
 
+    function touchLastActive(userId) {
+      setDoc(doc(db, "users", userId), { lastActiveAt: serverTimestamp() }, { merge: true }).catch(() => {});
+    }
+
     onAuthStateChanged(auth, async (user) => {
       currentUser = user || null;
 
@@ -929,6 +934,7 @@
         messagesBtn.style.display = "inline-block";
 
         listenForUnreadMessages(user.uid);
+        touchLastActive(user.uid);
 
         try {
           const userDoc = await getDoc(doc(db, "users", user.uid));

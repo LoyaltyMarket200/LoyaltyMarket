@@ -554,6 +554,8 @@
       getDocs,
       doc,
       getDoc,
+      setDoc,
+      serverTimestamp,
       query,
       orderBy,
       where,
@@ -1124,6 +1126,14 @@
       );
     }
 
+    function touchLastActive(userId) {
+      setDoc(
+        doc(db, "users", userId),
+        { lastActiveAt: serverTimestamp() },
+        { merge: true }
+      ).catch(() => {});
+    }
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         loginBtn.style.display = "none";
@@ -1132,6 +1142,7 @@
         messagesBtn.style.display = "inline-block";
 
         listenForUnreadMessages(user.uid);
+        touchLastActive(user.uid);
       } else {
         loginBtn.style.display = "inline-block";
 

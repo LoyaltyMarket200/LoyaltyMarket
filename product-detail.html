@@ -1480,6 +1480,10 @@ document.querySelectorAll("[data-footer-county]").forEach((button) => {
 // Wait for Firebase Auth to resolve (even if the visitor is logged
 // out) before loading the product, so the owner/admin visibility
 // check above has the correct currentUser to compare against.
+function touchLastActive(userId) {
+  setDoc(doc(db, "users", userId), { lastActiveAt: serverTimestamp() }, { merge: true }).catch(() => {});
+}
+
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
 
@@ -1490,6 +1494,7 @@ onAuthStateChanged(auth, (user) => {
     messagesBtn.style.display = "inline-block";
 
     listenForUnreadMessages(user.uid);
+    touchLastActive(user.uid);
   } else {
     loginBtn.style.display = "inline-block";
     registerBtn.style.display = "inline-block";
