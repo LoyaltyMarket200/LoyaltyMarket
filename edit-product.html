@@ -9,34 +9,6 @@
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#1e3a8a">
   <style>
-    .image-preview-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 8px;
-      margin-bottom: 4px;
-      flex-wrap: wrap;
-    }
-    .image-preview-box {
-      width: 70px;
-      height: 70px;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid #d1d5db;
-      background: #f3f4f6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .image-preview-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .image-preview-box.empty {
-      color: #9ca3af;
-      font-size: 11px;
-      text-align: center;
-    }
     .field-error {
       color: #dc2626;
       font-size: 12px;
@@ -64,6 +36,125 @@
     .post-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+    }
+
+    /* ===== Image upload UI (matches sell.html) ===== */
+    .image-upload-box {
+      margin-top: 8px;
+      padding: 18px;
+      border: 2px dashed #93c5fd;
+      border-radius: 14px;
+      background: #eff6ff;
+    }
+
+    .image-upload-box input[type="file"] {
+      min-height: auto;
+      padding: 10px;
+      background: #fff;
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 11px;
+      font: inherit;
+    }
+
+    .upload-help {
+      margin: 8px 0 0;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .image-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .image-preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: 1px solid #dbeafe;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .image-preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-number {
+      position: absolute;
+      left: 6px;
+      bottom: 6px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.82);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .image-remove-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 22px;
+      height: 22px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(220,38,38,.92);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-remove-btn:hover {
+      background: #b91c1c;
+    }
+
+    .image-section-label {
+      margin: 16px 0 0;
+      color: #1f2937;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .upload-progress-wrap {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .upload-progress-wrap.show { display: block; }
+
+    .upload-progress-bar {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e2e8f0;
+    }
+
+    .upload-progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #2563eb, #0ea5e9);
+      transition: width .2s ease;
+    }
+
+    .upload-progress-text {
+      margin: 7px 0 0;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -131,13 +222,24 @@
         </div>
       </div>
 
-      <label>Product Images (up to 4 links)</label>
-      <input type="url" id="imageUrl1" placeholder="Main image link (required)" required>
-      <input type="url" id="imageUrl2" placeholder="Second image link (optional)" style="margin-top:10px;">
-      <input type="url" id="imageUrl3" placeholder="Third image link (optional)" style="margin-top:10px;">
-      <input type="url" id="imageUrl4" placeholder="Fourth image link (optional)" style="margin-top:10px;">
+      <label>Product Images</label>
+      <div class="image-upload-box">
+        <p class="image-section-label">Current photos</p>
+        <div id="existingImagesGrid" class="image-preview-grid"></div>
+        <p id="noExistingImagesNote" class="upload-help" style="display:none;">No photos yet — add some below.</p>
 
-      <div class="image-preview-row" id="imagePreviewRow"></div>
+        <p class="image-section-label">Add new photos</p>
+        <input type="file" id="newImages" accept="image/jpeg,image/png,image/webp" multiple>
+        <p class="upload-help">JPG, PNG, or WebP. Maximum 5 MB each. Up to 4 photos total (current + new combined). The first photo shown above becomes the main photo.</p>
+        <div id="newImagesPreview" class="image-preview-grid"></div>
+      </div>
+
+      <div id="uploadProgressWrap" class="upload-progress-wrap">
+        <div class="upload-progress-bar">
+          <div id="uploadProgressFill" class="upload-progress-fill"></div>
+        </div>
+        <p id="uploadProgressText" class="upload-progress-text">Preparing upload...</p>
+      </div>
 
       <label>Description</label>
       <textarea id="description" rows="5" required></textarea>
@@ -160,9 +262,19 @@
 </footer>
 
 <script type="module">
-import { auth, db } from "./firebase.js";
+import { auth, db, storage } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+const MAX_IMAGES = 4;
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
@@ -179,16 +291,31 @@ const phoneInput = document.getElementById("phone");
 const saveBtn = document.getElementById("saveBtn");
 const titleError = document.getElementById("titleError");
 const priceError = document.getElementById("priceError");
-const imagePreviewRow = document.getElementById("imagePreviewRow");
 
-const imageInputs = [
-  document.getElementById("imageUrl1"),
-  document.getElementById("imageUrl2"),
-  document.getElementById("imageUrl3"),
-  document.getElementById("imageUrl4")
-];
+const existingImagesGrid = document.getElementById("existingImagesGrid");
+const noExistingImagesNote = document.getElementById("noExistingImagesNote");
+const newImagesInput = document.getElementById("newImages");
+const newImagesPreview = document.getElementById("newImagesPreview");
+
+const uploadProgressWrap = document.getElementById("uploadProgressWrap");
+const uploadProgressFill = document.getElementById("uploadProgressFill");
+const uploadProgressText = document.getElementById("uploadProgressText");
 
 let currentUser = null;
+
+// The photos already saved on this listing (Storage download URLs).
+// The seller can remove any of these before saving; whatever remains,
+// in order, stays first in the final images[] array (position 0 = main photo).
+let existingImages = [];
+
+// URLs of existing photos the seller removed this session — deleted
+// from Storage (best-effort) only after the Firestore save succeeds,
+// so a removed-then-cancelled edit never loses the file.
+let removedExistingImageUrls = [];
+
+// Newly selected files staged for upload on save — not uploaded yet,
+// so removing one here is free (no Storage cleanup needed).
+let newFiles = [];
 
 // Tracks the listing's status as it was when the page loaded, so an
 // edit doesn't accidentally overwrite "sold" or "archived" back to
@@ -212,35 +339,180 @@ function firstDefined(...values) {
   return "";
 }
 
-function updateImagePreviews() {
-  imagePreviewRow.innerHTML = "";
+function totalImageCount() {
+  return existingImages.length + newFiles.length;
+}
 
-  imageInputs.forEach((input) => {
-    const url = input.value.trim();
-    const box = document.createElement("div");
-    box.className = "image-preview-box";
+function renderExistingImages() {
+  existingImagesGrid.innerHTML = "";
+  noExistingImagesNote.style.display = existingImages.length ? "none" : "block";
 
-    if (url) {
-      const img = document.createElement("img");
-      img.src = url;
-      img.alt = "Preview";
-      img.onerror = () => {
-        box.classList.add("empty");
-        box.textContent = "Broken link";
-      };
-      box.appendChild(img);
-    } else {
-      box.classList.add("empty");
-      box.textContent = "No image";
-    }
+  existingImages.forEach((url, index) => {
+    const item = document.createElement("div");
+    item.className = "image-preview-item";
 
-    imagePreviewRow.appendChild(box);
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = `Product photo ${index + 1}`;
+
+    const numberTag = document.createElement("span");
+    numberTag.className = "image-number";
+    numberTag.textContent = index === 0 ? "Main photo" : `Photo ${index + 1}`;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "image-remove-btn";
+    removeBtn.setAttribute("aria-label", "Remove this photo");
+    removeBtn.textContent = "✕";
+    removeBtn.addEventListener("click", () => {
+      removedExistingImageUrls.push(url);
+      existingImages.splice(index, 1);
+      renderExistingImages();
+    });
+
+    item.append(img, numberTag, removeBtn);
+    existingImagesGrid.appendChild(item);
   });
 }
 
-imageInputs.forEach((input) => {
-  input.addEventListener("input", updateImagePreviews);
+function renderNewImagePreviews() {
+  newImagesPreview.innerHTML = "";
+
+  newFiles.forEach((file, index) => {
+    const item = document.createElement("div");
+    item.className = "image-preview-item";
+
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.alt = `New photo ${index + 1}`;
+
+    const numberTag = document.createElement("span");
+    numberTag.className = "image-number";
+    numberTag.textContent = "New";
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "image-remove-btn";
+    removeBtn.setAttribute("aria-label", "Remove this photo");
+    removeBtn.textContent = "✕";
+    removeBtn.addEventListener("click", () => {
+      newFiles.splice(index, 1);
+      renderNewImagePreviews();
+    });
+
+    item.append(img, numberTag, removeBtn);
+    newImagesPreview.appendChild(item);
+  });
+}
+
+newImagesInput.addEventListener("change", () => {
+  const selected = Array.from(newImagesInput.files);
+
+  try {
+    if (totalImageCount() + selected.length > MAX_IMAGES) {
+      throw new Error(
+        `You can have a maximum of ${MAX_IMAGES} photos total. Remove one first or select fewer new photos.`
+      );
+    }
+
+    selected.forEach((file) => {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        throw new Error(`${file.name} is not a supported image type.`);
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        throw new Error(`${file.name} is larger than 5 MB.`);
+      }
+    });
+
+    newFiles = newFiles.concat(selected);
+    renderNewImagePreviews();
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    newImagesInput.value = "";
+  }
 });
+
+function sanitizeFileName(name) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9._-]+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+function uploadSingleFile(file, storagePath, progressCallback) {
+  return new Promise((resolve, reject) => {
+    const fileRef = ref(storage, storagePath);
+    const task = uploadBytesResumable(fileRef, file, {
+      contentType: file.type
+    });
+
+    task.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = snapshot.totalBytes
+          ? snapshot.bytesTransferred / snapshot.totalBytes
+          : 0;
+
+        progressCallback(progress);
+      },
+      reject,
+      async () => {
+        try {
+          resolve(await getDownloadURL(task.snapshot.ref));
+        } catch (error) {
+          reject(error);
+        }
+      }
+    );
+  });
+}
+
+async function uploadNewImages(files) {
+  if (files.length === 0) return [];
+
+  uploadProgressWrap.classList.add("show");
+  uploadProgressFill.style.width = "0%";
+
+  const urls = [];
+  const individualProgress = new Array(files.length).fill(0);
+  const folderId = `${productId}-${Date.now()}`;
+
+  for (let index = 0; index < files.length; index += 1) {
+    const file = files[index];
+    const fileName = `${index + 1}-${sanitizeFileName(file.name)}`;
+    const storagePath =
+      `listing-images/${currentUser.uid}/product/${folderId}/${fileName}`;
+
+    uploadProgressText.textContent =
+      `Uploading photo ${index + 1} of ${files.length}...`;
+
+    const url = await uploadSingleFile(file, storagePath, (progress) => {
+      individualProgress[index] = progress;
+
+      const totalProgress =
+        individualProgress.reduce((sum, value) => sum + value, 0) / files.length;
+
+      uploadProgressFill.style.width = `${Math.round(totalProgress * 100)}%`;
+      uploadProgressText.textContent = `Uploading ${Math.round(totalProgress * 100)}%`;
+    });
+
+    urls.push(url);
+    individualProgress[index] = 1;
+  }
+
+  uploadProgressFill.style.width = "100%";
+  uploadProgressText.textContent = "New photos uploaded successfully.";
+
+  return urls;
+}
+
+function resetProgress() {
+  uploadProgressWrap.classList.remove("show");
+  uploadProgressFill.style.width = "0%";
+  uploadProgressText.textContent = "Preparing upload...";
+}
 
 async function loadProduct() {
   try {
@@ -291,17 +563,15 @@ async function loadProduct() {
       product.phoneNumber
     );
 
-    // Backward-compatible images: new listings use images[],
-    // older listings used a single imageUrl string.
-    const existingImages = product.images && product.images.length > 0
-      ? product.images
+    // Backward-compatible images: new listings use images[] (real
+    // Storage URLs from sell.html's uploader), older listings may
+    // have a single imageUrl string (Storage URL or a legacy pasted
+    // link) with no images[] array.
+    existingImages = product.images && product.images.length > 0
+      ? [...product.images]
       : (product.imageUrl ? [product.imageUrl] : []);
 
-    imageInputs.forEach((input, index) => {
-      input.value = existingImages[index] || "";
-    });
-
-    updateImagePreviews();
+    renderExistingImages();
 
   } catch (error) {
     alert("Could not load product: " + error.message);
@@ -337,9 +607,9 @@ function validateForm() {
     isValid = false;
   }
 
-  if (!imageInputs[0].value.trim()) {
+  if (totalImageCount() === 0) {
     isValid = false;
-    alert("Please provide at least one product image link.");
+    alert("Please keep or add at least one product photo.");
   }
 
   return isValid;
@@ -420,70 +690,80 @@ document.getElementById("editForm").addEventListener("submit", async (event) => 
     return;
   }
 
-  const images = imageInputs
-    .map((input) => input.value.trim())
-    .filter((url) => url !== "");
-
-  const priceUsdValue = priceUsdInput.value;
-  const priceLrdValue = priceLrdInput.value;
-  const phoneValue = phoneInput.value.trim();
-  const titleValue = titleInput.value.trim();
-  const descriptionValue = descriptionInput.value.trim();
-  const categoryValue = categoryInput.value;
-
-  const flagReasons = runScamChecks({
-    title: titleValue,
-    description: descriptionValue,
-    category: categoryValue,
-    priceUsd: priceUsdValue,
-    images: images
-  });
-
-  const isFlagged = flagReasons.length > 0;
-
-  // Don't let an edit undo a "sold" or "archived" status — only
-  // adjust status between active/pending_review.
-  let newStatus = existingStatus;
-  if (existingStatus === "active" || existingStatus === "pending_review") {
-    newStatus = isFlagged ? "pending_review" : "active";
-  }
-
-  // Save BOTH new-format and old-format field names on every update,
-  // so any older page or tool still reading the legacy field names
-  // keeps working, while new pages use the new field names.
-  const updatedProduct = {
-    title: titleValue,
-    category: categoryValue,
-
-    priceUsd: priceUsdValue,
-    priceUSD: priceUsdValue,
-
-    priceLrd: priceLrdValue,
-    priceLRD: priceLrdValue,
-    "priceL$": priceLrdValue,
-
-    condition: conditionInput.value,
-    county: countyInput.value.trim(),
-    city: cityInput.value.trim(),
-
-    imageUrl: images[0] || "",
-    images: images,
-
-    description: descriptionValue,
-
-    phone: phoneValue,
-    phoneNumber: phoneValue,
-
-    status: newStatus,
-    flagged: isFlagged,
-    flagReasons: flagReasons
-  };
-
   saveBtn.disabled = true;
-  saveBtn.textContent = "Saving...";
+  saveBtn.textContent = newFiles.length ? "Uploading photos..." : "Saving...";
 
   try {
+    const uploadedUrls = await uploadNewImages(newFiles);
+    const images = [...existingImages, ...uploadedUrls];
+
+    const priceUsdValue = priceUsdInput.value;
+    const priceLrdValue = priceLrdInput.value;
+    const phoneValue = phoneInput.value.trim();
+    const titleValue = titleInput.value.trim();
+    const descriptionValue = descriptionInput.value.trim();
+    const categoryValue = categoryInput.value;
+
+    saveBtn.textContent = "Checking listing...";
+
+    const flagReasons = runScamChecks({
+      title: titleValue,
+      description: descriptionValue,
+      category: categoryValue,
+      priceUsd: priceUsdValue,
+      images: images
+    });
+
+    const isFlagged = flagReasons.length > 0;
+
+    // Don't let an edit undo a "sold" or "archived" status — only
+    // adjust status between active/pending_review.
+    let newStatus = existingStatus;
+    if (existingStatus === "active" || existingStatus === "pending_review") {
+      newStatus = isFlagged ? "pending_review" : "active";
+    }
+
+    // Save BOTH new-format and old-format field names on every update,
+    // so any older page or tool still reading the legacy field names
+    // keeps working, while new pages use the new field names.
+    const updatedProduct = {
+      title: titleValue,
+      category: categoryValue,
+
+      priceUsd: priceUsdValue,
+      priceUSD: priceUsdValue,
+
+      priceLrd: priceLrdValue,
+      priceLRD: priceLrdValue,
+      "priceL$": priceLrdValue,
+
+      condition: conditionInput.value,
+      county: countyInput.value.trim(),
+      city: cityInput.value.trim(),
+
+      imageUrl: images[0] || "",
+      images: images,
+
+      description: descriptionValue,
+
+      phone: phoneValue,
+      phoneNumber: phoneValue,
+
+      status: newStatus,
+      flagged: isFlagged,
+      flagReasons: flagReasons
+    };
+
+    saveBtn.textContent = "Saving...";
     await updateDoc(doc(db, "products", productId), updatedProduct);
+
+    // Best-effort cleanup: delete any photos the seller removed this
+    // session. Failures here are silent — a leftover orphaned file in
+    // Storage is a minor cost issue, not something worth blocking or
+    // alarming the seller over.
+    removedExistingImageUrls.forEach((url) => {
+      deleteObject(ref(storage, url)).catch(() => {});
+    });
 
     if (isFlagged && existingStatus !== "sold" && existingStatus !== "archived") {
       alert("Your changes were saved, but this listing needs a quick admin review before it's visible again. This usually happens for things like unusually low prices or missing photos.");
@@ -494,6 +774,8 @@ document.getElementById("editForm").addEventListener("submit", async (event) => 
     window.location.href = "dashboard.html";
   } catch (error) {
     alert("Could not save changes: " + error.message);
+    resetProgress();
+  } finally {
     saveBtn.disabled = false;
     saveBtn.textContent = "Save Changes";
   }

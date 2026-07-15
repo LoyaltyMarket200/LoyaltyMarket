@@ -365,10 +365,18 @@
       <div class="mp-app-banner-inner">
         <div class="mp-app-banner-copy">
           <h2>Get The LoyaltyMarket App</h2>
-          <p>Buy, sell, and message on the go. Android and iPhone apps coming soon.</p>
+          <p>Install LoyaltyMarket on your home screen for the fastest way to buy and sell. Native App Store and Google Play apps are coming soon.</p>
         </div>
 
         <div class="mp-app-badges">
+          <button type="button" id="pwaInstallBtn" class="mp-cta mp-cta-primary" style="display:none;">
+            📲 Install App
+          </button>
+
+          <span id="iosInstallHint" class="mp-app-badge" style="display:none;">
+            On iPhone: tap Share, then "Add to Home Screen"
+          </span>
+
           <span class="mp-app-badge">📱 App Store — Coming Soon</span>
           <span class="mp-app-badge">▶ Google Play — Coming Soon</span>
         </div>
@@ -1342,6 +1350,64 @@
           )
         );
     }
+  </script>
+
+  <script>
+    // Handles the "Install App" button in the app-download banner.
+    // Chrome/Android/Edge fire "beforeinstallprompt" — we intercept it,
+    // hide the browser's default mini-bar, and show our own styled button
+    // instead. Safari on iOS never fires this event (Apple doesn't support
+    // it), so we detect iOS separately and show a "tap Share" hint instead.
+
+    const pwaInstallBtn = document.getElementById("pwaInstallBtn");
+    const iosInstallHint = document.getElementById("iosInstallHint");
+    let deferredInstallPrompt = null;
+
+    function isRunningStandalone() {
+      return (
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true
+      );
+    }
+
+    function isIos() {
+      return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    }
+
+    if (!isRunningStandalone()) {
+      if (isIos()) {
+        // iOS has no install prompt API — show manual instructions instead.
+        iosInstallHint.style.display = "inline-flex";
+      } else {
+        window.addEventListener("beforeinstallprompt", (event) => {
+          event.preventDefault();
+          deferredInstallPrompt = event;
+          pwaInstallBtn.style.display = "inline-flex";
+        });
+      }
+    }
+
+    pwaInstallBtn?.addEventListener("click", async () => {
+      if (!deferredInstallPrompt) {
+        return;
+      }
+
+      pwaInstallBtn.disabled = true;
+      deferredInstallPrompt.prompt();
+
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      console.log("Install prompt outcome:", outcome);
+
+      deferredInstallPrompt = null;
+      pwaInstallBtn.style.display = "none";
+      pwaInstallBtn.disabled = false;
+    });
+
+    window.addEventListener("appinstalled", () => {
+      pwaInstallBtn.style.display = "none";
+      iosInstallHint.style.display = "none";
+      console.log("LoyaltyMarket installed as an app");
+    });
   </script>
 </body>
 </html>
