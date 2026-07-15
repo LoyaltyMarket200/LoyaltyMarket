@@ -12,460 +12,239 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0f2d67">
 
   <style>
-    /* ===== PRODUCT DETAIL PAGE ===== */
-    body {
-      background: #f5f7fb;
+    /* ==================================================
+       PRODUCT DETAIL — RESTRAINED 2-COLOR SYSTEM
+       Navy (#0f2d67) = structure/brand/primary action.
+       Orange (#f97316) = the ONLY accent, reserved for
+       price and the Contact Seller button. Everything
+       else (badges, pills, buttons) is either navy,
+       neutral gray, or an outline — no stray blues or
+       greens. Bold reserved for the price and headings.
+       ================================================== */
+    :root{
+      --navy:#0f2d67;
+      --navy-soft:#eef1f7;
+      --orange:#f97316;
+      --orange-soft:#fff4ec;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --bg:#f7f8fa;
     }
+
+    .icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    body { background: var(--bg); }
 
     .product-detail {
       width: min(1280px, 94%);
       margin: 20px auto 60px;
       display: grid;
       grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr);
-      gap: 28px;
+      gap: 24px;
     }
 
     .product-detail-left {
-      padding: 16px;
-      border: 1px solid #e2e8f0;
-      border-radius: 22px;
-      background: #fff;
-      box-shadow: 0 12px 30px rgba(15,23,42,.07);
-    }
-
-    .main-image {
-      height: 560px;
+      padding: 14px;
+      border: 1px solid var(--line);
       border-radius: 16px;
-      overflow: hidden;
+      background: #fff;
     }
 
-    .main-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .main-image { height: 540px; border-radius: 12px; overflow: hidden; background: #f1f5f9; }
+    .main-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    .thumbnail-strip {
-      display: flex;
-      gap: 10px;
-      margin-top: 14px;
-      padding: 4px 2px;
-      overflow-x: auto;
-    }
-
-    .thumbnail {
-      width: 86px;
-      height: 70px;
-      border-radius: 10px;
-      object-fit: cover;
-      cursor: pointer;
-      border: 2px solid transparent;
-      flex-shrink: 0;
-    }
-
-    .thumbnail-active {
-      border-color: var(--mp-blue, #1d4ed8);
-    }
+    .thumbnail-strip { display: flex; gap: 8px; margin-top: 12px; padding: 2px; overflow-x: auto; }
+    .thumbnail { width: 78px; height: 64px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; opacity: .75; }
+    .thumbnail:hover { opacity: 1; }
+    .thumbnail-active { border-color: var(--navy); opacity: 1; }
 
     .product-detail-right {
-      padding: 28px;
-      border-radius: 22px;
+      padding: 24px;
+      border-radius: 16px;
       background: #fff;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 12px 30px rgba(15,23,42,.08);
+      border: 1px solid var(--line);
       position: sticky;
       top: 14px;
     }
 
     .product-detail-right h1 {
-      font-size: clamp(24px, 3.4vw, 34px);
-      margin: 8px 0 4px;
-      color: #0f172a;
+      font-size: clamp(20px, 2.8vw, 27px);
+      font-weight: 700;
+      margin: 6px 0 4px;
+      color: var(--ink);
     }
 
-    .posted-time-line {
-      margin: 0 0 12px;
-      color: #94a3b8;
-      font-size: 12px;
-      font-weight: 700;
-    }
+    .posted-time-line { margin: 0 0 12px; color: var(--muted); font-size: 12px; font-weight: 500; }
 
     .detail-price {
-      color: #ea580c;
-      font-size: 27px;
-      font-weight: 900;
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
+      color: var(--orange);
+      font-size: 23px;
+      font-weight: 700;
+      padding: 10px 13px;
+      border-radius: 10px;
+      background: var(--orange-soft);
       display: inline-block;
     }
 
-    .detail-location,
-    .detail-condition {
-      padding: 10px 0;
+    .detail-location, .detail-condition {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 0;
       margin: 0;
       border-bottom: 1px solid #f1f5f9;
-      color: #334155;
-      font-size: 14px;
+      color: var(--ink);
+      font-size: 13.5px;
+      font-weight: 400;
     }
 
-    .detail-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 22px 0 12px;
-    }
+    .detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 20px 0 12px; }
 
-    .buy-now-btn,
-    .contact-btn,
-    .heart-btn {
-      min-height: 50px;
-      border-radius: 11px;
-      font-weight: 800;
-      font-size: 14px;
+    .buy-now-btn, .contact-btn, .heart-btn {
+      min-height: 46px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 13.5px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 7px;
       text-decoration: none;
       cursor: pointer;
       border: none;
     }
 
-    .buy-now-btn {
-      grid-column: span 2;
-      background: #1d4ed8;
-      color: #fff;
-    }
+    .buy-now-btn { grid-column: span 2; background: var(--navy); color: #fff; }
+    .buy-now-btn:hover { background: #0b2350; }
+    .buy-now-btn:disabled { opacity: .6; cursor: not-allowed; }
 
-    .buy-now-btn:hover {
-      background: #123b8d;
-    }
+    .contact-btn { background: var(--orange); color: #fff; }
+    .contact-btn:hover { background: #ea680a; }
 
-    .buy-now-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .contact-btn {
-      background: #f97316;
-      color: #fff;
-    }
-
-    .contact-btn:hover {
-      background: #ea580c;
-    }
-
-    .heart-btn {
-      background: #fff;
-      border: 1.5px solid #e2e8f0;
-      color: #334155;
-    }
-
-    .heart-btn.is-saved {
-      background: #1d4ed8;
-      color: #fff;
-      border-color: #1d4ed8;
-    }
+    .heart-btn { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+    .heart-btn.is-saved { background: var(--navy-soft); color: var(--navy); border-color: var(--navy); }
 
     .report-btn {
       width: 100%;
       margin-top: 6px;
-      min-height: 44px;
-      border-radius: 10px;
+      min-height: 42px;
+      border-radius: 9px;
       background: #fff;
-      border: 1px solid #dc2626;
-      color: #dc2626;
-      font-weight: 700;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-weight: 500;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
-
-    .report-btn:hover {
-      background: #dc2626;
-      color: #fff;
-    }
+    .report-btn:hover { border-color: #b91c1c; color: #b91c1c; }
 
     .seller-card {
       position: relative;
-      margin-top: 24px;
-      padding: 24px 18px 18px;
-      border-radius: 16px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      margin-top: 22px;
+      padding: 22px 17px 17px;
+      border-radius: 14px;
+      background: var(--bg);
+      border: 1px solid var(--line);
     }
 
     .seller-card-header {
       position: absolute;
-      top: -11px;
-      left: 16px;
-      padding: 4px 10px;
+      top: -10px;
+      left: 15px;
+      padding: 3px 10px;
       border-radius: 999px;
-      background: #0f2d67;
+      background: var(--navy);
       color: #fff;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .05em;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: .04em;
     }
 
     .seller-avatar {
-      width: 64px;
-      height: 64px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
-      background: linear-gradient(135deg, #dbeafe, #eff6ff);
-      margin-bottom: 10px;
+      color: var(--navy);
+      background: var(--navy-soft);
+      margin-bottom: 9px;
     }
 
-    .seller-badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      margin: 2px 0 6px;
-    }
+    .seller-badge-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 2px 0 6px; }
 
     .seller-verified-pill {
-      display: inline-flex;
-      padding: 2px 9px;
-      border-radius: 999px;
-      background: #fff7ed;
-      color: #c2410c;
-      border: 1px solid #fed7aa;
-      font-size: 10px;
-      font-weight: 900;
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 9px; border-radius: 999px;
+      background: var(--orange-soft); color: #9a3412;
+      font-size: 10px; font-weight: 600;
     }
 
     .seller-years-pill {
-      display: inline-flex;
-      padding: 2px 9px;
-      border-radius: 999px;
-      background: #eff6ff;
-      color: #1d4ed8;
-      border: 1px solid #bfdbfe;
-      font-size: 10px;
-      font-weight: 800;
+      display: inline-flex; padding: 2px 9px; border-radius: 999px;
+      background: var(--navy-soft); color: var(--navy);
+      font-size: 10px; font-weight: 600;
     }
 
     .buyer-safety-card {
-      display: flex;
-      gap: 12px;
-      margin: 22px 0;
-      padding: 16px;
-      border: 1px solid #fed7aa;
-      border-radius: 14px;
-      background: #fff7ed;
-      color: #9a3412;
+      display: flex; gap: 11px; margin: 20px 0;
+      padding: 14px; border: 1px solid var(--line); border-radius: 12px;
+      background: var(--navy-soft); color: var(--navy);
     }
+    .buyer-safety-card > span { flex-shrink: 0; }
+    .buyer-safety-card strong { display: block; margin-bottom: 3px; font-weight: 600; }
+    .buyer-safety-card p { margin: 0; font-size: 12.5px; line-height: 1.5; color: #33507e; }
 
-    .buyer-safety-card > span {
-      font-size: 24px;
-    }
+    .product-description { padding-top: 18px; border-top: 1px solid #f1f5f9; margin-top: 18px; }
+    .product-description h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
+    .product-description p { color: var(--muted); line-height: 1.6; font-size: 13.5px; font-weight: 400; }
 
-    .buyer-safety-card strong {
-      display: block;
-      margin-bottom: 4px;
-    }
+    .related-section { width: min(1280px, 94%); margin: 0 auto 60px; }
+    .related-section h2 { margin-bottom: 14px; font-size: 17px; font-weight: 600; color: var(--ink); }
 
-    .buyer-safety-card p {
-      margin: 0;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .product-description {
-      padding-top: 20px;
-      border-top: 1px solid #f1f5f9;
-      margin-top: 20px;
-    }
-
-    .product-description h3 {
-      font-size: 18px;
-      color: #0f172a;
-      margin-bottom: 8px;
-    }
-
-    .product-description p {
-      color: #475569;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    .related-section {
-      width: min(1280px, 94%);
-      margin: 0 auto 60px;
-    }
-
-    .related-section h2 {
-      margin-bottom: 16px;
-      font-size: 20px;
-      color: #0f172a;
-    }
-
-    .unavailable-box {
-      max-width: 700px;
-      margin: 60px auto;
-      padding: 30px;
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      text-align: center;
-    }
-
-    .unavailable-box h2 {
-      margin-top: 0;
-      color: #111827;
-    }
-
-    .unavailable-box p {
-      color: #64748b;
-      line-height: 1.6;
-    }
-
-    .unavailable-box a {
-      color: #1d4ed8;
-      font-weight: 700;
-      text-decoration: none;
-    }
+    .unavailable-box { max-width: 700px; margin: 60px auto; padding: 28px; background: #fff; border: 1px solid var(--line); border-radius: 14px; text-align: center; }
+    .unavailable-box h2 { margin-top: 0; font-weight: 600; color: var(--ink); }
+    .unavailable-box p { color: var(--muted); line-height: 1.6; font-weight: 400; }
+    .unavailable-box a { color: var(--navy); font-weight: 600; text-decoration: none; }
 
     /* Report modal */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15,23,42,0.5);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-overlay.modal-open {
-      display: flex;
-    }
-
-    .modal-box {
-      background: #fff;
-      border-radius: 18px;
-      padding: 24px;
-      width: 90%;
-      max-width: 420px;
-      box-shadow: 0 20px 55px rgba(15,23,42,.24);
-    }
-
-    .modal-box h3 {
-      margin-top: 0;
-      margin-bottom: 16px;
-      color: #111;
-    }
-
-    .modal-box label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 6px;
-      margin-top: 14px;
-      font-size: 14px;
-      color: #333;
-    }
-
-    .modal-box select,
-    .modal-box textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 14px;
-      box-sizing: border-box;
-      font-family: inherit;
-    }
-
-    .modal-box textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .modal-cancel-btn {
-      flex: 1;
-      background: #f3f4f6;
-      color: #333;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .modal-submit-btn {
-      flex: 1;
-      background: #dc2626;
-      color: #fff;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .modal-submit-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.modal-open { display: flex; }
+    .modal-box { background: #fff; border-radius: 16px; padding: 22px; width: 90%; max-width: 400px; }
+    .modal-box h3 { margin: 0 0 14px; font-size: 16px; font-weight: 600; color: var(--ink); }
+    .modal-box label { display: block; font-weight: 500; margin: 12px 0 6px; font-size: 13px; color: var(--ink); }
+    .modal-box select, .modal-box textarea { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 13.5px; box-sizing: border-box; font-family: inherit; }
+    .modal-box textarea { min-height: 84px; resize: vertical; }
+    .modal-actions { display: flex; gap: 9px; margin-top: 18px; }
+    .modal-cancel-btn { flex: 1; background: #f1f5f9; color: var(--ink); border: none; padding: 11px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .modal-submit-btn { flex: 1; background: #b91c1c; color: #fff; border: none; padding: 11px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .modal-submit-btn:disabled { opacity: .6; cursor: not-allowed; }
 
     @media (max-width: 980px) {
-      .product-detail {
-        grid-template-columns: 1fr;
-      }
-
-      .product-detail-right {
-        position: static;
-      }
-
-      .main-image {
-        height: 460px;
-      }
+      .product-detail { grid-template-columns: 1fr; }
+      .product-detail-right { position: static; }
+      .main-image { height: 440px; }
     }
 
     @media (max-width: 700px) {
-      .product-detail-left,
-      .product-detail-right {
-        padding: 16px;
-        border-radius: 17px;
-      }
-
-      .main-image {
-        height: 320px;
-      }
-
-      .detail-actions {
-        grid-template-columns: 1fr;
-      }
-
-      .buy-now-btn {
-        grid-column: span 1;
-      }
+      .product-detail-left, .product-detail-right { padding: 15px; border-radius: 14px; }
+      .main-image { height: 300px; }
+      .detail-actions { grid-template-columns: 1fr; }
+      .buy-now-btn { grid-column: span 1; }
     }
 
     @media (max-width: 480px) {
-      .main-image {
-        height: 260px;
-      }
-
-      .detail-price {
-        font-size: 22px;
-      }
+      .main-image { height: 250px; }
+      .detail-price { font-size: 19px; }
     }
   </style>
 </head>
@@ -473,7 +252,7 @@
 <body class="homepage">
   <div class="top-strip">
     <div class="site-shell top-strip-inner">
-      <p>🇱🇷 Liberia's trusted online marketplace</p>
+      <p>Liberia's trusted online marketplace</p>
 
       <div class="top-strip-links">
         <a href="safety.html">Safety Tips</a>
@@ -522,7 +301,7 @@
     <div class="mp-header-search">
       <div class="mp-search-row">
         <div class="mp-search-field mp-search-location">
-          <span aria-hidden="true">📍</span>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
 
           <select id="countyFilter" aria-label="Select county">
             <option value="">All Liberia</option>
@@ -545,7 +324,7 @@
         </div>
 
         <div class="mp-search-field mp-search-keyword">
-          <span aria-hidden="true">🔎</span>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
 
           <input
             type="text"
@@ -603,7 +382,7 @@
 
   <nav class="mp-nav-strip" aria-label="Category navigation">
     <div class="mp-nav-inner">
-      <a href="index.html#products" class="mp-nav-all">☰ All Categories</a>
+      <a href="index.html#products" class="mp-nav-all">All Categories</a>
       <a href="category-vehicles.html" class="mp-nav-link">Vehicles</a>
       <a href="category-property.html" class="mp-nav-link">Property</a>
       <a href="category-phones.html" class="mp-nav-link">Phones &amp; Tablets</a>
@@ -641,23 +420,37 @@
       <h1 id="productTitle">Loading product...</h1>
       <p id="postedTimeLine" class="posted-time-line"></p>
       <p class="detail-price" id="productPrice">US$0 | L$0</p>
-      <p class="detail-location" id="productLocation">📍 Liberia</p>
+      <p class="detail-location" id="productLocation">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        Liberia
+      </p>
       <p class="detail-condition" id="productCondition">Condition: Not listed</p>
 
       <div class="detail-actions">
-        <button id="buyNowBtn" class="buy-now-btn" type="button">🛒 Buy Now</button>
+        <button id="buyNowBtn" class="buy-now-btn" type="button">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M2 3h2l2.6 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20 7H5.2"/></svg>
+          Buy Now
+        </button>
         <a id="contactSellerBtn" class="contact-btn" href="#">Contact Seller</a>
-        <button id="saveBtn" class="heart-btn" type="button">♡ Save</button>
+        <button id="saveBtn" class="heart-btn" type="button">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 5c-2.5 4.5-9.5 9-9.5 9Z"/></svg>
+          Save
+        </button>
       </div>
 
-      <button id="reportBtn" class="report-btn" type="button">🚩 Report this listing</button>
+      <button id="reportBtn" class="report-btn" type="button">
+        <svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg>
+        Report this listing
+      </button>
 
       <div class="seller-card">
         <div class="seller-card-header">Seller Details</div>
-        <div class="seller-avatar">👤</div>
+        <div class="seller-avatar">
+          <svg class="icon" viewBox="0 0 24 24" style="width:22px;height:22px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </div>
         <div class="seller-info">
           <h4>Seller Information</h4>
-          <p><a id="sellerNameLink" href="#" style="color:#1d4ed8; text-decoration:none; font-weight:700;">Loading...</a></p>
+          <p><a id="sellerNameLink" href="#" style="color:#0f2d67; text-decoration:none; font-weight:600;">Loading...</a></p>
           <div id="sellerBadgeRow" class="seller-badge-row"></div>
           <p id="sellerEmail">Loading...</p>
           <p id="sellerPhone">Phone not listed</p>
@@ -665,7 +458,7 @@
       </div>
 
       <div class="buyer-safety-card">
-        <span>🛡️</span>
+        <svg class="icon" viewBox="0 0 24 24" style="width:20px;height:20px;"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg>
         <div>
           <strong>Deal Safely</strong>
           <p>Inspect the item before paying. Meet in a public place and avoid sending deposits to unknown sellers.</p>
@@ -804,8 +597,6 @@
         <div class="site-shell lm-county-section">
           <div class="lm-county-heading">
             <div>
-              <span class="lm-country-flag">🇱🇷</span>
-
               <span>
                 <strong>Browse Across Liberia</strong>
                 <small>Serving buyers and sellers in all 15 counties</small>
@@ -840,7 +631,7 @@
               All Rights Reserved.
             </p>
 
-            <p>Made For Liberia 🇱🇷</p>
+            <p>Made For Liberia</p>
           </div>
         </div>
       </div>
@@ -953,6 +744,8 @@ let unsubscribeUnreadMessages = null;
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop";
 
+const LOCATION_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.9em;height:.9em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+
 // Works out the list of real image URLs for a product, no matter which
 // field name the listing was saved with (new listings use images[],
 // older listings may use imageUrl, imageURL, image, mainImage, photoUrl,
@@ -1050,11 +843,13 @@ function listenForUnreadMessages(userId) {
 }
 
 function updateSaveButtonUI() {
+  const heartPath = '<svg class="icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 5c-2.5 4.5-9.5 9-9.5 9Z"/></svg>';
+
   if (isSaved) {
-    saveBtn.textContent = "♥ Saved";
+    saveBtn.innerHTML = heartPath + " Saved";
     saveBtn.classList.add("is-saved");
   } else {
-    saveBtn.textContent = "♡ Save";
+    saveBtn.innerHTML = heartPath + " Save";
     saveBtn.classList.remove("is-saved");
   }
 }
@@ -1119,6 +914,7 @@ async function buyNow() {
   if (!confirmBuy) return;
 
   buyNowBtn.disabled = true;
+  const originalBtnHtml = buyNowBtn.innerHTML;
   buyNowBtn.textContent = "Placing order...";
 
   try {
@@ -1157,7 +953,7 @@ async function buyNow() {
     alert("Could not place order: " + error.message);
   } finally {
     buyNowBtn.disabled = false;
-    buyNowBtn.textContent = "🛒 Buy Now";
+    buyNowBtn.innerHTML = originalBtnHtml;
   }
 }
 
@@ -1198,7 +994,7 @@ async function loadSellerBadges(sellerId) {
     let html = "";
 
     if (userData.verified === true) {
-      html += '<span class="seller-verified-pill">⭐ Verified Seller</span>';
+      html += '<span class="seller-verified-pill">Verified Seller</span>';
     }
 
     if (userData.createdAt && userData.createdAt.seconds) {
@@ -1257,13 +1053,13 @@ async function loadRelatedListings(category, excludeId) {
 
       link.innerHTML = `
         <div class="product-card">
-          <span class="badge ${featured ? "badge-featured" : ""}">${featured ? "⭐ Featured" : "New"}</span>
+          <span class="badge ${featured ? "badge-featured" : ""}">${featured ? "Featured" : "New"}</span>
           <div class="product-image">
             <img src="${safeText(images[0])}" alt="${safeText(product.title || "Product")}" loading="lazy">
           </div>
           <h3>${safeText(product.title || "Untitled Product")}</h3>
           <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
-          <p class="location">📍 ${safeText(product.city || "")}${product.county ? ", " + safeText(product.county) : ""}</p>
+          <p class="location">${LOCATION_SVG} ${safeText(product.city || "")}${product.county ? ", " + safeText(product.county) : ""}</p>
           <p class="condition">${safeText(product.condition || "Used")}</p>
         </div>
       `;
@@ -1341,7 +1137,7 @@ async function loadProduct() {
     }
 
     productPrice.textContent = `US$${priceUsd} | L$${priceLrd}`;
-    productLocation.textContent = `📍 ${city}, ${county}`;
+    productLocation.innerHTML = `${LOCATION_SVG} ${safeText(city)}, ${safeText(county)}`;
     productCondition.textContent = `Condition: ${condition}`;
     productDescription.textContent = description;
     productImage.src = images[0];
@@ -1352,7 +1148,7 @@ async function loadProduct() {
     sellerEmail.textContent = email;
     sellerNameLink.textContent = "View Seller Profile";
     sellerNameLink.href = sellerId ? "seller-profile.html?id=" + sellerId : "#";
-    sellerPhone.textContent = phone ? `📞 ${phone}` : "Phone not listed";
+    sellerPhone.textContent = phone ? phone : "Phone not listed";
 
     loadSellerBadges(sellerId);
 

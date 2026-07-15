@@ -12,166 +12,140 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0f2d67">
 
   <style>
+    /* ==================================================
+       BUSINESS PROFILE — RESTRAINED 2-COLOR SYSTEM
+       Navy (#0f2d67) = structure/brand/hero. Orange
+       (#f97316) = the ONLY accent, reserved for the
+       Message This Business button and price. Bold
+       reserved for name/stats/price.
+       ================================================== */
+    :root{
+      --navy:#0f2d67;
+      --navy-soft:#eef1f7;
+      --orange:#f97316;
+      --orange-soft:#fff4ec;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --bg:#f7f8fa;
+    }
     *{box-sizing:border-box}
-    body{margin:0;background:#f5f7fb;color:#0f172a}
+    body{margin:0;background:var(--bg);color:var(--ink)}
 
-    .business-page{width:min(1180px,94%);margin:32px auto 60px}
+    .icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    .business-page{width:min(1180px,94%);margin:28px auto 60px}
 
     .not-business-box{
-      display:none;max-width:720px;margin:60px auto;padding:34px;
-      border:1px solid #e2e8f0;border-radius:20px;background:#fff;
-      text-align:center;box-shadow:0 14px 34px rgba(15,23,42,.07)
+      display:none;max-width:680px;margin:60px auto;padding:30px;
+      border:1px solid var(--line);border-radius:16px;background:#fff;
+      text-align:center
     }
-    .not-business-box h2{margin:0 0 10px;font-size:28px}
-    .not-business-box p{margin:0 0 18px;color:#64748b;line-height:1.6}
+    .not-business-box h2{margin:0 0 10px;font-size:22px;font-weight:600}
+    .not-business-box p{margin:0 0 16px;color:var(--muted);line-height:1.6;font-weight:400}
     .not-business-box a{
       display:inline-flex;padding:11px 18px;border-radius:10px;color:#fff;
-      background:#1d4ed8;text-decoration:none;font-weight:900
+      background:var(--navy);text-decoration:none;font-weight:600
     }
 
     .business-hero{
-      display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;
-      padding:32px;border-radius:24px;color:#fff;
-      background:
-        radial-gradient(circle at top right,rgba(255,255,255,.15),transparent 32%),
-        linear-gradient(135deg,#0f2d67,#1d4ed8);
-      box-shadow:0 18px 42px rgba(30,58,138,.2)
+      display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;
+      padding:18px 20px;border-radius:14px;color:#fff;
+      background:var(--navy);
     }
 
-    .business-main{display:flex;gap:20px;align-items:center}
+    .business-main{display:flex;gap:18px;align-items:center}
     .business-avatar{
-      width:100px;height:100px;display:grid;place-items:center;border-radius:22px;
-      background:rgba(255,255,255,.14);border:4px solid rgba(255,255,255,.22);
-      font-size:44px;overflow:hidden;flex-shrink:0
+      width:56px;height:56px;display:grid;place-items:center;border-radius:14px;
+      background:rgba(255,255,255,.14);overflow:hidden;flex-shrink:0
     }
     .business-avatar img{width:100%;height:100%;object-fit:cover}
 
-    .business-hero h1{margin:0 0 8px;font-size:clamp(30px,5vw,46px);line-height:1.08}
+    .business-hero h1{margin:0 0 6px;font-size:clamp(18px,2.6vw,24px);font-weight:700;line-height:1.18}
 
-    .business-badges{display:flex;gap:8px;flex-wrap:wrap}
+    .business-badges{display:flex;gap:7px;flex-wrap:wrap}
     .business-verified,.business-category{
-      display:inline-flex;padding:6px 11px;border-radius:999px;
-      font-size:12px;font-weight:900
+      display:inline-flex;padding:5px 11px;border-radius:999px;
+      font-size:11.5px;font-weight:600
     }
-    .business-verified{background:#fef3c7;color:#92400e}
-    .business-verified.verified{background:#eff6ff;color:#1d4ed8}
-    .business-category{display:none;background:#dbeafe;color:#1e40af}
+    .business-verified{background:rgba(255,255,255,.14);color:#fff}
+    .business-verified.verified{background:var(--orange-soft);color:#9a3412}
+    .business-category{display:none;background:rgba(255,255,255,.14);color:#fff}
 
-    .business-member{margin:9px 0 0;color:#dbeafe;font-size:13px}
-    .business-description{margin:14px 0 0;color:#e0ecff;line-height:1.65;max-width:680px}
-    .business-contact{margin:7px 0 0;color:#dbeafe;font-size:13px}
+    .business-member{margin:9px 0 0;color:#cdd8ef;font-size:12.5px;font-weight:400}
+    .business-description{margin:12px 0 0;color:#dbe4f5;line-height:1.6;max-width:640px;font-size:13.5px;font-weight:400}
+    .business-contact{margin:6px 0 0;color:#cdd8ef;font-size:12.5px;display:flex;align-items:center;gap:6px;font-weight:400}
 
     .message-business-btn{
-      display:none;min-height:46px;align-items:center;justify-content:center;
-      padding:11px 20px;border-radius:11px;color:#fff;background:#f97316;
-      text-decoration:none;font-weight:900;white-space:nowrap
+      display:none;min-height:36px;align-items:center;justify-content:center;gap:7px;
+      padding:8px 16px;border-radius:9px;color:#fff;background:var(--orange);
+      text-decoration:none;font-weight:600;white-space:nowrap;font-size:12.5px
     }
+    .message-business-btn:hover{background:#ea680a}
 
-    .business-stats{
-      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;
-      margin-top:22px
-    }
-    .business-stat{
-      padding:18px;border:1px solid #e2e8f0;border-radius:16px;background:#fff;
-      box-shadow:0 10px 24px rgba(15,23,42,.06);text-align:center
-    }
-    .business-stat-value{font-size:25px;font-weight:900;color:#1e3a8a}
-    .business-stat-label{margin-top:5px;color:#64748b;font-size:12px;font-weight:700}
+    .business-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:20px}
+    .business-stat{padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff;text-align:center}
+    .business-stat-value{font-size:22px;font-weight:700;color:var(--navy)}
+    .business-stat-label{margin-top:5px;color:var(--muted);font-size:12px;font-weight:500}
 
-    .business-section{
-      margin-top:24px;padding:24px;border:1px solid #e2e8f0;border-radius:22px;
-      background:#fff;box-shadow:0 14px 34px rgba(15,23,42,.07)
-    }
-    .business-section-header{
-      display:flex;align-items:center;justify-content:space-between;gap:16px;
-      margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #e2e8f0
-    }
-    .business-section-header h2{margin:0 0 4px;font-size:26px}
-    .business-section-header p{margin:0;color:#64748b;font-size:13px}
+    .business-section{margin-top:20px;padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff}
+    .business-section-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;padding-bottom:15px;border-bottom:1px solid var(--line)}
+    .business-section-header h2{margin:0 0 4px;font-size:19px;font-weight:600}
+    .business-section-header p{margin:0;color:var(--muted);font-size:12.5px;font-weight:400}
 
-    .business-listings-grid{
-      display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px
-    }
+    .business-listings-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
     .business-product-link{color:inherit;text-decoration:none}
-    .business-product-card{
-      overflow:hidden;border:1px solid #e2e8f0;border-radius:17px;background:#fff;
-      transition:.2s ease
-    }
-    .business-product-card:hover{
-      transform:translateY(-3px);border-color:#bfdbfe;
-      box-shadow:0 12px 26px rgba(37,99,235,.10)
-    }
-    .business-product-image{height:210px;background:#f1f5f9}
+    .business-product-card{overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#fff}
+    .business-product-card:hover{border-color:var(--navy)}
+    .business-product-image{height:190px;background:#f1f5f9}
     .business-product-image img{width:100%;height:100%;object-fit:cover;display:block}
-    .business-product-body{padding:15px}
-    .business-product-body h3{margin:0 0 8px;font-size:16px;line-height:1.35}
-    .business-price{margin:0 0 7px;color:#ea580c;font-size:15px;font-weight:900}
-    .business-location{margin:0;color:#64748b;font-size:12px}
-    .listing-featured-badge{
-      display:inline-flex;margin-left:6px;padding:3px 7px;border-radius:999px;
-      background:#fef3c7;color:#92400e;font-size:10px;font-weight:900
-    }
+    .business-product-body{padding:13px}
+    .business-product-body h3{margin:0 0 7px;font-size:14.5px;font-weight:500;line-height:1.35}
+    .business-price{margin:0 0 6px;color:var(--orange);font-size:14px;font-weight:700}
+    .business-location{margin:0;color:var(--muted);font-size:11.5px;display:flex;align-items:center;gap:4px;font-weight:400}
+    .listing-featured-badge{display:inline-flex;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--orange-soft);color:#9a3412;font-size:10px;font-weight:600}
 
-    .review-grid{display:grid;grid-template-columns:360px minmax(0,1fr);gap:20px}
-    .review-form-card{
-      display:none;padding:20px;border:1px solid #e2e8f0;border-radius:16px;background:#f8fafc
-    }
-    .review-form-card h3{margin:0 0 14px}
-    .review-form-card label{display:block;margin:13px 0 7px;font-size:13px;font-weight:800}
-    .review-form-card select,.review-form-card textarea{
-      width:100%;padding:12px 13px;border:1px solid #cbd5e1;border-radius:10px;
-      background:#fff;font:inherit
-    }
-    .review-form-card select:focus,.review-form-card textarea:focus{
-      outline:none;border-color:#1d4ed8;box-shadow:0 0 0 4px rgba(29,78,216,.10)
-    }
-    .review-submit{
-      width:100%;min-height:46px;margin-top:15px;border:none;border-radius:10px;
-      color:#fff;background:#1d4ed8;font-weight:900;cursor:pointer
-    }
+    .review-grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px}
+    .review-form-card{display:none;padding:19px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+    .review-form-card h3{margin:0 0 14px;font-size:15.5px;font-weight:600}
+    .review-form-card label{display:block;margin:13px 0 7px;font-size:12.5px;font-weight:500}
+    .review-form-card select,.review-form-card textarea{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit}
+    .review-form-card select:focus,.review-form-card textarea:focus{outline:none;border-color:var(--navy)}
+    .review-submit{width:100%;min-height:44px;margin-top:14px;border:none;border-radius:10px;color:#fff;background:var(--navy);font-weight:600;cursor:pointer}
 
-    .review-message{
-      display:none;padding:15px;border-radius:12px;background:#f8fafc;
-      color:#64748b;border:1px solid #e2e8f0;font-size:14px
-    }
-    .review-message a{color:#1d4ed8;font-weight:800}
+    .review-message{display:none;padding:14px;border-radius:12px;background:var(--bg);color:var(--muted);border:1px solid var(--line);font-size:13.5px;font-weight:400}
+    .review-message a{color:var(--navy);font-weight:600}
 
-    .reviews-list{display:grid;gap:12px}
-    .review-card{
-      padding:16px;border:1px solid #e2e8f0;border-radius:14px;background:#fff
-    }
+    .reviews-list{display:grid;gap:11px}
+    .review-card{padding:15px;border:1px solid var(--line);border-radius:13px;background:#fff}
     .review-header{display:flex;justify-content:space-between;gap:12px;align-items:center}
-    .review-stars{font-size:13px}
-    .review-comment{margin:10px 0 7px;color:#334155;line-height:1.6}
-    .review-date{margin:0;color:#94a3b8;font-size:12px}
+    .review-header strong{font-weight:600;font-size:13.5px}
+    .review-stars{color:var(--orange);display:flex;gap:1px}
+    .review-comment{margin:10px 0 7px;color:var(--ink);line-height:1.6;font-size:13.5px;font-weight:400}
+    .review-date{margin:0;color:#9ca3af;font-size:11.5px}
 
-    .business-empty{
-      grid-column:1/-1;padding:48px 20px;text-align:center;border:1px dashed #cbd5e1;
-      border-radius:16px;background:#f8fafc;color:#64748b
-    }
+    .business-empty{grid-column:1/-1;padding:44px 20px;text-align:center;border:1px dashed var(--line);border-radius:15px;background:var(--bg);color:var(--muted);font-size:13px}
 
     @media(max-width:1000px){
       .business-listings-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
       .review-grid{grid-template-columns:1fr}
     }
-
     @media(max-width:760px){
       .business-hero{grid-template-columns:1fr}
-      .message-business-btn{justify-self:start}
+      .message-business-btn{justify-self:start;display:inline-flex}
       .business-stats{grid-template-columns:1fr}
       .business-listings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
-
     @media(max-width:560px){
-      .business-page{width:94%;margin-top:20px}
-      .business-hero,.business-section{padding:20px 16px;border-radius:18px}
+      .business-page{width:94%;margin-top:18px}
+      .business-hero,.business-section{padding:18px 15px;border-radius:16px}
       .business-main{align-items:flex-start;flex-direction:column}
       .business-section-header{align-items:flex-start;flex-direction:column}
       .business-listings-grid{grid-template-columns:1fr}
-      .business-product-image{height:240px}
+      .business-product-image{height:220px}
     }
   </style>
 </head>
@@ -179,7 +153,7 @@
 <body class="homepage">
   <div class="top-strip">
     <div class="site-shell top-strip-inner">
-      <p>🇱🇷 Liberia's trusted online marketplace</p>
+      <p>Liberia's trusted online marketplace</p>
 
       <div class="top-strip-links">
         <a href="safety.html">Safety Tips</a>
@@ -228,7 +202,7 @@
 
   <nav class="mp-nav-strip" aria-label="Category navigation">
     <div class="mp-nav-inner">
-      <a href="index.html#products" class="mp-nav-all">☰ All Categories</a>
+      <a href="index.html#products" class="mp-nav-all">All Categories</a>
       <a href="category-vehicles.html" class="mp-nav-link">Vehicles</a>
       <a href="category-property.html" class="mp-nav-link">Property</a>
       <a href="category-phones.html" class="mp-nav-link">Phones &amp; Tablets</a>
@@ -254,7 +228,9 @@
     <section id="businessProfileSection">
       <section class="business-hero">
         <div class="business-main">
-          <div id="businessAvatar" class="business-avatar">🏢</div>
+          <div id="businessAvatar" class="business-avatar">
+            <svg class="icon" viewBox="0 0 24 24" style="width:36px;height:36px;"><path d="M3 21V9l9-6 9 6v12M9 21v-6h6v6"/></svg>
+          </div>
 
           <div>
             <h1 id="businessName">Loading...</h1>
@@ -272,7 +248,8 @@
         </div>
 
         <a href="#" id="messageSellerBtn" class="message-business-btn">
-          💬 Message This Business
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.4a8.4 8.4 0 1 1 16.1-4.1Z"/></svg>
+          Message This Business
         </a>
       </section>
 
@@ -323,11 +300,11 @@
                 <label for="reviewRating">Rating</label>
                 <select id="reviewRating" required>
                   <option value="">Select rating</option>
-                  <option value="5">⭐⭐⭐⭐⭐ (5) Excellent</option>
-                  <option value="4">⭐⭐⭐⭐ (4) Good</option>
-                  <option value="3">⭐⭐⭐ (3) Average</option>
-                  <option value="2">⭐⭐ (2) Poor</option>
-                  <option value="1">⭐ (1) Terrible</option>
+                  <option value="5">5 — Excellent</option>
+                  <option value="4">4 — Good</option>
+                  <option value="3">3 — Average</option>
+                  <option value="2">2 — Poor</option>
+                  <option value="1">1 — Terrible</option>
                 </select>
 
                 <label for="reviewComment">Comment</label>
@@ -452,8 +429,6 @@
         <div class="site-shell lm-county-section">
           <div class="lm-county-heading">
             <div>
-              <span class="lm-country-flag">🇱🇷</span>
-
               <span>
                 <strong>Browse Across Liberia</strong>
                 <small>Serving buyers and sellers in all 15 counties</small>
@@ -488,7 +463,7 @@
               All Rights Reserved.
             </p>
 
-            <p>Made For Liberia 🇱🇷</p>
+            <p>Made For Liberia</p>
           </div>
         </div>
       </div>
@@ -589,6 +564,9 @@
     let isOwnProfile = false;
     let unsubscribeUnreadMessages = null;
 
+    const LOCATION_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.9em;height:.9em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+    const PHONE_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.9em;height:.9em;"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2Z"/></svg>';
+
     function safeText(value) {
       return String(value || "")
         .replaceAll("&", "&amp;")
@@ -599,7 +577,8 @@
     }
 
     function starsFor(rating) {
-      return "⭐".repeat(rating);
+      const filled = '<svg class="icon" viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:.85em;height:.85em;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2Z"/></svg>';
+      return filled.repeat(rating);
     }
 
     async function loadMarketplaceSettings() {
@@ -700,7 +679,7 @@
         }
 
         if (userData.businessVerified === true) {
-          sellerVerified.textContent = "✔ Verified Business";
+          sellerVerified.textContent = "Verified Business";
           sellerVerified.classList.add("verified");
         } else {
           sellerVerified.textContent = "Verification Pending";
@@ -728,14 +707,14 @@
           userData.businessCounty
         ].filter(Boolean);
 
-        businessLocationLine.textContent =
+        businessLocationLine.innerHTML =
           locationParts.length
-            ? "📍 " + locationParts.join(", ")
+            ? LOCATION_SVG + " " + safeText(locationParts.join(", "))
             : "";
 
-        businessPhoneLine.textContent =
+        businessPhoneLine.innerHTML =
           userData.businessPhone
-            ? "📞 " + userData.businessPhone
+            ? PHONE_SVG + " " + safeText(userData.businessPhone)
             : "";
 
         await loadBusinessListings();
@@ -823,7 +802,7 @@
                 <h3>
                   ${safeText(product.title || "Untitled Product")}
                   ${isFeatured
-                    ? '<span class="listing-featured-badge">⭐ Featured</span>'
+                    ? '<span class="listing-featured-badge">Featured</span>'
                     : ""}
                 </h3>
 
@@ -834,7 +813,7 @@
                 </p>
 
                 <p class="business-location">
-                  📍 ${safeText(product.city || "")},
+                  ${LOCATION_SVG} ${safeText(product.city || "")},
                   ${safeText(product.county || "Liberia")}
                 </p>
               </div>
@@ -909,9 +888,9 @@
         const avg = (totalStars / reviewCount).toFixed(1);
 
         averageRating.textContent =
-          `(${avg} ⭐ from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
+          `(${avg} avg from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
 
-        statAverageRating.textContent = avg + " ⭐";
+        statAverageRating.textContent = avg;
         statReviewCount.textContent = reviewCount;
 
       } catch (error) {

@@ -7,431 +7,173 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0f2d67">
   <style>
-    .featured-badge {
-      display: inline-block;
-      background: #fef3c7;
-      color: #92400e;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-left: 6px;
+    /* ==================================================
+       DASHBOARD — RESTRAINED 2-COLOR SYSTEM
+       Navy (#0f2d67) = structure/brand. Orange (#f97316)
+       = the ONLY accent, reserved for primary actions
+       (Post An Ad, Feature toggle when active, Boost).
+       All other listing-card actions are plain outline
+       buttons in navy or neutral gray — differentiated by
+       LABEL, not by five different colors. Bold text is
+       reserved for numbers/headings only.
+       ================================================== */
+    :root{
+      --navy:#0f2d67;
+      --navy-soft:#eef1f7;
+      --orange:#f97316;
+      --orange-soft:#fff4ec;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --bg:#f7f8fa;
+      --danger:#b91c1c;
+      --danger-soft:#fdecec;
     }
-    .boost-pending-badge {
-      display: inline-block;
-      background: #dbeafe;
-      color: #1e40af;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-left: 6px;
-    }
-    .boost-expired-badge {
-      display: inline-block;
-      background: #e2e8f0;
-      color: #475569;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-left: 6px;
-    }
-    .feature-btn {
-      background: #fff;
-      border: 1px solid #d97706;
-      color: #d97706;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .feature-btn:hover {
-      background: #d97706;
-      color: #fff;
-    }
-    .feature-btn.is-featured {
-      background: #d97706;
-      color: #fff;
-    }
-    .feature-btn:disabled,
-    .sold-btn:disabled,
-    .duplicate-btn:disabled,
-    .archive-btn:disabled,
-    .boost-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .sold-btn {
-      background: #fff;
-      border: 1px solid #0f2d67;
-      color: #0f2d67;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .sold-btn:hover {
-      background: #0f2d67;
-      color: #fff;
-    }
-    .sold-btn.is-sold {
-      background: #6b7280;
-      border-color: #6b7280;
-      color: #fff;
-    }
-    .duplicate-btn {
-      background: #fff;
-      border: 1px solid #2563eb;
-      color: #2563eb;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .duplicate-btn:hover {
-      background: #2563eb;
-      color: #fff;
-    }
-    .archive-btn {
-      background: #fff;
-      border: 1px solid #7c3aed;
-      color: #7c3aed;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .archive-btn:hover {
-      background: #7c3aed;
-      color: #fff;
-    }
-    .archive-btn.is-archived {
-      background: #7c3aed;
-      color: #fff;
-    }
-    .boost-btn {
-      background: #fff;
-      border: 1px solid #db2777;
-      color: #db2777;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .boost-btn:hover {
-      background: #db2777;
-      color: #fff;
-    }
-    .boost-btn.is-pending {
-      background: #fdf2f8;
-      border-color: #db2777;
-      color: #db2777;
-    }
-    .status-badge.sold {
-      background: #e5e7eb;
-      color: #374151;
-    }
-    .status-badge.archived {
-      background: #ede9fe;
-      color: #5b21b6;
-    }
-    .dashboard-listing-card.is-archived-card {
-      opacity: 0.7;
-    }
-    .archive-filter-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .archive-filter-btn {
-      background: #fff;
-      border: 1px solid #d1d5db;
-      padding: 8px 16px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      color: #374151;
-    }
-    .dashboard-listing-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.dashboard-listing-actions > button {
-  flex: 0 0 auto;
-}
-    .nav-messages-link {
-      position: relative;
-    }
-    .unread-badge {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background: #dc2626;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      min-width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-    }
-    .unread-badge.has-unread {
-      display: flex;
-    }
-    .dashboard-listing-image a {
-      display: block;
-    }
-    .dashboard-listing-image img {
-      cursor: pointer;
-    }
-    .dashboard-listing-info h4 a {
-      color: inherit;
-      text-decoration: none;
-    }
-    .dashboard-listing-info h4 a:hover {
-      text-decoration: underline;
-    }
+    * { box-sizing: border-box; }
+    body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;margin:0}
 
-    .boost-modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-    .boost-modal-overlay.open {
-      display: flex;
-    }
-    .boost-modal {
-      background: #fff;
-      border-radius: 14px;
-      padding: 28px;
-      max-width: 420px;
-      width: 90%;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-    .boost-modal h3 {
-      margin-top: 0;
-      margin-bottom: 4px;
-    }
-    .boost-modal-subtitle {
-      color: #64748b;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-    .boost-plan-option {
-      display: block;
-      border: 2px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: border-color 0.15s;
-    }
-    .boost-plan-option:hover {
-      border-color: #db2777;
-    }
-    .boost-plan-option.selected {
-      border-color: #db2777;
-      background: #fdf2f8;
-    }
-    .boost-plan-option input {
-      margin-right: 10px;
-    }
-    .boost-plan-title {
-      font-weight: 700;
-      font-size: 15px;
-      color: #111;
-    }
-    .boost-plan-price {
-      font-weight: 700;
-      color: #db2777;
-      float: right;
-    }
-    .boost-plan-desc {
-      color: #64748b;
-      font-size: 13px;
-      margin-top: 4px;
-      margin-left: 24px;
-    }
-    .boost-modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .boost-modal-actions button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-    }
-    .boost-submit-btn {
-      background: #db2777;
-      color: #fff;
-    }
-    .boost-submit-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .boost-cancel-btn {
-      background: #f1f5f9;
-      color: #374151;
-    }
-    .boost-modal-note {
-      font-size: 12px;
-      color: #94a3b8;
-      margin-top: 14px;
-      text-align: center;
-    }
+    .icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-    .boost-payment-screen {
-      display: none;
+    /* Badges — replaces featured-badge / boost-pending-badge / boost-expired-badge */
+    .featured-badge,.boost-pending-badge,.boost-expired-badge{
+      display:inline-flex;align-items:center;gap:4px;
+      font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;margin-left:6px;
     }
-    .boost-payment-screen.open {
-      display: block;
-    }
-    .boost-payment-amount {
-      background: #fdf2f8;
-      border: 2px solid #db2777;
-      border-radius: 10px;
-      padding: 16px;
-      text-align: center;
-      margin-bottom: 18px;
-    }
-    .boost-payment-amount-label {
-      font-size: 13px;
-      color: #64748b;
-      margin-bottom: 4px;
-    }
-    .boost-payment-amount-value {
-      font-size: 28px;
-      font-weight: 800;
-      color: #db2777;
-    }
-    .boost-payment-method {
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-    }
-    .boost-payment-method-name {
-      font-weight: 700;
-      font-size: 14px;
-      color: #111;
-      margin-bottom: 4px;
-    }
-    .boost-payment-method-number {
-      font-size: 18px;
-      font-weight: 800;
-      color: #1d4ed8;
-      letter-spacing: 0.5px;
-    }
-    .boost-payment-steps {
-      margin-top: 16px;
-      padding: 14px 16px;
-      background: #f8fafc;
-      border-radius: 10px;
-      font-size: 13px;
-      color: #334155;
-      line-height: 1.6;
-    }
-    .boost-payment-steps ol {
-      margin: 6px 0 0 18px;
-      padding: 0;
-    }
-    .boost-payment-done-btn {
-      width: 100%;
-      margin-top: 20px;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      background: #1d4ed8;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .business-badge {
-      display: inline-block;
-      background: #dbeafe;
-      color: #1e40af;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-top: 6px;
-    }
-    .business-badge.verified {
-      background: #dbeafe;
-      color: #1e40af;
-    }
-    .dashboard-business-name {
-      font-size: 13px;
-      color: #64748b;
-      margin-top: 2px;
-    }
+    .featured-badge{background:var(--orange-soft);color:#9a3412}
+    .boost-pending-badge{background:var(--navy-soft);color:var(--navy)}
+    .boost-expired-badge{background:#f1f5f9;color:var(--muted)}
 
-    /* PROFESSIONAL DASHBOARD REDESIGN */
-    body{background:#f5f7fb}
-    .dashboard-navbar{min-height:78px;height:auto;padding:12px max(24px,5vw);background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(15,23,42,.06);justify-content:space-between;position:sticky;top:0;z-index:50}
-    .dashboard-navbar .logo-link img{width:48px;height:48px;object-fit:contain}
-    .dashboard-navbar .logo-text{color:#0f2d67;font-size:21px}
-    .dashboard-nav-actions{display:flex;align-items:center;gap:10px}
-    .dashboard-top-link,.dashboard-post-btn,.dashboard-logout-btn{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;border:1px solid transparent;cursor:pointer}
-    .dashboard-top-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}
-    .dashboard-top-link:hover{color:#1e3a8a;border-color:#bfdbfe;background:#eff6ff}
-    .dashboard-post-btn{color:#fff;background:#f97316;box-shadow:0 8px 18px rgba(249,115,22,.2)}
-    .dashboard-post-btn:hover{background:#ea580c}
-    .dashboard-logout-btn{color:#b91c1c;background:#fff;border-color:#fecaca}
-    .dashboard-shell{width:min(1450px,94%);margin:30px auto 70px}
-    .dashboard-welcome{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:34px 38px;border-radius:22px;background:radial-gradient(circle at top right,rgba(255,255,255,.17),transparent 34%),linear-gradient(135deg,#0f2d67,#1d4ed8);color:#fff;box-shadow:0 18px 44px rgba(30,58,138,.2)}
-    .dashboard-kicker{margin-bottom:8px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.18em}
-    .dashboard-welcome h1{margin:0 0 9px;font-size:clamp(28px,4vw,42px);line-height:1.1}
-    .dashboard-welcome p:last-child{color:#dbeafe;font-size:16px;line-height:1.6}
-    .dashboard-welcome-btn{flex-shrink:0;padding:14px 20px;border-radius:12px;color:#0f2d67;background:#fff;text-decoration:none;font-weight:900;box-shadow:0 10px 24px rgba(0,0,0,.14)}
-    .dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:22px 0}
-    .dashboard-stat-card{display:flex;align-items:center;gap:15px;padding:20px;border:1px solid #e2e8f0;border-radius:16px;background:#fff;box-shadow:0 8px 22px rgba(15,23,42,.06)}
-    .dashboard-stat-icon{width:48px;height:48px;flex-shrink:0;display:grid;place-items:center;border-radius:14px;background:#eff6ff;font-size:23px}
-    .dashboard-stat-card strong{display:block;color:#0f172a;font-size:25px;line-height:1}
-    .dashboard-stat-card p{margin-top:6px;color:#64748b;font-size:13px;font-weight:700}
-    .dashboard-section{display:grid;grid-template-columns:270px minmax(0,1fr);gap:22px;padding:0;align-items:start}
-    .dashboard-sidebar{border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 8px 24px rgba(15,23,42,.06);top:100px}
-    .dashboard-main{min-width:0;padding:25px;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.06)}
-    .archive-filter-row{flex-wrap:wrap;padding:6px;border-radius:999px;background:#f1f5f9;width:fit-content}
-    .archive-filter-btn{border:none;background:transparent}
-    .archive-filter-btn.active{color:#fff;background:#1e3a8a;box-shadow:0 4px 12px rgba(30,58,138,.2)}
-    .dashboard-listings{grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:18px}
-    .dashboard-listing-card{overflow:hidden;padding:0;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 6px 18px rgba(15,23,42,.07);transition:.2s}
-    .dashboard-listing-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,23,42,.12)}
-    .dashboard-listing-image{height:190px;margin:0;border-radius:0}
-    .dashboard-listing-info{padding:16px 16px 8px}
-    .dashboard-listing-actions{padding:10px 16px 18px;border-top:1px solid #f1f5f9}
+    /* Listing action buttons — all outline style, differentiated by label only */
+    .feature-btn,.sold-btn,.duplicate-btn,.archive-btn,.boost-btn{
+      background:#fff;border:1px solid var(--line);color:var(--ink);
+      padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;
+    }
+    .feature-btn:hover,.sold-btn:hover,.duplicate-btn:hover,.archive-btn:hover,.boost-btn:hover{border-color:var(--navy);color:var(--navy)}
+    .feature-btn.is-featured{background:var(--orange);border-color:var(--orange);color:#fff}
+    .sold-btn.is-sold{background:var(--navy-soft);border-color:var(--navy);color:var(--navy)}
+    .archive-btn.is-archived{background:var(--navy-soft);border-color:var(--navy);color:var(--navy)}
+    .boost-btn.is-pending{background:var(--orange-soft);border-color:var(--orange);color:#9a3412}
+    .feature-btn:disabled,.sold-btn:disabled,.duplicate-btn:disabled,.archive-btn:disabled,.boost-btn:disabled{opacity:.55;cursor:not-allowed}
+
+    .status-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;text-transform:capitalize}
+    .status-badge.active{background:var(--orange-soft);color:#9a3412}
+    .status-badge.sold{background:#e5e7eb;color:#374151}
+    .status-badge.archived{background:var(--navy-soft);color:var(--navy)}
+    .dashboard-listing-card.is-archived-card{opacity:.7}
+
+    .archive-filter-row{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;padding:5px;border-radius:999px;background:#f1f5f9;width:fit-content}
+    .archive-filter-btn{background:transparent;border:none;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:500;cursor:pointer;color:var(--ink)}
+    .archive-filter-btn.active{color:#fff;background:var(--navy)}
+
+    .dashboard-listing-actions{display:flex;flex-wrap:wrap;gap:7px;padding:10px 16px 18px;border-top:1px solid #f1f5f9}
+    .dashboard-listing-actions > button{flex:0 0 auto}
+
+    .nav-messages-link{position:relative}
+    .unread-badge{position:absolute;top:-8px;right:-8px;background:var(--danger);color:#fff;font-size:10px;font-weight:600;min-width:17px;height:17px;border-radius:999px;display:none;align-items:center;justify-content:center;padding:0 4px}
+    .unread-badge.has-unread{display:flex}
+    .dashboard-listing-image a{display:block}
+    .dashboard-listing-image img{cursor:pointer}
+    .dashboard-listing-info h4 a{color:inherit;text-decoration:none}
+    .dashboard-listing-info h4 a:hover{text-decoration:underline}
+
+    /* Boost modal */
+    .boost-modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:1000;align-items:center;justify-content:center}
+    .boost-modal-overlay.open{display:flex}
+    .boost-modal{background:#fff;border-radius:14px;padding:26px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto}
+    .boost-modal h3{margin:0 0 4px;font-size:17px;font-weight:700;color:var(--ink)}
+    .boost-modal-subtitle{color:var(--muted);font-size:13px;margin-bottom:18px}
+    .boost-plan-option{display:block;border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-bottom:10px;cursor:pointer}
+    .boost-plan-option:hover{border-color:var(--navy)}
+    .boost-plan-option.selected{border-color:var(--navy);background:var(--navy-soft)}
+    .boost-plan-option input{margin-right:10px}
+    .boost-plan-title{font-weight:600;font-size:14px;color:var(--ink)}
+    .boost-plan-price{font-weight:700;color:var(--navy);float:right}
+    .boost-plan-desc{color:var(--muted);font-size:12.5px;margin-top:4px;margin-left:24px}
+    .boost-modal-actions{display:flex;gap:10px;margin-top:18px}
+    .boost-modal-actions button{flex:1;padding:11px;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer;border:none}
+    .boost-submit-btn{background:var(--orange);color:#fff}
+    .boost-submit-btn:disabled{opacity:.6;cursor:not-allowed}
+    .boost-cancel-btn{background:#f1f5f9;color:var(--ink)}
+    .boost-modal-note{font-size:11.5px;color:var(--muted);margin-top:12px;text-align:center}
+
+    .boost-payment-screen{display:none}
+    .boost-payment-screen.open{display:block}
+    .boost-payment-amount{background:var(--orange-soft);border:1px solid #fed7aa;border-radius:10px;padding:15px;text-align:center;margin-bottom:16px}
+    .boost-payment-amount-label{font-size:12px;color:var(--muted);margin-bottom:3px}
+    .boost-payment-amount-value{font-size:24px;font-weight:700;color:var(--navy)}
+    .boost-payment-method{border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-bottom:10px}
+    .boost-payment-method-name{font-weight:600;font-size:13px;color:var(--ink);margin-bottom:3px;display:flex;align-items:center;gap:6px}
+    .boost-payment-method-number{font-size:16px;font-weight:700;color:var(--navy);letter-spacing:.3px}
+    .boost-payment-steps{margin-top:14px;padding:13px 15px;background:var(--bg);border-radius:10px;font-size:12.5px;color:var(--ink);line-height:1.6}
+    .boost-payment-steps ol{margin:6px 0 0 18px;padding:0}
+    .boost-payment-done-btn{width:100%;margin-top:18px;padding:11px;border-radius:8px;border:none;background:var(--navy);color:#fff;font-size:13.5px;font-weight:600;cursor:pointer}
+
+    .business-badge{display:inline-flex;align-items:center;gap:4px;background:var(--navy-soft);color:var(--navy);font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;margin-top:5px}
+    .dashboard-business-name{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+    /* Header */
+    .dashboard-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);justify-content:space-between;position:sticky;top:0;z-index:50;display:flex;align-items:center}
+    .dashboard-navbar .logo-link{display:flex;align-items:center;gap:9px;text-decoration:none}
+    .dashboard-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
+    .dashboard-navbar .logo-text{color:var(--navy);font-size:14px;font-weight:700}
+    .dashboard-nav-actions{display:flex;align-items:center;gap:8px}
+    .dashboard-top-link,.dashboard-post-btn,.dashboard-logout-btn{min-height:31px;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:6px 12px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:500;border:1px solid var(--line);cursor:pointer}
+    .dashboard-top-link{color:var(--ink);background:#fff}
+    .dashboard-top-link:hover{color:var(--navy);border-color:var(--navy)}
+    .dashboard-post-btn{color:#fff;background:var(--orange);border-color:var(--orange)}
+    .dashboard-post-btn:hover{background:#ea680a}
+    .dashboard-logout-btn{color:var(--danger);background:#fff;border-color:#f3d0d0}
+
+    /* Shell */
+    .dashboard-shell{width:min(1300px,94%);margin:26px auto 60px}
+    .dashboard-welcome{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;border-radius:14px;background:var(--navy);color:#fff}
+    .dashboard-kicker{margin-bottom:7px;color:#cdd8ef;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+    .dashboard-welcome h1{margin:0 0 6px;font-size:clamp(17px,2.3vw,21px);font-weight:700;line-height:1.2}
+    .dashboard-welcome p:last-child{color:#cdd8ef;font-size:14px;line-height:1.55;font-weight:400}
+    .dashboard-welcome-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:9px;color:var(--navy);background:#fff;text-decoration:none;font-weight:600;font-size:12.5px}
+
+    .dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0}
+    .dashboard-stat-card{display:flex;align-items:center;gap:13px;padding:17px;border:1px solid var(--line);border-radius:13px;background:#fff}
+    .dashboard-stat-icon{width:38px;height:38px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--navy-soft);color:var(--navy);font-size:18px}
+    .dashboard-stat-card strong{display:block;color:var(--ink);font-size:22px;font-weight:700;line-height:1}
+    .dashboard-stat-card p{margin-top:5px;color:var(--muted);font-size:12.5px;font-weight:500}
+
+    .dashboard-section{display:grid;grid-template-columns:250px minmax(0,1fr);gap:18px;align-items:start}
+    .dashboard-sidebar{border:1px solid var(--line);border-radius:14px;background:#fff;top:88px;position:sticky;padding:22px}
+    .dashboard-profile{text-align:center;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:12px}
+    .dashboard-avatar{width:56px;height:56px;margin:0 auto 9px;background:var(--navy-soft);color:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center}
+    .dashboard-profile h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:5px;word-break:break-word}
+    .dashboard-profile p{font-size:12.5px;color:var(--muted);margin:2px 0}
+    .member-since{color:#9ca3af !important}
+    .dashboard-nav{display:flex;flex-direction:column;gap:4px}
+    .dashboard-nav-link{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;text-decoration:none;color:var(--ink);font-size:13.5px;font-weight:500}
+    .dashboard-nav-link:hover{background:var(--bg)}
+    .dashboard-nav-link.active{background:var(--navy);color:#fff}
+
+    .dashboard-main{min-width:0;padding:22px;border:1px solid var(--line);border-radius:14px;background:#fff}
+    .dashboard-main h1{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:5px}
+    .dashboard-subtitle{color:var(--muted);font-size:13px;margin-bottom:20px;font-weight:400}
+
+    .dashboard-listings{display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:16px}
+    .dashboard-listing-card{overflow:hidden;padding:0;border:1px solid var(--line);border-radius:13px;background:#fff}
+    .dashboard-listing-image{height:170px;margin:0;border-radius:0;background:#f1f5f9}
+    .dashboard-listing-image img{width:100%;height:100%;object-fit:cover;display:block}
+    .dashboard-listing-info{padding:14px 16px 8px}
+    .dashboard-listing-info h4{font-size:14.5px;font-weight:600;color:var(--ink);margin:0 0 6px}
+    .dashboard-listing-info .price{color:var(--navy);font-weight:700;margin-bottom:8px;font-size:14px}
+
+    .empty-hint{margin-top:20px;color:var(--muted);font-size:13px}
+    .empty-hint a{color:var(--navy);font-weight:600;text-decoration:none}
+
+    .footer{background:var(--navy);color:#dbe4f5;text-align:center;padding:30px 20px}
+    .footer h2{color:#fff;margin-bottom:8px;font-size:16px;font-weight:600}
+    .footer p{margin-bottom:6px;font-size:12px}
+
     @media(max-width:1000px){.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-section{grid-template-columns:1fr}.dashboard-sidebar{position:static}.dashboard-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:760px){.dashboard-navbar{align-items:stretch}.dashboard-nav-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.dashboard-welcome{flex-direction:column;align-items:flex-start;padding:28px 22px}.dashboard-welcome-btn{width:100%;text-align:center}.dashboard-shell{width:94%;margin-top:20px}.dashboard-main{padding:18px}}
-    @media(max-width:520px){.dashboard-stats{grid-template-columns:1fr 1fr;gap:10px}.dashboard-stat-card{align-items:flex-start;flex-direction:column;padding:15px}.dashboard-nav{grid-template-columns:1fr}.dashboard-listings{grid-template-columns:1fr}}
-
+    @media(max-width:760px){.dashboard-navbar{flex-wrap:wrap;gap:8px}.dashboard-nav-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.dashboard-welcome{flex-direction:column;align-items:flex-start;padding:22px}.dashboard-welcome-btn{width:100%;justify-content:center}.dashboard-shell{width:92%;margin-top:18px}.dashboard-main{padding:16px}}
+    @media(max-width:520px){.dashboard-stats{grid-template-columns:1fr 1fr;gap:9px}.dashboard-stat-card{align-items:flex-start;flex-direction:column;padding:13px}.dashboard-nav{grid-template-columns:1fr}.dashboard-listings{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -440,7 +182,7 @@
   <div class="logo">
     <a href="index.html" class="logo-link">
       <img src="icons/icon-512.png" alt="LoyaltyMarket">
-      <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+      <span class="logo-text">LoyaltyMarket</span>
     </a>
   </div>
   <div class="dashboard-nav-actions">
@@ -456,24 +198,41 @@
 <section class="dashboard-shell">
   <div class="dashboard-welcome">
     <div>
-      <p class="dashboard-kicker">SELLER CENTER</p>
-      <h1>Welcome To Your Dashboard</h1>
+      <p class="dashboard-kicker">Seller Center</p>
+      <h1>Welcome to your dashboard</h1>
       <p>Manage your listings, sales, messages, and business profile in one place.</p>
     </div>
-    <a href="sell.html" class="dashboard-welcome-btn">＋ Post New Listing</a>
+    <a href="sell.html" class="dashboard-welcome-btn">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      Post New Listing
+    </a>
   </div>
 
   <div class="dashboard-stats">
-    <article class="dashboard-stat-card"><span class="dashboard-stat-icon">📦</span><div><strong id="totalListingsStat">0</strong><p>Total Listings</p></div></article>
-    <article class="dashboard-stat-card"><span class="dashboard-stat-icon">✅</span><div><strong id="activeListingsStat">0</strong><p>Active Listings</p></div></article>
-    <article class="dashboard-stat-card"><span class="dashboard-stat-icon">💰</span><div><strong id="soldListingsStat">0</strong><p>Sold Listings</p></div></article>
-    <article class="dashboard-stat-card"><span class="dashboard-stat-icon">🗄️</span><div><strong id="archivedListingsStat">0</strong><p>Archived</p></div></article>
+    <article class="dashboard-stat-card">
+      <span class="dashboard-stat-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="M3 8l9 5 9-5"/></svg></span>
+      <div><strong id="totalListingsStat">0</strong><p>Total Listings</p></div>
+    </article>
+    <article class="dashboard-stat-card">
+      <span class="dashboard-stat-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <div><strong id="activeListingsStat">0</strong><p>Active Listings</p></div>
+    </article>
+    <article class="dashboard-stat-card">
+      <span class="dashboard-stat-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+      <div><strong id="soldListingsStat">0</strong><p>Sold Listings</p></div>
+    </article>
+    <article class="dashboard-stat-card">
+      <span class="dashboard-stat-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="4" rx="1"/><path d="M5 10v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8M10 14h4"/></svg></span>
+      <div><strong id="archivedListingsStat">0</strong><p>Archived</p></div>
+    </article>
   </div>
 
   <div class="dashboard-section">
   <aside class="dashboard-sidebar">
     <div class="dashboard-profile">
-      <div class="dashboard-avatar">👤</div>
+      <div class="dashboard-avatar">
+        <svg class="icon" viewBox="0 0 24 24" style="width:24px;height:24px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+      </div>
       <h3 id="userName">Loading...</h3>
       <p id="verifiedBadge"></p>
       <p class="dashboard-business-name" id="businessNameLine" style="display:none;"></p>
@@ -482,12 +241,30 @@
     </div>
 
     <nav class="dashboard-nav">
-      <a href="dashboard.html" class="dashboard-nav-link active">📋 My Listings</a>
-      <a href="wishlist.html" class="dashboard-nav-link">❤️ My Wishlist</a>
-      <a href="sell.html" class="dashboard-nav-link">➕ Post New Listing</a>
-      <a href="my-sales.html" class="dashboard-nav-link">💰 My Sales</a>
-      <a id="businessStorefrontLink" href="business-profile.html" class="dashboard-nav-link" style="display:none;">🏢 My Business Storefront</a>
-      <a href="account-setting.html" class="dashboard-nav-link">⚙️ Account Settings</a>
+      <a href="dashboard.html" class="dashboard-nav-link active">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>
+        My Listings
+      </a>
+      <a href="wishlist.html" class="dashboard-nav-link">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 5c-2.5 4.5-9.5 9-9.5 9Z"/></svg>
+        My Wishlist
+      </a>
+      <a href="sell.html" class="dashboard-nav-link">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Post New Listing
+      </a>
+      <a href="my-sales.html" class="dashboard-nav-link">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h4.5a1.5 1.5 0 0 1 0 3H9m0-3v3m0-3h4.5a1.5 1.5 0 0 0 0-3H9"/></svg>
+        My Sales
+      </a>
+      <a id="businessStorefrontLink" href="business-profile.html" class="dashboard-nav-link" style="display:none;">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12M9 21v-6h6v6"/></svg>
+        My Business Storefront
+      </a>
+      <a href="account-setting.html" class="dashboard-nav-link">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+        Account Settings
+      </a>
     </nav>
   </aside>
 
@@ -517,7 +294,7 @@
   <div class="boost-modal">
 
     <div id="boostPlanScreen">
-      <h3>🚀 Boost This Listing</h3>
+      <h3>Boost This Listing</h3>
       <p class="boost-modal-subtitle">Boosted listings appear higher in search results and get a featured badge.</p>
 
       <form id="boostForm">
@@ -552,7 +329,7 @@
     </div>
 
     <div class="boost-payment-screen" id="boostPaymentScreen">
-      <h3>💳 Complete Your Payment</h3>
+      <h3>Complete Your Payment</h3>
       <p class="boost-modal-subtitle">Your boost request has been submitted. Send payment to activate it.</p>
 
       <div class="boost-payment-amount">
@@ -561,12 +338,12 @@
       </div>
 
       <div class="boost-payment-method">
-        <div class="boost-payment-method-name">📱 MTN Mobile Money</div>
+        <div class="boost-payment-method-name">MTN Mobile Money</div>
         <div class="boost-payment-method-number">+231 88 147 1694</div>
       </div>
 
       <div class="boost-payment-method">
-        <div class="boost-payment-method-name">🟠 Orange Money</div>
+        <div class="boost-payment-method-name">Orange Money</div>
         <div class="boost-payment-method-number">+231 77 002 5588</div>
       </div>
 
@@ -574,7 +351,7 @@
         <strong>How to activate your boost:</strong>
         <ol>
           <li>Send the exact amount above to either number</li>
-          <li>Your listing will show "⏳ Boost Pending" until payment is confirmed</li>
+          <li>Your listing will show "Boost Pending" until payment is confirmed</li>
           <li>Once confirmed by an admin, your listing becomes boosted within 24 hours</li>
         </ol>
       </div>
@@ -586,7 +363,7 @@
 </div>
 
 <footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
+  <h2>LoyaltyMarket</h2>
   <p>Buy And Sell Products Across Liberia.</p>
   <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
 </footer>
@@ -672,25 +449,25 @@ async function loadUserProfile() {
       userName.textContent = userData.name || currentUser.email;
 
       if (userData.verified === true) {
-        verifiedBadge.textContent = "⭐ Verified Seller";
+        verifiedBadge.textContent = "Verified Seller";
       } else {
         verifiedBadge.textContent = "Unverified Seller";
       }
 
       if (isBusiness) {
-        businessNameLine.textContent = "🏢 " + (userData.businessName || "Business Account");
+        businessNameLine.textContent = userData.businessName || "Business Account";
         businessNameLine.style.display = "block";
 
-        businessStorefrontLink.style.display = "block";
+        businessStorefrontLink.style.display = "flex";
 
         if (userData.businessVerified === true) {
-          businessBadge.textContent = "✔ Verified Business";
+          businessBadge.textContent = "Verified Business";
           businessBadge.className = "business-badge verified";
         } else {
           businessBadge.textContent = "Business Verification Pending";
           businessBadge.className = "business-badge";
         }
-        businessBadge.style.display = "inline-block";
+        businessBadge.style.display = "inline-flex";
       } else {
         businessNameLine.style.display = "none";
         businessBadge.style.display = "none";
@@ -824,19 +601,19 @@ function renderListings() {
 
     let boostBadgeHtml = "";
     if (isBoostPending) {
-      boostBadgeHtml = '<span class="boost-pending-badge">⏳ Boost Pending</span>';
+      boostBadgeHtml = '<span class="boost-pending-badge">Boost Pending</span>';
     } else if (isBoostActive) {
       const expiryText = formatBoostExpiry(product);
-      boostBadgeHtml = `<span class="boost-pending-badge" title="Expires ${safeText(expiryText)}">🚀 Boosted</span>`;
+      boostBadgeHtml = `<span class="boost-pending-badge" title="Expires ${safeText(expiryText)}">Boosted</span>`;
     } else if (isBoostExpired) {
       boostBadgeHtml = '<span class="boost-expired-badge">Boost Expired</span>';
     }
 
-    let boostButtonLabel = isBoostExpired ? "🚀 Boost Again" : "🚀 Boost";
+    let boostButtonLabel = isBoostExpired ? "Boost Again" : "Boost";
     if (isBoostPending) {
-      boostButtonLabel = "⏳ Boost Pending";
+      boostButtonLabel = "Boost Pending";
     } else if (isBoostActive) {
-      boostButtonLabel = "🚀 Boost Active";
+      boostButtonLabel = "Boost Active";
     }
 
     const card = document.createElement("div");
@@ -850,23 +627,23 @@ function renderListings() {
       </div>
 
       <div class="dashboard-listing-info">
-        <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">⭐ Featured</span>' : ""}${boostBadgeHtml}</h4>
+        <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">Featured</span>' : ""}${boostBadgeHtml}</h4>
         <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
         <span class="status-badge ${statusClass}">${statusLabel}</span>
       </div>
 
       <div class="dashboard-listing-actions">
         <button class="edit-btn" data-id="${productId}">Edit</button>
-        <button class="duplicate-btn" data-id="${productId}">📋 Duplicate</button>
+        <button class="duplicate-btn" data-id="${productId}">Duplicate</button>
         <button class="delete-btn" data-id="${productId}">Delete</button>
         <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}">
-          ${isFeatured ? "★ Unfeature" : "☆ Feature this listing"}
+          ${isFeatured ? "Unfeature" : "Feature this listing"}
         </button>
         <button class="sold-btn ${isSold ? "is-sold" : ""}" data-id="${productId}" data-sold="${isSold}">
-          ${isSold ? "↺ Mark as Active" : "✔ Mark as Sold"}
+          ${isSold ? "Mark as Active" : "Mark as Sold"}
         </button>
         <button class="archive-btn ${isArchived ? "is-archived" : ""}" data-id="${productId}" data-archived="${isArchived}">
-          ${isArchived ? "↺ Unarchive" : "🗄 Archive"}
+          ${isArchived ? "Unarchive" : "Archive"}
         </button>
         <button class="boost-btn ${isBoostPending || isBoostActive ? "is-pending" : ""}" data-id="${productId}" ${isBoostPending || isBoostActive ? "disabled" : ""}>
           ${boostButtonLabel}
@@ -1038,7 +815,7 @@ function attachListingButtonListeners() {
         if (!originalSnap.exists()) {
           alert("Could not find the original listing.");
           button.disabled = false;
-          button.textContent = "📋 Duplicate";
+          button.textContent = "Duplicate";
           return;
         }
 
@@ -1070,7 +847,7 @@ function attachListingButtonListeners() {
       } catch (error) {
         alert("Could not duplicate listing: " + error.message);
         button.disabled = false;
-        button.textContent = "📋 Duplicate";
+        button.textContent = "Duplicate";
       }
     });
   });

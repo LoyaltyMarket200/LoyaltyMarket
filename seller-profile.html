@@ -7,274 +7,171 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0f2d67">
 
   <style>
+    /* ==================================================
+       SELLER PROFILE — RESTRAINED 2-COLOR SYSTEM
+       Navy (#0f2d67) = structure/brand/hero. Orange
+       (#f97316) = the ONLY accent, reserved for the
+       Message Seller button (the one primary conversion
+       action). Everything else is navy, neutral, or
+       outline-on-navy. Bold reserved for name/stats/price.
+       ================================================== */
+    :root{
+      --navy:#0f2d67;
+      --navy-soft:#eef1f7;
+      --orange:#f97316;
+      --orange-soft:#fff4ec;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --bg:#f7f8fa;
+    }
     *{box-sizing:border-box}
-    body{margin:0;background:#f5f7fb;color:#0f172a}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+
+    .icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
     .seller-navbar{
-      min-height:62px;height:auto;padding:10px max(20px,4vw);
-      background:#fff;border-bottom:1px solid #e5e7eb;
-      box-shadow:0 4px 20px rgba(15,23,42,.06);
-      justify-content:space-between;position:sticky;top:0;z-index:40
+      min-height:60px;height:auto;padding:10px max(20px,4vw);
+      background:#fff;border-bottom:1px solid var(--line);
+      justify-content:space-between;position:sticky;top:0;z-index:40;
+      display:flex;align-items:center;
     }
-
-    .seller-navbar .logo-link img{width:36px;height:36px;object-fit:contain}
-    .seller-navbar .logo-text{color:#0f2d67;font-size:16px}
+    .seller-navbar .logo-link{display:flex;align-items:center;gap:8px;text-decoration:none}
+    .seller-navbar .logo-link img{width:34px;height:34px;object-fit:contain}
+    .seller-navbar .logo-text{color:var(--navy);font-size:15.5px;font-weight:700}
 
     .seller-nav-actions{display:flex;align-items:center;gap:8px}
     .seller-nav-link,.seller-post-link{
-      min-height:38px;display:inline-flex;align-items:center;justify-content:center;
+      min-height:36px;display:inline-flex;align-items:center;justify-content:center;
       padding:8px 13px;border-radius:9px;text-decoration:none;
-      font-size:13px;font-weight:800;border:1px solid transparent
+      font-size:13px;font-weight:500;border:1px solid var(--line)
     }
-    .seller-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}
-    .seller-nav-link:hover{color:#1e3a8a;border-color:#bfdbfe;background:#eff6ff}
-    .seller-post-link{color:#fff;background:#f97316}
+    .seller-nav-link{color:var(--ink);background:#fff}
+    .seller-nav-link:hover{color:var(--navy);border-color:var(--navy)}
+    .seller-post-link{color:#fff;background:var(--orange);border-color:var(--orange)}
+    .seller-post-link:hover{background:#ea680a}
 
-    .seller-page{width:min(1180px,94%);margin:24px auto 50px}
+    .seller-page{width:min(1180px,94%);margin:22px auto 50px}
 
     .redirect-notice{
-      display:none;margin-bottom:18px;padding:14px 16px;border:1px solid #bfdbfe;
-      border-radius:14px;background:#eff6ff;color:#1e40af;font-size:14px
+      display:none;margin-bottom:16px;padding:13px 16px;border:1px solid var(--line);
+      border-radius:12px;background:var(--navy-soft);color:var(--navy);font-size:13.5px
     }
-    .redirect-notice a{color:#1d4ed8;font-weight:900;text-decoration:none}
+    .redirect-notice a{color:var(--navy);font-weight:600;text-decoration:none}
 
     .seller-hero{
       display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;
       padding:24px;border-radius:16px;color:#fff;
-      background:
-        radial-gradient(circle at top right,rgba(255,255,255,.15),transparent 32%),
-        linear-gradient(135deg,#0f2d67,#1d4ed8);
-      box-shadow:0 14px 34px rgba(30,58,138,.18)
+      background:var(--navy);
     }
 
-    .seller-profile-main{display:flex;gap:16px;align-items:center}
+    .seller-profile-main{display:flex;gap:15px;align-items:center}
     .seller-avatar{
-      width:72px;height:72px;display:grid;place-items:center;border-radius:50%;
-      background:rgba(255,255,255,.14);border:3px solid rgba(255,255,255,.22);
-      font-size:32px;flex-shrink:0
+      width:64px;height:64px;display:grid;place-items:center;border-radius:50%;
+      background:rgba(255,255,255,.14);flex-shrink:0
     }
-    .seller-hero h1{margin:0 0 6px;font-size:clamp(22px,3.5vw,34px);line-height:1.1}
+    .seller-hero h1{margin:0 0 6px;font-size:clamp(20px,3vw,28px);font-weight:700;line-height:1.15}
     .seller-badge-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
     .seller-badge{
-      display:inline-flex;padding:5px 10px;border-radius:999px;
-      background:#fbbf24;color:#78350f;font-size:11px;font-weight:900
+      display:inline-flex;padding:4px 10px;border-radius:999px;
+      background:var(--orange-soft);color:#9a3412;font-size:11px;font-weight:600
     }
     .seller-years-badge{
-      display:inline-flex;padding:5px 10px;border-radius:999px;
-      background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);
-      color:#fff;font-size:11px;font-weight:800
+      display:inline-flex;padding:4px 10px;border-radius:999px;
+      background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);
+      color:#fff;font-size:11px;font-weight:500
     }
-    .seller-member{margin:6px 0 0;color:#dbeafe;font-size:12px}
-    .seller-last-active{margin:4px 0 0;color:#dbeafe;font-size:12px;display:flex;align-items:center;gap:6px}
-    .seller-last-active .online-dot{
-      width:8px;height:8px;border-radius:50%;background:#4ade80;
-      display:inline-block;flex-shrink:0
-    }
-    .seller-location-line{margin:4px 0 0;color:#dbeafe;font-size:12px;display:none}
+    .seller-member{margin:6px 0 0;color:#cdd8ef;font-size:12px;font-weight:400}
+    .seller-last-active{margin:4px 0 0;color:#cdd8ef;font-size:12px;display:flex;align-items:center;gap:6px;font-weight:400}
+    .seller-last-active .online-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;flex-shrink:0}
+    .seller-location-line{margin:4px 0 0;color:#cdd8ef;font-size:12px;display:none;align-items:center;gap:5px;font-weight:400}
 
-    .seller-action-buttons{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      min-width:170px;
+    .seller-action-buttons{display:flex;flex-direction:column;gap:8px;min-width:170px}
+
+    .call-seller-btn,.message-seller-btn,.follow-seller-btn,.invite-seller-btn{
+      min-height:38px;display:none;align-items:center;justify-content:center;gap:7px;
+      padding:9px 16px;border-radius:9px;font-weight:600;font-size:13px;white-space:nowrap
     }
 
-    .call-seller-btn,
-    .message-seller-btn,
-    .follow-seller-btn,
-    .invite-seller-btn{
-      min-height:40px;
-      align-items:center;
-      justify-content:center;
-      padding:9px 16px;
-      border-radius:10px;
-      font-weight:900;
-      font-size:13px;
-      white-space:nowrap;
-    }
+    .call-seller-btn{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);text-decoration:none}
+    .message-seller-btn{color:#fff;background:var(--orange);text-decoration:none}
+    .message-seller-btn:hover{background:#ea680a}
 
-    .call-seller-btn{
-      display:none;
-      color:#fff;
-      background:#1d4ed8;
-      text-decoration:none;
+    .follow-seller-btn,.invite-seller-btn{
+      width:100%;border:1px solid rgba(255,255,255,.35);cursor:pointer;font:inherit;font-weight:600
     }
+    .follow-seller-btn{color:#fff;background:rgba(255,255,255,.12)}
+    .invite-seller-btn{display:flex;color:#fff;background:rgba(255,255,255,.12)}
+    .follow-seller-btn:hover,.call-seller-btn:hover,.invite-seller-btn:hover{background:rgba(255,255,255,.2)}
+    .follow-seller-btn.following{background:#fff;color:var(--navy);border-color:#fff}
+    .follow-seller-btn:disabled{opacity:.6;cursor:not-allowed}
 
-    .message-seller-btn{
-      display:none;
-      color:#fff;
-      background:#f97316;
-      text-decoration:none;
-    }
+    .seller-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+    .seller-stat{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:center}
+    .seller-stat-value{font-size:19px;font-weight:700;color:var(--navy)}
+    .seller-stat-label{margin-top:4px;color:var(--muted);font-size:11px;font-weight:500}
 
-    .follow-seller-btn,
-    .invite-seller-btn{
-      width:100%;
-      border:2px solid #fff;
-      cursor:pointer;
-      font:inherit;
-      font-weight:900;
-      transition:.2s ease;
-    }
-
-    .follow-seller-btn{
-      display:none;
-      color:#1e3a8a;
-      background:#fff;
-    }
-
-    .invite-seller-btn{
-      display:block;
-      color:#fff;
-      background:rgba(255,255,255,.12);
-      border-color:rgba(255,255,255,.55);
-    }
-
-    .follow-seller-btn:hover{
-      transform:translateY(-2px);
-      background:#eff6ff;
-    }
-
-    .invite-seller-btn:hover,
-    .call-seller-btn:hover,
-    .message-seller-btn:hover{
-      transform:translateY(-2px);
-      filter:brightness(1.06);
-    }
-
-    .follow-seller-btn.following{
-      border-color:#bfdbfe;
-      background:#eff6ff;
-      color:#1d4ed8;
-    }
-
-    .follow-seller-btn:disabled{
-      opacity:.65;
-      cursor:not-allowed;
-      transform:none;
-    }
-
-    .seller-stats{
-      display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;
-      margin-top:16px
-    }
-    .seller-stat{
-      padding:14px;border:1px solid #e2e8f0;border-radius:12px;
-      background:#fff;box-shadow:0 8px 18px rgba(15,23,42,.05);text-align:center
-    }
-    .seller-stat-value{font-size:20px;font-weight:900;color:#1e3a8a}
-    .seller-stat-label{margin-top:4px;color:#64748b;font-size:11px;font-weight:700}
-
-    /* TABS */
-    .seller-tabs{
-      display:flex;gap:6px;margin-top:20px;padding:5px;border-radius:12px;
-      background:#eef2f6;width:fit-content;max-width:100%;overflow-x:auto
-    }
-    .seller-tab{
-      flex-shrink:0;border:0;background:transparent;padding:10px 16px;border-radius:9px;
-      font-size:13px;font-weight:800;color:#475569;cursor:pointer;white-space:nowrap
-    }
-    .seller-tab.active{background:#fff;color:#1e3a8a;box-shadow:0 4px 12px rgba(15,23,42,.08)}
+    .seller-tabs{display:flex;gap:5px;margin-top:20px;padding:5px;border-radius:11px;background:#eef2f6;width:fit-content;max-width:100%;overflow-x:auto}
+    .seller-tab{flex-shrink:0;border:0;background:transparent;padding:9px 15px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+    .seller-tab.active{background:#fff;color:var(--navy)}
     .seller-tab-panel{display:none}
     .seller-tab-panel.active{display:block}
 
-    .seller-section{
-      margin-top:14px;padding:18px;border:1px solid #e2e8f0;border-radius:16px;
-      background:#fff;box-shadow:0 10px 26px rgba(15,23,42,.06)
-    }
-    .seller-section-header{
-      display:flex;align-items:center;justify-content:space-between;gap:16px;
-      margin-bottom:14px;padding-bottom:13px;border-bottom:1px solid #e2e8f0
-    }
-    .seller-section-header h2{margin:0 0 4px;font-size:20px}
-    .seller-section-header p{margin:0;color:#64748b;font-size:12px}
+    .seller-section{margin-top:14px;padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff}
+    .seller-section-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;padding-bottom:13px;border-bottom:1px solid var(--line)}
+    .seller-section-header h2{margin:0 0 4px;font-size:17px;font-weight:600}
+    .seller-section-header p{margin:0;color:var(--muted);font-size:12px;font-weight:400}
 
-    /* CATEGORY BREAKDOWN */
-    .category-breakdown-row{
-      display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px
-    }
-    .category-tile{
-      flex-shrink:0;min-width:96px;padding:10px 12px;border:1.5px solid #e2e8f0;
-      border-radius:12px;background:#f8fafc;cursor:pointer;text-align:left;font:inherit
-    }
-    .category-tile.active{border-color:#1d4ed8;background:#eff6ff}
-    .category-tile-count{display:block;font-size:13px;font-weight:900;color:#1e3a8a}
-    .category-tile-label{display:block;font-size:11px;color:#64748b;margin-top:2px;line-height:1.3}
+    .category-breakdown-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px}
+    .category-tile{flex-shrink:0;min-width:92px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;font:inherit}
+    .category-tile.active{border-color:var(--navy);background:var(--navy-soft)}
+    .category-tile-count{display:block;font-size:12.5px;font-weight:700;color:var(--navy)}
+    .category-tile-label{display:block;font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3;font-weight:400}
 
-    .seller-listings-grid{
-      display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px
-    }
+    .seller-listings-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px}
     .seller-product-link{color:inherit;text-decoration:none}
-    .seller-product-card{
-      overflow:hidden;border:1px solid #e2e8f0;border-radius:13px;background:#fff;
-      transition:.2s ease
-    }
-    .seller-product-card:hover{transform:translateY(-3px);border-color:#bfdbfe;box-shadow:0 12px 26px rgba(37,99,235,.10)}
-    .seller-product-image{height:150px;background:#f1f5f9}
+    .seller-product-card{overflow:hidden;border:1px solid var(--line);border-radius:12px;background:#fff}
+    .seller-product-card:hover{border-color:var(--navy)}
+    .seller-product-image{height:145px;background:#f1f5f9}
     .seller-product-image img{width:100%;height:100%;object-fit:cover;display:block}
-    .seller-product-body{padding:11px}
-    .seller-product-body h3{margin:0 0 6px;font-size:13px;line-height:1.35}
-    .seller-price{margin:0 0 5px;color:#ea580c;font-size:13px;font-weight:900}
-    .seller-location{margin:0;color:#64748b;font-size:11px}
-    .listing-featured-badge{
-      display:inline-flex;margin-left:5px;padding:2px 6px;border-radius:999px;
-      background:#fef3c7;color:#92400e;font-size:9px;font-weight:900
-    }
+    .seller-product-body{padding:10px}
+    .seller-product-body h3{margin:0 0 6px;font-size:12.5px;font-weight:500;line-height:1.35}
+    .seller-price{margin:0 0 5px;color:var(--orange);font-size:13px;font-weight:700}
+    .seller-location{margin:0;color:var(--muted);font-size:11px;display:flex;align-items:center;gap:4px;font-weight:400}
+    .listing-featured-badge{display:inline-flex;margin-left:5px;padding:2px 6px;border-radius:999px;background:var(--orange-soft);color:#9a3412;font-size:9px;font-weight:600}
 
-    .review-grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px}
-    .review-form-card{
-      display:none;padding:18px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc
-    }
-    .review-form-card h3{margin:0 0 12px;font-size:16px}
-    .review-form-card label{display:block;margin:11px 0 6px;font-size:12px;font-weight:800}
-    .review-form-card select,.review-form-card textarea{
-      width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:9px;
-      background:#fff;font:inherit;font-size:13px
-    }
-    .review-form-card select:focus,.review-form-card textarea:focus{
-      outline:none;border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.10)
-    }
-    .review-submit{
-      width:100%;min-height:42px;margin-top:13px;border:none;border-radius:9px;
-      color:#fff;background:#2563eb;font-weight:900;cursor:pointer;font-size:13px
-    }
+    .review-grid{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px}
+    .review-form-card{display:none;padding:17px;border:1px solid var(--line);border-radius:13px;background:var(--bg)}
+    .review-form-card h3{margin:0 0 12px;font-size:15px;font-weight:600}
+    .review-form-card label{display:block;margin:11px 0 6px;font-size:12px;font-weight:500}
+    .review-form-card select,.review-form-card textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;font:inherit;font-size:13px}
+    .review-form-card select:focus,.review-form-card textarea:focus{outline:none;border-color:var(--navy)}
+    .review-submit{width:100%;min-height:42px;margin-top:13px;border:none;border-radius:9px;color:#fff;background:var(--navy);font-weight:600;cursor:pointer;font-size:13px}
 
-    .review-message{
-      display:none;padding:13px;border-radius:11px;background:#f8fafc;color:#64748b;
-      border:1px solid #e2e8f0;font-size:13px
-    }
-    .review-message a{color:#2563eb;font-weight:800}
+    .review-message{display:none;padding:13px;border-radius:11px;background:var(--bg);color:var(--muted);border:1px solid var(--line);font-size:13px;font-weight:400}
+    .review-message a{color:var(--navy);font-weight:600}
 
     .reviews-list{display:grid;gap:10px}
-    .review-card{
-      padding:14px;border:1px solid #e2e8f0;border-radius:12px;background:#fff
-    }
+    .review-card{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff}
     .review-header{display:flex;justify-content:space-between;gap:12px;align-items:center}
-    .review-header strong{font-size:13px}
-    .review-stars{font-size:12px}
-    .review-comment{margin:9px 0 6px;color:#334155;line-height:1.55;font-size:13px}
-    .review-date{margin:0;color:#94a3b8;font-size:11px}
+    .review-header strong{font-size:13px;font-weight:600}
+    .review-stars{color:var(--orange);display:flex;gap:1px}
+    .review-comment{margin:9px 0 6px;color:var(--ink);line-height:1.55;font-size:13px;font-weight:400}
+    .review-date{margin:0;color:#9ca3af;font-size:11px}
 
-    /* ABOUT TAB */
-    .about-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .about-row{
-      padding:14px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc
-    }
-    .about-row-label{display:block;font-size:11px;color:#64748b;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
-    .about-row-value{display:block;font-size:14px;color:#0f172a;font-weight:700}
+    .about-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+    .about-row{padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--bg)}
+    .about-row-label{display:block;font-size:10.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+    .about-row-value{display:block;font-size:13.5px;color:var(--ink);font-weight:600}
 
-    .seller-empty{
-      grid-column:1/-1;padding:40px 20px;text-align:center;border:1px dashed #cbd5e1;
-      border-radius:14px;background:#f8fafc;color:#64748b;font-size:13px
-    }
+    .seller-empty{grid-column:1/-1;padding:36px 20px;text-align:center;border:1px dashed var(--line);border-radius:13px;background:var(--bg);color:var(--muted);font-size:13px}
 
-    .seller-footer{
-      display:flex;justify-content:space-between;align-items:center;gap:20px;
-      text-align:left;padding:24px max(20px,5vw)
-    }
+    .seller-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:22px max(20px,5vw);background:var(--navy);color:#cdd8ef}
+    .seller-footer h2{margin:0 0 3px;color:#fff;font-size:15px;font-weight:600}
+    .seller-footer p{margin:0;font-size:12px}
 
     @media(max-width:1000px){
       .seller-listings-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -282,9 +179,8 @@
       .seller-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
       .about-grid{grid-template-columns:1fr}
     }
-
     @media(max-width:760px){
-      .seller-navbar{align-items:stretch}
+      .seller-navbar{flex-wrap:wrap;gap:8px}
       .seller-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
       .seller-hero{grid-template-columns:1fr}
       .seller-action-buttons{width:100%;min-width:0}
@@ -292,19 +188,16 @@
       .seller-listings-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
       .seller-footer{flex-direction:column;text-align:center}
     }
-
     @media(max-width:560px){
       .seller-nav-actions{grid-template-columns:1fr}
-      .seller-page{width:94%;margin-top:16px}
+      .seller-page{width:94%;margin-top:14px}
       .seller-hero,.seller-section{padding:16px 14px;border-radius:14px}
       .seller-profile-main{align-items:flex-start;flex-direction:column}
       .seller-section-header{align-items:flex-start;flex-direction:column}
       .seller-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-      .seller-listings-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-      .seller-product-image{height:120px}
+      .seller-listings-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+      .seller-product-image{height:115px}
       .seller-product-body{padding:8px}
-      .seller-product-body h3{font-size:12px}
-      .seller-price{font-size:12px}
     }
   </style>
 </head>
@@ -314,7 +207,7 @@
     <div class="logo">
       <a href="index.html" class="logo-link">
         <img src="icons/icon-512.png" alt="LoyaltyMarket">
-        <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+        <span class="logo-text">LoyaltyMarket</span>
       </a>
     </div>
 
@@ -333,7 +226,9 @@
 
     <section class="seller-hero">
       <div class="seller-profile-main">
-        <div class="seller-avatar">👤</div>
+        <div class="seller-avatar">
+          <svg class="icon" viewBox="0 0 24 24" style="width:28px;height:28px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </div>
         <div>
           <h1 id="sellerName">Loading...</h1>
           <div class="seller-badge-row">
@@ -347,10 +242,22 @@
       </div>
 
       <div class="seller-action-buttons">
-        <a href="#" id="callSellerBtn" class="call-seller-btn">📞 Call Seller</a>
-        <a href="#" id="messageSellerBtn" class="message-seller-btn">💬 Message Seller</a>
-        <button type="button" id="followSellerBtn" class="follow-seller-btn">➕ Follow Seller</button>
-        <button type="button" id="inviteSellerBtn" class="invite-seller-btn">📤 Invite Friends</button>
+        <a href="#" id="callSellerBtn" class="call-seller-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2Z"/></svg>
+          Call Seller
+        </a>
+        <a href="#" id="messageSellerBtn" class="message-seller-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.4a8.4 8.4 0 1 1 16.1-4.1Z"/></svg>
+          Message Seller
+        </a>
+        <button type="button" id="followSellerBtn" class="follow-seller-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Follow Seller
+        </button>
+        <button type="button" id="inviteSellerBtn" class="invite-seller-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>
+          Invite Friends
+        </button>
       </div>
     </section>
 
@@ -421,11 +328,11 @@
                 <label for="reviewRating">Rating</label>
                 <select id="reviewRating" required>
                   <option value="">Select rating</option>
-                  <option value="5">⭐⭐⭐⭐⭐ (5) Excellent</option>
-                  <option value="4">⭐⭐⭐⭐ (4) Good</option>
-                  <option value="3">⭐⭐⭐ (3) Average</option>
-                  <option value="2">⭐⭐ (2) Poor</option>
-                  <option value="1">⭐ (1) Terrible</option>
+                  <option value="5">5 — Excellent</option>
+                  <option value="4">4 — Good</option>
+                  <option value="3">3 — Average</option>
+                  <option value="2">2 — Poor</option>
+                  <option value="1">1 — Terrible</option>
                 </select>
 
                 <label for="reviewComment">Comment</label>
@@ -502,7 +409,7 @@
 
   <footer class="footer seller-footer">
     <div>
-      <h2>🇱🇷 LoyaltyMarket</h2>
+      <h2>LoyaltyMarket</h2>
       <p>You Get Market, We Get Buyer.</p>
     </div>
     <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
@@ -574,6 +481,10 @@
     let sellerListingsCache = [];
     let activeCategoryFilter = null;
 
+    const LOCATION_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.9em;height:.9em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+    const CHECK_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M20 6 9 17l-5-5"/></svg>';
+    const PLUS_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M12 5v14M5 12h14"/></svg>';
+
     function safeText(value) {
       return String(value || "")
         .replaceAll("&", "&amp;")
@@ -584,7 +495,8 @@
     }
 
     function starsFor(rating) {
-      return "⭐".repeat(rating);
+      const filled = '<svg class="icon" viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:.85em;height:.85em;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2Z"/></svg>';
+      return filled.repeat(rating);
     }
 
     function getFollowDocumentId(followerId) {
@@ -660,9 +572,9 @@
       }
 
       if (!currentUser) {
-        followSellerBtn.style.display = "block";
+        followSellerBtn.style.display = "flex";
         followSellerBtn.classList.remove("following");
-        followSellerBtn.textContent = "🔐 Login To Follow";
+        followSellerBtn.innerHTML = "Login To Follow";
         return;
       }
 
@@ -671,14 +583,14 @@
         return;
       }
 
-      followSellerBtn.style.display = "block";
+      followSellerBtn.style.display = "flex";
 
       if (alreadyFollowing) {
         followSellerBtn.classList.add("following");
-        followSellerBtn.textContent = "✓ Following";
+        followSellerBtn.innerHTML = CHECK_SVG + " Following";
       } else {
         followSellerBtn.classList.remove("following");
-        followSellerBtn.textContent = "➕ Follow Seller";
+        followSellerBtn.innerHTML = PLUS_SVG + " Follow Seller";
       }
     }
 
@@ -751,11 +663,11 @@
           const isVerified = userData.verified === true;
 
           if (isVerified) {
-            sellerVerified.textContent = "⭐ Verified Seller";
+            sellerVerified.textContent = "Verified Seller";
             aboutStatus.textContent = "Verified Seller";
           } else {
             sellerVerified.textContent = "Unverified Seller";
-            sellerVerified.style.background = "#e2e8f0";
+            sellerVerified.style.background = "#f1f5f9";
             sellerVerified.style.color = "#475569";
             aboutStatus.textContent = "Unverified Seller";
           }
@@ -803,8 +715,8 @@
           ].filter(Boolean).join(", ");
 
           if (locationText) {
-            sellerLocationLine.textContent = "📍 " + locationText;
-            sellerLocationLine.style.display = "block";
+            sellerLocationLine.innerHTML = LOCATION_SVG + " " + safeText(locationText);
+            sellerLocationLine.style.display = "flex";
             aboutLocation.textContent = locationText;
           } else {
             aboutLocation.textContent = "Not provided";
@@ -923,7 +835,7 @@
               <h3>
                 ${safeText(product.title || "Untitled Product")}
                 ${isFeatured
-                  ? '<span class="listing-featured-badge">⭐ Featured</span>'
+                  ? '<span class="listing-featured-badge">Featured</span>'
                   : ""}
               </h3>
 
@@ -934,7 +846,7 @@
               </p>
 
               <p class="seller-location">
-                📍 ${safeText(product.city || "")},
+                ${LOCATION_SVG} ${safeText(product.city || "")},
                 ${safeText(product.county || "Liberia")}
               </p>
             </div>
@@ -1052,9 +964,9 @@
         const avg = (totalStars / reviewCount).toFixed(1);
 
         averageRating.textContent =
-          `(${avg} ⭐ from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
+          `(${avg} avg from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
 
-        statAverageRating.textContent = avg + " ⭐";
+        statAverageRating.textContent = avg;
         statReviewCount.textContent = reviewCount;
 
       } catch (error) {
