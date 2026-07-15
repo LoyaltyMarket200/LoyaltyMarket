@@ -1,4 +1,4 @@
-const CACHE_NAME = "loyaltymarket-cache-v2";
+const CACHE_NAME = "loyaltymarket-cache-v3";
 
 // Pages and static assets to pre-cache on install.
 // NOTE: bump CACHE_NAME (v2 -> v3 etc.) any time you add/remove entries here
