@@ -4,284 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product Details - LoyaltyMarket</title>
+
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="stylesheet" href="marketplace.css">
+
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#1e3a8a">
-  <style>
-    .report-btn {
-      background: #fff;
-      border: 1px solid #dc2626;
-      color: #dc2626;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-    .report-btn:hover {
-      background: #dc2626;
-      color: #fff;
-    }
-    .heart-btn.is-saved {
-      background: #dc2626;
-      color: #fff;
-      border-color: #dc2626;
-    }
-    .buy-now-btn {
-      background: #059669;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .buy-now-btn:hover {
-      background: #047857;
-    }
-    .buy-now-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-overlay.modal-open {
-      display: flex;
-    }
-    .modal-box {
-      background: #fff;
-      border-radius: 12px;
-      padding: 24px;
-      width: 90%;
-      max-width: 420px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    }
-    .modal-box h3 {
-      margin-top: 0;
-      margin-bottom: 16px;
-      color: #111;
-    }
-    .modal-box label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 6px;
-      margin-top: 14px;
-      font-size: 14px;
-      color: #333;
-    }
-    .modal-box select,
-    .modal-box textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 14px;
-      box-sizing: border-box;
-      font-family: inherit;
-    }
-    .modal-box textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .modal-cancel-btn {
-      flex: 1;
-      background: #f3f4f6;
-      color: #333;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .modal-submit-btn {
-      flex: 1;
-      background: #dc2626;
-      color: #fff;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .modal-submit-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .nav-messages-link {
-      position: relative;
-    }
-    .unread-badge {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background: #dc2626;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      min-width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-    }
-    .unread-badge.has-unread {
-      display: flex;
-    }
-    .unavailable-box {
-      max-width: 700px;
-      margin: 60px auto;
-      padding: 30px;
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      text-align: center;
-    }
-    .unavailable-box h2 {
-      margin-top: 0;
-      color: #111827;
-    }
-    .unavailable-box p {
-      color: #64748b;
-      line-height: 1.6;
-    }
-    .unavailable-box a {
-      color: #2563eb;
-      font-weight: 700;
-      text-decoration: none;
-    }
 
-    /* ===== PROFESSIONAL PRODUCT DETAILS REDESIGN ===== */
+  <meta name="theme-color" content="#1e3a8a">
+
+  <style>
+    /* ===== PRODUCT DETAIL PAGE ===== */
     body {
       background: #f5f7fb;
     }
 
-    .product-navbar {
-      min-height: 78px;
-      height: auto;
-      padding: 12px max(24px, 5vw);
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 40;
-    }
-
-    .product-navbar .logo-link img {
-      width: 48px;
-      height: 48px;
-      object-fit: contain;
-    }
-
-    .product-navbar .logo-text {
-      color: #0f2d67;
-      font-size: 21px;
-    }
-
-    .product-nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .product-nav-link,
-    .product-post-btn {
-      min-height: 42px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 16px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 800;
-      border: 1px solid transparent;
-    }
-
-    .product-nav-link {
-      color: #334155;
-      background: #f8fafc;
-      border-color: #e2e8f0;
-    }
-
-    .product-nav-link:hover {
-      color: #1e3a8a;
-      border-color: #bfdbfe;
-      background: #eff6ff;
-    }
-
-    .product-post-btn {
-      color: #fff;
-      background: #f97316;
-      box-shadow: 0 8px 18px rgba(249,115,22,.2);
-    }
-
-    .product-post-btn:hover {
-      background: #ea580c;
-    }
-
-    .product-hero-strip {
-      padding: 42px max(24px, 6vw);
-      color: #fff;
-      background:
-        radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 30%),
-        linear-gradient(135deg, #0f2d67, #1d4ed8);
-    }
-
-    .product-hero-strip > div {
-      width: min(1180px, 100%);
-      margin: 0 auto;
-    }
-
-    .product-kicker {
-      margin-bottom: 8px;
-      color: #fbbf24;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .16em;
-    }
-
-    .product-hero-strip h1 {
-      margin: 0 0 8px;
-      font-size: clamp(30px, 4vw, 44px);
-      line-height: 1.1;
-    }
-
-    .product-hero-strip p:last-child {
-      color: #dbeafe;
-      font-size: 16px;
-    }
-
-    .breadcrumb {
-      width: min(1280px, 94%);
-      margin: 22px auto 0;
-      padding: 12px 16px;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      background: #fff;
-    }
-
     .product-detail {
       width: min(1280px, 94%);
-      margin: 20px auto 70px;
+      margin: 20px auto 60px;
+      display: grid;
       grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr);
       gap: 28px;
     }
@@ -297,47 +39,70 @@
     .main-image {
       height: 560px;
       border-radius: 16px;
-      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .main-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .thumbnail-strip {
+      display: flex;
+      gap: 10px;
       margin-top: 14px;
       padding: 4px 2px;
+      overflow-x: auto;
     }
 
     .thumbnail {
       width: 86px;
       height: 70px;
       border-radius: 10px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      flex-shrink: 0;
+    }
+
+    .thumbnail-active {
+      border-color: var(--mp-blue, #1d4ed8);
     }
 
     .product-detail-right {
       padding: 28px;
       border-radius: 22px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
       box-shadow: 0 12px 30px rgba(15,23,42,.08);
       position: sticky;
-      top: 100px;
-    }
-
-    .product-detail-right .badge {
-      background: #dcfce7;
-      color: #166534;
-      border: 1px solid #bbf7d0;
+      top: 14px;
     }
 
     .product-detail-right h1 {
-      font-size: clamp(29px, 4vw, 42px);
-      margin-bottom: 12px;
+      font-size: clamp(24px, 3.4vw, 34px);
+      margin: 8px 0 4px;
+      color: #0f172a;
+    }
+
+    .posted-time-line {
+      margin: 0 0 12px;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .detail-price {
       color: #ea580c;
-      font-size: 29px;
+      font-size: 27px;
       font-weight: 900;
       padding: 12px 14px;
       border-radius: 12px;
       background: #fff7ed;
       border: 1px solid #fed7aa;
+      display: inline-block;
     }
 
     .detail-location,
@@ -345,13 +110,15 @@
       padding: 10px 0;
       margin: 0;
       border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+      font-size: 14px;
     }
 
     .detail-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin: 24px 0 12px;
+      margin: 22px 0 12px;
     }
 
     .buy-now-btn,
@@ -360,39 +127,76 @@
       min-height: 50px;
       border-radius: 11px;
       font-weight: 800;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
     }
 
     .buy-now-btn {
-      background: #16a34a;
       grid-column: span 2;
+      background: #1d4ed8;
+      color: #fff;
     }
 
     .buy-now-btn:hover {
-      background: #15803d;
+      background: #123b8d;
+    }
+
+    .buy-now-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .contact-btn {
-      background: #1d4ed8;
+      background: #f97316;
+      color: #fff;
+    }
+
+    .contact-btn:hover {
+      background: #ea580c;
     }
 
     .heart-btn {
       background: #fff;
+      border: 1.5px solid #e2e8f0;
+      color: #334155;
+    }
+
+    .heart-btn.is-saved {
+      background: #1d4ed8;
+      color: #fff;
+      border-color: #1d4ed8;
     }
 
     .report-btn {
       width: 100%;
-      margin-top: 0;
+      margin-top: 6px;
       min-height: 44px;
       border-radius: 10px;
       background: #fff;
+      border: 1px solid #dc2626;
+      color: #dc2626;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .report-btn:hover {
+      background: #dc2626;
+      color: #fff;
     }
 
     .seller-card {
       position: relative;
-      margin-top: 22px;
+      margin-top: 24px;
       padding: 24px 18px 18px;
       border-radius: 16px;
       background: #f8fafc;
+      border: 1px solid #e2e8f0;
     }
 
     .seller-card-header {
@@ -401,7 +205,7 @@
       left: 16px;
       padding: 4px 10px;
       border-radius: 999px;
-      background: #1e3a8a;
+      background: #0f2d67;
       color: #fff;
       font-size: 11px;
       font-weight: 900;
@@ -411,7 +215,43 @@
     .seller-avatar {
       width: 64px;
       height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
       background: linear-gradient(135deg, #dbeafe, #eff6ff);
+      margin-bottom: 10px;
+    }
+
+    .seller-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin: 2px 0 6px;
+    }
+
+    .seller-verified-pill {
+      display: inline-flex;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .seller-years-pill {
+      display: inline-flex;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      font-size: 10px;
+      font-weight: 800;
     }
 
     .buyer-safety-card {
@@ -442,32 +282,146 @@
 
     .product-description {
       padding-top: 20px;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 20px;
     }
 
     .product-description h3 {
-      font-size: 20px;
+      font-size: 18px;
+      color: #0f172a;
+      margin-bottom: 8px;
     }
 
+    .product-description p {
+      color: #475569;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .related-section {
+      width: min(1280px, 94%);
+      margin: 0 auto 60px;
+    }
+
+    .related-section h2 {
+      margin-bottom: 16px;
+      font-size: 20px;
+      color: #0f172a;
+    }
+
+    .unavailable-box {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .unavailable-box h2 {
+      margin-top: 0;
+      color: #111827;
+    }
+
+    .unavailable-box p {
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .unavailable-box a {
+      color: #1d4ed8;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* Report modal */
     .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15,23,42,0.5);
       backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.modal-open {
+      display: flex;
     }
 
     .modal-box {
+      background: #fff;
       border-radius: 18px;
+      padding: 24px;
+      width: 90%;
+      max-width: 420px;
       box-shadow: 0 20px 55px rgba(15,23,42,.24);
     }
 
-    .product-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      text-align: left;
-      padding: 34px max(24px, 6vw);
+    .modal-box h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: #111;
     }
 
-    .product-footer h2 {
+    .modal-box label {
+      display: block;
+      font-weight: 600;
       margin-bottom: 6px;
+      margin-top: 14px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .modal-box select,
+    .modal-box textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    .modal-box textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-cancel-btn {
+      flex: 1;
+      background: #f3f4f6;
+      color: #333;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .modal-submit-btn {
+      flex: 1;
+      background: #dc2626;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .modal-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     @media (max-width: 980px) {
@@ -480,25 +434,11 @@
       }
 
       .main-image {
-        height: 500px;
+        height: 460px;
       }
     }
 
     @media (max-width: 700px) {
-      .product-navbar {
-        align-items: stretch;
-      }
-
-      .product-nav-actions {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .product-hero-strip {
-        padding: 32px 20px;
-      }
-
       .product-detail-left,
       .product-detail-right {
         padding: 16px;
@@ -506,7 +446,7 @@
       }
 
       .main-image {
-        height: 340px;
+        height: 320px;
       }
 
       .detail-actions {
@@ -516,165 +456,442 @@
       .buy-now-btn {
         grid-column: span 1;
       }
-
-      .product-footer {
-        flex-direction: column;
-        text-align: center;
-      }
     }
 
     @media (max-width: 480px) {
-      .product-nav-actions {
-        grid-template-columns: 1fr;
-      }
-
       .main-image {
-        height: 280px;
-      }
-
-      .product-detail-right h1 {
-        font-size: 28px;
+        height: 260px;
       }
 
       .detail-price {
-        font-size: 23px;
+        font-size: 22px;
       }
     }
-
   </style>
 </head>
-<body>
 
-<header class="navbar product-navbar">
-  <div class="logo">
-    <a href="index.html" class="logo-link">
-      <img src="icons/icon-512.png" alt="LoyaltyMarket">
-      <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
-    </a>
-  </div>
+<body class="homepage">
+  <div class="top-strip">
+    <div class="site-shell top-strip-inner">
+      <p>🇱🇷 Liberia's trusted online marketplace</p>
 
-  <div class="product-nav-actions">
-    <a href="index.html" class="product-nav-link">Home</a>
-    <a href="messages.html" id="messagesBtn" class="product-nav-link nav-messages-link">
-      Messages
-      <span id="unreadBadge" class="unread-badge">0</span>
-    </a>
-    <a href="dashboard.html" class="product-nav-link">Dashboard</a>
-    <a href="sell.html" class="product-post-btn">Post An Ad</a>
-  </div>
-</header>
-
-<section class="product-hero-strip">
-  <div>
-    <p class="product-kicker">LOYALTYMARKET LISTING</p>
-    <h1>Find It. Check It. Make A Deal.</h1>
-    <p>Browse trusted listings from sellers and businesses across Liberia.</p>
-  </div>
-</section>
-
-<div class="breadcrumb">
-  <a href="index.html">Home</a> &gt;
-  <span id="breadcrumbCategory">Product</span> &gt;
-  <span id="breadcrumbTitle">Loading...</span>
-</div>
-
-<div id="unavailableBox" class="unavailable-box" style="display:none;">
-  <h2>This listing is not available</h2>
-  <p id="unavailableMessage">This listing may still be under review or is no longer available.</p>
-  <a href="index.html">Return to homepage</a>
-</div>
-
-<main class="product-detail" id="productDetailMain">
-
-  <section class="product-detail-left">
-    <div class="main-image">
-      <img id="productImage" src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop" alt="Product image">
+      <div class="top-strip-links">
+        <a href="safety.html">Safety Tips</a>
+        <a href="business-profile.html">Verified Businesses</a>
+        <a href="contact.html">Help &amp; Support</a>
+      </div>
     </div>
-    <div class="thumbnail-strip" id="thumbnailStrip"></div>
-  </section>
+  </div>
 
-  <section class="product-detail-right">
-    <span class="badge">Available</span>
-    <h1 id="productTitle">Loading product...</h1>
-    <p class="detail-price" id="productPrice">US$0 | L$0</p>
-    <p class="detail-location" id="productLocation">📍 Liberia</p>
-    <p class="detail-condition" id="productCondition">Condition: Not listed</p>
+  <header class="mp-header">
+    <div class="mp-header-top">
+      <a href="index.html" class="mp-logo" aria-label="LoyaltyMarket home">
+        <span class="mp-logo-word mp-logo-loyalty">Loyalty</span><span class="mp-logo-word mp-logo-market">Market</span>
+        <span class="mp-logo-sub">Liberia's No.1 Marketplace</span>
+      </a>
 
-    <div class="detail-actions">
-      <button id="buyNowBtn" class="buy-now-btn" type="button">🛒 Buy Now</button>
-      <a id="contactSellerBtn" class="contact-btn" href="#">Contact Seller</a>
-      <button id="saveBtn" class="heart-btn" type="button">♡ Save</button>
-    </div>
+      <div class="mp-header-actions">
+        <a href="login.html" id="loginBtn" class="mp-action-link">Sign In</a>
+        <a href="register.html" id="registerBtn" class="mp-action-link">Register</a>
 
-    <button id="reportBtn" class="report-btn" type="button">🚩 Report this listing</button>
+        <a
+          href="dashboard.html"
+          id="dashboardBtn"
+          class="mp-action-link"
+          style="display:none;"
+        >
+          Dashboard
+        </a>
 
-    <div class="seller-card">
-      <div class="seller-card-header">Seller Details</div>
-      <div class="seller-avatar">👤</div>
-      <div class="seller-info">
-        <h4>Seller Information</h4>
-        <p><a id="sellerNameLink" href="#" style="color:#2563eb; text-decoration:none; font-weight:600;">Loading...</a></p>
-        <p id="sellerEmail">Loading...</p>
-        <p id="sellerPhone">Phone not listed</p>
+        <a
+          href="messages.html"
+          id="messagesBtn"
+          class="mp-action-link mp-messages-link"
+          style="display:none;"
+        >
+          Messages
+          <span id="unreadBadge" class="unread-badge">0</span>
+        </a>
+
+        <a href="sell.html" id="navSellBtn" class="mp-post-ad">
+          Post An Ad
+        </a>
       </div>
     </div>
 
-    <div class="buyer-safety-card">
-      <span>🛡️</span>
-      <div>
-        <strong>Deal Safely</strong>
-        <p>Inspect the item before paying. Meet in a public place and avoid sending deposits to unknown sellers.</p>
+    <div class="mp-header-search">
+      <div class="mp-search-row">
+        <div class="mp-search-field mp-search-location">
+          <span aria-hidden="true">📍</span>
+
+          <select id="countyFilter" aria-label="Select county">
+            <option value="">All Liberia</option>
+            <option value="Montserrado">Montserrado</option>
+            <option value="Margibi">Margibi</option>
+            <option value="Grand Bassa">Grand Bassa</option>
+            <option value="Nimba">Nimba</option>
+            <option value="Bong">Bong</option>
+            <option value="Lofa">Lofa</option>
+            <option value="Grand Cape Mount">Grand Cape Mount</option>
+            <option value="Bomi">Bomi</option>
+            <option value="Gbarpolu">Gbarpolu</option>
+            <option value="Grand Gedeh">Grand Gedeh</option>
+            <option value="Grand Kru">Grand Kru</option>
+            <option value="Maryland">Maryland</option>
+            <option value="River Cess">River Cess</option>
+            <option value="River Gee">River Gee</option>
+            <option value="Sinoe">Sinoe</option>
+          </select>
+        </div>
+
+        <div class="mp-search-field mp-search-keyword">
+          <span aria-hidden="true">🔎</span>
+
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search products, cars, phones, services..."
+            autocomplete="off"
+          >
+        </div>
+
+        <div class="mp-search-field mp-search-category">
+          <select id="categoryFilter" aria-label="Select category">
+            <option value="">All Categories</option>
+            <option value="Vehicles">Vehicles</option>
+            <option value="Property">Property</option>
+            <option value="Phones">Phones &amp; Tablets</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Home & Appliances">Home &amp; Appliances</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Beauty & Personal Care">Beauty &amp; Personal Care</option>
+            <option value="Services">Services</option>
+            <option value="Repair & Construction">Repair &amp; Construction</option>
+            <option value="Commercial Equipment & Tools">Commercial Equipment &amp; Tools</option>
+            <option value="Sports & Leisure">Sports &amp; Leisure</option>
+            <option value="Babies & Kids">Babies &amp; Kids</option>
+            <option value="Agriculture & Farming">Agriculture &amp; Farming</option>
+            <option value="Animals & Pets">Animals &amp; Pets</option>
+            <option value="Jobs">Jobs</option>
+            <option value="Seeking Work - CVs">Seeking Work - CVs</option>
+          </select>
+        </div>
+
+        <button class="mp-search-btn" id="applyFiltersBtn" type="button">
+          Search
+        </button>
+      </div>
+
+      <div class="mp-search-advanced">
+        <select id="priceFilter" aria-label="Select price range">
+          <option value="">Any Price</option>
+          <option value="100">Under US$100</option>
+          <option value="500">Under US$500</option>
+          <option value="1000">Under US$1,000</option>
+          <option value="over1000">Over US$1,000</option>
+        </select>
+
+        <select id="conditionFilter" aria-label="Select condition">
+          <option value="">Any Condition</option>
+          <option value="Brand New">Brand New</option>
+          <option value="Used">Used</option>
+          <option value="Foreign Used">Foreign Used</option>
+        </select>
       </div>
     </div>
+  </header>
 
-    <div class="product-description">
-      <h3>Description</h3>
-      <p id="productDescription">Loading description...</p>
+  <nav class="mp-nav-strip" aria-label="Category navigation">
+    <div class="mp-nav-inner">
+      <a href="index.html#products" class="mp-nav-all">☰ All Categories</a>
+      <a href="category-vehicles.html" class="mp-nav-link">Vehicles</a>
+      <a href="category-property.html" class="mp-nav-link">Property</a>
+      <a href="category-phones.html" class="mp-nav-link">Phones &amp; Tablets</a>
+      <a href="category-electronics.html" class="mp-nav-link">Electronics</a>
+      <a href="category-fashion.html" class="mp-nav-link">Fashion</a>
+      <a href="category-jobs.html" class="mp-nav-link">Jobs</a>
+      <a href="index.html#products" class="mp-nav-link">Services</a>
+      <a href="index.html#products" class="mp-nav-link mp-nav-more">More</a>
     </div>
+  </nav>
+
+  <p class="cat-breadcrumb">
+    <a href="index.html">Home</a> &rsaquo;
+    <span id="breadcrumbCategory">Product</span> &rsaquo;
+    <span id="breadcrumbTitle">Loading...</span>
+  </p>
+
+  <div id="unavailableBox" class="unavailable-box" style="display:none;">
+    <h2>This listing is not available</h2>
+    <p id="unavailableMessage">This listing may still be under review or is no longer available.</p>
+    <a href="index.html">Return to homepage</a>
+  </div>
+
+  <main class="product-detail" id="productDetailMain">
+
+    <section class="product-detail-left">
+      <div class="main-image">
+        <img id="productImage" src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop" alt="Product image">
+      </div>
+      <div class="thumbnail-strip" id="thumbnailStrip"></div>
+    </section>
+
+    <section class="product-detail-right">
+      <span class="badge">Available</span>
+      <h1 id="productTitle">Loading product...</h1>
+      <p id="postedTimeLine" class="posted-time-line"></p>
+      <p class="detail-price" id="productPrice">US$0 | L$0</p>
+      <p class="detail-location" id="productLocation">📍 Liberia</p>
+      <p class="detail-condition" id="productCondition">Condition: Not listed</p>
+
+      <div class="detail-actions">
+        <button id="buyNowBtn" class="buy-now-btn" type="button">🛒 Buy Now</button>
+        <a id="contactSellerBtn" class="contact-btn" href="#">Contact Seller</a>
+        <button id="saveBtn" class="heart-btn" type="button">♡ Save</button>
+      </div>
+
+      <button id="reportBtn" class="report-btn" type="button">🚩 Report this listing</button>
+
+      <div class="seller-card">
+        <div class="seller-card-header">Seller Details</div>
+        <div class="seller-avatar">👤</div>
+        <div class="seller-info">
+          <h4>Seller Information</h4>
+          <p><a id="sellerNameLink" href="#" style="color:#1d4ed8; text-decoration:none; font-weight:700;">Loading...</a></p>
+          <div id="sellerBadgeRow" class="seller-badge-row"></div>
+          <p id="sellerEmail">Loading...</p>
+          <p id="sellerPhone">Phone not listed</p>
+        </div>
+      </div>
+
+      <div class="buyer-safety-card">
+        <span>🛡️</span>
+        <div>
+          <strong>Deal Safely</strong>
+          <p>Inspect the item before paying. Meet in a public place and avoid sending deposits to unknown sellers.</p>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <h3>Description</h3>
+        <p id="productDescription">Loading description...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="related-section" id="relatedSection" style="display:none;">
+    <h2>Similar Listings</h2>
+    <div class="product-grid" id="relatedGrid"></div>
   </section>
 
-</main>
-
-<div class="modal-overlay" id="reportModalOverlay">
-  <div class="modal-box">
-    <h3>Report this Listing</h3>
-    <label for="reportReason">Reason</label>
-    <select id="reportReason">
-      <option value="">Select a reason</option>
-      <option value="Scam">Scam</option>
-      <option value="Fake item">Fake item</option>
-      <option value="Wrong price">Wrong price</option>
-      <option value="Prohibited item">Prohibited item</option>
-      <option value="Other">Other</option>
-    </select>
-    <label for="reportDetails">Additional details (optional)</label>
-    <textarea id="reportDetails" placeholder="Tell us more about the issue..."></textarea>
-    <div class="modal-actions">
-      <button type="button" class="modal-cancel-btn" id="reportCancelBtn">Cancel</button>
-      <button type="button" class="modal-submit-btn" id="reportSubmitBtn">Submit Report</button>
+  <div class="modal-overlay" id="reportModalOverlay">
+    <div class="modal-box">
+      <h3>Report this Listing</h3>
+      <label for="reportReason">Reason</label>
+      <select id="reportReason">
+        <option value="">Select a reason</option>
+        <option value="Scam">Scam</option>
+        <option value="Fake item">Fake item</option>
+        <option value="Wrong price">Wrong price</option>
+        <option value="Prohibited item">Prohibited item</option>
+        <option value="Other">Other</option>
+      </select>
+      <label for="reportDetails">Additional details (optional)</label>
+      <textarea id="reportDetails" placeholder="Tell us more about the issue..."></textarea>
+      <div class="modal-actions">
+        <button type="button" class="modal-cancel-btn" id="reportCancelBtn">Cancel</button>
+        <button type="button" class="modal-submit-btn" id="reportSubmitBtn">Submit Report</button>
+      </div>
     </div>
   </div>
-</div>
 
-<footer class="footer product-footer">
-  <div>
-    <h2>🇱🇷 LoyaltyMarket</h2>
-    <p>You Get Market, We Get Buyer.</p>
-  </div>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
+  <!-- PROFESSIONAL LOYALTYMARKET FOOTER -->
+  <footer class="lm-footer" id="marketplaceFooter">
+    <button
+      type="button"
+      id="mobileFooterToggle"
+      class="lm-footer-toggle"
+      aria-expanded="false"
+      aria-controls="mobileFooterContent"
+    >
+      <span class="lm-footer-toggle-brand">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+
+        <span>
+          <span class="lm-footer-toggle-lr">LR</span>
+          <span data-marketplace-name>LoyaltyMarket</span>
+        </span>
+      </span>
+
+      <span class="lm-footer-toggle-label">Explore LoyaltyMarket</span>
+      <span class="lm-footer-arrow" aria-hidden="true">⌄</span>
+    </button>
+
+    <div id="mobileFooterContent" class="lm-footer-content">
+      <div class="lm-skyline-wrap" aria-label="Liberia-inspired skyline">
+        <div class="lm-skyline site-shell">
+          <div class="lm-building lm-building-one"></div>
+          <div class="lm-building lm-building-two"></div>
+          <div class="lm-capitol">
+            <span class="lm-capitol-dome"></span>
+            <span class="lm-capitol-roof"></span>
+            <span class="lm-capitol-body">
+              <i></i><i></i><i></i><i></i><i></i>
+            </span>
+          </div>
+          <div class="lm-building lm-building-three"></div>
+          <div class="lm-building lm-building-four"></div>
+          <div class="lm-building lm-building-five"></div>
+        </div>
+      </div>
+
+      <div class="lm-footer-main">
+        <div class="site-shell lm-footer-grid">
+          <section class="lm-footer-brand">
+            <p class="lm-footer-description">
+              Liberia's trusted marketplace for products, vehicles,
+              property, jobs and professional services.
+            </p>
+
+            <div class="lm-footer-support">
+              <p id="footerSupport"></p>
+
+              <a href="contact.html" class="lm-footer-help-button">
+                Contact Support
+              </a>
+            </div>
+
+            <div class="lm-footer-app">
+              <strong>LoyaltyMarket Mobile App</strong>
+              <span>Android and iPhone apps coming soon.</span>
+            </div>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Marketplace</h3>
+            <a href="index.html#products">Browse Listings</a>
+            <a href="sell.html">Post An Ad</a>
+            <a href="business-profile.html">Business Accounts</a>
+            <a href="category-jobs.html">Jobs</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Support</h3>
+            <a href="safety.html">Safety Tips</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="faq.html">Help Center</a>
+            <a href="report.html">Report A Problem</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Legal</h3>
+            <a href="terms.html">Terms &amp; Conditions</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="prohibited-items.html">Prohibited Items</a>
+            <a href="community-rules.html">Community Rules</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Follow Us</h3>
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">YouTube</a>
+            <a href="#">TikTok</a>
+          </section>
+        </div>
+
+        <div class="site-shell lm-county-section">
+          <div class="lm-county-heading">
+            <div>
+              <span class="lm-country-flag">🇱🇷</span>
+
+              <span>
+                <strong>Browse Across Liberia</strong>
+                <small>Serving buyers and sellers in all 15 counties</small>
+              </span>
+            </div>
+          </div>
+
+          <div class="lm-county-list">
+            <button type="button" data-footer-county="Bomi">Bomi</button>
+            <button type="button" data-footer-county="Bong">Bong</button>
+            <button type="button" data-footer-county="Gbarpolu">Gbarpolu</button>
+            <button type="button" data-footer-county="Grand Bassa">Grand Bassa</button>
+            <button type="button" data-footer-county="Grand Cape Mount">Grand Cape Mount</button>
+            <button type="button" data-footer-county="Grand Gedeh">Grand Gedeh</button>
+            <button type="button" data-footer-county="Grand Kru">Grand Kru</button>
+            <button type="button" data-footer-county="Lofa">Lofa</button>
+            <button type="button" data-footer-county="Margibi">Margibi</button>
+            <button type="button" data-footer-county="Maryland">Maryland</button>
+            <button type="button" data-footer-county="Montserrado">Montserrado</button>
+            <button type="button" data-footer-county="Nimba">Nimba</button>
+            <button type="button" data-footer-county="River Cess">River Cess</button>
+            <button type="button" data-footer-county="River Gee">River Gee</button>
+            <button type="button" data-footer-county="Sinoe">Sinoe</button>
+          </div>
+        </div>
+
+        <div class="lm-footer-bottom">
+          <div class="site-shell lm-footer-bottom-inner">
+            <p>
+              &copy; 2026
+              <span data-marketplace-name>LoyaltyMarket</span>.
+              All Rights Reserved.
+            </p>
+
+            <p>Made For Liberia 🇱🇷</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">⌂</span>
+      <span>Home</span>
+    </a>
+
+    <a href="wishlist.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">♡</span>
+      <span>Saved</span>
+    </a>
+
+    <a href="sell.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">⊞</span>
+      <span>Sell</span>
+    </a>
+
+    <a href="messages.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">▤</span>
+      <span>Messages</span>
+    </a>
+
+    <a href="dashboard.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">♙</span>
+      <span>Profile</span>
+    </a>
+  </nav>
 
 <script type="module">
 import { db, auth } from "./firebase.js";
 import {
-  doc, getDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, query, where, onSnapshot
+  doc, getDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, query, where, limit, getDocs, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const DEFAULT_SETTINGS = {
+  marketplaceName: "LoyaltyMarket",
+  supportEmail: "princeteah200@gmail.com",
+  supportPhone: "+231 88 147 1694"
+};
 
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
 const productTitle = document.getElementById("productTitle");
+const postedTimeLine = document.getElementById("postedTimeLine");
 const productPrice = document.getElementById("productPrice");
 const productLocation = document.getElementById("productLocation");
 const productCondition = document.getElementById("productCondition");
@@ -683,10 +900,13 @@ const productImage = document.getElementById("productImage");
 const thumbnailStrip = document.getElementById("thumbnailStrip");
 const sellerEmail = document.getElementById("sellerEmail");
 const sellerNameLink = document.getElementById("sellerNameLink");
+const sellerBadgeRow = document.getElementById("sellerBadgeRow");
 const sellerPhone = document.getElementById("sellerPhone");
 const contactSellerBtn = document.getElementById("contactSellerBtn");
 const breadcrumbCategory = document.getElementById("breadcrumbCategory");
 const breadcrumbTitle = document.getElementById("breadcrumbTitle");
+const relatedSection = document.getElementById("relatedSection");
+const relatedGrid = document.getElementById("relatedGrid");
 
 const reportBtn = document.getElementById("reportBtn");
 const reportModalOverlay = document.getElementById("reportModalOverlay");
@@ -700,6 +920,19 @@ const buyNowBtn = document.getElementById("buyNowBtn");
 const productDetailMain = document.getElementById("productDetailMain");
 const unavailableBox = document.getElementById("unavailableBox");
 const unavailableMessage = document.getElementById("unavailableMessage");
+const footerSupport = document.getElementById("footerSupport");
+
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const dashboardBtn = document.getElementById("dashboardBtn");
+const messagesBtn = document.getElementById("messagesBtn");
+
+const searchInput = document.getElementById("searchInput");
+const countyFilter = document.getElementById("countyFilter");
+const categoryFilter = document.getElementById("categoryFilter");
+const priceFilter = document.getElementById("priceFilter");
+const conditionFilter = document.getElementById("conditionFilter");
+const applyFiltersBtn = document.getElementById("applyFiltersBtn");
 
 // Listings with these statuses are hidden from public viewing.
 // A seller can still view their own pending/rejected listing (e.g.
@@ -716,6 +949,7 @@ let loadedPriceUsd = "0";
 let loadedPriceLrd = "0";
 let loadedImage = "";
 let isSaved = false;
+let unsubscribeUnreadMessages = null;
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop";
 
@@ -756,9 +990,55 @@ function resolveProductImages(product) {
   return collected;
 }
 
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function getRelativeTime(millis) {
+  if (!millis) return "";
+  const diffMs = Date.now() - millis;
+  const minutes = Math.floor(diffMs / 60000);
+  const hours = Math.floor(diffMs / 3600000);
+  const days = Math.floor(diffMs / 86400000);
+
+  if (minutes < 1) return "Posted just now";
+  if (minutes < 60) return `Posted ${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+  if (hours < 24) return `Posted ${hours} hour${hours === 1 ? "" : "s"} ago`;
+  if (days < 30) return `Posted ${days} day${days === 1 ? "" : "s"} ago`;
+
+  return "Posted " + new Date(millis).toLocaleDateString();
+}
+
+async function loadMarketplaceSettings() {
+  let settings = { ...DEFAULT_SETTINGS };
+
+  try {
+    const snapshot = await getDoc(doc(db, "settings", "marketplace"));
+    if (snapshot.exists()) {
+      settings = { ...settings, ...snapshot.data() };
+    }
+  } catch (error) {
+    console.error("Could not load marketplace settings:", error);
+  }
+
+  const support = [settings.supportEmail, settings.supportPhone].filter(Boolean);
+
+  if (footerSupport) {
+    footerSupport.textContent = support.length ? `Support: ${support.join(" | ")}` : "";
+  }
+}
+
 function listenForUnreadMessages(userId) {
+  unsubscribeUnreadMessages?.();
+
   const unreadQuery = query(collection(db, "messages"), where("receiverId", "==", userId), where("read", "==", false));
-  onSnapshot(unreadQuery, (snapshot) => {
+
+  unsubscribeUnreadMessages = onSnapshot(unreadQuery, (snapshot) => {
     const count = snapshot.size;
     if (count > 0) {
       unreadBadge.textContent = count > 9 ? "9+" : String(count);
@@ -881,15 +1161,6 @@ async function buyNow() {
   }
 }
 
-function safeText(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
 function renderThumbnails(images, title) {
   thumbnailStrip.innerHTML = "";
 
@@ -912,6 +1183,100 @@ function renderThumbnails(images, title) {
 
     thumbnailStrip.appendChild(thumb);
   });
+}
+
+async function loadSellerBadges(sellerId) {
+  sellerBadgeRow.innerHTML = "";
+
+  if (!sellerId) return;
+
+  try {
+    const userSnapshot = await getDoc(doc(db, "users", sellerId));
+    if (!userSnapshot.exists()) return;
+
+    const userData = userSnapshot.data();
+    let html = "";
+
+    if (userData.verified === true) {
+      html += '<span class="seller-verified-pill">⭐ Verified Seller</span>';
+    }
+
+    if (userData.createdAt && userData.createdAt.seconds) {
+      const joinYear = new Date(userData.createdAt.seconds * 1000).getFullYear();
+      const yearsOn = new Date().getFullYear() - joinYear;
+
+      if (yearsOn >= 1) {
+        html += `<span class="seller-years-pill">${yearsOn}+ yr${yearsOn === 1 ? "" : "s"} on LoyaltyMarket</span>`;
+      } else {
+        html += '<span class="seller-years-pill">New Seller</span>';
+      }
+    }
+
+    sellerBadgeRow.innerHTML = html;
+  } catch (error) {
+    console.error("Could not load seller badges:", error.message);
+  }
+}
+
+async function loadRelatedListings(category, excludeId) {
+  if (!category) {
+    relatedSection.style.display = "none";
+    return;
+  }
+
+  try {
+    const relatedQuery = query(
+      collection(db, "products"),
+      where("category", "==", category),
+      limit(9)
+    );
+
+    const snapshot = await getDocs(relatedQuery);
+
+    const items = snapshot.docs
+      .filter((docSnap) => docSnap.id !== excludeId)
+      .filter((docSnap) => !HIDDEN_STATUSES.includes(docSnap.data().status) && docSnap.data().status !== "sold")
+      .slice(0, 8);
+
+    if (items.length === 0) {
+      relatedSection.style.display = "none";
+      return;
+    }
+
+    relatedGrid.innerHTML = "";
+
+    items.forEach((docSnap) => {
+      const product = docSnap.data();
+      const images = resolveProductImages(product);
+      const featured = product.featured === true;
+
+      const link = document.createElement("a");
+      link.href = "product-detail.html?id=" + encodeURIComponent(docSnap.id);
+      link.style.textDecoration = "none";
+      link.style.color = "inherit";
+
+      link.innerHTML = `
+        <div class="product-card">
+          <span class="badge ${featured ? "badge-featured" : ""}">${featured ? "⭐ Featured" : "New"}</span>
+          <div class="product-image">
+            <img src="${safeText(images[0])}" alt="${safeText(product.title || "Product")}" loading="lazy">
+          </div>
+          <h3>${safeText(product.title || "Untitled Product")}</h3>
+          <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
+          <p class="location">📍 ${safeText(product.city || "")}${product.county ? ", " + safeText(product.county) : ""}</p>
+          <p class="condition">${safeText(product.condition || "Used")}</p>
+        </div>
+      `;
+
+      relatedGrid.appendChild(link);
+    });
+
+    relatedSection.style.display = "block";
+
+  } catch (error) {
+    console.error("Could not load related listings:", error.message);
+    relatedSection.style.display = "none";
+  }
 }
 
 function showUnavailable(message) {
@@ -968,6 +1333,13 @@ async function loadProduct() {
     loadedImage = images[0];
 
     productTitle.textContent = title;
+
+    if (product.createdAt && product.createdAt.seconds) {
+      postedTimeLine.textContent = getRelativeTime(product.createdAt.seconds * 1000);
+    } else {
+      postedTimeLine.textContent = "";
+    }
+
     productPrice.textContent = `US$${priceUsd} | L$${priceLrd}`;
     productLocation.textContent = `📍 ${city}, ${county}`;
     productCondition.textContent = `Condition: ${condition}`;
@@ -982,6 +1354,8 @@ async function loadProduct() {
     sellerNameLink.href = sellerId ? "seller-profile.html?id=" + sellerId : "#";
     sellerPhone.textContent = phone ? `📞 ${phone}` : "Phone not listed";
 
+    loadSellerBadges(sellerId);
+
     breadcrumbCategory.textContent = category;
     breadcrumbTitle.textContent = title;
     document.title = `${title} - LoyaltyMarket`;
@@ -989,6 +1363,8 @@ async function loadProduct() {
     contactSellerBtn.href = "chat.html?product=" + encodeURIComponent(productId) + "&seller=" + encodeURIComponent(sellerId);
 
     if (currentUser) checkIfSaved();
+
+    loadRelatedListings(category, productId);
 
     try {
       const stored = localStorage.getItem("loyaltymarket_recently_viewed");
@@ -1081,13 +1457,48 @@ reportModalOverlay.addEventListener("click", (event) => {
   if (event.target === reportModalOverlay) closeReportModal();
 });
 
+// Header search bar: this page shows one product, so "Search" takes
+// the visitor back to the homepage listings grid to browse/filter
+// from there rather than trying to filter a single-product page.
+function goToHomepageSearch() {
+  window.location.href = "index.html#products";
+}
+
+applyFiltersBtn?.addEventListener("click", goToHomepageSearch);
+
+searchInput?.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    goToHomepageSearch();
+  }
+});
+
+document.querySelectorAll("[data-footer-county]").forEach((button) => {
+  button.addEventListener("click", goToHomepageSearch);
+});
+
 // Wait for Firebase Auth to resolve (even if the visitor is logged
 // out) before loading the product, so the owner/admin visibility
 // check above has the correct currentUser to compare against.
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
+
   if (user) {
+    loginBtn.style.display = "none";
+    registerBtn.style.display = "none";
+    dashboardBtn.style.display = "inline-block";
+    messagesBtn.style.display = "inline-block";
+
     listenForUnreadMessages(user.uid);
+  } else {
+    loginBtn.style.display = "inline-block";
+    registerBtn.style.display = "inline-block";
+    dashboardBtn.style.display = "none";
+    messagesBtn.style.display = "none";
+
+    unreadBadge.classList.remove("has-unread");
+    unsubscribeUnreadMessages?.();
+    unsubscribeUnreadMessages = null;
   }
 
   if (!authReady) {
@@ -1100,6 +1511,21 @@ onAuthStateChanged(auth, (user) => {
     if (currentUser) checkIfSaved();
   }
 });
+
+loadMarketplaceSettings();
+</script>
+
+<script>
+  const mobileFooterToggle = document.getElementById("mobileFooterToggle");
+  const mobileFooterContent = document.getElementById("mobileFooterContent");
+
+  if (mobileFooterToggle && mobileFooterContent) {
+    mobileFooterToggle.addEventListener("click", () => {
+      const isOpen = mobileFooterContent.classList.toggle("footer-open");
+      mobileFooterToggle.classList.toggle("footer-toggle-open", isOpen);
+      mobileFooterToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+  }
 </script>
 
 <script>

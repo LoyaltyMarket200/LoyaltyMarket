@@ -77,9 +77,9 @@
     }
 
     .success-box {
-      border: 1px solid #bbf7d0;
-      background: #f0fdf4;
-      color: #166534;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
     }
 
     .admin-section-tabs {
@@ -155,7 +155,7 @@
     }
 
     .save-settings-btn {
-      background: #059669;
+      background: #f97316;
       min-width: 190px;
     }
 
@@ -294,7 +294,7 @@
       text-transform: capitalize;
     }
 
-    .badge-verified { background: #dcfce7; color: #166534; }
+    .badge-verified { background: #eff6ff; color: #1d4ed8; }
     .badge-unverified { background: #e2e8f0; color: #475569; }
     .badge-suspended { background: #fee2e2; color: #b91c1c; }
     .badge-business { background: #dbeafe; color: #1e40af; }
@@ -303,7 +303,7 @@
     .status-pending { background: #fef3c7; color: #92400e; }
     .status-reviewed { background: #dbeafe; color: #1e40af; }
     .status-dismissed { background: #e2e8f0; color: #475569; }
-    .status-active { background: #dcfce7; color: #166534; }
+    .status-active { background: #dbeafe; color: #1e40af; }
     .status-expired { background: #e2e8f0; color: #475569; }
     .status-rejected { background: #fee2e2; color: #b91c1c; }
     .status-pending_review { background: #fef3c7; color: #92400e; }
@@ -350,7 +350,7 @@
 
     .btn-unsuspend,
     .btn-confirm-boost,
-    .btn-approve-review { background: #059669; color: white; }
+    .btn-approve-review { background: #1d4ed8; color: white; }
 
     .boost-payment-info {
       margin-top: 13px;
@@ -481,7 +481,7 @@
       background: #2563eb;
     }
 
-    .bar-fill.color-green { background: #059669; }
+    .bar-fill.color-sky { background: #0ea5e9; }
     .bar-fill.color-amber { background: #d97706; }
     .bar-fill.color-red { background: #dc2626; }
     .bar-fill.color-purple { background: #7c3aed; }
@@ -916,7 +916,7 @@
     }
 
     .save-settings-btn {
-      background: linear-gradient(135deg, #047857, #059669);
+      background: linear-gradient(135deg, #f97316, #ea580c);
     }
 
     .admin-footer {
@@ -1575,7 +1575,7 @@
       });
 
       const categoryEntries = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
-      const categoryColors = ["", "color-green", "color-amber", "color-purple", "color-pink", "color-red"];
+      const categoryColors = ["", "color-sky", "color-amber", "color-purple", "color-pink", "color-red"];
       const maxCategoryCount = categoryEntries.length
         ? Math.max(...categoryEntries.map((entry) => entry[1]))
         : 0;
@@ -1612,7 +1612,7 @@
       const statusColorMap = {
         pending: "color-amber",
         confirmed: "",
-        completed: "color-green",
+        completed: "color-sky",
         cancelled: "color-red"
       };
 

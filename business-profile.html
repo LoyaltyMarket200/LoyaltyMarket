@@ -4,36 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Business Profile - LoyaltyMarket</title>
+
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="stylesheet" href="marketplace.css">
+
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+
   <meta name="theme-color" content="#1e3a8a">
 
   <style>
     *{box-sizing:border-box}
     body{margin:0;background:#f5f7fb;color:#0f172a}
 
-    .business-navbar{
-      min-height:78px;height:auto;padding:12px max(24px,5vw);
-      background:#fff;border-bottom:1px solid #e5e7eb;
-      box-shadow:0 4px 20px rgba(15,23,42,.06);
-      justify-content:space-between;position:sticky;top:0;z-index:40
-    }
-
-    .business-navbar .logo-link img{width:48px;height:48px;object-fit:contain}
-    .business-navbar .logo-text{color:#0f2d67;font-size:21px}
-
-    .business-nav-actions{display:flex;align-items:center;gap:10px}
-    .business-nav-link,.business-post-link{
-      min-height:42px;display:inline-flex;align-items:center;justify-content:center;
-      padding:10px 16px;border-radius:10px;text-decoration:none;
-      font-size:14px;font-weight:800;border:1px solid transparent
-    }
-    .business-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}
-    .business-nav-link:hover{color:#1e3a8a;border-color:#bfdbfe;background:#eff6ff}
-    .business-post-link{color:#fff;background:#f97316}
-
-    .business-page{width:min(1180px,94%);margin:32px auto 70px}
+    .business-page{width:min(1180px,94%);margin:32px auto 60px}
 
     .not-business-box{
       display:none;max-width:720px;margin:60px auto;padding:34px;
@@ -44,7 +29,7 @@
     .not-business-box p{margin:0 0 18px;color:#64748b;line-height:1.6}
     .not-business-box a{
       display:inline-flex;padding:11px 18px;border-radius:10px;color:#fff;
-      background:#2563eb;text-decoration:none;font-weight:900
+      background:#1d4ed8;text-decoration:none;font-weight:900
     }
 
     .business-hero{
@@ -72,7 +57,7 @@
       font-size:12px;font-weight:900
     }
     .business-verified{background:#fef3c7;color:#92400e}
-    .business-verified.verified{background:#dcfce7;color:#166534}
+    .business-verified.verified{background:#eff6ff;color:#1d4ed8}
     .business-category{display:none;background:#dbeafe;color:#1e40af}
 
     .business-member{margin:9px 0 0;color:#dbeafe;font-size:13px}
@@ -141,18 +126,18 @@
       background:#fff;font:inherit
     }
     .review-form-card select:focus,.review-form-card textarea:focus{
-      outline:none;border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.10)
+      outline:none;border-color:#1d4ed8;box-shadow:0 0 0 4px rgba(29,78,216,.10)
     }
     .review-submit{
       width:100%;min-height:46px;margin-top:15px;border:none;border-radius:10px;
-      color:#fff;background:#2563eb;font-weight:900;cursor:pointer
+      color:#fff;background:#1d4ed8;font-weight:900;cursor:pointer
     }
 
     .review-message{
       display:none;padding:15px;border-radius:12px;background:#f8fafc;
       color:#64748b;border:1px solid #e2e8f0;font-size:14px
     }
-    .review-message a{color:#2563eb;font-weight:800}
+    .review-message a{color:#1d4ed8;font-weight:800}
 
     .reviews-list{display:grid;gap:12px}
     .review-card{
@@ -168,28 +153,19 @@
       border-radius:16px;background:#f8fafc;color:#64748b
     }
 
-    .business-footer{
-      display:flex;justify-content:space-between;align-items:center;gap:20px;
-      text-align:left;padding:30px max(24px,6vw)
-    }
-
     @media(max-width:1000px){
       .business-listings-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
       .review-grid{grid-template-columns:1fr}
     }
 
     @media(max-width:760px){
-      .business-navbar{align-items:stretch}
-      .business-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
       .business-hero{grid-template-columns:1fr}
       .message-business-btn{justify-self:start}
       .business-stats{grid-template-columns:1fr}
       .business-listings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .business-footer{flex-direction:column;text-align:center}
     }
 
     @media(max-width:560px){
-      .business-nav-actions{grid-template-columns:1fr}
       .business-page{width:94%;margin-top:20px}
       .business-hero,.business-section{padding:20px 16px;border-radius:18px}
       .business-main{align-items:flex-start;flex-direction:column}
@@ -200,21 +176,73 @@
   </style>
 </head>
 
-<body>
-  <header class="navbar business-navbar">
-    <div class="logo">
-      <a href="index.html" class="logo-link">
-        <img src="icons/icon-512.png" alt="LoyaltyMarket">
-        <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
-      </a>
-    </div>
+<body class="homepage">
+  <div class="top-strip">
+    <div class="site-shell top-strip-inner">
+      <p>🇱🇷 Liberia's trusted online marketplace</p>
 
-    <div class="business-nav-actions">
-      <a href="index.html" class="business-nav-link">Home</a>
-      <a href="messages.html" class="business-nav-link">Messages</a>
-      <a href="sell.html" class="business-post-link">Post An Ad</a>
+      <div class="top-strip-links">
+        <a href="safety.html">Safety Tips</a>
+        <a href="business-profile.html">Verified Businesses</a>
+        <a href="contact.html">Help &amp; Support</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="mp-header">
+    <div class="mp-header-top">
+      <a href="index.html" class="mp-logo" aria-label="LoyaltyMarket home">
+        <span class="mp-logo-word mp-logo-loyalty">Loyalty</span><span class="mp-logo-word mp-logo-market">Market</span>
+        <span class="mp-logo-sub">Liberia's No.1 Marketplace</span>
+      </a>
+
+      <div class="mp-header-actions">
+        <a href="login.html" id="loginBtn" class="mp-action-link">Sign In</a>
+        <a href="register.html" id="registerBtn" class="mp-action-link">Register</a>
+
+        <a
+          href="dashboard.html"
+          id="dashboardBtn"
+          class="mp-action-link"
+          style="display:none;"
+        >
+          Dashboard
+        </a>
+
+        <a
+          href="messages.html"
+          id="messagesBtn"
+          class="mp-action-link mp-messages-link"
+          style="display:none;"
+        >
+          Messages
+          <span id="unreadBadge" class="unread-badge">0</span>
+        </a>
+
+        <a href="sell.html" id="navSellBtn" class="mp-post-ad">
+          Post An Ad
+        </a>
+      </div>
     </div>
   </header>
+
+  <nav class="mp-nav-strip" aria-label="Category navigation">
+    <div class="mp-nav-inner">
+      <a href="index.html#products" class="mp-nav-all">☰ All Categories</a>
+      <a href="category-vehicles.html" class="mp-nav-link">Vehicles</a>
+      <a href="category-property.html" class="mp-nav-link">Property</a>
+      <a href="category-phones.html" class="mp-nav-link">Phones &amp; Tablets</a>
+      <a href="category-electronics.html" class="mp-nav-link">Electronics</a>
+      <a href="category-fashion.html" class="mp-nav-link">Fashion</a>
+      <a href="category-jobs.html" class="mp-nav-link">Jobs</a>
+      <a href="index.html#products" class="mp-nav-link">Services</a>
+      <a href="index.html#products" class="mp-nav-link mp-nav-more">More</a>
+    </div>
+  </nav>
+
+  <p class="cat-breadcrumb">
+    <a href="index.html">Home</a> &rsaquo; <span>Business Profile</span>
+  </p>
 
   <main class="business-page">
     <div id="notBusinessBox" class="not-business-box">
@@ -326,13 +354,173 @@
     </section>
   </main>
 
-  <footer class="footer business-footer">
-    <div>
-      <h2>🇱🇷 LoyaltyMarket</h2>
-      <p>You Get Market, We Get Buyer.</p>
+  <!-- PROFESSIONAL LOYALTYMARKET FOOTER -->
+  <footer class="lm-footer" id="marketplaceFooter">
+    <button
+      type="button"
+      id="mobileFooterToggle"
+      class="lm-footer-toggle"
+      aria-expanded="false"
+      aria-controls="mobileFooterContent"
+    >
+      <span class="lm-footer-toggle-brand">
+        <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+
+        <span>
+          <span class="lm-footer-toggle-lr">LR</span>
+          <span data-marketplace-name>LoyaltyMarket</span>
+        </span>
+      </span>
+
+      <span class="lm-footer-toggle-label">Explore LoyaltyMarket</span>
+      <span class="lm-footer-arrow" aria-hidden="true">⌄</span>
+    </button>
+
+    <div id="mobileFooterContent" class="lm-footer-content">
+      <div class="lm-skyline-wrap" aria-label="Liberia-inspired skyline">
+        <div class="lm-skyline site-shell">
+          <div class="lm-building lm-building-one"></div>
+          <div class="lm-building lm-building-two"></div>
+          <div class="lm-capitol">
+            <span class="lm-capitol-dome"></span>
+            <span class="lm-capitol-roof"></span>
+            <span class="lm-capitol-body">
+              <i></i><i></i><i></i><i></i><i></i>
+            </span>
+          </div>
+          <div class="lm-building lm-building-three"></div>
+          <div class="lm-building lm-building-four"></div>
+          <div class="lm-building lm-building-five"></div>
+        </div>
+      </div>
+
+      <div class="lm-footer-main">
+        <div class="site-shell lm-footer-grid">
+          <section class="lm-footer-brand">
+            <p class="lm-footer-description">
+              Liberia's trusted marketplace for products, vehicles,
+              property, jobs and professional services.
+            </p>
+
+            <div class="lm-footer-support">
+              <p id="footerSupport"></p>
+
+              <a href="contact.html" class="lm-footer-help-button">
+                Contact Support
+              </a>
+            </div>
+
+            <div class="lm-footer-app">
+              <strong>LoyaltyMarket Mobile App</strong>
+              <span>Android and iPhone apps coming soon.</span>
+            </div>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Marketplace</h3>
+            <a href="index.html#products">Browse Listings</a>
+            <a href="sell.html">Post An Ad</a>
+            <a href="business-profile.html">Business Accounts</a>
+            <a href="category-jobs.html">Jobs</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Support</h3>
+            <a href="safety.html">Safety Tips</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="faq.html">Help Center</a>
+            <a href="report.html">Report A Problem</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Legal</h3>
+            <a href="terms.html">Terms &amp; Conditions</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="prohibited-items.html">Prohibited Items</a>
+            <a href="community-rules.html">Community Rules</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Follow Us</h3>
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">YouTube</a>
+            <a href="#">TikTok</a>
+          </section>
+        </div>
+
+        <div class="site-shell lm-county-section">
+          <div class="lm-county-heading">
+            <div>
+              <span class="lm-country-flag">🇱🇷</span>
+
+              <span>
+                <strong>Browse Across Liberia</strong>
+                <small>Serving buyers and sellers in all 15 counties</small>
+              </span>
+            </div>
+          </div>
+
+          <div class="lm-county-list">
+            <button type="button" data-footer-county="Bomi">Bomi</button>
+            <button type="button" data-footer-county="Bong">Bong</button>
+            <button type="button" data-footer-county="Gbarpolu">Gbarpolu</button>
+            <button type="button" data-footer-county="Grand Bassa">Grand Bassa</button>
+            <button type="button" data-footer-county="Grand Cape Mount">Grand Cape Mount</button>
+            <button type="button" data-footer-county="Grand Gedeh">Grand Gedeh</button>
+            <button type="button" data-footer-county="Grand Kru">Grand Kru</button>
+            <button type="button" data-footer-county="Lofa">Lofa</button>
+            <button type="button" data-footer-county="Margibi">Margibi</button>
+            <button type="button" data-footer-county="Maryland">Maryland</button>
+            <button type="button" data-footer-county="Montserrado">Montserrado</button>
+            <button type="button" data-footer-county="Nimba">Nimba</button>
+            <button type="button" data-footer-county="River Cess">River Cess</button>
+            <button type="button" data-footer-county="River Gee">River Gee</button>
+            <button type="button" data-footer-county="Sinoe">Sinoe</button>
+          </div>
+        </div>
+
+        <div class="lm-footer-bottom">
+          <div class="site-shell lm-footer-bottom-inner">
+            <p>
+              &copy; 2026
+              <span data-marketplace-name>LoyaltyMarket</span>.
+              All Rights Reserved.
+            </p>
+
+            <p>Made For Liberia 🇱🇷</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
   </footer>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">⌂</span>
+      <span>Home</span>
+    </a>
+
+    <a href="wishlist.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">♡</span>
+      <span>Saved</span>
+    </a>
+
+    <a href="sell.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">⊞</span>
+      <span>Sell</span>
+    </a>
+
+    <a href="messages.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">▤</span>
+      <span>Messages</span>
+    </a>
+
+    <a href="dashboard.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">♙</span>
+      <span>Profile</span>
+    </a>
+  </nav>
 
   <script type="module">
     import { auth, db } from "./firebase.js";
@@ -349,8 +537,15 @@
       getDocs,
       addDoc,
       serverTimestamp,
-      orderBy
+      orderBy,
+      onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const DEFAULT_SETTINGS = {
+      marketplaceName: "LoyaltyMarket",
+      supportEmail: "princeteah200@gmail.com",
+      supportPhone: "+231 88 147 1694"
+    };
 
     const params = new URLSearchParams(window.location.search);
     let businessOwnerId = params.get("id");
@@ -381,9 +576,17 @@
     const statAverageRating = document.getElementById("statAverageRating");
     const statReviewCount = document.getElementById("statReviewCount");
 
+    const footerSupport = document.getElementById("footerSupport");
+    const loginBtn = document.getElementById("loginBtn");
+    const registerBtn = document.getElementById("registerBtn");
+    const dashboardBtn = document.getElementById("dashboardBtn");
+    const messagesBtn = document.getElementById("messagesBtn");
+    const unreadBadge = document.getElementById("unreadBadge");
+
     let currentUser = null;
     let currentUserName = "";
     let isOwnProfile = false;
+    let unsubscribeUnreadMessages = null;
 
     function safeText(value) {
       return String(value || "")
@@ -396,6 +599,45 @@
 
     function starsFor(rating) {
       return "⭐".repeat(rating);
+    }
+
+    async function loadMarketplaceSettings() {
+      let settings = { ...DEFAULT_SETTINGS };
+
+      try {
+        const snapshot = await getDoc(doc(db, "settings", "marketplace"));
+        if (snapshot.exists()) {
+          settings = { ...settings, ...snapshot.data() };
+        }
+      } catch (error) {
+        console.error("Could not load marketplace settings:", error);
+      }
+
+      const support = [settings.supportEmail, settings.supportPhone].filter(Boolean);
+
+      if (footerSupport) {
+        footerSupport.textContent = support.length ? `Support: ${support.join(" | ")}` : "";
+      }
+    }
+
+    function listenForUnreadMessages(userId) {
+      unsubscribeUnreadMessages?.();
+
+      const unreadQuery = query(
+        collection(db, "messages"),
+        where("receiverId", "==", userId),
+        where("read", "==", false)
+      );
+
+      unsubscribeUnreadMessages = onSnapshot(unreadQuery, (snapshot) => {
+        const count = snapshot.size;
+        if (count > 0) {
+          unreadBadge.textContent = count > 9 ? "9+" : String(count);
+          unreadBadge.classList.add("has-unread");
+        } else {
+          unreadBadge.classList.remove("has-unread");
+        }
+      });
     }
 
     function showNotBusiness(message, linkId) {
@@ -681,6 +923,13 @@
       currentUser = user || null;
 
       if (user) {
+        loginBtn.style.display = "none";
+        registerBtn.style.display = "none";
+        dashboardBtn.style.display = "inline-block";
+        messagesBtn.style.display = "inline-block";
+
+        listenForUnreadMessages(user.uid);
+
         try {
           const userDoc = await getDoc(doc(db, "users", user.uid));
 
@@ -691,6 +940,15 @@
         } catch (error) {
           currentUserName = user.email;
         }
+      } else {
+        loginBtn.style.display = "inline-block";
+        registerBtn.style.display = "inline-block";
+        dashboardBtn.style.display = "none";
+        messagesBtn.style.display = "none";
+
+        unreadBadge.classList.remove("has-unread");
+        unsubscribeUnreadMessages?.();
+        unsubscribeUnreadMessages = null;
       }
 
       await loadBusinessProfile();
@@ -731,6 +989,21 @@
         alert("Could not submit review: " + error.message);
       }
     });
+
+    loadMarketplaceSettings();
+  </script>
+
+  <script>
+    const mobileFooterToggle = document.getElementById("mobileFooterToggle");
+    const mobileFooterContent = document.getElementById("mobileFooterContent");
+
+    if (mobileFooterToggle && mobileFooterContent) {
+      mobileFooterToggle.addEventListener("click", () => {
+        const isOpen = mobileFooterContent.classList.toggle("footer-open");
+        mobileFooterToggle.classList.toggle("footer-toggle-open", isOpen);
+        mobileFooterToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+    }
   </script>
 
   <script>
