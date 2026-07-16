@@ -189,150 +189,49 @@
       color: var(--navy);
     }
 
-    /* ---------- PAGE LAYOUT ---------- */
+    /* ---------- PAGE LAYOUT (Jiji-style: single column, no sidebar) ---------- */
 
     .sell-page {
-      width: min(1200px, 94%);
-      margin: 28px auto 60px;
-      display: grid;
-      grid-template-columns: minmax(300px, .78fr) minmax(0, 1.22fr);
-      gap: 22px;
-      align-items: start;
+      width: min(640px, 94%);
+      margin: 20px auto 60px;
     }
 
-    .sell-hero-panel {
-      position: sticky;
-      top: 66px;
-      padding: 18px 20px;
-      border-radius: 14px;
-      color: #fff;
-      background: var(--navy);
-    }
-
-    .sell-kicker {
-      margin: 0 0 10px;
-      color: #cdd8ef;
-      font-size: 11px;
+    .sell-page-title {
+      margin: 4px 0 18px;
+      font-size: 19px;
       font-weight: 600;
-      letter-spacing: .12em;
-      text-transform: uppercase;
+      color: var(--ink);
     }
 
-    .sell-hero-panel h1 {
-      margin: 0 0 8px;
-      font-size: clamp(18px, 2.4vw, 23px);
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .sell-hero-panel > p:not(.sell-kicker) {
-      margin: 0;
-      color: #cdd8ef;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .sell-benefit-list {
-      display: grid;
-      gap: 10px;
-      margin: 24px 0;
-    }
-
-    .sell-benefit-list > div {
-      display: flex;
-      gap: 12px;
-      padding: 13px;
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 11px;
-      background: rgba(255,255,255,.06);
-    }
-
-    .sell-benefit-list span {
-      width: 26px;
-      height: 26px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: rgba(255,255,255,.14);
-      color: #fff;
-    }
-
-    .sell-benefit-list p {
-      margin: 0;
-      color: #dbe4f5;
-      font-size: 13px;
-      line-height: 1.5;
-      font-weight: 400;
-    }
-
-    .sell-benefit-list strong {
-      display: block;
-      color: #fff;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .sell-safety-note {
-      display: flex;
-      gap: 10px;
-      padding: 14px;
-      border-radius: 11px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.16);
-      color: #dbe4f5;
+    .sell-terms-line {
+      margin: 14px 4px 0;
+      color: var(--muted);
       font-size: 12px;
       line-height: 1.5;
     }
 
-    .sell-safety-note strong {
-      display: block;
-      color: #fff;
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
+    .sell-terms-line strong { font-weight: 600; color: var(--ink); }
 
-    /* ---------- FORM CARD ---------- */
+    /* ---------- FORM (plain, no card chrome — Jiji has no boxed card) ---------- */
 
     .sell-card {
-      padding: 28px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
     }
 
     .sell-card-heading {
-      margin-bottom: 20px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .sell-step-badge {
-      display: inline-block;
-      margin-bottom: 8px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      color: var(--navy);
-      background: var(--navy-soft);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .04em;
-    }
-
-    .sell-card h1 {
-      margin: 0 0 5px;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--ink);
+      margin-bottom: 14px;
     }
 
     #sellSubtitle {
-      margin: 0;
+      margin: 2px 0 0;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 400;
     }
+
 
     .sell-form label {
       display: block;
@@ -534,8 +433,7 @@
       .sell-navbar { flex-wrap: wrap; gap: 10px; }
       .sell-nav-actions { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .sell-nav-link { padding: 9px 6px; font-size: 12px; }
-      .sell-page { width: 92%; margin-top: 18px; }
-      .sell-hero-panel, .sell-card { padding: 20px; border-radius: 14px; }
+      .sell-page { width: 92%; margin-top: 14px; }
       .image-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .sell-footer { flex-direction: column; text-align: center; }
     }
@@ -561,39 +459,9 @@
 </header>
 
 <section class="sell-page">
-  <div class="sell-hero-panel">
-    <p class="sell-kicker">Post on LoyaltyMarket</p>
-    <h1>Turn what you have into opportunity</h1>
-    <p>Create a product or service listing and reach buyers across Liberia.</p>
-
-    <div class="sell-benefit-list">
-      <div>
-        <span><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
-        <p><strong>Upload real photos</strong>Select images directly from your phone or computer.</p>
-      </div>
-      <div>
-        <span><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
-        <p><strong>Choose product or service</strong>Sell an item or offer your skills.</p>
-      </div>
-      <div>
-        <span><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
-        <p><strong>Manage everything easily</strong>Edit, boost, archive, or mark as sold.</p>
-      </div>
-    </div>
-
-    <div class="sell-safety-note">
-      <svg class="icon" viewBox="0 0 24 24" style="flex-shrink:0;width:18px;height:18px;margin-top:1px;"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg>
-      <div>
-        <strong>Safety tip</strong>
-        <p style="margin:0;">Never send money before inspecting an item or confirming a service provider.</p>
-      </div>
-    </div>
-  </div>
-
   <div class="sell-card">
     <div class="sell-card-heading">
-      <span class="sell-step-badge">Create listing</span>
-      <h1 id="sellHeading">List your product</h1>
+      <h1 id="sellHeading" class="sell-page-title">List your product</h1>
       <p id="sellSubtitle">Post your item for buyers across Liberia.</p>
     </div>
 
@@ -745,11 +613,16 @@
       </div>
 
       <button type="submit" class="post-btn" id="postBtn">Post Product</button>
+
+      <p class="sell-terms-line">
+        By clicking Post Product, you accept the <strong>Terms of Use</strong>, confirm you will follow the <strong>Safety Tips</strong>, and declare this listing has no prohibited items.
+      </p>
     </form>
   </div>
 </section>
 
 <footer class="footer sell-footer">
+
   <div>
     <h2>LoyaltyMarket</h2>
     <p>You Get Market, We Get Buyer.</p>
@@ -1097,13 +970,31 @@
   }
 
   const CATEGORY_PRICE_FLOORS = {
-    Phones: 15,
-    Electronics: 10,
     Vehicles: 300,
     Property: 500,
+    Phones: 15,
+    Electronics: 10,
+    "Home & Appliances": 5,
     Fashion: 1,
-    Jobs: 0
+    "Beauty & Personal Care": 1,
+    Services: 0,
+    "Repair & Construction": 0,
+    "Commercial Equipment & Tools": 10,
+    "Sports & Leisure": 1,
+    "Babies & Kids": 1,
+    "Agriculture & Farming": 1,
+    "Animals & Pets": 1,
+    Jobs: 0,
+    "Seeking Work - CVs": 0
   };
+
+  // Categories where an unusually NEW seller account posting a
+  // high-value item is a meaningful risk signal (common pattern:
+  // fresh account, expensive item, urgency language, wants a deposit
+  // before any inspection).
+  const HIGH_VALUE_CATEGORIES = ["Vehicles", "Property", "Electronics", "Phones"];
+  const NEW_ACCOUNT_HOURS = 24;
+  const HIGH_VALUE_THRESHOLD_USD = 500;
 
   const SUSPICIOUS_KEYWORDS = [
     "wire transfer",
@@ -1111,12 +1002,36 @@
     "send deposit",
     "send a deposit",
     "pay deposit first",
+    "advance payment",
+    "pay in advance",
     "urgent sale",
     "no returns",
     "no refunds",
+    "no inspection",
     "cash only no meet",
     "moneygram",
-    "gift card"
+    "gift card",
+    "reship",
+    "reshipping",
+    "shipping agent",
+    "customs fee",
+    "clearing fee",
+    "processing fee",
+    "delivery fee before pickup",
+    "whatsapp only",
+    "telegram only",
+    "double your money",
+    "investment opportunity",
+    "guaranteed returns",
+    "click this link",
+    "verify your account",
+    "you have won",
+    "claim your prize",
+    "lottery winner",
+    "inheritance fund",
+    "next of kin",
+    "outside the app",
+    "off the app"
   ];
 
   function checkPriceTooLow(category, priceUsd) {
@@ -1134,6 +1049,16 @@
   function checkSuspiciousKeywords(title, description) {
     const text = `${title} ${description}`.toLowerCase();
     return SUSPICIOUS_KEYWORDS.some((keyword) => text.includes(keyword));
+  }
+
+  function checkThinDescription(description, priceUsd) {
+    const price = Number(priceUsd);
+    const wordCount = description.trim().split(/\s+/).filter(Boolean).length;
+
+    // A near-empty description on a higher-priced item is a real
+    // low-effort-scam signal — genuine sellers of valuable items
+    // usually write more than a couple of words.
+    return price >= 100 && wordCount < 5;
   }
 
   async function checkTooManyRecentListings(sellerId) {
@@ -1154,6 +1079,95 @@
     }
   }
 
+  // Compares the listing's price against the median price of other
+  // ACTIVE listings in the same category, using real marketplace data
+  // instead of a single hardcoded number. Catches outliers a fixed
+  // floor would miss (e.g. a normally-expensive category where this
+  // specific price is still suspiciously below everyone else's).
+  async function checkPriceOutlier(category, priceUsd) {
+    const price = Number(priceUsd);
+    if (!Number.isFinite(price) || price <= 0) return false;
+
+    try {
+      const categoryQuery = query(
+        collection(db, "products"),
+        where("category", "==", category),
+        where("status", "==", "active")
+      );
+
+      const snapshot = await getDocs(categoryQuery);
+      const prices = snapshot.docs
+        .map((docSnap) => Number(docSnap.data().priceUsd))
+        .filter((value) => Number.isFinite(value) && value > 0)
+        .sort((a, b) => a - b);
+
+      // Need a reasonable sample size before trusting a median.
+      if (prices.length < 5) return false;
+
+      const median = prices[Math.floor(prices.length / 2)];
+      return price < median * 0.2;
+    } catch (error) {
+      console.warn("Price-outlier check skipped:", error.message);
+      return false;
+    }
+  }
+
+  // A brand-new account posting a high-value item in a category
+  // that's commonly targeted by scammers (vehicles, electronics,
+  // property, phones) is a real, well-documented fraud pattern —
+  // worth a human admin glance even if nothing else looks wrong.
+  async function checkNewAccountHighValue(sellerId, category, priceUsd) {
+    const price = Number(priceUsd);
+
+    if (!HIGH_VALUE_CATEGORIES.includes(category) || price < HIGH_VALUE_THRESHOLD_USD) {
+      return false;
+    }
+
+    try {
+      const userSnapshot = await getDoc(doc(db, "users", sellerId));
+      if (!userSnapshot.exists()) return false;
+
+      const userData = userSnapshot.data();
+      if (!userData.createdAt || !userData.createdAt.seconds) return false;
+
+      const accountAgeHours =
+        (Date.now() - userData.createdAt.seconds * 1000) / (1000 * 60 * 60);
+
+      return accountAgeHours < NEW_ACCOUNT_HOURS;
+    } catch (error) {
+      console.warn("New-account check skipped:", error.message);
+      return false;
+    }
+  }
+
+  // Same title AND same price already posted by a DIFFERENT seller is
+  // a common copy-paste scam pattern (stolen listing photos/text
+  // reposted by a second account).
+  async function checkDuplicateListing(title, priceUsd, sellerId) {
+    const cleanTitle = title.trim().toLowerCase();
+    if (!cleanTitle) return false;
+
+    try {
+      const titleQuery = query(
+        collection(db, "products"),
+        where("title", "==", title.trim())
+      );
+
+      const snapshot = await getDocs(titleQuery);
+
+      return snapshot.docs.some((docSnap) => {
+        const data = docSnap.data();
+        return (
+          data.sellerId !== sellerId &&
+          String(data.priceUsd) === String(priceUsd)
+        );
+      });
+    } catch (error) {
+      console.warn("Duplicate-listing check skipped:", error.message);
+      return false;
+    }
+  }
+
   async function runScamChecks({ title, description, category, priceUsd, images, sellerId }) {
     const reasons = [];
 
@@ -1161,8 +1175,16 @@
       reasons.push("Price is unusually low for this category.");
     }
 
+    if (await checkPriceOutlier(category, priceUsd)) {
+      reasons.push("Price is far below the median price of similar active listings.");
+    }
+
     if (checkSuspiciousKeywords(title, description)) {
       reasons.push("Listing text contains language commonly used in scams.");
+    }
+
+    if (checkThinDescription(description, priceUsd)) {
+      reasons.push("Description is very short for the price listed.");
     }
 
     if (images.length === 0) {
@@ -1171,6 +1193,14 @@
 
     if (await checkTooManyRecentListings(sellerId)) {
       reasons.push("Seller has posted several listings within the last hour.");
+    }
+
+    if (await checkNewAccountHighValue(sellerId, category, priceUsd)) {
+      reasons.push("A brand-new account is posting a high-value item in a commonly targeted category.");
+    }
+
+    if (await checkDuplicateListing(title, priceUsd, sellerId)) {
+      reasons.push("An identical title and price already exists from a different seller.");
     }
 
     return reasons;

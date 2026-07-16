@@ -17,18 +17,14 @@
   <style>
     :root {
       --navy: #0f2d67;
-      --blue: #1d4ed8;
-      --blue-dark: #123b8d;
+      --navy-soft: #eef1f7;
       --orange: #f97316;
-      --orange-dark: #ea580c;
-      --green: #16a34a;
-      --green-dark: #15803d;
-      --ink: #0f172a;
-      --muted: #64748b;
-      --line: #e2e8f0;
+      --orange-soft: #fff4ec;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
       --surface: #ffffff;
-      --soft: #f8fafc;
-      --shadow: 0 18px 46px rgba(15, 23, 42, 0.12);
+      --bg: #f7f8fa;
     }
 
     * {
@@ -43,12 +39,9 @@
 
     body {
       min-height: 100vh;
-      font-family: Inter, Arial, Helvetica, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       color: var(--ink);
-      background:
-        radial-gradient(circle at 8% 12%, rgba(37, 99, 235, 0.11), transparent 26%),
-        radial-gradient(circle at 92% 88%, rgba(249, 115, 22, 0.10), transparent 24%),
-        #f8fafc;
+      background: var(--bg);
     }
 
     button,
@@ -56,13 +49,24 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    .icon {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.15em;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     .welcome-shell {
       min-height: 100vh;
       display: grid;
       grid-template-columns: minmax(0, 1.08fr) minmax(400px, 0.92fr);
-      gap: 20px;
-      padding: 20px;
-      background: #eef2f6;
+      gap: 16px;
+      padding: 16px;
       align-items: stretch;
     }
 
@@ -70,39 +74,12 @@
       position: relative;
       overflow: hidden;
       min-height: 0;
-      padding: 28px clamp(22px, 4vw, 52px);
+      padding: 24px clamp(22px, 4vw, 44px);
       display: flex;
       flex-direction: column;
       color: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
-      background:
-        linear-gradient(135deg, rgba(15, 45, 103, 0.97), rgba(29, 78, 216, 0.94)),
-        url("icons/icon-512.png") center / 280px no-repeat;
-    }
-
-    .brand-panel::before,
-    .brand-panel::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      pointer-events: none;
-    }
-
-    .brand-panel::before {
-      width: 340px;
-      height: 340px;
-      top: -170px;
-      right: -100px;
-      background: rgba(255,255,255,0.08);
-    }
-
-    .brand-panel::after {
-      width: 240px;
-      height: 240px;
-      left: -120px;
-      bottom: -100px;
-      background: rgba(14,165,233,0.18);
+      border-radius: 16px;
+      background: var(--navy);
     }
 
     .brand-header,
@@ -119,94 +96,92 @@
     }
 
     .brand-logo {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       padding: 4px;
-      border-radius: 12px;
+      border-radius: 10px;
       object-fit: contain;
       background: #ffffff;
-      box-shadow: 0 8px 22px rgba(0,0,0,0.16);
     }
 
     .brand-name {
-      font-size: 17px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-    }
-
-    .brand-name span {
-      color: #fbbf24;
+      font-size: 15px;
+      font-weight: 600;
     }
 
     .brand-main {
       width: min(560px, 100%);
       margin: auto 0;
-      padding: 30px 0;
+      padding: 24px 0;
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      margin-bottom: 12px;
-      padding: 6px 10px;
+      margin-bottom: 10px;
+      padding: 5px 10px;
       border: 1px solid rgba(255,255,255,0.18);
       border-radius: 999px;
-      background: rgba(255,255,255,0.10);
-      color: #fde68a;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.1em;
+      background: rgba(255,255,255,0.1);
+      color: #fdc179;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     .brand-main h1 {
-      max-width: 520px;
-      font-size: clamp(26px, 3.2vw, 40px);
-      line-height: 1.12;
-      letter-spacing: -0.03em;
-      margin-bottom: 14px;
+      max-width: 500px;
+      font-size: clamp(23px, 2.8vw, 34px);
+      line-height: 1.15;
+      margin-bottom: 12px;
+      font-weight: 700;
     }
 
     .brand-main > p {
-      max-width: 460px;
-      color: #dbeafe;
-      font-size: 14px;
+      max-width: 440px;
+      color: #cdd8ef;
+      font-size: 13.5px;
       line-height: 1.6;
+      font-weight: 400;
     }
 
     .trust-row {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
-      margin-top: 22px;
+      margin-top: 20px;
     }
 
     .trust-card {
-      min-height: 90px;
+      min-height: 88px;
       padding: 12px;
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 14px;
-      background: rgba(255,255,255,0.09);
-      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
     }
 
-    .trust-card span {
+    .trust-card .icon {
       display: block;
       margin-bottom: 7px;
-      font-size: 20px;
+      width: 18px;
+      height: 18px;
+      color: #fdc179;
     }
 
     .trust-card strong {
       display: block;
       margin-bottom: 4px;
-      font-size: 13px;
+      font-size: 12.5px;
+      font-weight: 600;
     }
 
     .trust-card p {
-      color: #dbeafe;
+      color: #cdd8ef;
       font-size: 11px;
       line-height: 1.4;
+      font-weight: 400;
     }
 
     .brand-footer {
@@ -214,38 +189,32 @@
       justify-content: space-between;
       align-items: center;
       gap: 14px;
-      color: #bfdbfe;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .liberia-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
+      color: #cdd8ef;
+      font-size: 11.5px;
+      font-weight: 500;
     }
 
     .action-panel {
       position: relative;
       min-height: 0;
-      padding: 24px clamp(16px, 3vw, 40px);
+      padding: 22px clamp(16px, 3vw, 36px);
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.97);
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.10);
+      border-radius: 16px;
+      background: var(--surface);
+      border: 1px solid var(--line);
     }
 
     .skip-button {
       position: absolute;
-      top: 20px;
-      right: 24px;
+      top: 18px;
+      right: 22px;
       border: 0;
       background: transparent;
       color: var(--muted);
-      font-size: 13px;
-      font-weight: 800;
+      font-size: 12.5px;
+      font-weight: 600;
       cursor: pointer;
     }
 
@@ -254,7 +223,7 @@
     }
 
     .action-card {
-      width: min(460px, 100%);
+      width: min(440px, 100%);
       padding: 4px;
     }
 
@@ -262,137 +231,109 @@
       display: none;
       align-items: center;
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .mobile-brand img {
-      width: 36px;
-      height: 36px;
+      width: 30px;
+      height: 30px;
       object-fit: contain;
     }
 
     .mobile-brand strong {
       color: var(--navy);
-      font-size: 16px;
-      font-weight: 900;
-    }
-
-    .mobile-brand strong span {
-      color: var(--orange);
+      font-size: 14px;
+      font-weight: 600;
     }
 
     .small-label {
-      margin-bottom: 8px;
-      color: var(--blue);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.1em;
+      margin-bottom: 7px;
+      color: var(--navy);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     .action-card h2 {
       max-width: 400px;
-      margin-bottom: 8px;
-      font-size: clamp(22px, 3vw, 32px);
-      line-height: 1.12;
-      letter-spacing: -0.025em;
+      margin-bottom: 7px;
+      font-size: clamp(19px, 2.6vw, 26px);
+      line-height: 1.15;
+      font-weight: 700;
     }
 
     .intro {
       max-width: 400px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
+      font-size: 12.5px;
+      line-height: 1.5;
+      font-weight: 400;
     }
 
     .choice-list {
       display: grid;
-      gap: 10px;
+      gap: 9px;
     }
 
     .choice-button {
       width: 100%;
-      min-height: 68px;
+      min-height: 62px;
       display: grid;
-      grid-template-columns: 44px minmax(0, 1fr) auto;
+      grid-template-columns: 40px minmax(0, 1fr) auto;
       align-items: center;
       gap: 10px;
-      padding: 10px 12px;
-      border: 1.5px solid var(--line);
-      border-radius: 12px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
       background: #ffffff;
       color: var(--ink);
       text-align: left;
       cursor: pointer;
-      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
 
     .choice-button:hover {
-      transform: translateY(-2px);
-      border-color: #93c5fd;
-      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.10);
-    }
-
-    .choice-button:focus-visible {
-      outline: 3px solid rgba(37, 99, 235, 0.16);
-      outline-offset: 2px;
+      border-color: var(--navy);
     }
 
     .choice-icon {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       display: grid;
       place-items: center;
-      border-radius: 10px;
-      font-size: 19px;
+      border-radius: 9px;
+      background: var(--navy-soft);
+      color: var(--navy);
     }
 
-    .buy .choice-icon {
-      background: #eff6ff;
-      color: var(--blue);
-    }
-
-    .sell .choice-icon {
-      background: #fff7ed;
-      color: var(--orange);
-    }
-
-    .service .choice-icon {
-      background: #ecfdf5;
-      color: var(--green);
-    }
+    .choice-icon .icon { width: 17px; height: 17px; }
 
     .choice-copy strong {
       display: block;
-      margin-bottom: 3px;
-      font-size: 14px;
+      margin-bottom: 2px;
+      font-size: 13.5px;
+      font-weight: 600;
     }
 
     .choice-copy span {
       display: block;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11.5px;
       line-height: 1.4;
+      font-weight: 400;
     }
 
     .choice-arrow {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       display: grid;
       place-items: center;
       border-radius: 999px;
-      background: #f8fafc;
+      background: var(--bg);
       color: #94a3b8;
-      font-size: 17px;
-      font-weight: 900;
-      transition: .18s ease;
-    }
-
-    .choice-button:hover .choice-arrow {
-      transform: translateX(3px);
-      background: #eff6ff;
-      color: var(--blue);
+      font-size: 15px;
+      font-weight: 700;
     }
 
     .account-links {
@@ -407,39 +348,37 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 10px;
+      border-radius: 9px;
       text-decoration: none;
-      font-size: 13px;
-      font-weight: 900;
+      font-size: 12.5px;
+      font-weight: 600;
     }
 
     .account-link.sign-in {
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--line);
       color: var(--navy);
       background: #ffffff;
     }
 
     .account-link.register {
       color: #ffffff;
-      background: var(--navy);
+      background: var(--orange);
     }
 
-    .account-link:hover {
-      transform: translateY(-1px);
-    }
+    .account-link.register:hover { background: #ea680a; }
 
     .legal {
       margin-top: 14px;
-      color: #94a3b8;
-      font-size: 11px;
-      line-height: 1.55;
+      color: #9ca3af;
+      font-size: 10.5px;
+      line-height: 1.5;
       text-align: center;
     }
 
     .legal a {
-      color: var(--blue);
+      color: var(--navy);
       text-decoration: none;
-      font-weight: 800;
+      font-weight: 600;
     }
 
     .legal a:hover {
@@ -468,48 +407,17 @@
     @media (max-width: 560px) {
       .action-panel {
         align-items: flex-start;
-        padding: 60px 12px 20px;
+        padding: 54px 12px 20px;
       }
 
       .skip-button {
-        top: 16px;
-        right: 14px;
+        top: 14px;
+        right: 12px;
       }
 
       .action-card {
-        padding: 18px 14px;
-        border-radius: 16px;
-      }
-
-      .action-card h2 {
-        font-size: 26px;
-      }
-
-      .choice-button {
-        min-height: 62px;
-        grid-template-columns: 38px minmax(0, 1fr) auto;
-        gap: 9px;
-        padding: 9px 10px;
-      }
-
-      .choice-icon {
-        width: 34px;
-        height: 34px;
-        border-radius: 9px;
-        font-size: 16px;
-      }
-
-      .choice-copy strong {
-        font-size: 13px;
-      }
-
-      .choice-copy span {
-        font-size: 11px;
-      }
-
-      .choice-arrow {
-        width: 24px;
-        height: 24px;
+        padding: 16px 12px;
+        border-radius: 14px;
       }
     }
 
@@ -538,11 +446,11 @@
           alt="LoyaltyMarket logo"
           class="brand-logo"
         >
-        <div class="brand-name"><span>LR</span> LoyaltyMarket</div>
+        <div class="brand-name">LoyaltyMarket</div>
       </div>
 
       <div class="brand-main">
-        <div class="eyebrow">🇱🇷 Built For Liberia</div>
+        <div class="eyebrow">Built For Liberia</div>
 
         <h1>You Get Market. We Get Buyer.</h1>
 
@@ -553,19 +461,19 @@
 
         <div class="trust-row">
           <article class="trust-card">
-            <span>🛍️</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M6 2h12l1 6H5l1-6Z"/><path d="M5 8h14v13H5z"/><path d="M9 12h6"/></svg>
             <strong>Buy With Choice</strong>
             <p>Explore products, property, vehicles, jobs, and services.</p>
           </article>
 
           <article class="trust-card">
-            <span>📣</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3Z"/></svg>
             <strong>Reach More Buyers</strong>
             <p>Post your listing and grow your customer base.</p>
           </article>
 
           <article class="trust-card">
-            <span>🤝</span>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm6 3a4 4 0 1 0-2.5-7.14"/></svg>
             <strong>Connect Directly</strong>
             <p>Message sellers and service providers with confidence.</p>
           </article>
@@ -573,7 +481,7 @@
       </div>
 
       <div class="brand-footer">
-        <span class="liberia-tag">🇱🇷 Liberia's Online Marketplace</span>
+        <span>Liberia's Online Marketplace</span>
         <span>Safe • Simple • Local</span>
       </div>
     </section>
@@ -586,7 +494,7 @@
       <div class="action-card">
         <div class="mobile-brand">
           <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
-          <strong><span>LR</span> LoyaltyMarket</strong>
+          <strong>LoyaltyMarket</strong>
         </div>
 
         <p class="small-label">Welcome To LoyaltyMarket</p>
@@ -599,7 +507,7 @@
 
         <div class="choice-list">
           <button type="button" class="choice-button buy" id="buyBtn">
-            <span class="choice-icon">🛍️</span>
+            <span class="choice-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M6 2h12l1 6H5l1-6Z"/><path d="M5 8h14v13H5z"/><path d="M9 12h6"/></svg></span>
 
             <span class="choice-copy">
               <strong>I Want To Buy</strong>
@@ -610,7 +518,7 @@
           </button>
 
           <button type="button" class="choice-button sell" id="sellBtn">
-            <span class="choice-icon">💰</span>
+            <span class="choice-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
 
             <span class="choice-copy">
               <strong>I Want To Sell</strong>
@@ -621,7 +529,7 @@
           </button>
 
           <button type="button" class="choice-button service" id="serviceBtn">
-            <span class="choice-icon">🛠️</span>
+            <span class="choice-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 1 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4Z"/></svg></span>
 
             <span class="choice-copy">
               <strong>I Want To Offer A Service</strong>

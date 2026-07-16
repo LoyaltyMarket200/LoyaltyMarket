@@ -7,72 +7,311 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0f2d67">
+
   <style>
-    *{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#0f172a}
-    .orders-navbar{min-height:78px;height:auto;padding:12px max(24px,5vw);background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(15,23,42,.06);justify-content:space-between;position:sticky;top:0;z-index:40}
-    .orders-navbar .logo-link img{width:48px;height:48px;object-fit:contain}.orders-navbar .logo-text{color:#0f2d67;font-size:21px}
-    .orders-nav-actions{display:flex;align-items:center;gap:10px}.orders-nav-link,.orders-post-link{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;border:1px solid transparent}
-    .orders-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}.orders-post-link{color:#fff;background:#f97316}
-    .orders-page{width:min(1180px,94%);margin:32px auto 70px}
-    .orders-hero{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:32px;border-radius:24px;color:#fff;background:linear-gradient(135deg,#0f2d67,#1d4ed8);box-shadow:0 18px 42px rgba(30,58,138,.2)}
-    .orders-kicker{margin:0 0 8px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.16em}.orders-hero h1{margin:0 0 8px;font-size:clamp(32px,5vw,48px)}.orders-hero p{margin:0;color:#dbeafe}
-    .orders-summary{min-width:160px;padding:20px;border:1px solid rgba(255,255,255,.18);border-radius:18px;background:rgba(255,255,255,.10);text-align:center}.orders-summary strong{display:block;font-size:30px}
-    .orders-panel{margin-top:24px;padding:24px;border:1px solid #e2e8f0;border-radius:22px;background:#fff;box-shadow:0 14px 34px rgba(15,23,42,.07)}
-    .orders-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 20px}.orders-tab{background:#fff;border:1px solid #d1d5db;padding:9px 16px;border-radius:999px;font-size:14px;font-weight:800;cursor:pointer}.orders-tab.active{background:#1d4ed8;color:#fff;border-color:#1d4ed8}
-    .orders-list{display:grid;gap:14px}.order-card{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:16px;align-items:center;border:1px solid #e2e8f0;border-radius:16px;padding:14px}.order-card img{width:92px;height:92px;object-fit:cover;border-radius:12px}.order-info h4{margin:0 0 7px}.order-price{margin:0 0 7px;color:#ea580c;font-weight:900}.order-meta{display:block;color:#64748b;font-size:12px;margin-top:3px}
-    .order-side{display:flex;flex-direction:column;align-items:flex-end;gap:10px}.order-status{font-size:12px;font-weight:900;padding:7px 11px;border-radius:999px;text-transform:capitalize}.pending{background:#fef3c7;color:#92400e}.confirmed{background:#dbeafe;color:#1e40af}.completed{background:#d1fae5;color:#065f46}.cancelled{background:#fee2e2;color:#991b1b}
-    .order-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.order-btn{border:none;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer}.cancel-order-btn{background:#fff;border:1px solid #dc2626;color:#dc2626}.message-seller-btn{background:#2563eb;color:#fff;text-decoration:none}
-    .orders-empty,.orders-error{padding:48px 24px;text-align:center;border-radius:18px}.orders-empty{border:1px dashed #cbd5e1;background:#f8fafc;color:#64748b}.orders-error{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
-    .orders-footer{display:flex;justify-content:space-between;align-items:center;padding:30px max(24px,6vw)}
-    @media(max-width:760px){.orders-nav-actions{width:100%;display:grid;grid-template-columns:repeat(4,1fr)}.orders-hero{flex-direction:column;align-items:flex-start}.orders-summary{width:100%}.order-card{grid-template-columns:76px minmax(0,1fr)}.order-card img{width:76px;height:76px}.order-side{grid-column:2;align-items:flex-start}}@media(max-width:560px){.orders-nav-actions{grid-template-columns:1fr}.order-card{grid-template-columns:1fr}.order-card img{width:100%;height:220px}.order-side{grid-column:auto}.orders-footer{flex-direction:column;text-align:center}}
+    :root{
+      --navy:#0f2d67;
+      --navy-soft:#eef1f7;
+      --orange:#f97316;
+      --orange-soft:#fff4ec;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --bg:#f7f8fa;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+    .icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    .orders-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);justify-content:space-between;position:sticky;top:0;z-index:40;display:flex;align-items:center}
+    .orders-navbar .logo-link{display:flex;align-items:center;gap:8px;text-decoration:none}
+    .orders-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
+    .orders-navbar .logo-text{color:var(--navy);font-size:14px;font-weight:700}
+    .orders-nav-actions{display:flex;align-items:center;gap:8px}
+    .orders-nav-link,.orders-post-link{min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:500;border:1px solid var(--line)}
+    .orders-nav-link{color:var(--ink);background:#fff}
+    .orders-nav-link:hover{color:var(--navy);border-color:var(--navy)}
+    .orders-post-link{color:#fff;background:var(--orange);border-color:var(--orange)}
+
+    .orders-shell{width:min(880px,94%);margin:22px auto 60px}
+    .orders-plain-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+    .orders-plain-header h1{margin:0;font-size:19px;font-weight:600;color:var(--ink)}
+    .orders-plain-header p{margin:3px 0 0;color:var(--muted);font-size:12.5px;font-weight:400}
+
+    .orders-filter-row{display:flex;gap:5px;margin-bottom:16px;padding:5px;border-radius:999px;background:#eef2f6;width:fit-content;max-width:100%;overflow-x:auto}
+    .orders-filter-btn{flex-shrink:0;border:0;background:transparent;padding:8px 14px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+    .orders-filter-btn.active{background:#fff;color:var(--navy)}
+
+    .order-card{display:grid;grid-template-columns:64px minmax(0,1fr);gap:13px;padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff;margin-bottom:12px}
+    .order-card img{width:64px;height:64px;border-radius:10px;object-fit:cover;background:#f1f5f9}
+    .order-card-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+    .order-card-price{font-size:13.5px;font-weight:700;color:var(--orange);margin-bottom:6px}
+    .order-badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+    .order-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;font-size:10.5px;font-weight:600}
+    .order-badge.status-pending,.order-badge.payment-awaiting_payment{background:var(--orange-soft);color:#9a3412}
+    .order-badge.payment-paid,.order-badge.status-completed{background:var(--navy-soft);color:var(--navy)}
+    .order-badge.status-cancelled{background:#fee2e2;color:#b91c1c}
+    .order-badge.protection{background:var(--navy-soft);color:var(--navy)}
+    .order-card-meta{color:var(--muted);font-size:11.5px;margin-bottom:10px}
+    .order-card-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .order-action-btn{min-height:34px;padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center}
+    .order-action-btn:hover{border-color:var(--navy)}
+    .order-action-btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .order-action-btn.primary:hover{background:#0b2350}
+    .order-action-btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .orders-empty{padding:44px 20px;text-align:center;border:1px dashed var(--line);border-radius:14px;background:#fff;color:var(--muted);font-size:13px}
+    .orders-empty a{color:var(--navy);font-weight:600;text-decoration:none}
+
+    .footer{background:var(--navy);color:#dbe4f5;text-align:center;padding:26px 20px}
+    .footer h2{color:#fff;margin-bottom:6px;font-size:15px;font-weight:600}
+    .footer p{margin-bottom:5px;font-size:12px}
+
+    @media(max-width:600px){
+      .orders-navbar{flex-wrap:wrap;gap:8px}
+      .orders-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+      .orders-shell{margin-top:16px}
+      .order-card{grid-template-columns:52px minmax(0,1fr)}
+      .order-card img{width:52px;height:52px}
+    }
   </style>
 </head>
+
 <body>
-<header class="navbar orders-navbar">
-  <div class="logo"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="LoyaltyMarket"><span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span></a></div>
-  <div class="orders-nav-actions"><a href="index.html" class="orders-nav-link">Home</a><a href="messages.html" class="orders-nav-link">Messages</a><a href="dashboard.html" class="orders-nav-link">Dashboard</a><a href="sell.html" class="orders-post-link">Post An Ad</a></div>
-</header>
-<main class="orders-page">
-  <section class="orders-hero"><div><p class="orders-kicker">BUYER CENTER</p><h1>My Orders</h1><p>Track your orders and contact sellers from one place.</p></div><div class="orders-summary"><strong id="ordersCount">0</strong><span>Total Orders</span></div></section>
-  <section class="orders-panel">
-    <div class="orders-tabs">
-      <button class="orders-tab active" data-filter="all">All</button><button class="orders-tab" data-filter="pending">Pending</button><button class="orders-tab" data-filter="confirmed">Confirmed</button><button class="orders-tab" data-filter="completed">Completed</button><button class="orders-tab" data-filter="cancelled">Cancelled</button>
+  <header class="navbar orders-navbar">
+    <a href="index.html" class="logo-link">
+      <img src="icons/icon-512.png" alt="LoyaltyMarket">
+      <span class="logo-text">LoyaltyMarket</span>
+    </a>
+    <div class="orders-nav-actions">
+      <a href="index.html" class="orders-nav-link">Home</a>
+      <a href="dashboard.html" class="orders-nav-link">Dashboard</a>
+      <a href="sell.html" class="orders-post-link">Post An Ad</a>
     </div>
-    <div id="ordersList" class="orders-list"><div class="orders-empty"><h3>Loading your orders...</h3></div></div>
+  </header>
+
+  <section class="orders-shell">
+    <div class="orders-plain-header">
+      <div>
+        <h1>My Orders</h1>
+        <p>Track payment status and confirm receipt for protected orders.</p>
+      </div>
+    </div>
+
+    <div class="orders-filter-row">
+      <button class="orders-filter-btn active" data-filter="all">All</button>
+      <button class="orders-filter-btn" data-filter="awaiting_payment">Awaiting Payment</button>
+      <button class="orders-filter-btn" data-filter="paid">Paid</button>
+      <button class="orders-filter-btn" data-filter="completed">Completed</button>
+    </div>
+
+    <div id="ordersList">
+      <p class="orders-empty">Loading your orders...</p>
+    </div>
   </section>
-</main>
-<footer class="footer orders-footer"><div><h2>🇱🇷 LoyaltyMarket</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p></footer>
-<script type="module">
-import {db,auth} from "./firebase.js";
-import {collection,query,where,onSnapshot,doc,updateDoc,addDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import {onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-const ordersList=document.getElementById("ordersList"),ordersCount=document.getElementById("ordersCount"),tabs=document.querySelectorAll(".orders-tab");
-let currentUser=null,allOrders=[],activeFilter="all",unsubscribe=null;
-const safe=v=>String(v||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
-function formatDate(t){if(!t)return"Date unavailable";const d=typeof t.toDate==="function"?t.toDate():new Date(t.seconds?t.seconds*1000:t);return Number.isNaN(d.getTime())?"Date unavailable":d.toLocaleString([],{month:"short",day:"numeric",year:"numeric",hour:"2-digit",minute:"2-digit"})}
-async function cancelOrder(order){
-  if((order.status||"pending").toLowerCase()!=="pending")return;
-  if(!confirm(`Cancel your order for "${order.productTitle||"this item"}"?`))return;
-  try{
-    await updateDoc(doc(db,"orders",order.id),{status:"cancelled",cancelledBy:"buyer",cancelledAt:serverTimestamp(),updatedAt:serverTimestamp()});
-    await addDoc(collection(db,"notifications"),{userId:order.sellerId,type:"order",title:"Order cancelled",body:(order.productTitle||"An order")+" was cancelled by the buyer.",link:"my-sales.html",read:false,createdAt:serverTimestamp()}).catch(()=>{});
-  }catch(e){alert("Could not cancel order: "+e.message)}
-}
-function render(){
-  const rows=activeFilter==="all"?allOrders:allOrders.filter(o=>(o.status||"pending").toLowerCase()===activeFilter);
-  ordersCount.textContent=String(allOrders.length);
-  if(!rows.length){ordersList.innerHTML='<div class="orders-empty"><h3>No orders found</h3><p>You have no orders in this category.</p></div>';return}
-  ordersList.innerHTML=rows.map(o=>{
-    const status=(o.status||"pending").toLowerCase(),img=o.productImage||"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
-    const chatUrl="chat.html?product="+encodeURIComponent(o.productId||"")+"&user="+encodeURIComponent(o.sellerId||"");
-    return `<article class="order-card"><img src="${safe(img)}" alt="${safe(o.productTitle||"Product")}"><div class="order-info"><h4><a href="product-detail.html?id=${encodeURIComponent(o.productId||"")}">${safe(o.productTitle||"Untitled Product")}</a></h4><p class="order-price">US$${safe(o.priceUsd||"0")} | L$${safe(o.priceLrd||"0")}</p><span class="order-meta">Ordered ${safe(formatDate(o.createdAt))}</span>${o.updatedAt?`<span class="order-meta">Updated ${safe(formatDate(o.updatedAt))}</span>`:""}</div><div class="order-side"><span class="order-status ${safe(status)}">${safe(status)}</span><div class="order-actions"><a class="order-btn message-seller-btn" href="${chatUrl}">Message Seller</a>${status==="pending"?`<button class="order-btn cancel-order-btn" data-id="${o.id}">Cancel Order</button>`:""}</div></div></article>`
-  }).join("");
-  document.querySelectorAll(".cancel-order-btn").forEach(btn=>btn.addEventListener("click",()=>{const o=allOrders.find(x=>x.id===btn.dataset.id);if(o)cancelOrder(o)}));
-}
-function listen(){const q=query(collection(db,"orders"),where("buyerId","==",currentUser.uid));unsubscribe=onSnapshot(q,s=>{allOrders=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));render()},e=>ordersList.innerHTML=`<div class="orders-error">Could not load orders: ${safe(e.message)}</div>`)}
-tabs.forEach(tab=>tab.addEventListener("click",()=>{tabs.forEach(x=>x.classList.remove("active"));tab.classList.add("active");activeFilter=tab.dataset.filter;render()}));
-onAuthStateChanged(auth,u=>{if(!u){location.href="login.html";return}currentUser=u;listen()});addEventListener("beforeunload",()=>unsubscribe&&unsubscribe());
-</script>
+
+  <footer class="footer">
+    <h2>LoyaltyMarket</h2>
+    <p>Buy And Sell Products Across Liberia.</p>
+    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import {
+      collection, query, where, getDocs, doc, updateDoc, addDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const ordersList = document.getElementById("ordersList");
+    const filterButtons = document.querySelectorAll(".orders-filter-btn");
+
+    const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
+
+    let currentUser = null;
+    let allOrders = [];
+    let currentFilter = "all";
+
+    function safeText(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp || !timestamp.seconds) return "";
+      return new Date(timestamp.seconds * 1000).toLocaleDateString(undefined, {
+        month: "short", day: "numeric", year: "numeric"
+      });
+    }
+
+    function paymentStatusLabel(order) {
+      const map = {
+        awaiting_payment: "Awaiting Payment",
+        paid: "Paid",
+        failed: "Payment Failed"
+      };
+      return map[order.paymentStatus] || "Awaiting Payment";
+    }
+
+    function renderOrders() {
+      const filtered = currentFilter === "all"
+        ? allOrders
+        : allOrders.filter((order) => {
+            if (currentFilter === "completed") return order.status === "completed";
+            return (order.paymentStatus || "awaiting_payment") === currentFilter;
+          });
+
+      if (filtered.length === 0) {
+        ordersList.innerHTML = `
+          <div class="orders-empty">
+            No orders in this view yet. <a href="index.html">Browse listings</a> to get started.
+          </div>
+        `;
+        return;
+      }
+
+      ordersList.innerHTML = filtered.map((order) => {
+        const image = order.productImage || FALLBACK_IMAGE;
+        const paymentStatus = order.paymentStatus || "awaiting_payment";
+        const isProtected = order.protectionEnabled === true;
+        const isCompleted = order.status === "completed";
+
+        const canConfirmReceipt =
+          isProtected && paymentStatus === "paid" && !isCompleted;
+
+        return `
+          <article class="order-card">
+            <img src="${safeText(image)}" alt="${safeText(order.productTitle || "Product")}">
+
+            <div>
+              <div class="order-card-title">${safeText(order.productTitle || "Untitled Order")}</div>
+              <div class="order-card-price">US$${safeText(order.priceUsd || "0")} | L$${safeText(order.priceLrd || "0")}</div>
+
+              <div class="order-badge-row">
+                <span class="order-badge payment-${safeText(paymentStatus)}">${paymentStatusLabel(order)}</span>
+                ${isProtected ? '<span class="order-badge protection">Buyer Protection</span>' : ""}
+                ${isCompleted ? '<span class="order-badge status-completed">Completed</span>' : ""}
+              </div>
+
+              <div class="order-card-meta">
+                Paid via ${safeText(order.paymentMethod === "orange" ? "Orange Money" : "MTN Mobile Money")}
+                • ${formatDate(order.createdAt)}
+              </div>
+
+              <div class="order-card-actions">
+                <a class="order-action-btn" href="product-detail.html?id=${encodeURIComponent(order.productId || "")}">
+                  View Listing
+                </a>
+
+                ${canConfirmReceipt ? `
+                  <button class="order-action-btn primary" data-confirm-order="${safeText(order.id)}">
+                    Confirm Receipt
+                  </button>
+                ` : ""}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-confirm-order]").forEach((button) => {
+        button.addEventListener("click", () => confirmReceipt(button.dataset.confirmOrder, button));
+      });
+    }
+
+    async function confirmReceipt(orderId, button) {
+      const order = allOrders.find((item) => item.id === orderId);
+      if (!order) return;
+
+      if (!confirm(`Confirm you received "${order.productTitle}"? This releases payment to the seller.`)) {
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Confirming...";
+
+      try {
+        // NOTE: this marks the order completed on the buyer's side.
+        // Once the Cloud Function backend exists, this is the exact
+        // point where it should trigger the real MTN/Orange Disbursement
+        // to the seller (price minus commission) instead of just
+        // updating this Firestore field.
+        await updateDoc(doc(db, "orders", orderId), {
+          status: "completed",
+          receiptConfirmedAt: serverTimestamp()
+        });
+
+        order.status = "completed";
+
+        try {
+          await addDoc(collection(db, "notifications"), {
+            userId: order.sellerId,
+            type: "order",
+            title: "Buyer confirmed receipt for " + order.productTitle,
+            body: "The buyer has confirmed they received the item.",
+            link: "my-sales.html",
+            read: false,
+            createdAt: serverTimestamp()
+          });
+        } catch (notifyError) {
+          // Non-critical.
+        }
+
+        renderOrders();
+      } catch (error) {
+        alert("Could not confirm receipt: " + error.message);
+        button.disabled = false;
+        button.textContent = "Confirm Receipt";
+      }
+    }
+
+    async function loadOrders() {
+      ordersList.innerHTML = '<p class="orders-empty">Loading your orders...</p>';
+
+      try {
+        const ordersQuery = query(collection(db, "orders"), where("buyerId", "==", currentUser.uid));
+        const snapshot = await getDocs(ordersQuery);
+
+        allOrders = snapshot.docs
+          .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+          .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+        renderOrders();
+      } catch (error) {
+        ordersList.innerHTML = `<p class="orders-empty">Could not load orders: ${safeText(error.message)}</p>`;
+      }
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        filterButtons.forEach((b) => b.classList.remove("active"));
+        button.classList.add("active");
+        currentFilter = button.dataset.filter;
+        renderOrders();
+      });
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        alert("Please log in to view your orders.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      currentUser = user;
+      loadOrders();
+    });
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').catch(() => {});
+    }
+  </script>
 </body>
 </html>

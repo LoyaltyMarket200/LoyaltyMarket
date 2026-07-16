@@ -353,3 +353,57 @@
   .mp-logo-word { font-size: 17px; }
   .mp-hero-copy h1 { font-size: 22px; }
 }
+
+/* ---------- QUICK ACTIONS (Jiji-style horizontal row, replaces old hero) ---------- */
+
+.mp-quick-actions {
+  background: #ffffff;
+  border-bottom: 1px solid var(--mp-line);
+  padding: 12px 0;
+}
+
+.mp-quick-actions-row {
+  display: flex;
+  gap: 10px;
+  padding: 0 max(20px, 4vw);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.mp-quick-actions-row::-webkit-scrollbar { display: none; }
+
+.mp-quick-action-card {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 78px;
+  padding: 10px 6px;
+  border-radius: 12px;
+  background: var(--mp-soft);
+  text-decoration: none;
+  text-align: center;
+}
+
+.mp-quick-action-highlight { background: var(--mp-orange-soft, #fff4ec); }
+
+.mp-quick-action-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--mp-navy);
+}
+
+.mp-quick-action-icon .icon { width: 18px; height: 18px; }
+
+.mp-quick-action-card span:last-child {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mp-ink);
+  line-height: 1.25;
+}

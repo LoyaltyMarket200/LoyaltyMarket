@@ -34,20 +34,20 @@
     .icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
     .seller-navbar{
-      min-height:60px;height:auto;padding:10px max(20px,4vw);
+      min-height:50px;height:auto;padding:7px max(16px,3vw);
       background:#fff;border-bottom:1px solid var(--line);
       justify-content:space-between;position:sticky;top:0;z-index:40;
       display:flex;align-items:center;
     }
     .seller-navbar .logo-link{display:flex;align-items:center;gap:8px;text-decoration:none}
-    .seller-navbar .logo-link img{width:34px;height:34px;object-fit:contain}
-    .seller-navbar .logo-text{color:var(--navy);font-size:15.5px;font-weight:700}
+    .seller-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
+    .seller-navbar .logo-text{color:var(--navy);font-size:13.5px;font-weight:700}
 
     .seller-nav-actions{display:flex;align-items:center;gap:8px}
     .seller-nav-link,.seller-post-link{
-      min-height:36px;display:inline-flex;align-items:center;justify-content:center;
-      padding:8px 13px;border-radius:9px;text-decoration:none;
-      font-size:13px;font-weight:500;border:1px solid var(--line)
+      min-height:30px;display:inline-flex;align-items:center;justify-content:center;
+      padding:6px 11px;border-radius:8px;text-decoration:none;
+      font-size:12px;font-weight:500;border:1px solid var(--line)
     }
     .seller-nav-link{color:var(--ink);background:#fff}
     .seller-nav-link:hover{color:var(--navy);border-color:var(--navy)}
@@ -63,17 +63,17 @@
     .redirect-notice a{color:var(--navy);font-weight:600;text-decoration:none}
 
     .seller-hero{
-      display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;
-      padding:24px;border-radius:16px;color:#fff;
-      background:var(--navy);
+      display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;
+      padding:16px 20px;border-radius:14px;color:var(--ink);
+      background:#fff;border:1px solid var(--line);
     }
 
     .seller-profile-main{display:flex;gap:15px;align-items:center}
     .seller-avatar{
-      width:64px;height:64px;display:grid;place-items:center;border-radius:50%;
-      background:rgba(255,255,255,.14);flex-shrink:0
+      width:46px;height:46px;display:grid;place-items:center;border-radius:50%;
+      background:var(--navy-soft);color:var(--navy);flex-shrink:0
     }
-    .seller-hero h1{margin:0 0 6px;font-size:clamp(20px,3vw,28px);font-weight:700;line-height:1.15}
+    .seller-hero h1{margin:0 0 5px;font-size:clamp(16px,2.2vw,20px);font-weight:700;line-height:1.2;color:var(--ink)}
     .seller-badge-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
     .seller-badge{
       display:inline-flex;padding:4px 10px;border-radius:999px;
@@ -81,32 +81,32 @@
     }
     .seller-years-badge{
       display:inline-flex;padding:4px 10px;border-radius:999px;
-      background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);
-      color:#fff;font-size:11px;font-weight:500
+      background:var(--navy-soft);border:1px solid var(--line);
+      color:var(--navy);font-size:11px;font-weight:500
     }
-    .seller-member{margin:6px 0 0;color:#cdd8ef;font-size:12px;font-weight:400}
-    .seller-last-active{margin:4px 0 0;color:#cdd8ef;font-size:12px;display:flex;align-items:center;gap:6px;font-weight:400}
-    .seller-last-active .online-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;flex-shrink:0}
-    .seller-location-line{margin:4px 0 0;color:#cdd8ef;font-size:12px;display:none;align-items:center;gap:5px;font-weight:400}
+    .seller-member{margin:6px 0 0;color:var(--muted);font-size:12px;font-weight:400}
+    .seller-last-active{margin:4px 0 0;color:var(--muted);font-size:12px;display:flex;align-items:center;gap:6px;font-weight:400}
+    .seller-last-active .online-dot{width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block;flex-shrink:0}
+    .seller-location-line{margin:4px 0 0;color:var(--muted);font-size:12px;display:none;align-items:center;gap:5px;font-weight:400}
 
     .seller-action-buttons{display:flex;flex-direction:column;gap:8px;min-width:170px}
 
     .call-seller-btn,.message-seller-btn,.follow-seller-btn,.invite-seller-btn{
-      min-height:38px;display:none;align-items:center;justify-content:center;gap:7px;
-      padding:9px 16px;border-radius:9px;font-weight:600;font-size:13px;white-space:nowrap
+      min-height:32px;display:none;align-items:center;justify-content:center;gap:6px;
+      padding:7px 13px;border-radius:8px;font-weight:600;font-size:12px;white-space:nowrap
     }
 
-    .call-seller-btn{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);text-decoration:none}
-    .message-seller-btn{color:#fff;background:var(--orange);text-decoration:none}
+    .call-seller-btn{color:var(--navy);background:#fff;border:1px solid var(--navy);text-decoration:none}
+    .message-seller-btn{color:#fff;background:var(--orange);border:none;text-decoration:none}
     .message-seller-btn:hover{background:#ea680a}
 
     .follow-seller-btn,.invite-seller-btn{
-      width:100%;border:1px solid rgba(255,255,255,.35);cursor:pointer;font:inherit;font-weight:600
+      width:100%;border:1px solid var(--navy);cursor:pointer;font:inherit;font-weight:600
     }
-    .follow-seller-btn{color:#fff;background:rgba(255,255,255,.12)}
-    .invite-seller-btn{display:flex;color:#fff;background:rgba(255,255,255,.12)}
-    .follow-seller-btn:hover,.call-seller-btn:hover,.invite-seller-btn:hover{background:rgba(255,255,255,.2)}
-    .follow-seller-btn.following{background:#fff;color:var(--navy);border-color:#fff}
+    .follow-seller-btn{color:var(--navy);background:#fff}
+    .invite-seller-btn{display:flex;color:var(--navy);background:#fff}
+    .follow-seller-btn:hover,.call-seller-btn:hover,.invite-seller-btn:hover{background:var(--navy-soft)}
+    .follow-seller-btn.following{background:var(--navy);color:#fff;border-color:var(--navy)}
     .follow-seller-btn:disabled{opacity:.6;cursor:not-allowed}
 
     .seller-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}

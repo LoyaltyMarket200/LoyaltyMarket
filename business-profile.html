@@ -15,13 +15,6 @@
   <meta name="theme-color" content="#0f2d67">
 
   <style>
-    /* ==================================================
-       BUSINESS PROFILE — RESTRAINED 2-COLOR SYSTEM
-       Navy (#0f2d67) = structure/brand/hero. Orange
-       (#f97316) = the ONLY accent, reserved for the
-       Message This Business button and price. Bold
-       reserved for name/stats/price.
-       ================================================== */
     :root{
       --navy:#0f2d67;
       --navy-soft:#eef1f7;
@@ -53,31 +46,31 @@
 
     .business-hero{
       display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;
-      padding:18px 20px;border-radius:14px;color:#fff;
-      background:var(--navy);
+      padding:18px 20px;border-radius:14px;color:var(--ink);
+      background:#fff;border:1px solid var(--line);
     }
 
     .business-main{display:flex;gap:18px;align-items:center}
     .business-avatar{
       width:56px;height:56px;display:grid;place-items:center;border-radius:14px;
-      background:rgba(255,255,255,.14);overflow:hidden;flex-shrink:0
+      background:var(--navy-soft);color:var(--navy);overflow:hidden;flex-shrink:0
     }
     .business-avatar img{width:100%;height:100%;object-fit:cover}
 
-    .business-hero h1{margin:0 0 6px;font-size:clamp(18px,2.6vw,24px);font-weight:700;line-height:1.18}
+    .business-hero h1{margin:0 0 6px;font-size:clamp(18px,2.6vw,24px);font-weight:700;line-height:1.18;color:var(--ink)}
 
     .business-badges{display:flex;gap:7px;flex-wrap:wrap}
     .business-verified,.business-category{
       display:inline-flex;padding:5px 11px;border-radius:999px;
       font-size:11.5px;font-weight:600
     }
-    .business-verified{background:rgba(255,255,255,.14);color:#fff}
+    .business-verified{background:var(--navy-soft);color:var(--navy)}
     .business-verified.verified{background:var(--orange-soft);color:#9a3412}
-    .business-category{display:none;background:rgba(255,255,255,.14);color:#fff}
+    .business-category{display:none;background:var(--navy-soft);color:var(--navy)}
 
-    .business-member{margin:9px 0 0;color:#cdd8ef;font-size:12.5px;font-weight:400}
-    .business-description{margin:12px 0 0;color:#dbe4f5;line-height:1.6;max-width:640px;font-size:13.5px;font-weight:400}
-    .business-contact{margin:6px 0 0;color:#cdd8ef;font-size:12.5px;display:flex;align-items:center;gap:6px;font-weight:400}
+    .business-member{margin:9px 0 0;color:var(--muted);font-size:12.5px;font-weight:400}
+    .business-description{margin:12px 0 0;color:var(--ink);line-height:1.6;max-width:640px;font-size:13.5px;font-weight:400}
+    .business-contact{margin:6px 0 0;color:var(--muted);font-size:12.5px;display:flex;align-items:center;gap:6px;font-weight:400}
 
     .message-business-btn{
       display:none;min-height:36px;align-items:center;justify-content:center;gap:7px;

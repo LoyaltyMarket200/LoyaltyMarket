@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0f2d67">
 
   <style>
     * { box-sizing: border-box; }
@@ -19,8 +19,10 @@
       margin: 0;
       background: #f8fafc;
       color: #111827;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     }
+
+    .icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
     .admin-wrap {
       width: min(1180px, calc(100% - 30px));
@@ -59,7 +61,7 @@
     }
 
     .status-box h2 { margin-top: 0; }
-    .status-box a { color: #2563eb; font-weight: 700; }
+    .status-box a { color: #0f2d67; font-weight: 700; }
 
     .error-box,
     .success-box {
@@ -77,9 +79,9 @@
     }
 
     .success-box {
-      border: 1px solid #bfdbfe;
-      background: #eff6ff;
-      color: #1d4ed8;
+      border: 1px solid #e5e7eb;
+      background: #eef1f7;
+      color: #0f2d67;
     }
 
     .admin-section-tabs {
@@ -96,14 +98,14 @@
       border-bottom: 3px solid transparent;
       background: transparent;
       color: #64748b;
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 600;
       cursor: pointer;
     }
 
     .admin-section-tab-btn.active {
-      color: #2563eb;
-      border-bottom-color: #2563eb;
+      color: #0f2d67;
+      border-bottom-color: #0f2d67;
     }
 
     .report-count-badge {
@@ -113,12 +115,12 @@
       margin-left: 7px;
       padding: 0 6px;
       border-radius: 999px;
-      background: #dc2626;
+      background: #b91c1c;
       color: #ffffff;
       align-items: center;
       justify-content: center;
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 700;
       line-height: 20px;
       vertical-align: middle;
     }
@@ -129,16 +131,16 @@
       border-radius: 8px;
       background: #f8fafc;
       color: #334155;
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 600;
       cursor: pointer;
     }
 
     .admin-tab-btn:hover { background: #e2e8f0; }
 
     .admin-tab-btn.active {
-      border-color: #2563eb;
-      background: #2563eb;
+      border-color: #0f2d67;
+      background: #0f2d67;
       color: white;
     }
 
@@ -147,10 +149,10 @@
       padding: 10px 17px;
       border: none;
       border-radius: 9px;
-      background: #2563eb;
+      background: #0f2d67;
       color: white;
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 600;
       cursor: pointer;
     }
 
@@ -181,24 +183,32 @@
     }
 
     .stat-card-icon {
-      display: block;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 10px;
-      font-size: 24px;
+      border-radius: 10px;
+      background: #eef1f7;
+      color: #0f2d67;
     }
+
+    .stat-card-icon .icon { width: 18px; height: 18px; }
 
     .stat-card-label {
       margin-bottom: 8px;
       color: #64748b;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
     }
 
     .stat-card-value {
       color: #111827;
-      font-size: 32px;
-      font-weight: 800;
+      font-size: 28px;
+      font-weight: 700;
     }
 
     .admin-tabs {
@@ -230,8 +240,7 @@
     .user-search-box:focus,
     .settings-input:focus,
     .settings-select:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      border-color: #0f2d67;
     }
 
     .user-card,
@@ -256,8 +265,8 @@
     .user-name,
     .report-title {
       color: #111827;
-      font-size: 17px;
-      font-weight: 800;
+      font-size: 15.5px;
+      font-weight: 600;
     }
 
     .user-email {
@@ -290,23 +299,23 @@
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 600;
       text-transform: capitalize;
     }
 
-    .badge-verified { background: #eff6ff; color: #1d4ed8; }
+    .badge-verified { background: #eef1f7; color: #0f2d67; }
     .badge-unverified { background: #e2e8f0; color: #475569; }
     .badge-suspended { background: #fee2e2; color: #b91c1c; }
-    .badge-business { background: #dbeafe; color: #1e40af; }
-    .badge-business-verified { background: #fef3c7; color: #92400e; }
+    .badge-business { background: #eef1f7; color: #0f2d67; }
+    .badge-business-verified { background: #fff4ec; color: #9a3412; }
     .report-reason { background: #fee2e2; color: #b91c1c; }
-    .status-pending { background: #fef3c7; color: #92400e; }
-    .status-reviewed { background: #dbeafe; color: #1e40af; }
+    .status-pending { background: #fff4ec; color: #9a3412; }
+    .status-reviewed { background: #eef1f7; color: #0f2d67; }
     .status-dismissed { background: #e2e8f0; color: #475569; }
-    .status-active { background: #dbeafe; color: #1e40af; }
+    .status-active { background: #eef1f7; color: #0f2d67; }
     .status-expired { background: #e2e8f0; color: #475569; }
     .status-rejected { background: #fee2e2; color: #b91c1c; }
-    .status-pending_review { background: #fef3c7; color: #92400e; }
+    .status-pending_review { background: #fff4ec; color: #9a3412; }
 
     .user-actions,
     .report-actions {
@@ -323,8 +332,8 @@
       padding: 8px 13px;
       border: none;
       border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 12.5px;
+      font-weight: 600;
       text-decoration: none;
       cursor: pointer;
     }
@@ -338,7 +347,7 @@
 
     .btn-reviewed,
     .btn-verify,
-    .btn-business-verify { background: #2563eb; color: white; }
+    .btn-business-verify { background: #0f2d67; color: white; }
 
     .btn-dismiss,
     .btn-unverify,
@@ -346,18 +355,18 @@
 
     .btn-suspend,
     .btn-reject-boost,
-    .btn-reject-review { background: #dc2626; color: white; }
+    .btn-reject-review { background: #b91c1c; color: white; }
 
     .btn-unsuspend,
     .btn-confirm-boost,
-    .btn-approve-review { background: #1d4ed8; color: white; }
+    .btn-approve-review { background: #0f2d67; color: white; }
 
     .boost-payment-info {
       margin-top: 13px;
       padding: 10px 12px;
       border-radius: 8px;
-      background: #eff6ff;
-      color: #1e40af;
+      background: #eef1f7;
+      color: #0f2d67;
       font-size: 13px;
       line-height: 1.6;
     }
@@ -366,8 +375,8 @@
       margin-top: 13px;
       padding: 10px 12px;
       border-radius: 8px;
-      background: #fef3c7;
-      color: #92400e;
+      background: #fff4ec;
+      color: #9a3412;
       font-size: 13px;
       line-height: 1.6;
     }
@@ -392,8 +401,8 @@
 
     .analytics-section-title {
       margin: 34px 0 14px;
-      font-size: 18px;
-      font-weight: 800;
+      font-size: 16.5px;
+      font-weight: 600;
       color: #111827;
     }
 
@@ -419,8 +428,8 @@
     .activity-card-header {
       padding: 14px 16px;
       border-bottom: 1px solid #f1f5f9;
-      font-weight: 800;
-      font-size: 14px;
+      font-weight: 600;
+      font-size: 13.5px;
       color: #111827;
       background: #f8fafc;
     }
@@ -441,7 +450,7 @@
     .activity-row:last-child { border-bottom: none; }
 
     .activity-row-title {
-      font-weight: 700;
+      font-weight: 600;
       color: #111827;
     }
 
@@ -452,8 +461,8 @@
     }
 
     .breakdown-card-title {
-      font-weight: 800;
-      font-size: 14px;
+      font-weight: 600;
+      font-size: 13.5px;
       color: #111827;
       margin-bottom: 14px;
     }
@@ -469,7 +478,7 @@
     }
 
     .bar-track {
-      height: 9px;
+      height: 8px;
       border-radius: 999px;
       background: #f1f5f9;
       overflow: hidden;
@@ -478,14 +487,14 @@
     .bar-fill {
       height: 100%;
       border-radius: 999px;
-      background: #2563eb;
+      background: #0f2d67;
     }
 
-    .bar-fill.color-sky { background: #0ea5e9; }
-    .bar-fill.color-amber { background: #d97706; }
-    .bar-fill.color-red { background: #dc2626; }
-    .bar-fill.color-purple { background: #7c3aed; }
-    .bar-fill.color-pink { background: #db2777; }
+    .bar-fill.color-sky { background: #3355a0; }
+    .bar-fill.color-amber { background: #f97316; }
+    .bar-fill.color-red { background: #b91c1c; }
+    .bar-fill.color-purple { background: #0f2d67; opacity: .7; }
+    .bar-fill.color-pink { background: #f97316; opacity: .7; }
 
     .week-chart {
       display: flex;
@@ -508,13 +517,13 @@
       width: 100%;
       max-width: 34px;
       border-radius: 6px 6px 0 0;
-      background: #2563eb;
+      background: #0f2d67;
       min-height: 3px;
     }
 
     .week-chart-value {
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 600;
       color: #334155;
       margin-bottom: 4px;
     }
@@ -541,19 +550,20 @@
       border-radius: 12px;
       background: white;
       color: #111827;
-      font-weight: 700;
-      font-size: 14px;
+      font-weight: 600;
+      font-size: 13.5px;
       text-decoration: none;
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
     }
 
+    .quick-action-btn .icon { width: 17px; height: 17px; color: #0f2d67; flex-shrink: 0; }
+
     .quick-action-btn:hover {
-      border-color: #2563eb;
-      color: #2563eb;
+      border-color: #0f2d67;
+      color: #0f2d67;
     }
 
-    /* Marketplace Settings */
     .settings-shell {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
@@ -572,6 +582,7 @@
     .settings-card h3 {
       margin-top: 0;
       color: #111827;
+      font-weight: 600;
     }
 
     .settings-card p {
@@ -598,7 +609,7 @@
     .settings-field label {
       color: #334155;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: 600;
     }
 
     .settings-help {
@@ -629,7 +640,8 @@
       display: block;
       margin-bottom: 4px;
       color: #111827;
-      font-size: 14px;
+      font-size: 13.5px;
+      font-weight: 600;
     }
 
     .toggle-card span {
@@ -674,7 +686,7 @@
     }
 
     .switch input:checked + .slider {
-      background: #2563eb;
+      background: #0f2d67;
     }
 
     .switch input:checked + .slider::before {
@@ -715,141 +727,86 @@
   </style>
 
   <style>
-    body {
-      background:
-        linear-gradient(rgba(245,247,251,.96), rgba(245,247,251,.96)),
-        radial-gradient(circle at top right, #dbeafe, transparent 38%);
-      color: #0f172a;
-    }
+    body { background: #f7f8fa; color: #1f2937; }
 
     .admin-navbar {
-      min-height: 78px;
+      min-height: 50px;
       height: auto;
-      padding: 12px max(24px, 5vw);
+      padding: 7px max(20px, 4vw);
       background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      box-shadow: 0 4px 20px rgba(15,23,42,.06);
+      border-bottom: 1px solid #e5e7eb;
       justify-content: space-between;
       position: sticky;
       top: 0;
       z-index: 60;
-    }
-
-    .admin-navbar .logo-link img {
-      width: 48px;
-      height: 48px;
-      object-fit: contain;
-    }
-
-    .admin-navbar .logo-text {
-      color: #0f2d67;
-      font-size: 21px;
-    }
-
-    .admin-navbar-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
     }
+
+    .admin-navbar .logo-link img { width: 26px; height: 26px; object-fit: contain; }
+    .admin-navbar .logo-text { color: #0f2d67; font-size: 14px; font-weight: 700; }
+
+    .admin-navbar-actions { display: flex; align-items: center; gap: 8px; }
 
     .admin-navbar-link,
     .admin-navbar-dashboard {
-      min-height: 42px;
+      min-height: 32px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 10px 16px;
-      border-radius: 10px;
+      padding: 6px 12px;
+      border-radius: 8px;
       text-decoration: none;
-      font-size: 14px;
-      font-weight: 800;
+      font-size: 12px;
+      font-weight: 600;
       border: 1px solid transparent;
     }
 
-    .admin-navbar-link {
-      color: #334155;
-      background: #f8fafc;
-      border-color: #e2e8f0;
-    }
+    .admin-navbar-link { color: #334155; background: #f8fafc; border-color: #e2e8f0; }
+    .admin-navbar-dashboard { color: #ffffff; background: #f97316; }
 
-    .admin-navbar-dashboard {
-      color: #ffffff;
-      background: #f97316;
-      box-shadow: 0 8px 18px rgba(249,115,22,.18);
-    }
-
-    .admin-wrap {
-      width: min(1280px, 94%);
-      margin: 32px auto 70px;
-    }
+    .admin-wrap { width: min(1180px, 94%); margin: 26px auto 60px; }
 
     .admin-hero {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 22px;
-      margin-bottom: 22px;
-      padding: 30px 32px;
-      border-radius: 24px;
+      gap: 18px;
+      margin-bottom: 20px;
+      padding: 20px 22px;
+      border-radius: 16px;
       color: #ffffff;
-      background:
-        radial-gradient(circle at top right, rgba(255,255,255,.16), transparent 32%),
-        linear-gradient(135deg, #0f2d67, #1d4ed8);
-      box-shadow: 0 18px 42px rgba(30,58,138,.20);
+      background: #0f2d67;
     }
 
     .admin-hero-kicker {
-      margin: 0 0 8px;
-      color: #fbbf24;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .16em;
+      margin: 0 0 6px;
+      color: #cdd8ef;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
-    .admin-hero h1 {
-      margin: 0 0 8px;
-      color: #ffffff;
-      font-size: clamp(30px, 5vw, 46px);
-      line-height: 1.08;
-    }
+    .admin-hero h1 { margin: 0 0 6px; color: #ffffff; font-size: clamp(20px, 3vw, 26px); font-weight: 700; line-height: 1.15; }
+    .admin-hero p { margin: 0; color: #cdd8ef; line-height: 1.55; font-size: 13px; font-weight: 400; }
+    .admin-hero .refresh-btn { min-width: 135px; background: #f97316; }
 
-    .admin-hero p {
-      margin: 0;
-      color: #dbeafe;
-      line-height: 1.6;
-    }
-
-    .admin-hero .refresh-btn {
-      min-width: 145px;
-      background: #f97316;
-      box-shadow: 0 8px 18px rgba(249,115,22,.22);
-    }
-
-    .status-box {
-      border-radius: 20px;
-      border-color: #e2e8f0;
-      box-shadow: 0 14px 34px rgba(15,23,42,.08);
-    }
+    .status-box { border-radius: 16px; border-color: #e2e8f0; }
 
     .admin-section-tabs {
-      padding: 10px;
+      padding: 8px;
       border: 1px solid #e2e8f0;
-      border-radius: 16px;
+      border-radius: 13px;
       background: #ffffff;
-      box-shadow: 0 10px 24px rgba(15,23,42,.05);
     }
 
-    .admin-section-tab-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 11px 15px;
-    }
+    .admin-section-tab-btn { border: none; border-radius: 9px; padding: 10px 14px; }
 
     .admin-section-tab-btn.active {
       color: #ffffff;
       border-bottom-color: transparent;
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
-      box-shadow: 0 8px 18px rgba(37,99,235,.17);
+      background: #0f2d67;
     }
 
     .stat-card,
@@ -858,66 +815,11 @@
     .settings-card,
     .user-card,
     .report-card {
-      border-radius: 16px;
-      border-color: #e2e8f0;
-      box-shadow: 0 10px 25px rgba(15,23,42,.06);
-    }
-
-    .stat-card {
-      position: relative;
-      overflow: hidden;
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-
-    .stat-card::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0;
-      height: 4px;
-      background: linear-gradient(90deg, #1d4ed8, #38bdf8);
-    }
-
-    .stat-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 30px rgba(37,99,235,.10);
-    }
-
-    .stat-card-icon {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: #eff6ff;
-      font-size: 21px;
-    }
-
-    .quick-action-btn {
       border-radius: 14px;
-      min-height: 58px;
+      border-color: #e2e8f0;
     }
 
-    .quick-action-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 22px rgba(37,99,235,.10);
-    }
-
-    .admin-tab-btn.active {
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
-      border-color: #2563eb;
-    }
-
-    .refresh-btn,
-    .save-settings-btn,
-    .btn-reviewed,
-    .btn-verify,
-    .btn-business-verify {
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
-    }
-
-    .save-settings-btn {
-      background: linear-gradient(135deg, #f97316, #ea580c);
-    }
+    .quick-action-btn { border-radius: 12px; min-height: 54px; }
 
     .admin-footer {
       display: flex;
@@ -925,55 +827,27 @@
       align-items: center;
       gap: 20px;
       text-align: left;
-      padding: 30px max(24px, 6vw);
+      padding: 24px max(24px, 6vw);
+      background: #0f2d67;
+      color: #cdd8ef;
     }
 
+    .admin-footer h2 { margin: 0 0 3px; color: #fff; font-size: 15px; font-weight: 600; }
+    .admin-footer p { margin: 0; font-size: 12px; }
+
     @media (max-width: 760px) {
-      .admin-navbar {
-        align-items: stretch;
-      }
-
-      .admin-navbar-actions {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0,1fr));
-      }
-
-      .admin-hero {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 22px 18px;
-        border-radius: 18px;
-      }
-
-      .admin-hero .refresh-btn {
-        width: 100%;
-      }
-
-      .admin-section-tabs {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0,1fr));
-      }
-
-      .admin-section-tab-btn {
-        min-width: 0;
-      }
-
-      .admin-footer {
-        flex-direction: column;
-        text-align: center;
-      }
+      .admin-navbar { align-items: stretch; }
+      .admin-navbar-actions { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .admin-hero { align-items: flex-start; flex-direction: column; padding: 18px 15px; border-radius: 14px; }
+      .admin-hero .refresh-btn { width: 100%; }
+      .admin-section-tabs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .admin-section-tab-btn { min-width: 0; }
+      .admin-footer { flex-direction: column; text-align: center; }
     }
 
     @media (max-width: 520px) {
-      .admin-navbar-actions,
-      .admin-section-tabs {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-wrap {
-        width: 94%;
-      }
+      .admin-navbar-actions, .admin-section-tabs { grid-template-columns: 1fr; }
+      .admin-wrap { width: 94%; }
     }
   </style>
 
@@ -983,7 +857,7 @@
   <header class="navbar admin-navbar">
     <a href="index.html" class="logo-link">
       <img src="icons/icon-512.png" alt="LoyaltyMarket">
-      <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+      <span class="logo-text">LoyaltyMarket</span>
     </a>
 
     <div class="admin-navbar-actions">
@@ -1009,12 +883,12 @@
 
     <section class="admin-hero">
       <div>
-        <p class="admin-hero-kicker">LOYALTYMARKET ADMINISTRATION</p>
+        <p class="admin-hero-kicker">LoyaltyMarket Administration</p>
         <h1>Admin Control Center</h1>
         <p id="adminWelcomeText">Manage users, listings, reports, boosts, analytics, and marketplace settings.</p>
       </div>
 
-      <button id="refreshBtn" class="refresh-btn">🔄 Refresh Data</button>
+      <button id="refreshBtn" class="refresh-btn">Refresh Data</button>
     </section>
 
     <div class="admin-section-tabs">
@@ -1027,7 +901,7 @@
       </button>
 
       <button class="admin-section-tab-btn" data-section="reports">
-        Reports & Support
+        Reports &amp; Support
         <span id="pendingReportsBadge" class="report-count-badge" aria-label="Pending reports"></span>
       </button>
 
@@ -1047,42 +921,42 @@
 
     <section id="overviewSection">
       <div class="stats-grid">
-        <div class="stat-card"><span class="stat-card-icon">👥</span><div class="stat-card-label">Total Users</div><div class="stat-card-value" id="statTotalUsers">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">🆕</span><div class="stat-card-label">New Users Today</div><div class="stat-card-value" id="statNewUsersToday">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">⭐</span><div class="stat-card-label">Verified Sellers</div><div class="stat-card-value" id="statVerifiedSellers">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">🏢</span><div class="stat-card-label">Verified Businesses</div><div class="stat-card-value" id="statVerifiedBusinesses">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">📋</span><div class="stat-card-label">Total Listings</div><div class="stat-card-value" id="statTotalListings">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">📈</span><div class="stat-card-label">New Listings Today</div><div class="stat-card-value" id="statNewListingsToday">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">🛡️</span><div class="stat-card-label">Pending Review</div><div class="stat-card-value" id="statPendingScamReview">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">🚩</span><div class="stat-card-label">Total Reports</div><div class="stat-card-value" id="statTotalReports">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">⏳</span><div class="stat-card-label">Pending Reports</div><div class="stat-card-value" id="statPendingReports">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">🚀</span><div class="stat-card-label">Pending Boosts</div><div class="stat-card-value" id="statPendingBoosts">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">✅</span><div class="stat-card-label">Active Listings</div><div class="stat-card-value" id="statActiveListings">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">🗄️</span><div class="stat-card-label">Archived Listings</div><div class="stat-card-value" id="statArchivedListings">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">💰</span><div class="stat-card-label">Sold Listings</div><div class="stat-card-value" id="statSoldListings">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">🌟</span><div class="stat-card-label">Featured Listings</div><div class="stat-card-value" id="statFeaturedListings">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">🧾</span><div class="stat-card-label">Total Orders</div><div class="stat-card-value" id="statTotalOrders">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">✔️</span><div class="stat-card-label">Completed Sales</div><div class="stat-card-value" id="statCompletedOrders">—</div></div>
-        <div class="stat-card"><span class="stat-card-icon">🚀</span><div class="stat-card-label">Active Boosted Listings</div><div class="stat-card-value" id="statActiveBoosts">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><circle cx="17" cy="9" r="3"/><path d="M15 14c2.5 0 5 1.5 5.5 4"/></svg></span><div class="stat-card-label">Total Users</div><div class="stat-card-value" id="statTotalUsers">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><div class="stat-card-label">New Users Today</div><div class="stat-card-value" id="statNewUsersToday">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><div class="stat-card-label">Verified Sellers</div><div class="stat-card-value" id="statVerifiedSellers">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12M9 21v-6h6v6"/></svg></span><div class="stat-card-label">Verified Businesses</div><div class="stat-card-value" id="statVerifiedBusinesses">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span><div class="stat-card-label">Total Listings</div><div class="stat-card-value" id="statTotalListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span><div class="stat-card-label">New Listings Today</div><div class="stat-card-value" id="statNewListingsToday">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg></span><div class="stat-card-label">Pending Review</div><div class="stat-card-value" id="statPendingScamReview">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg></span><div class="stat-card-label">Total Reports</div><div class="stat-card-value" id="statTotalReports">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><div class="stat-card-label">Pending Reports</div><div class="stat-card-value" id="statPendingReports">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3Z"/></svg></span><div class="stat-card-label">Pending Boosts</div><div class="stat-card-value" id="statPendingBoosts">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><div class="stat-card-label">Active Listings</div><div class="stat-card-value" id="statActiveListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="4" rx="1"/><path d="M5 10v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8M10 14h4"/></svg></span><div class="stat-card-label">Archived Listings</div><div class="stat-card-value" id="statArchivedListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h4.5a1.5 1.5 0 0 1 0 3H9m0-3v3m0-3h4.5a1.5 1.5 0 0 0 0-3H9"/></svg></span><div class="stat-card-label">Sold Listings</div><div class="stat-card-value" id="statSoldListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24" style="fill:currentColor;stroke:none;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2Z"/></svg></span><div class="stat-card-label">Featured Listings</div><div class="stat-card-value" id="statFeaturedListings">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h6"/></svg></span><div class="stat-card-label">Total Orders</div><div class="stat-card-value" id="statTotalOrders">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><div class="stat-card-label">Completed Sales</div><div class="stat-card-value" id="statCompletedOrders">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3Z"/></svg></span><div class="stat-card-label">Active Boosted Listings</div><div class="stat-card-value" id="statActiveBoosts">—</div></div>
       </div>
 
       <div class="analytics-section-title">Quick Actions</div>
       <div class="quick-actions-grid">
-        <button class="quick-action-btn" type="button" data-goto-section="users">👥 Manage Users</button>
-        <button class="quick-action-btn" type="button" data-goto-section="reports">🚩 View Reports</button>
-        <button class="quick-action-btn" type="button" data-goto-section="pendingReview">🛡️ Pending Review</button>
-        <button class="quick-action-btn" type="button" data-goto-section="boosts">🚀 View Boost Requests</button>
-        <a class="quick-action-btn" href="dashboard.html">📋 Manage Listings</a>
-        <button class="quick-action-btn" type="button" data-goto-section="settings">⚙️ Marketplace Settings</button>
+        <button class="quick-action-btn" type="button" data-goto-section="users"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/></svg> Manage Users</button>
+        <button class="quick-action-btn" type="button" data-goto-section="reports"><svg class="icon" viewBox="0 0 24 24"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg> View Reports</button>
+        <button class="quick-action-btn" type="button" data-goto-section="pendingReview"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg> Pending Review</button>
+        <button class="quick-action-btn" type="button" data-goto-section="boosts"><svg class="icon" viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3Z"/></svg> View Boost Requests</button>
+        <a class="quick-action-btn" href="dashboard.html"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Manage Listings</a>
+        <button class="quick-action-btn" type="button" data-goto-section="settings"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg> Marketplace Settings</button>
       </div>
 
       <div class="analytics-section-title">Recent Activity</div>
       <div class="activity-grid">
-        <div class="activity-card"><div class="activity-card-header">🆕 New Users</div><div class="activity-list" id="recentUsersList"><p class="empty-state">Loading...</p></div></div>
-        <div class="activity-card"><div class="activity-card-header">📋 New Listings</div><div class="activity-list" id="recentListingsList"><p class="empty-state">Loading...</p></div></div>
-        <div class="activity-card"><div class="activity-card-header">🧾 New Orders</div><div class="activity-list" id="recentOrdersList"><p class="empty-state">Loading...</p></div></div>
-        <div class="activity-card"><div class="activity-card-header">🚀 New Boost Requests</div><div class="activity-list" id="recentBoostsList"><p class="empty-state">Loading...</p></div></div>
-        <div class="activity-card"><div class="activity-card-header">🚩 Recent Reports</div><div class="activity-list" id="recentReportsList"><p class="empty-state">Loading...</p></div></div>
+        <div class="activity-card"><div class="activity-card-header">New Users</div><div class="activity-list" id="recentUsersList"><p class="empty-state">Loading...</p></div></div>
+        <div class="activity-card"><div class="activity-card-header">New Listings</div><div class="activity-list" id="recentListingsList"><p class="empty-state">Loading...</p></div></div>
+        <div class="activity-card"><div class="activity-card-header">New Orders</div><div class="activity-list" id="recentOrdersList"><p class="empty-state">Loading...</p></div></div>
+        <div class="activity-card"><div class="activity-card-header">New Boost Requests</div><div class="activity-list" id="recentBoostsList"><p class="empty-state">Loading...</p></div></div>
+        <div class="activity-card"><div class="activity-card-header">Recent Reports</div><div class="activity-list" id="recentReportsList"><p class="empty-state">Loading...</p></div></div>
       </div>
 
       <div class="analytics-section-title">Analytics Breakdown</div>
@@ -1148,7 +1022,7 @@
     <section id="settingsSection" style="display:none;">
       <div class="settings-shell">
         <div class="settings-card">
-          <h2>⚙️ Marketplace Settings</h2>
+          <h2>Marketplace Settings</h2>
           <p>
             These values are saved in Firestore under
             <strong>settings/marketplace</strong>.
@@ -1257,7 +1131,7 @@
 
   <footer class="footer admin-footer">
     <div>
-      <h2>🇱🇷 LoyaltyMarket</h2>
+      <h2>LoyaltyMarket</h2>
       <p>You Get Market, We Get Buyer.</p>
     </div>
     <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
@@ -1780,7 +1654,7 @@
         showError("Some Firebase data could not load. " + error.message);
       } finally {
         refreshBtn.disabled = false;
-        refreshBtn.textContent = "🔄 Refresh Data";
+        refreshBtn.textContent = "Refresh Data";
       }
     }
 
@@ -1842,7 +1716,7 @@
                   ${safeText(displayName)}
 
                   ${isBusiness
-                    ? '<span class="user-badge badge-business">🏢 Business Account</span>'
+                    ? '<span class="user-badge badge-business">Business Account</span>'
                     : '<span class="user-badge badge-unverified">Personal Account</span>'}
 
                   <span class="user-badge ${isVerified ? "badge-verified" : "badge-unverified"}">
@@ -1851,7 +1725,7 @@
 
                   ${isBusiness
                     ? `<span class="user-badge ${isBusinessVerified ? "badge-business-verified" : "badge-unverified"}">
-                        ${isBusinessVerified ? "✓ Verified Business" : "Business Not Verified"}
+                        ${isBusinessVerified ? "Verified Business" : "Business Not Verified"}
                       </span>`
                     : ""}
 
@@ -2056,7 +1930,7 @@
             <article class="report-card">
               <div class="report-top">
                 <div>
-                  <span class="report-title">🚩 ${safeText(problemType)}</span>
+                  <span class="report-title">${safeText(problemType)}</span>
                   <span class="report-reason">Support Report</span>
                 </div>
 
@@ -2234,12 +2108,6 @@
       });
     });
 
-    // ================= PENDING REVIEW (SCAM DETECTION) =================
-    // Shows listings that sell.html / edit-product.html's rule-based scam
-    // checks flagged with status "pending_review", along with the specific
-    // reasons they were flagged, so an admin can Approve (make it active
-    // again) or Reject (mark it rejected and keep it hidden).
-
     function renderPendingReview() {
       const pendingListings = allProductsCache.filter(
         (product) => product.status === "pending_review"
@@ -2356,7 +2224,6 @@
         alert("The action failed: " + error.message);
       }
     }
-    // ================= END PENDING REVIEW =================
 
     function renderBoosts() {
       const filteredBoosts = currentBoostFilter === "all"
@@ -2511,12 +2378,12 @@
           marketplaceName: "LoyaltyMarket",
           supportEmail: "princeteah200@gmail.com",
           supportPhone: "+231 88 147 1694",
-          commissionPercent: 5,
+          commissionPercent: 0,
           mtnMobileMoney: "+231 88 147 1694",
           orangeMoney: "+231 77 002 5588",
-          boost3DayPrice: 5,
-          boost7DayPrice: 10,
-          boost14DayPrice: 18,
+          boost3DayPrice: 0,
+          boost7DayPrice: 0,
+          boost14DayPrice: 0,
           usdToLrdRate: 180,
           allowNewListings: true,
           allowNewRegistrations: true,
@@ -2530,12 +2397,12 @@
         settingsInputs.marketplaceName.value = settings.marketplaceName || "";
         settingsInputs.supportEmail.value = settings.supportEmail || "";
         settingsInputs.supportPhone.value = settings.supportPhone || "";
-        settingsInputs.commissionPercent.value = Number(settings.commissionPercent ?? 5);
+        settingsInputs.commissionPercent.value = Number(settings.commissionPercent ?? 0);
         settingsInputs.mtnMobileMoney.value = settings.mtnMobileMoney || "";
         settingsInputs.orangeMoney.value = settings.orangeMoney || "";
-        settingsInputs.boost3DayPrice.value = Number(settings.boost3DayPrice ?? 5);
-        settingsInputs.boost7DayPrice.value = Number(settings.boost7DayPrice ?? 10);
-        settingsInputs.boost14DayPrice.value = Number(settings.boost14DayPrice ?? 18);
+        settingsInputs.boost3DayPrice.value = Number(settings.boost3DayPrice ?? 0);
+        settingsInputs.boost7DayPrice.value = Number(settings.boost7DayPrice ?? 0);
+        settingsInputs.boost14DayPrice.value = Number(settings.boost14DayPrice ?? 0);
         settingsInputs.usdToLrdRate.value = Number(settings.usdToLrdRate ?? 180);
         settingsInputs.allowNewListings.checked = settings.allowNewListings !== false;
         settingsInputs.allowNewRegistrations.checked = settings.allowNewRegistrations !== false;

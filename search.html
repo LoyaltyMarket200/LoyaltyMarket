@@ -12,28 +12,28 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0f2d67">
 
   <style>
     body {
-      background: #f5f7fb;
+      background: #f7f8fa;
     }
 
     .load-more-btn {
       display: block;
       margin: 24px auto 0;
-      background: #1d4ed8;
+      background: #0f2d67;
       color: #fff;
       border: none;
-      padding: 12px 28px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 14px;
+      padding: 11px 26px;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 13.5px;
       cursor: pointer;
     }
 
     .load-more-btn:hover {
-      background: #123b8d;
+      background: #0b2350;
     }
 
     .load-more-btn:disabled {
@@ -43,29 +43,38 @@
 
     .recently-viewed-section {
       max-width: 1280px;
-      margin: 0 auto 20px;
+      margin: 0 auto 18px;
       padding: 0 max(20px, 4vw);
     }
 
     .recently-viewed-section h3 {
-      margin-bottom: 10px;
-      font-size: 15px;
-      color: #0f172a;
-      font-weight: 900;
+      margin-bottom: 9px;
+      font-size: 14px;
+      color: #1f2937;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .recently-viewed-section h3 .icon {
+      width: 15px;
+      height: 15px;
+      color: #0f2d67;
     }
 
     .recently-viewed-strip {
       display: flex;
-      gap: 12px;
+      gap: 11px;
       overflow-x: auto;
       padding-bottom: 6px;
     }
 
     .recently-viewed-card {
       flex: 0 0 auto;
-      width: 140px;
+      width: 138px;
       background: #fff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #e5e7eb;
       border-radius: 10px;
       padding: 8px;
       text-decoration: none;
@@ -74,14 +83,15 @@
 
     .recently-viewed-card img {
       width: 100%;
-      height: 90px;
+      height: 88px;
       object-fit: cover;
       border-radius: 6px;
       margin-bottom: 6px;
     }
 
     .recently-viewed-card h4 {
-      font-size: 12px;
+      font-size: 11.5px;
+      font-weight: 500;
       margin: 0 0 4px 0;
       white-space: nowrap;
       overflow: hidden;
@@ -89,9 +99,9 @@
     }
 
     .recently-viewed-card p {
-      font-size: 12px;
-      color: #ea580c;
-      font-weight: 800;
+      font-size: 11.5px;
+      color: #f97316;
+      font-weight: 700;
       margin: 0;
     }
   </style>
@@ -100,7 +110,7 @@
 <body class="homepage">
   <div class="top-strip">
     <div class="site-shell top-strip-inner">
-      <p>🇱🇷 Liberia's trusted online marketplace</p>
+      <p>Liberia's trusted online marketplace</p>
 
       <div class="top-strip-links">
         <a href="safety.html">Safety Tips</a>
@@ -149,7 +159,7 @@
     <div class="mp-header-search">
       <div class="mp-search-row">
         <div class="mp-search-field mp-search-location">
-          <span aria-hidden="true">📍</span>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
 
           <select id="countyFilter" aria-label="Select county">
             <option value="">All Liberia</option>
@@ -172,7 +182,7 @@
         </div>
 
         <div class="mp-search-field mp-search-keyword">
-          <span aria-hidden="true">🔎</span>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
 
           <input
             type="text"
@@ -230,7 +240,7 @@
 
   <nav class="mp-nav-strip" aria-label="Category navigation">
     <div class="mp-nav-inner">
-      <a href="index.html#products" class="mp-nav-all">☰ All Categories</a>
+      <a href="index.html#products" class="mp-nav-all"><svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;"><path d="M4 6h16M4 12h16M4 18h16"/></svg> All Categories</a>
       <a href="category-vehicles.html" class="mp-nav-link">Vehicles</a>
       <a href="category-property.html" class="mp-nav-link">Property</a>
       <a href="category-phones.html" class="mp-nav-link">Phones &amp; Tablets</a>
@@ -247,7 +257,7 @@
   </p>
 
   <div class="recently-viewed-section" id="recentlyViewedSection" style="display:none;">
-    <h3>🕒 Recently Viewed</h3>
+    <h3><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Recently Viewed</h3>
     <div class="recently-viewed-strip" id="recentlyViewedStrip"></div>
   </div>
 
@@ -453,8 +463,6 @@
         <div class="site-shell lm-county-section">
           <div class="lm-county-heading">
             <div>
-              <span class="lm-country-flag">🇱🇷</span>
-
               <span>
                 <strong>Browse Across Liberia</strong>
                 <small>Serving buyers and sellers in all 15 counties</small>
@@ -489,7 +497,7 @@
               All Rights Reserved.
             </p>
 
-            <p>Made For Liberia 🇱🇷</p>
+            <p>Made For Liberia</p>
           </div>
         </div>
       </div>
@@ -548,6 +556,8 @@ const DEFAULT_SETTINGS = {
   supportPhone: "+231 88 147 1694"
 };
 
+const LOCATION_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+
 const searchGrid = document.getElementById("searchGrid");
 const resultsCount = document.getElementById("resultsCount");
 const searchInput = document.getElementById("searchInput");
@@ -582,6 +592,17 @@ let currentFilteredProducts = [];
 let itemsShown = PAGE_SIZE;
 let unsubscribeUnreadMessages = null;
 
+const BOOST_TIER_RANK = {
+  diamond: 6, vipgold: 5, vip: 4, premium: 3, business: 2, basic: 1
+};
+
+function getBoostRank(product) {
+  if (product.boostStatus === "active" && product.boostPlan) {
+    return BOOST_TIER_RANK[product.boostPlan] || 1;
+  }
+  return product.featured === true ? 1 : 0;
+}
+
 function safeText(value) {
   return String(value || "")
     .replaceAll("&", "&amp;")
@@ -608,7 +629,7 @@ function renderProductCard(product) {
 
   productLink.innerHTML = `
     <div class="product-card">
-      <span class="badge ${isFeatured ? "badge-featured" : ""}">${isFeatured ? "⭐ Featured" : "New"}</span>
+      <span class="badge ${isFeatured ? "badge-featured" : ""}">${isFeatured ? "Featured" : "New"}</span>
 
       <button
         class="heart"
@@ -635,7 +656,7 @@ function renderProductCard(product) {
       </p>
 
       <p class="location">
-        📍 ${safeText(product.city || "")},
+        ${LOCATION_SVG} ${safeText(product.city || "")},
         ${safeText(product.county || "Liberia")}
       </p>
 
@@ -705,11 +726,7 @@ function sortProducts(products) {
       const bTime = b.createdAt?.seconds || 0;
       return bTime - aTime;
     });
-    sorted.sort((a, b) => {
-      const aFeatured = a.featured === true ? 1 : 0;
-      const bFeatured = b.featured === true ? 1 : 0;
-      return bFeatured - aFeatured;
-    });
+    sorted.sort((a, b) => getBoostRank(b) - getBoostRank(a));
   }
 
   return sorted;

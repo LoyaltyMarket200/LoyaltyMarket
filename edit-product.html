@@ -7,203 +7,157 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0f2d67">
+
   <style>
-    .field-error {
-      color: #dc2626;
-      font-size: 12px;
-      margin-top: -8px;
-      margin-bottom: 10px;
-      display: none;
+    :root {
+      --navy: #0f2d67;
+      --navy-soft: #eef1f7;
+      --orange: #f97316;
+      --orange-soft: #fff4ec;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --bg: #f7f8fa;
     }
-    .field-error.show {
-      display: block;
-    }
-    .save-btn-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .cancel-link {
-      color: #6b7280;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    .cancel-link:hover {
-      text-decoration: underline;
-    }
-    .post-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+    .icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* ===== Image upload UI (matches sell.html) ===== */
-    .image-upload-box {
-      margin-top: 8px;
-      padding: 18px;
-      border: 2px dashed #93c5fd;
-      border-radius: 14px;
-      background: #eff6ff;
-    }
+    .edit-navbar { min-height: 50px; padding: 7px max(20px, 4vw); background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 40; }
+    .edit-navbar .logo-link { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .edit-navbar .logo-link img { width: 26px; height: 26px; object-fit: contain; }
+    .edit-navbar .logo-text { color: var(--navy); font-size: 14px; font-weight: 700; }
+    .edit-nav-actions { display: flex; gap: 8px; }
+    .edit-nav-link { min-height: 31px; display: inline-flex; align-items: center; justify-content: center; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 500; border: 1px solid var(--line); color: var(--ink); background: #fff; }
+    .edit-nav-link:hover { border-color: var(--navy); color: var(--navy); }
 
-    .image-upload-box input[type="file"] {
-      min-height: auto;
-      padding: 10px;
-      background: #fff;
-      width: 100%;
-      border: 1px solid #cbd5e1;
-      border-radius: 11px;
-      font: inherit;
-    }
+    .edit-page { width: min(640px, 94%); margin: 20px auto 60px; }
+    .edit-page-title { margin: 4px 0 3px; font-size: 19px; font-weight: 600; color: var(--ink); }
+    .edit-page-subtitle { margin: 0 0 18px; color: var(--muted); font-size: 12.5px; font-weight: 400; }
 
-    .upload-help {
-      margin: 8px 0 0;
-      color: #64748b;
-      font-size: 12px;
-      line-height: 1.5;
+    .edit-form label { display: block; margin-top: 16px; margin-bottom: 6px; color: var(--ink); font-size: 13px; font-weight: 500; }
+    .edit-form input, .edit-form select, .edit-form textarea {
+      width: 100%; min-height: 46px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 10px;
+      background: #fff; font: inherit; font-size: 14px; color: var(--ink);
     }
+    .edit-form input:focus, .edit-form select:focus, .edit-form textarea:focus { outline: none; border-color: var(--navy); }
+    .edit-form textarea { min-height: 120px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-    .image-preview-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
-    }
+    .image-upload-box { margin-top: 8px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
+    .upload-trigger-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .upload-trigger-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--navy); border-radius: 9px; background: #fff; color: var(--navy); font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+    .upload-trigger-btn:hover { background: var(--navy-soft); }
+    .upload-file-status { color: var(--muted); font-size: 13px; }
+    .image-upload-box input[type="file"] { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+    .upload-help { margin: 10px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
 
-    .image-preview-item {
-      position: relative;
-      aspect-ratio: 1;
-      overflow: hidden;
-      border: 1px solid #dbeafe;
-      border-radius: 12px;
-      background: #fff;
-    }
-
-    .image-preview-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .image-number {
-      position: absolute;
-      left: 6px;
-      bottom: 6px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: rgba(15,23,42,.82);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 800;
-    }
-
+    .image-preview-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .image-preview-item { position: relative; aspect-ratio: 1; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .image-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+    .image-number { position: absolute; left: 5px; bottom: 5px; padding: 2px 6px; border-radius: 999px; background: rgba(15,45,103,.85); color: #fff; font-size: 9px; font-weight: 600; }
     .image-remove-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 22px;
-      height: 22px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(220,38,38,.92);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 900;
-      line-height: 1;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; border: none; border-radius: 50%;
+      background: rgba(185,28,28,.9); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
+    .image-remove-btn .icon { width: 12px; height: 12px; }
 
-    .image-remove-btn:hover {
-      background: #b91c1c;
-    }
-
-    .image-section-label {
-      margin: 16px 0 0;
-      color: #1f2937;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .upload-progress-wrap {
-      display: none;
-      margin-top: 16px;
-    }
-
+    .upload-progress-wrap { display: none; margin-top: 14px; }
     .upload-progress-wrap.show { display: block; }
+    .upload-progress-bar { height: 8px; overflow: hidden; border-radius: 999px; background: var(--line); }
+    .upload-progress-fill { width: 0; height: 100%; background: var(--navy); transition: width .2s ease; }
+    .upload-progress-text { margin: 6px 0 0; color: var(--muted); font-size: 12px; font-weight: 500; }
 
-    .upload-progress-bar {
-      height: 12px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #e2e8f0;
+    .save-btn { width: 100%; min-height: 50px; margin-top: 26px; border: none; border-radius: 11px; color: #fff; background: var(--orange); font-size: 15px; font-weight: 700; cursor: pointer; }
+    .save-btn:hover { background: #ea680a; }
+    .save-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    .status-box { width: min(560px, 90%); margin: 70px auto; padding: 28px; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-align: center; }
+    .status-box h2 { margin-top: 0; color: var(--ink); }
+    .status-box p { color: var(--muted); }
+    .status-box a { color: var(--navy); font-weight: 600; text-decoration: none; }
+
+    .footer { background: var(--navy); color: #dbe4f5; text-align: center; padding: 26px 20px; }
+    .footer h2 { color: #fff; margin-bottom: 6px; font-size: 15px; font-weight: 600; }
+    .footer p { margin-bottom: 5px; font-size: 12px; }
+
+    @media (max-width: 700px) {
+      .edit-navbar { flex-wrap: wrap; gap: 8px; }
+      .edit-page { width: 92%; margin-top: 14px; }
+      .image-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
-    .upload-progress-fill {
-      width: 0;
-      height: 100%;
-      background: linear-gradient(90deg, #2563eb, #0ea5e9);
-      transition: width .2s ease;
-    }
-
-    .upload-progress-text {
-      margin: 7px 0 0;
-      color: #475569;
-      font-size: 12px;
-      font-weight: 700;
+    @media (max-width: 520px) {
+      .form-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
+
 <body>
+  <header class="navbar edit-navbar">
+    <a href="index.html" class="logo-link">
+      <img src="icons/icon-512.png" alt="LoyaltyMarket">
+      <span class="logo-text">LoyaltyMarket</span>
+    </a>
+    <div class="edit-nav-actions">
+      <a href="dashboard.html" class="edit-nav-link">Dashboard</a>
+    </div>
+  </header>
 
-<header class="navbar">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <div id="noIdBox" class="status-box" style="display:none;">
+    <h2>No Product Selected</h2>
+    <p>Open this page from the Edit button on your Dashboard.</p>
+    <a href="dashboard.html">Return To Dashboard</a>
+  </div>
 
-  <a href="index.html" class="login-btn">Home</a>
-  <a href="dashboard.html" class="register-btn">Dashboard</a>
-</header>
+  <div id="notOwnerBox" class="status-box" style="display:none;">
+    <h2>Not Your Listing</h2>
+    <p>You can only edit products you posted yourself.</p>
+    <a href="dashboard.html">Return To Dashboard</a>
+  </div>
 
-<section class="sell-section">
-  <div class="sell-card">
-    <h1>Edit Your Product</h1>
-    <p class="sell-subtitle">Update your listing details below.</p>
+  <section class="edit-page" id="editPage" style="display:none;">
+    <h1 class="edit-page-title">Edit Product</h1>
+    <p class="edit-page-subtitle">Update your listing details below.</p>
 
-    <form class="sell-form" id="editForm">
-      <label>Product Title</label>
+    <form class="edit-form" id="editForm">
+      <label for="title">Product Title</label>
       <input type="text" id="title" required>
-      <p class="field-error" id="titleError">Title cannot be empty.</p>
 
-      <label>Category</label>
+      <label for="category">Category</label>
       <select id="category" required>
         <option value="">Select Category</option>
-        <option>Phones</option>
-        <option>Electronics</option>
         <option>Vehicles</option>
         <option>Property</option>
+        <option>Phones</option>
+        <option>Electronics</option>
+        <option>Home & Appliances</option>
         <option>Fashion</option>
+        <option>Beauty & Personal Care</option>
+        <option>Services</option>
+        <option>Repair & Construction</option>
+        <option>Commercial Equipment & Tools</option>
+        <option>Sports & Leisure</option>
+        <option>Babies & Kids</option>
+        <option>Agriculture & Farming</option>
+        <option>Animals & Pets</option>
         <option>Jobs</option>
+        <option>Seeking Work - CVs</option>
       </select>
 
       <div class="form-row">
-        <div class="form-col">
-          <label>Price USD</label>
-          <input type="number" id="priceUsd" min="0" required>
+        <div>
+          <label for="priceUsd">Price USD</label>
+          <input type="number" id="priceUsd" min="0" step="0.01" required>
         </div>
-
-        <div class="form-col">
-          <label>Price L$</label>
-          <input type="number" id="priceLrd" min="0" required>
+        <div>
+          <label for="priceLrd">Price L$</label>
+          <input type="number" id="priceLrd" min="0" step="1">
         </div>
       </div>
-      <p class="field-error" id="priceError">Prices must be 0 or greater.</p>
 
-      <label>Condition</label>
-      <select id="condition" required>
+      <label for="condition">Condition</label>
+      <select id="condition">
         <option value="">Select Condition</option>
         <option>Brand New</option>
         <option>Used</option>
@@ -211,65 +165,59 @@
       </select>
 
       <div class="form-row">
-        <div class="form-col">
-          <label>County</label>
+        <div>
+          <label for="county">County</label>
           <input type="text" id="county" required>
         </div>
-
-        <div class="form-col">
-          <label>City</label>
+        <div>
+          <label for="city">City</label>
           <input type="text" id="city" required>
         </div>
       </div>
 
-      <label>Product Images</label>
+      <label for="productImages">Product Images</label>
       <div class="image-upload-box">
-        <p class="image-section-label">Current photos</p>
-        <div id="existingImagesGrid" class="image-preview-grid"></div>
-        <p id="noExistingImagesNote" class="upload-help" style="display:none;">No photos yet — add some below.</p>
-
-        <p class="image-section-label">Add new photos</p>
-        <input type="file" id="newImages" accept="image/jpeg,image/png,image/webp" multiple>
-        <p class="upload-help">JPG, PNG, or WebP. Maximum 5 MB each. Up to 4 photos total (current + new combined). The first photo shown above becomes the main photo.</p>
-        <div id="newImagesPreview" class="image-preview-grid"></div>
+        <div class="upload-trigger-row">
+          <button type="button" class="upload-trigger-btn" id="addPhotosBtn">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            Add photos
+          </button>
+          <span class="upload-file-status" id="fileStatus">No new files chosen</span>
+        </div>
+        <input type="file" id="productImages" accept="image/jpeg,image/png,image/webp" multiple>
+        <p class="upload-help">Existing photos are shown below — tap the red X to remove one. Choose new images to add (4 total maximum, 5 MB each). The first photo becomes the main image.</p>
+        <div id="imagePreviewGrid" class="image-preview-grid"></div>
       </div>
 
+      <label for="description">Description</label>
+      <textarea id="description" required></textarea>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" required>
+
       <div id="uploadProgressWrap" class="upload-progress-wrap">
-        <div class="upload-progress-bar">
-          <div id="uploadProgressFill" class="upload-progress-fill"></div>
-        </div>
+        <div class="upload-progress-bar"><div id="uploadProgressFill" class="upload-progress-fill"></div></div>
         <p id="uploadProgressText" class="upload-progress-text">Preparing upload...</p>
       </div>
 
-      <label>Description</label>
-      <textarea id="description" rows="5" required></textarea>
-
-      <label>Phone Number</label>
-      <input type="tel" id="phone" required>
-
-      <div class="save-btn-row">
-        <button type="submit" class="post-btn" id="saveBtn">Save Changes</button>
-        <a href="dashboard.html" class="cancel-link">Cancel</a>
-      </div>
+      <button type="submit" class="save-btn" id="saveBtn">Save Changes</button>
     </form>
-  </div>
-</section>
+  </section>
 
-<footer class="footer">
-  <h2>🇱🇷 LoyaltyMarket</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
-</footer>
+  <footer class="footer">
+    <h2>LoyaltyMarket</h2>
+    <p>You Get Market, We Get Buyer.</p>
+    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  </footer>
 
 <script type="module">
 import { auth, db, storage } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject
+  doc, getDoc, updateDoc, collection, query, where, getDocs, Timestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {
+  ref, uploadBytesResumable, getDownloadURL, deleteObject
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
 const MAX_IMAGES = 4;
@@ -278,6 +226,12 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
+
+const noIdBox = document.getElementById("noIdBox");
+const notOwnerBox = document.getElementById("notOwnerBox");
+const editPage = document.getElementById("editPage");
+const editForm = document.getElementById("editForm");
+const saveBtn = document.getElementById("saveBtn");
 
 const titleInput = document.getElementById("title");
 const categoryInput = document.getElementById("category");
@@ -288,507 +242,408 @@ const countyInput = document.getElementById("county");
 const cityInput = document.getElementById("city");
 const descriptionInput = document.getElementById("description");
 const phoneInput = document.getElementById("phone");
-const saveBtn = document.getElementById("saveBtn");
-const titleError = document.getElementById("titleError");
-const priceError = document.getElementById("priceError");
 
-const existingImagesGrid = document.getElementById("existingImagesGrid");
-const noExistingImagesNote = document.getElementById("noExistingImagesNote");
-const newImagesInput = document.getElementById("newImages");
-const newImagesPreview = document.getElementById("newImagesPreview");
+const productImagesInput = document.getElementById("productImages");
+const addPhotosBtn = document.getElementById("addPhotosBtn");
+const fileStatus = document.getElementById("fileStatus");
+const imagePreviewGrid = document.getElementById("imagePreviewGrid");
 
 const uploadProgressWrap = document.getElementById("uploadProgressWrap");
 const uploadProgressFill = document.getElementById("uploadProgressFill");
 const uploadProgressText = document.getElementById("uploadProgressText");
 
 let currentUser = null;
+let existingImages = [];   // URLs already on Storage, kept unless removed
+let removedImages = [];    // URLs marked for deletion on save
+let newFiles = [];         // File objects selected to add
 
-// The photos already saved on this listing (Storage download URLs).
-// The seller can remove any of these before saving; whatever remains,
-// in order, stays first in the final images[] array (position 0 = main photo).
-let existingImages = [];
-
-// URLs of existing photos the seller removed this session — deleted
-// from Storage (best-effort) only after the Firestore save succeeds,
-// so a removed-then-cancelled edit never loses the file.
-let removedExistingImageUrls = [];
-
-// Newly selected files staged for upload on save — not uploaded yet,
-// so removing one here is free (no Storage cleanup needed).
-let newFiles = [];
-
-// Tracks the listing's status as it was when the page loaded, so an
-// edit doesn't accidentally overwrite "sold" or "archived" back to
-// "active"/"pending_review" just because the seller updated a field.
-let existingStatus = "active";
-
-if (!productId) {
-  alert("No product selected to edit.");
-  window.location.href = "dashboard.html";
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
 
-// Helper: return the first defined, non-empty value among several
-// possible field names. Used so old-format and new-format listings
-// both populate the form correctly.
-function firstDefined(...values) {
-  for (const value of values) {
-    if (value !== undefined && value !== null && value !== "") {
-      return value;
-    }
-  }
-  return "";
-}
+addPhotosBtn.addEventListener("click", () => productImagesInput.click());
 
-function totalImageCount() {
-  return existingImages.length + newFiles.length;
-}
-
-function renderExistingImages() {
-  existingImagesGrid.innerHTML = "";
-  noExistingImagesNote.style.display = existingImages.length ? "none" : "block";
+function renderPreviews() {
+  imagePreviewGrid.innerHTML = "";
+  const total = existingImages.length + newFiles.length;
 
   existingImages.forEach((url, index) => {
     const item = document.createElement("div");
     item.className = "image-preview-item";
-
-    const img = document.createElement("img");
-    img.src = url;
-    img.alt = `Product photo ${index + 1}`;
-
-    const numberTag = document.createElement("span");
-    numberTag.className = "image-number";
-    numberTag.textContent = index === 0 ? "Main photo" : `Photo ${index + 1}`;
-
-    const removeBtn = document.createElement("button");
-    removeBtn.type = "button";
-    removeBtn.className = "image-remove-btn";
-    removeBtn.setAttribute("aria-label", "Remove this photo");
-    removeBtn.textContent = "✕";
-    removeBtn.addEventListener("click", () => {
-      removedExistingImageUrls.push(url);
-      existingImages.splice(index, 1);
-      renderExistingImages();
-    });
-
-    item.append(img, numberTag, removeBtn);
-    existingImagesGrid.appendChild(item);
+    item.innerHTML = `
+      <img src="${safeText(url)}" alt="Product photo ${index + 1}">
+      <span class="image-number">${index === 0 ? "Main photo" : "Existing"}</span>
+      <button type="button" class="image-remove-btn" data-remove-existing="${index}">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    `;
+    imagePreviewGrid.appendChild(item);
   });
-}
-
-function renderNewImagePreviews() {
-  newImagesPreview.innerHTML = "";
 
   newFiles.forEach((file, index) => {
     const item = document.createElement("div");
     item.className = "image-preview-item";
-
-    const img = document.createElement("img");
-    img.src = URL.createObjectURL(file);
-    img.alt = `New photo ${index + 1}`;
-
-    const numberTag = document.createElement("span");
-    numberTag.className = "image-number";
-    numberTag.textContent = "New";
-
-    const removeBtn = document.createElement("button");
-    removeBtn.type = "button";
-    removeBtn.className = "image-remove-btn";
-    removeBtn.setAttribute("aria-label", "Remove this photo");
-    removeBtn.textContent = "✕";
-    removeBtn.addEventListener("click", () => {
-      newFiles.splice(index, 1);
-      renderNewImagePreviews();
-    });
-
-    item.append(img, numberTag, removeBtn);
-    newImagesPreview.appendChild(item);
+    item.innerHTML = `
+      <img src="${URL.createObjectURL(file)}" alt="New photo ${index + 1}">
+      <span class="image-number">New</span>
+      <button type="button" class="image-remove-btn" data-remove-new="${index}">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    `;
+    imagePreviewGrid.appendChild(item);
   });
+
+  fileStatus.textContent = newFiles.length
+    ? `${newFiles.length} new file${newFiles.length === 1 ? "" : "s"} chosen`
+    : "No new files chosen";
+
+  document.querySelectorAll("[data-remove-existing]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.removeExisting);
+      removedImages.push(existingImages[index]);
+      existingImages.splice(index, 1);
+      renderPreviews();
+    });
+  });
+
+  document.querySelectorAll("[data-remove-new]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.removeNew);
+      newFiles.splice(index, 1);
+      renderPreviews();
+    });
+  });
+
+  void total;
 }
 
-newImagesInput.addEventListener("change", () => {
-  const selected = Array.from(newImagesInput.files);
+productImagesInput.addEventListener("change", () => {
+  const incoming = Array.from(productImagesInput.files);
+  const totalAfter = existingImages.length + newFiles.length + incoming.length;
 
-  try {
-    if (totalImageCount() + selected.length > MAX_IMAGES) {
-      throw new Error(
-        `You can have a maximum of ${MAX_IMAGES} photos total. Remove one first or select fewer new photos.`
-      );
-    }
-
-    selected.forEach((file) => {
-      if (!ALLOWED_TYPES.includes(file.type)) {
-        throw new Error(`${file.name} is not a supported image type.`);
-      }
-
-      if (file.size > MAX_FILE_SIZE) {
-        throw new Error(`${file.name} is larger than 5 MB.`);
-      }
-    });
-
-    newFiles = newFiles.concat(selected);
-    renderNewImagePreviews();
-  } catch (error) {
-    alert(error.message);
-  } finally {
-    newImagesInput.value = "";
+  if (totalAfter > MAX_IMAGES) {
+    alert(`You can have a maximum of ${MAX_IMAGES} photos total. Remove one first.`);
+    productImagesInput.value = "";
+    return;
   }
+
+  for (const file of incoming) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      alert(`${file.name} is not a supported image type.`);
+      productImagesInput.value = "";
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      alert(`${file.name} is larger than 5 MB.`);
+      productImagesInput.value = "";
+      return;
+    }
+  }
+
+  newFiles = newFiles.concat(incoming);
+  productImagesInput.value = "";
+  renderPreviews();
 });
 
 function sanitizeFileName(name) {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9._-]+/g, "-")
-    .replace(/-+/g, "-");
+  return name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-").replace(/-+/g, "-");
 }
 
 function uploadSingleFile(file, storagePath, progressCallback) {
   return new Promise((resolve, reject) => {
     const fileRef = ref(storage, storagePath);
-    const task = uploadBytesResumable(fileRef, file, {
-      contentType: file.type
-    });
+    const task = uploadBytesResumable(fileRef, file, { contentType: file.type });
 
-    task.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = snapshot.totalBytes
-          ? snapshot.bytesTransferred / snapshot.totalBytes
-          : 0;
-
-        progressCallback(progress);
-      },
+    task.on("state_changed",
+      (snapshot) => progressCallback(snapshot.totalBytes ? snapshot.bytesTransferred / snapshot.totalBytes : 0),
       reject,
       async () => {
-        try {
-          resolve(await getDownloadURL(task.snapshot.ref));
-        } catch (error) {
-          reject(error);
-        }
+        try { resolve(await getDownloadURL(task.snapshot.ref)); }
+        catch (error) { reject(error); }
       }
     );
   });
 }
 
-async function uploadNewImages(files) {
-  if (files.length === 0) return [];
+async function uploadNewImages() {
+  if (newFiles.length === 0) return [];
 
   uploadProgressWrap.classList.add("show");
   uploadProgressFill.style.width = "0%";
 
   const urls = [];
-  const individualProgress = new Array(files.length).fill(0);
-  const folderId = `${productId}-${Date.now()}`;
+  const individualProgress = new Array(newFiles.length).fill(0);
+  const folderId = `${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}`;
 
-  for (let index = 0; index < files.length; index += 1) {
-    const file = files[index];
+  for (let index = 0; index < newFiles.length; index += 1) {
+    const file = newFiles[index];
     const fileName = `${index + 1}-${sanitizeFileName(file.name)}`;
-    const storagePath =
-      `listing-images/${currentUser.uid}/product/${folderId}/${fileName}`;
+    const storagePath = `listing-images/${currentUser.uid}/product/${folderId}/${fileName}`;
 
-    uploadProgressText.textContent =
-      `Uploading photo ${index + 1} of ${files.length}...`;
+    uploadProgressText.textContent = `Uploading image ${index + 1} of ${newFiles.length}...`;
 
     const url = await uploadSingleFile(file, storagePath, (progress) => {
       individualProgress[index] = progress;
-
-      const totalProgress =
-        individualProgress.reduce((sum, value) => sum + value, 0) / files.length;
-
-      uploadProgressFill.style.width = `${Math.round(totalProgress * 100)}%`;
-      uploadProgressText.textContent = `Uploading ${Math.round(totalProgress * 100)}%`;
+      const total = individualProgress.reduce((sum, v) => sum + v, 0) / newFiles.length;
+      uploadProgressFill.style.width = `${Math.round(total * 100)}%`;
+      uploadProgressText.textContent = `Uploading ${Math.round(total * 100)}%`;
     });
 
     urls.push(url);
-    individualProgress[index] = 1;
   }
 
   uploadProgressFill.style.width = "100%";
-  uploadProgressText.textContent = "New photos uploaded successfully.";
-
+  uploadProgressText.textContent = "Images uploaded successfully.";
   return urls;
 }
 
-function resetProgress() {
-  uploadProgressWrap.classList.remove("show");
-  uploadProgressFill.style.width = "0%";
-  uploadProgressText.textContent = "Preparing upload...";
+async function deleteRemovedImages() {
+  await Promise.all(
+    removedImages.map((url) =>
+      deleteObject(ref(storage, url)).catch(() => {
+        // Best-effort — a failed Storage delete shouldn't block saving
+        // the rest of the edit.
+      })
+    )
+  );
 }
 
-async function loadProduct() {
-  try {
-    const productRef = doc(db, "products", productId);
-    const productSnap = await getDoc(productRef);
-
-    if (!productSnap.exists()) {
-      alert("This product no longer exists.");
-      window.location.href = "dashboard.html";
-      return;
-    }
-
-    const product = productSnap.data();
-
-    if (product.sellerId !== currentUser.uid) {
-      alert("You do not have permission to edit this listing.");
-      window.location.href = "dashboard.html";
-      return;
-    }
-
-    existingStatus = product.status || "active";
-
-    titleInput.value = product.title || "";
-    categoryInput.value = product.category || "";
-
-    // Backward-compatible price fields: new listings use priceUsd/priceLrd,
-    // older listings used priceUSD/priceL$ (or priceLRD in some cases).
-    priceUsdInput.value = firstDefined(
-      product.priceUsd,
-      product.priceUSD
-    );
-
-    priceLrdInput.value = firstDefined(
-      product.priceLrd,
-      product.priceLRD,
-      product["priceL$"]
-    );
-
-    conditionInput.value = product.condition || "";
-    countyInput.value = product.county || "";
-    cityInput.value = product.city || "";
-    descriptionInput.value = product.description || "";
-
-    // Backward-compatible phone field: new listings use phone,
-    // older listings used phoneNumber.
-    phoneInput.value = firstDefined(
-      product.phone,
-      product.phoneNumber
-    );
-
-    // Backward-compatible images: new listings use images[] (real
-    // Storage URLs from sell.html's uploader), older listings may
-    // have a single imageUrl string (Storage URL or a legacy pasted
-    // link) with no images[] array.
-    existingImages = product.images && product.images.length > 0
-      ? [...product.images]
-      : (product.imageUrl ? [product.imageUrl] : []);
-
-    renderExistingImages();
-
-  } catch (error) {
-    alert("Could not load product: " + error.message);
-    window.location.href = "dashboard.html";
-  }
-}
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-    loadProduct();
-  } else {
-    window.location.href = "login.html";
-  }
-});
-
-function validateForm() {
-  let isValid = true;
-
-  titleError.classList.remove("show");
-  priceError.classList.remove("show");
-
-  if (!titleInput.value.trim()) {
-    titleError.classList.add("show");
-    isValid = false;
-  }
-
-  const priceUsd = Number(priceUsdInput.value);
-  const priceLrd = Number(priceLrdInput.value);
-
-  if (isNaN(priceUsd) || priceUsd < 0 || isNaN(priceLrd) || priceLrd < 0) {
-    priceError.classList.add("show");
-    isValid = false;
-  }
-
-  if (totalImageCount() === 0) {
-    isValid = false;
-    alert("Please keep or add at least one product photo.");
-  }
-
-  return isValid;
-}
-
-// ================= RULE-BASED SCAM DETECTION =================
-// Same free, rule-based checks used on new listings (sell.html),
-// re-run whenever a listing is edited. If a previously-clean
-// listing gets edited into something that trips these rules (e.g.
-// price dropped very low, suspicious wording added), it goes back
-// to "pending_review" so an admin can take a look before it stays
-// visible to buyers. Listings already marked "sold" or "archived"
-// are left alone — an edit shouldn't un-sell or un-archive them.
+// ---------- Scam checks (same expanded system as sell.html) ----------
 
 const CATEGORY_PRICE_FLOORS = {
-  Phones: 15,
-  Electronics: 10,
-  Vehicles: 300,
-  Property: 500,
-  Fashion: 1,
-  Jobs: 0
+  Vehicles: 300, Property: 500, Phones: 15, Electronics: 10,
+  "Home & Appliances": 5, Fashion: 1, "Beauty & Personal Care": 1,
+  Services: 0, "Repair & Construction": 0, "Commercial Equipment & Tools": 10,
+  "Sports & Leisure": 1, "Babies & Kids": 1, "Agriculture & Farming": 1,
+  "Animals & Pets": 1, Jobs: 0, "Seeking Work - CVs": 0
 };
 
+const HIGH_VALUE_CATEGORIES = ["Vehicles", "Property", "Electronics", "Phones"];
+const NEW_ACCOUNT_HOURS = 24;
+const HIGH_VALUE_THRESHOLD_USD = 500;
+
 const SUSPICIOUS_KEYWORDS = [
-  "wire transfer",
-  "western union",
-  "send deposit",
-  "send a deposit",
-  "pay deposit first",
-  "urgent sale",
-  "no returns",
-  "no refunds",
-  "cash only no meet",
-  "moneygram",
-  "gift card"
+  "wire transfer", "western union", "send deposit", "send a deposit", "pay deposit first",
+  "advance payment", "pay in advance", "urgent sale", "no returns", "no refunds",
+  "no inspection", "cash only no meet", "moneygram", "gift card", "reship", "reshipping",
+  "shipping agent", "customs fee", "clearing fee", "processing fee",
+  "delivery fee before pickup", "whatsapp only", "telegram only", "double your money",
+  "investment opportunity", "guaranteed returns", "click this link", "verify your account",
+  "you have won", "claim your prize", "lottery winner", "inheritance fund", "next of kin",
+  "outside the app", "off the app"
 ];
 
 function checkPriceTooLow(category, priceUsd) {
   const floor = CATEGORY_PRICE_FLOORS[category];
-  if (floor === undefined) return false;
   const price = Number(priceUsd);
-  if (!Number.isFinite(price)) return false;
-  return price > 0 && price < floor;
+  return floor !== undefined && Number.isFinite(price) && price > 0 && price < floor;
 }
 
 function checkSuspiciousKeywords(title, description) {
-  const combinedText = `${title} ${description}`.toLowerCase();
-  return SUSPICIOUS_KEYWORDS.some((keyword) => combinedText.includes(keyword));
+  const text = `${title} ${description}`.toLowerCase();
+  return SUSPICIOUS_KEYWORDS.some((keyword) => text.includes(keyword));
 }
 
-function checkMissingImage(images) {
-  return images.length === 0;
+function checkThinDescription(description, priceUsd) {
+  const price = Number(priceUsd);
+  const wordCount = description.trim().split(/\s+/).filter(Boolean).length;
+  return price >= 100 && wordCount < 5;
 }
 
-function runScamChecks({ title, description, category, priceUsd, images }) {
+async function checkPriceOutlier(category, priceUsd) {
+  const price = Number(priceUsd);
+  if (!Number.isFinite(price) || price <= 0) return false;
+  try {
+    const categoryQuery = query(collection(db, "products"), where("category", "==", category), where("status", "==", "active"));
+    const snapshot = await getDocs(categoryQuery);
+    const prices = snapshot.docs.map((d) => Number(d.data().priceUsd)).filter((v) => Number.isFinite(v) && v > 0).sort((a, b) => a - b);
+    if (prices.length < 5) return false;
+    const median = prices[Math.floor(prices.length / 2)];
+    return price < median * 0.2;
+  } catch { return false; }
+}
+
+async function checkNewAccountHighValue(sellerId, category, priceUsd) {
+  const price = Number(priceUsd);
+  if (!HIGH_VALUE_CATEGORIES.includes(category) || price < HIGH_VALUE_THRESHOLD_USD) return false;
+  try {
+    const userSnapshot = await getDoc(doc(db, "users", sellerId));
+    if (!userSnapshot.exists()) return false;
+    const userData = userSnapshot.data();
+    if (!userData.createdAt || !userData.createdAt.seconds) return false;
+    const accountAgeHours = (Date.now() - userData.createdAt.seconds * 1000) / (1000 * 60 * 60);
+    return accountAgeHours < NEW_ACCOUNT_HOURS;
+  } catch { return false; }
+}
+
+async function checkDuplicateListing(title, priceUsd, sellerId, excludeProductId) {
+  const cleanTitle = title.trim();
+  if (!cleanTitle) return false;
+  try {
+    const titleQuery = query(collection(db, "products"), where("title", "==", cleanTitle));
+    const snapshot = await getDocs(titleQuery);
+    return snapshot.docs.some((docSnap) =>
+      docSnap.id !== excludeProductId &&
+      docSnap.data().sellerId !== sellerId &&
+      String(docSnap.data().priceUsd) === String(priceUsd)
+    );
+  } catch { return false; }
+}
+
+async function runScamChecks({ title, description, category, priceUsd, images, sellerId }) {
   const reasons = [];
-
-  if (checkPriceTooLow(category, priceUsd)) {
-    reasons.push("Price is unusually low for this category.");
-  }
-
-  if (checkSuspiciousKeywords(title, description)) {
-    reasons.push("Listing text contains language commonly used in scams.");
-  }
-
-  if (checkMissingImage(images)) {
-    reasons.push("No product image was provided.");
-  }
-
+  if (checkPriceTooLow(category, priceUsd)) reasons.push("Price is unusually low for this category.");
+  if (await checkPriceOutlier(category, priceUsd)) reasons.push("Price is far below the median price of similar active listings.");
+  if (checkSuspiciousKeywords(title, description)) reasons.push("Listing text contains language commonly used in scams.");
+  if (checkThinDescription(description, priceUsd)) reasons.push("Description is very short for the price listed.");
+  if (images.length === 0) reasons.push("No product image was provided.");
+  if (await checkNewAccountHighValue(sellerId, category, priceUsd)) reasons.push("A brand-new account is posting a high-value item in a commonly targeted category.");
+  if (await checkDuplicateListing(title, priceUsd, sellerId, productId)) reasons.push("An identical title and price already exists from a different seller.");
   return reasons;
 }
-// ================= END SCAM DETECTION =================
 
-document.getElementById("editForm").addEventListener("submit", async (event) => {
+// ---------- Load existing product ----------
+
+async function loadProduct() {
+  if (!productId) {
+    noIdBox.style.display = "block";
+    return;
+  }
+
+  try {
+    const productSnapshot = await getDoc(doc(db, "products", productId));
+
+    if (!productSnapshot.exists()) {
+      noIdBox.style.display = "block";
+      return;
+    }
+
+    const product = productSnapshot.data();
+
+    if (product.sellerId !== currentUser.uid) {
+      notOwnerBox.style.display = "block";
+      return;
+    }
+
+    titleInput.value = product.title || "";
+    categoryInput.value = product.category || "";
+    priceUsdInput.value = product.priceUsd || "";
+    priceLrdInput.value = product.priceLrd || "";
+    conditionInput.value = product.condition || "";
+    countyInput.value = product.county || "";
+    cityInput.value = product.city || "";
+    descriptionInput.value = product.description || "";
+    phoneInput.value = product.phone || "";
+
+    // Back-compat: older listings may have used a single imageUrl
+    // field, or an images[] array, or both — collect every real URL
+    // found under any of the field names this app has ever used.
+    const collected = [];
+    if (Array.isArray(product.images)) {
+      product.images.forEach((url) => { if (url && !collected.includes(url)) collected.push(url); });
+    }
+    [product.imageUrl, product.imageURL, product.image, product.mainImage, product.photoUrl, product.photoURL].forEach((url) => {
+      if (url && typeof url === "string" && !collected.includes(url)) collected.push(url);
+    });
+
+    existingImages = collected;
+    renderPreviews();
+
+    editPage.style.display = "block";
+
+  } catch (error) {
+    alert("Could not load this product: " + error.message);
+    window.location.href = "dashboard.html";
+  }
+}
+
+editForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  if (!validateForm()) {
+  const totalImages = existingImages.length + newFiles.length;
+  if (totalImages === 0) {
+    alert("Please keep or add at least one product image.");
     return;
   }
 
   saveBtn.disabled = true;
-  saveBtn.textContent = newFiles.length ? "Uploading photos..." : "Saving...";
+  saveBtn.textContent = "Uploading photos...";
 
   try {
-    const uploadedUrls = await uploadNewImages(newFiles);
-    const images = [...existingImages, ...uploadedUrls];
+    const newUrls = await uploadNewImages();
+    const finalImages = existingImages.concat(newUrls);
 
-    const priceUsdValue = priceUsdInput.value;
-    const priceLrdValue = priceLrdInput.value;
-    const phoneValue = phoneInput.value.trim();
-    const titleValue = titleInput.value.trim();
-    const descriptionValue = descriptionInput.value.trim();
-    const categoryValue = categoryInput.value;
+    const title = titleInput.value.trim();
+    const category = categoryInput.value;
+    const priceUsd = priceUsdInput.value.trim();
+    const description = descriptionInput.value.trim();
 
     saveBtn.textContent = "Checking listing...";
 
-    const flagReasons = runScamChecks({
-      title: titleValue,
-      description: descriptionValue,
-      category: categoryValue,
-      priceUsd: priceUsdValue,
-      images: images
+    const flagReasons = await runScamChecks({
+      title, description, category, priceUsd,
+      images: finalImages, sellerId: currentUser.uid
     });
 
     const isFlagged = flagReasons.length > 0;
 
-    // Don't let an edit undo a "sold" or "archived" status — only
-    // adjust status between active/pending_review.
-    let newStatus = existingStatus;
-    if (existingStatus === "active" || existingStatus === "pending_review") {
-      newStatus = isFlagged ? "pending_review" : "active";
-    }
+    saveBtn.textContent = "Saving changes...";
 
-    // Save BOTH new-format and old-format field names on every update,
-    // so any older page or tool still reading the legacy field names
-    // keeps working, while new pages use the new field names.
-    const updatedProduct = {
-      title: titleValue,
-      category: categoryValue,
-
-      priceUsd: priceUsdValue,
-      priceUSD: priceUsdValue,
-
-      priceLrd: priceLrdValue,
-      priceLRD: priceLrdValue,
-      "priceL$": priceLrdValue,
-
+    await updateDoc(doc(db, "products", productId), {
+      title,
+      category,
+      priceUsd,
+      priceLrd: priceLrdInput.value.trim(),
       condition: conditionInput.value,
       county: countyInput.value.trim(),
       city: cityInput.value.trim(),
-
-      imageUrl: images[0] || "",
-      images: images,
-
-      description: descriptionValue,
-
-      phone: phoneValue,
-      phoneNumber: phoneValue,
-
-      status: newStatus,
+      imageUrl: finalImages[0],
+      images: finalImages,
+      description,
+      phone: phoneInput.value.trim(),
+      status: isFlagged ? "pending_review" : "active",
       flagged: isFlagged,
-      flagReasons: flagReasons
-    };
-
-    saveBtn.textContent = "Saving...";
-    await updateDoc(doc(db, "products", productId), updatedProduct);
-
-    // Best-effort cleanup: delete any photos the seller removed this
-    // session. Failures here are silent — a leftover orphaned file in
-    // Storage is a minor cost issue, not something worth blocking or
-    // alarming the seller over.
-    removedExistingImageUrls.forEach((url) => {
-      deleteObject(ref(storage, url)).catch(() => {});
+      flagReasons,
+      updatedAt: Timestamp.now()
     });
 
-    if (isFlagged && existingStatus !== "sold" && existingStatus !== "archived") {
-      alert("Your changes were saved, but this listing needs a quick admin review before it's visible again. This usually happens for things like unusually low prices or missing photos.");
+    // Best-effort Storage cleanup — happens after the save succeeds
+    // so a failed delete never blocks the actual product update.
+    await deleteRemovedImages();
+
+    if (isFlagged) {
+      alert("Your changes were saved and sent for admin review.");
     } else {
       alert("Product updated successfully!");
     }
 
     window.location.href = "dashboard.html";
+
   } catch (error) {
     alert("Could not save changes: " + error.message);
-    resetProgress();
   } finally {
     saveBtn.disabled = false;
     saveBtn.textContent = "Save Changes";
   }
 });
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    alert("Please log in to edit a listing.");
+    window.location.href = "login.html";
+    return;
+  }
+  currentUser = user;
+  loadProduct();
+});
 </script>
 
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
   }
 </script>
-
 </body>
 </html>

@@ -84,6 +84,7 @@
     .boost-modal{background:#fff;border-radius:14px;padding:26px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto}
     .boost-modal h3{margin:0 0 4px;font-size:17px;font-weight:700;color:var(--ink)}
     .boost-modal-subtitle{color:var(--muted);font-size:13px;margin-bottom:18px}
+    .launch-free-banner{margin-bottom:16px;padding:10px 13px;border-radius:10px;background:var(--orange-soft);color:#9a3412;font-size:12px;font-weight:600;text-align:center}
     .boost-plan-option{display:block;border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-bottom:10px;cursor:pointer}
     .boost-plan-option:hover{border-color:var(--navy)}
     .boost-plan-option.selected{border-color:var(--navy);background:var(--navy-soft)}
@@ -97,6 +98,8 @@
     .boost-submit-btn:disabled{opacity:.6;cursor:not-allowed}
     .boost-cancel-btn{background:#f1f5f9;color:var(--ink)}
     .boost-modal-note{font-size:11.5px;color:var(--muted);margin-top:12px;text-align:center}
+    .boost-scroll-hint{font-size:10.5px;color:#9ca3af;text-align:center;margin:8px 0 0}
+    .boost-tier-scroll{max-height:310px;overflow-y:auto;padding-right:2px;margin-bottom:4px}
 
     .boost-payment-screen{display:none}
     .boost-payment-screen.open{display:block}
@@ -128,11 +131,13 @@
 
     /* Shell */
     .dashboard-shell{width:min(1300px,94%);margin:26px auto 60px}
+    .dashboard-plain-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+    .dashboard-plain-header h1{margin:0;font-size:19px;font-weight:600;color:var(--ink)}
     .dashboard-welcome{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;border-radius:14px;background:var(--navy);color:#fff}
     .dashboard-kicker{margin-bottom:7px;color:#cdd8ef;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
     .dashboard-welcome h1{margin:0 0 6px;font-size:clamp(17px,2.3vw,21px);font-weight:700;line-height:1.2}
     .dashboard-welcome p:last-child{color:#cdd8ef;font-size:14px;line-height:1.55;font-weight:400}
-    .dashboard-welcome-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:9px;color:var(--navy);background:#fff;text-decoration:none;font-weight:600;font-size:12.5px}
+    .dashboard-welcome-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:9px;color:#fff;background:var(--orange);text-decoration:none;font-weight:600;font-size:12.5px}
 
     .dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0}
     .dashboard-stat-card{display:flex;align-items:center;gap:13px;padding:17px;border:1px solid var(--line);border-radius:13px;background:#fff}
@@ -196,12 +201,8 @@
 </header>
 
 <section class="dashboard-shell">
-  <div class="dashboard-welcome">
-    <div>
-      <p class="dashboard-kicker">Seller Center</p>
-      <h1>Welcome to your dashboard</h1>
-      <p>Manage your listings, sales, messages, and business profile in one place.</p>
-    </div>
+  <div class="dashboard-plain-header">
+    <h1>My Dashboard</h1>
     <a href="sell.html" class="dashboard-welcome-btn">
       <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
       Post New Listing
@@ -269,7 +270,6 @@
   </aside>
 
   <main class="dashboard-main">
-    <h1>My Dashboard</h1>
     <p class="dashboard-subtitle">Manage your LoyaltyMarket account and listings.</p>
 
     <div class="archive-filter-row">
@@ -295,29 +295,56 @@
 
     <div id="boostPlanScreen">
       <h3>Boost This Listing</h3>
-      <p class="boost-modal-subtitle">Boosted listings appear higher in search results and get a featured badge.</p>
+      <p class="boost-modal-subtitle">Higher tiers get more visibility and refresh more often, keeping your ad near the top.</p>
+
+      <div class="launch-free-banner">
+        Free for a limited time — every tier is US$0 during LoyaltyMarket's launch period.
+      </div>
 
       <form id="boostForm">
-        <label class="boost-plan-option" data-plan="3day">
-          <input type="radio" name="boostPlan" value="3day">
-          <span class="boost-plan-title">3-Day Boost</span>
-          <span class="boost-plan-price">US$5</span>
-          <p class="boost-plan-desc">Great for a quick sale push.</p>
+        <div class="boost-tier-scroll">
+        <label class="boost-plan-option" data-plan="basic">
+          <input type="radio" name="boostPlan" value="basic">
+          <span class="boost-plan-title">Basic</span>
+          <span class="boost-plan-price">Free</span>
+          <p class="boost-plan-desc">Up to 2x more views. Refreshes every 48 hours. 3 days.</p>
         </label>
 
-        <label class="boost-plan-option" data-plan="7day">
-          <input type="radio" name="boostPlan" value="7day">
-          <span class="boost-plan-title">7-Day Boost</span>
-          <span class="boost-plan-price">US$10</span>
-          <p class="boost-plan-desc">Most popular — a full week of visibility.</p>
+        <label class="boost-plan-option" data-plan="business">
+          <input type="radio" name="boostPlan" value="business">
+          <span class="boost-plan-title">Business</span>
+          <span class="boost-plan-price">Free</span>
+          <p class="boost-plan-desc">Up to 3x more views. Refreshes every 48 hours. 7 days.</p>
         </label>
 
-        <label class="boost-plan-option" data-plan="14day">
-          <input type="radio" name="boostPlan" value="14day">
-          <span class="boost-plan-title">14-Day Boost</span>
-          <span class="boost-plan-price">US$18</span>
-          <p class="boost-plan-desc">Best value for high-priced items.</p>
+        <label class="boost-plan-option" data-plan="premium">
+          <input type="radio" name="boostPlan" value="premium">
+          <span class="boost-plan-title">Premium</span>
+          <span class="boost-plan-price">Free</span>
+          <p class="boost-plan-desc">Up to 5x more views. Refreshes every 24 hours. 14 days.</p>
         </label>
+
+        <label class="boost-plan-option" data-plan="vip">
+          <input type="radio" name="boostPlan" value="vip">
+          <span class="boost-plan-title">VIP</span>
+          <span class="boost-plan-price">Free</span>
+          <p class="boost-plan-desc">Up to 7x more views. Refreshes every 12 hours. 14 days.</p>
+        </label>
+
+        <label class="boost-plan-option" data-plan="vipgold">
+          <input type="radio" name="boostPlan" value="vipgold">
+          <span class="boost-plan-title">VIP Gold</span>
+          <span class="boost-plan-price">Free</span>
+          <p class="boost-plan-desc">Up to 10x more views. Refreshes every 6 hours. Website link on your profile. 30 days.</p>
+        </label>
+
+        <label class="boost-plan-option" data-plan="diamond">
+          <input type="radio" name="boostPlan" value="diamond">
+          <span class="boost-plan-title">Diamond</span>
+          <span class="boost-plan-price">Free</span>
+          <p class="boost-plan-desc">Highest reach for high-volume sellers. Refreshes every 3 hours. Website link on your profile. 30 days.</p>
+        </label>
+        </div>
 
         <div class="boost-modal-actions">
           <button type="button" class="boost-cancel-btn" id="boostCancelBtn">Cancel</button>
@@ -325,34 +352,26 @@
         </div>
       </form>
 
-      <p class="boost-modal-note">Next, you'll see payment instructions to complete your boost.</p>
+      <p class="boost-scroll-hint">Scroll to see all 6 tiers</p>
+
+      <p class="boost-modal-note">Your boost activates automatically — no payment needed during launch.</p>
     </div>
 
     <div class="boost-payment-screen" id="boostPaymentScreen">
-      <h3>Complete Your Payment</h3>
-      <p class="boost-modal-subtitle">Your boost request has been submitted. Send payment to activate it.</p>
+      <h3>Boost Activated</h3>
+      <p class="boost-modal-subtitle">Your listing is now boosted and featured — free during LoyaltyMarket's launch period.</p>
 
       <div class="boost-payment-amount">
-        <div class="boost-payment-amount-label">Amount to pay</div>
-        <div class="boost-payment-amount-value" id="boostPaymentAmountValue">US$0</div>
-      </div>
-
-      <div class="boost-payment-method">
-        <div class="boost-payment-method-name">MTN Mobile Money</div>
-        <div class="boost-payment-method-number">+231 88 147 1694</div>
-      </div>
-
-      <div class="boost-payment-method">
-        <div class="boost-payment-method-name">Orange Money</div>
-        <div class="boost-payment-method-number">+231 77 002 5588</div>
+        <div class="boost-payment-amount-label">Amount charged</div>
+        <div class="boost-payment-amount-value" id="boostPaymentAmountValue">Free</div>
       </div>
 
       <div class="boost-payment-steps">
-        <strong>How to activate your boost:</strong>
+        <strong>What happens now:</strong>
         <ol>
-          <li>Send the exact amount above to either number</li>
-          <li>Your listing will show "Boost Pending" until payment is confirmed</li>
-          <li>Once confirmed by an admin, your listing becomes boosted within 24 hours</li>
+          <li>Your listing shows a "Featured" badge immediately</li>
+          <li>It appears higher in search results for the boost duration</li>
+          <li>Boosting will move to paid pricing after the launch period ends</li>
         </ol>
       </div>
 
@@ -383,7 +402,8 @@ import {
   addDoc,
   updateDoc,
   serverTimestamp,
-  onSnapshot
+  onSnapshot,
+  Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const unreadBadge = document.getElementById("unreadBadge");
@@ -419,9 +439,12 @@ let currentArchiveFilter = "all";
 let boostTargetProductId = null;
 
 const boostPlanDetails = {
-  "3day": { label: "3-Day Boost", price: "US$5", days: 3 },
-  "7day": { label: "7-Day Boost", price: "US$10", days: 7 },
-  "14day": { label: "14-Day Boost", price: "US$18", days: 14 }
+  "basic": { label: "Basic", price: "Free", days: 3, multiplier: "2x", refreshHours: 48 },
+  "business": { label: "Business", price: "Free", days: 7, multiplier: "3x", refreshHours: 48 },
+  "premium": { label: "Premium", price: "Free", days: 14, multiplier: "5x", refreshHours: 24 },
+  "vip": { label: "VIP", price: "Free", days: 14, multiplier: "7x", refreshHours: 12 },
+  "vipgold": { label: "VIP Gold", price: "Free", days: 30, multiplier: "10x", refreshHours: 6 },
+  "diamond": { label: "Diamond", price: "Free", days: 30, multiplier: "15x+", refreshHours: 3 }
 };
 
 function safeText(value) {
@@ -604,7 +627,8 @@ function renderListings() {
       boostBadgeHtml = '<span class="boost-pending-badge">Boost Pending</span>';
     } else if (isBoostActive) {
       const expiryText = formatBoostExpiry(product);
-      boostBadgeHtml = `<span class="boost-pending-badge" title="Expires ${safeText(expiryText)}">Boosted</span>`;
+      const tierLabel = product.boostPlanLabel || "Boosted";
+      boostBadgeHtml = `<span class="boost-pending-badge" title="Expires ${safeText(expiryText)}">${safeText(tierLabel)}</span>`;
     } else if (isBoostExpired) {
       boostBadgeHtml = '<span class="boost-expired-badge">Boost Expired</span>';
     }
@@ -705,27 +729,41 @@ boostForm.addEventListener("submit", async (event) => {
   const planInfo = boostPlanDetails[planKey];
 
   boostSubmitBtn.disabled = true;
-  boostSubmitBtn.textContent = "Submitting...";
+  boostSubmitBtn.textContent = "Activating...";
 
   try {
+    // Launch-period behavior: boosts are free, so activate immediately
+    // instead of waiting for a Mobile Money payment confirmation. Once
+    // the 6-month free period ends, this should go back to boostStatus:
+    // "pending" and wait for the real payment flow, same as before.
+    const activatedAt = Timestamp.now();
+    const boostExpiresAt = Timestamp.fromMillis(
+      activatedAt.toMillis() + planInfo.days * 24 * 60 * 60 * 1000
+    );
+
     await updateDoc(doc(db, "products", boostTargetProductId), {
-      boostStatus: "pending",
+      boostStatus: "active",
+      featured: true,
       boostPlan: planKey,
       boostPlanLabel: planInfo.label,
       boostPrice: planInfo.price,
       boostDurationDays: planInfo.days,
+      boostMultiplier: planInfo.multiplier,
+      boostRefreshHours: planInfo.refreshHours,
       boostRequestedAt: serverTimestamp(),
+      boostActivatedAt: activatedAt,
+      boostExpiresAt,
+      boostExpiredAt: null,
       sellerEmail: currentUser.email
     });
 
-    boostPaymentAmountValue.textContent = planInfo.price;
     boostPlanScreen.style.display = "none";
     boostPaymentScreen.classList.add("open");
 
     loadMyListings();
 
   } catch (error) {
-    alert("Could not submit boost request: " + error.message);
+    alert("Could not activate your boost: " + error.message);
   } finally {
     boostSubmitBtn.disabled = false;
     boostSubmitBtn.textContent = "Submit Boost Request";

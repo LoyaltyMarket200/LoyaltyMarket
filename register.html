@@ -4,18 +4,53 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Register - LoyaltyMarket</title>
 <link rel="stylesheet" href="style.css"><link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png"><meta name="theme-color" content="#1e3a8a">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png"><meta name="theme-color" content="#0f2d67">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#0f172a;font-family:Arial,sans-serif}.navbar{min-height:62px;padding:10px max(20px,4vw);background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;gap:16px}.logo-link{display:flex;align-items:center;gap:8px;text-decoration:none}.logo-link img{width:36px;height:36px}.logo-text{color:#0f2d67;font-size:16px;font-weight:900}.nav-actions{display:flex;gap:8px}.nav-actions a{padding:8px 13px;border-radius:8px;text-decoration:none;font-weight:800;font-size:13px}.home-link{background:#f8fafc;color:#334155;border:1px solid #e2e8f0}.login-link{background:#f97316;color:#fff}.page{width:min(1180px,94%);margin:24px auto 50px;display:grid;grid-template-columns:.8fr 1.2fr;gap:20px}.visual{padding:26px;border-radius:16px;color:#fff;background:linear-gradient(145deg,#0f2d67,#1d4ed8 64%,#0ea5e9);height:max-content;position:sticky;top:16px;box-shadow:0 14px 34px rgba(15,23,42,.10)}.visual h1{font-size:clamp(24px,3vw,38px);line-height:1.15;margin:8px 0}.visual p{color:#dbeafe;line-height:1.6;font-size:14px}.card{padding:24px;border:1px solid #e2e8f0;border-radius:16px;background:#fff;box-shadow:0 14px 34px rgba(15,23,42,.10)}.card h2{font-size:22px;margin:0 0 6px}.subtitle{color:#64748b;font-size:13px}.account-row,.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.account-row{margin:16px 0}.account-option{padding:12px;border:2px solid #e2e8f0;border-radius:10px;text-align:center;cursor:pointer}.account-option.selected{border-color:#1d4ed8;background:#eff6ff}.account-option input{display:none}.account-option span{display:block}.account-icon{font-size:22px}.account-label{font-weight:900;margin-top:4px;font-size:13px}.account-desc{font-size:11px;color:#64748b;margin-top:3px}form{display:flex;flex-direction:column}label{margin:10px 0 5px;font-size:12px;font-weight:800}input,select,textarea{width:100%;min-height:42px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:9px;font:inherit;font-size:14px}textarea{min-height:90px;resize:vertical}#businessFields{display:none;margin-top:14px;padding:16px;border:1px solid #bfdbfe;border-radius:12px;background:#f8fbff}#businessFields.open{display:block}.terms{display:flex;align-items:flex-start;gap:8px;margin:16px 0;font-size:13px}.terms input{width:auto;min-height:auto;margin-top:3px}button{min-height:44px;border:0;border-radius:10px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;font-size:14px;font-weight:900;cursor:pointer}button:disabled{opacity:.65}.message,.closed-box{display:none;margin-top:11px;padding:10px 12px;border-radius:9px;font-size:13px}.message.error{display:block;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.message.success{display:block;background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}.closed-box{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}.footer{display:flex;justify-content:space-between;align-items:center;padding:22px max(20px,5vw)}.footer h2{font-size:18px;margin:0 0 4px}.footer p{font-size:13px;margin:0}@media(max-width:900px){.page{grid-template-columns:1fr}.visual{position:static}}@media(max-width:600px){.navbar{flex-direction:column;align-items:stretch}.nav-actions{display:grid;grid-template-columns:1fr 1fr}.account-row,.row{grid-template-columns:1fr}.card,.visual{padding:20px 16px}.footer{flex-direction:column;text-align:center}}
+:root{--navy:#0f2d67;--navy-soft:#eef1f7;--orange:#f97316;--orange-soft:#fff4ec;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.navbar{min-height:50px;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo-link{display:flex;align-items:center;gap:8px;text-decoration:none}.logo-link img{width:26px;height:26px}
+.logo-text{color:var(--navy);font-size:14px;font-weight:700}
+.nav-actions{display:flex;gap:8px}.nav-actions a{padding:6px 12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:12px}
+.home-link{background:var(--navy-soft);color:var(--navy);border:1px solid var(--line)}.login-link{background:var(--orange);color:#fff}
+/* Single centered card — no promotional side panel */
+.page{width:min(520px,94%);margin:24px auto 50px}
+.card{padding:24px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.card h2{font-size:19px;font-weight:600;margin:0 0 5px;color:var(--ink)}.subtitle{color:var(--muted);font-size:13px;font-weight:400;margin:0 0 8px}
+.account-row,.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.account-row{margin:16px 0}
+.account-option{padding:12px;border:1px solid var(--line);border-radius:10px;text-align:center;cursor:pointer}
+.account-option.selected{border-color:var(--navy);background:var(--navy-soft)}
+.account-option input{display:none}.account-option span{display:block}
+.account-icon{width:26px;height:26px;margin:0 auto;color:var(--navy)}
+.account-label{font-weight:600;margin-top:6px;font-size:13px;color:var(--ink)}
+.account-desc{font-size:11px;color:var(--muted);margin-top:3px;font-weight:400}
+form{display:flex;flex-direction:column}
+label{margin:10px 0 5px;font-size:12px;font-weight:500;color:var(--ink)}
+input,select,textarea{width:100%;min-height:42px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:14px;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy)}
+textarea{min-height:90px;resize:vertical}
+#businessFields{display:none;margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+#businessFields.open{display:block}
+.terms{display:flex;align-items:flex-start;gap:8px;margin:16px 0;font-size:13px;color:var(--ink)}
+.terms input{width:auto;min-height:auto;margin-top:3px;accent-color:var(--navy)}
+button{min-height:44px;border:0;border-radius:10px;background:var(--orange);color:#fff;font-size:14px;font-weight:700;cursor:pointer}
+button:hover{background:#ea680a}button:disabled{opacity:.65}
+.message,.closed-box{display:none;margin-top:11px;padding:10px 12px;border-radius:9px;font-size:13px}
+.message.error{display:block;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.message.success{display:block;background:var(--navy-soft);color:var(--navy);border:1px solid var(--line)}
+.closed-box{background:var(--orange-soft);color:#9a3412;border:1px solid #fed7aa}
+.footer{display:flex;justify-content:space-between;align-items:center;padding:20px max(20px,5vw);background:var(--navy);color:#cdd8ef}
+.footer h2{font-size:15px;margin:0 0 3px;color:#fff;font-weight:600}.footer p{font-size:12px;margin:0}
+@media(max-width:600px){.navbar{flex-direction:column;align-items:stretch;gap:8px}.nav-actions{display:grid;grid-template-columns:1fr 1fr}.account-row,.row{grid-template-columns:1fr}.card{padding:18px}.footer{flex-direction:column;text-align:center;gap:4px}}
 </style>
 </head>
 <body>
-<header class="navbar"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="LoyaltyMarket"><span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span></a><div class="nav-actions"><a class="home-link" href="index.html">Home</a><a class="login-link" href="login.html">Login</a></div></header>
+<header class="navbar"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="LoyaltyMarket"><span class="logo-text">LoyaltyMarket</span></a><div class="nav-actions"><a class="home-link" href="index.html">Home</a><a class="login-link" href="login.html">Login</a></div></header>
 <main class="page">
-<section class="visual"><p>JOIN LOYALTYMARKET</p><h1>Start Buying, Selling, And Growing Today.</h1><p>Create a protected personal or business account for Liberia's marketplace.</p></section>
 <section class="card"><h2>Join LoyaltyMarket</h2><p class="subtitle">Choose your account type and enter accurate information.</p><div id="registrationClosedBox" class="closed-box"></div>
 <form id="registerForm">
-<label>Account Type</label><div class="account-row"><label class="account-option selected" id="personalOption"><input type="radio" name="accountType" value="personal" checked><span class="account-icon">👤</span><span class="account-label">Personal</span><span class="account-desc">Buy and sell as an individual</span></label><label class="account-option" id="businessOption"><input type="radio" name="accountType" value="business"><span class="account-icon">🏢</span><span class="account-label">Business</span><span class="account-desc">Sell as a business</span></label></div>
+<label>Account Type</label><div class="account-row"><label class="account-option selected" id="personalOption"><input type="radio" name="accountType" value="personal" checked><span class="account-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="account-label">Personal</span><span class="account-desc">Buy and sell as an individual</span></label><label class="account-option" id="businessOption"><input type="radio" name="accountType" value="business"><span class="account-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12M9 21v-6h6v6"/></svg></span><span class="account-label">Business</span><span class="account-desc">Sell as a business</span></label></div>
 <label for="name">Full Name</label><input id="name" type="text" required autocomplete="name">
 <label for="email">Email Address</label><input id="email" type="email" required autocomplete="email">
 <label for="phone">Phone Number</label><input id="phone" type="tel" required autocomplete="tel">
@@ -25,7 +60,7 @@
 <label class="terms"><input id="termsCheckbox" type="checkbox" required><span>I agree to the LoyaltyMarket terms and confirm my information is accurate.</span></label>
 <button id="registerBtn" type="submit">Create Account</button><div id="registerMessage" class="message"></div>
 </form></section></main>
-<footer class="footer"><div><h2>🇱🇷 LoyaltyMarket</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 LoyaltyMarket.</p></footer>
+<footer class="footer"><div><h2>LoyaltyMarket</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 LoyaltyMarket.</p></footer>
 <script type="module">
 import {auth,db} from './firebase.js';
 import {createUserWithEmailAndPassword,deleteUser,signOut} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';

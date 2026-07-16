@@ -104,7 +104,7 @@
 
     .detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 20px 0 12px; }
 
-    .buy-now-btn, .contact-btn, .heart-btn {
+    .buy-now-btn, .contact-btn, .heart-btn, .whatsapp-btn, .show-contact-btn {
       min-height: 46px;
       border-radius: 10px;
       font-weight: 600;
@@ -127,6 +127,78 @@
 
     .heart-btn { background: #fff; border: 1px solid var(--line); color: var(--ink); }
     .heart-btn.is-saved { background: var(--navy-soft); color: var(--navy); border-color: var(--navy); }
+
+    /* Jiji-style: WhatsApp + Show Contact side by side, outline style */
+    .whatsapp-btn, .show-contact-btn {
+      background: #fff;
+      border: 1px solid var(--navy);
+      color: var(--navy);
+    }
+    .whatsapp-btn:hover, .show-contact-btn:hover { background: var(--navy-soft); }
+    .show-contact-btn.revealed { border-color: var(--orange); color: #9a3412; background: var(--orange-soft); }
+
+    /* Jiji-style quick-reply chat starter */
+    .quick-chat-card {
+      margin: 18px 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+    .quick-chat-card h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--ink); }
+    .quick-reply-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .quick-reply-chip {
+      padding: 8px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--navy);
+      background: #fff;
+      color: var(--navy);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .quick-reply-chip:hover, .quick-reply-chip.active { background: var(--navy); color: #fff; }
+    .quick-chat-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font: inherit;
+      font-size: 13.5px;
+      color: var(--ink);
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .start-chat-btn {
+      width: 100%;
+      min-height: 44px;
+      border: none;
+      border-radius: 10px;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+    }
+    .start-chat-btn:hover { background: #ea680a; }
+
+    /* Jiji-style collapsible location row */
+    .location-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      margin: 14px 0;
+    }
+    .location-toggle-row strong { font-size: 13px; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 7px; }
+    .location-toggle-row span { color: var(--navy); font-size: 12.5px; font-weight: 600; }
+    .location-detail { display: none; padding: 0 14px 4px; color: var(--muted); font-size: 12.5px; }
+    .location-detail.open { display: block; }
 
     .report-btn {
       width: 100%;
@@ -195,14 +267,17 @@
       font-size: 10px; font-weight: 600;
     }
 
-    .buyer-safety-card {
-      display: flex; gap: 11px; margin: 20px 0;
-      padding: 14px; border: 1px solid var(--line); border-radius: 12px;
-      background: var(--navy-soft); color: var(--navy);
+    /* Jiji-style Safety Tips — bulleted list, not a single paragraph card */
+    .safety-tips-card {
+      margin: 20px 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
     }
-    .buyer-safety-card > span { flex-shrink: 0; }
-    .buyer-safety-card strong { display: block; margin-bottom: 3px; font-weight: 600; }
-    .buyer-safety-card p { margin: 0; font-size: 12.5px; line-height: 1.5; color: #33507e; }
+    .safety-tips-card h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--ink); }
+    .safety-tips-card ul { margin: 0; padding: 0 0 0 18px; }
+    .safety-tips-card li { color: var(--muted); font-size: 12.5px; line-height: 1.8; }
 
     .product-description { padding-top: 18px; border-top: 1px solid #f1f5f9; margin-top: 18px; }
     .product-description h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
@@ -217,6 +292,52 @@
     .unavailable-box a { color: var(--navy); font-weight: 600; text-decoration: none; }
 
     /* Report modal */
+    /* ---------- CHECKOUT MODAL (Mobile Money) ---------- */
+    .checkout-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 1100; align-items: center; justify-content: center; padding: 16px; }
+    .checkout-modal-overlay.modal-open { display: flex; }
+    .checkout-modal { background: #fff; border-radius: 16px; padding: 22px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; }
+    .checkout-modal h3 { margin: 0 0 3px; font-size: 17px; font-weight: 700; color: var(--ink); }
+    .checkout-modal-subtitle { color: var(--muted); font-size: 12.5px; margin-bottom: 16px; }
+
+    .checkout-summary { display: flex; gap: 11px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: 11px; background: var(--bg); margin-bottom: 18px; }
+    .checkout-summary img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+    .checkout-summary-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+    .checkout-summary-price { font-size: 13.5px; font-weight: 700; color: var(--orange); }
+
+    .checkout-section-label { font-size: 12px; font-weight: 600; color: var(--ink); margin: 14px 0 8px; }
+
+    .payment-option-card { display: block; padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 9px; cursor: pointer; }
+    .payment-option-card.selected { border-color: var(--navy); background: var(--navy-soft); }
+    .payment-option-card input { display: none; }
+    .payment-option-title { font-size: 13.5px; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 7px; }
+    .payment-option-badge { font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--orange-soft); color: #9a3412; text-transform: uppercase; letter-spacing: .04em; }
+    .payment-option-desc { font-size: 11.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+    .provider-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 4px; }
+    .provider-btn { padding: 12px 8px; border: 1px solid var(--line); border-radius: 11px; background: #fff; text-align: center; cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--ink); }
+    .provider-btn.selected { border-color: var(--navy); background: var(--navy-soft); color: var(--navy); }
+
+    .checkout-phone-input { width: 100%; min-height: 46px; margin-top: 12px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 14px; color: var(--ink); box-sizing: border-box; }
+    .checkout-phone-input:focus { outline: none; border-color: var(--navy); }
+
+    .checkout-submit-btn { width: 100%; min-height: 48px; margin-top: 18px; border: none; border-radius: 11px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; cursor: pointer; }
+    .checkout-submit-btn:hover { background: #ea680a; }
+    .checkout-submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    .checkout-cancel-btn { width: 100%; min-height: 40px; margin-top: 8px; border: none; background: transparent; color: var(--muted); font-weight: 600; font-size: 12.5px; cursor: pointer; }
+
+    .checkout-note { display: flex; gap: 8px; margin-top: 14px; padding: 11px 12px; border-radius: 10px; background: var(--navy-soft); color: var(--navy); font-size: 11.5px; line-height: 1.5; }
+    .checkout-note svg { flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px; }
+
+    /* Pending / confirmation screen shown after submitting */
+    .checkout-pending-screen { display: none; text-align: center; padding: 10px 4px; }
+    .checkout-pending-screen.open { display: block; }
+    .checkout-pending-icon { width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%; background: var(--orange-soft); display: flex; align-items: center; justify-content: center; color: #9a3412; }
+    .checkout-pending-icon .icon { width: 26px; height: 26px; }
+    .checkout-pending-screen h4 { font-size: 15px; font-weight: 700; margin: 0 0 6px; color: var(--ink); }
+    .checkout-pending-screen p { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin: 0 0 16px; }
+    .checkout-pending-done-btn { width: 100%; min-height: 44px; border: none; border-radius: 10px; background: var(--navy); color: #fff; font-weight: 600; font-size: 13.5px; cursor: pointer; }
+
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.5); z-index: 1000; align-items: center; justify-content: center; }
     .modal-overlay.modal-open { display: flex; }
     .modal-box { background: #fff; border-radius: 16px; padding: 22px; width: 90%; max-width: 400px; }
@@ -431,12 +552,39 @@
           <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M2 3h2l2.6 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20 7H5.2"/></svg>
           Buy Now
         </button>
-        <a id="contactSellerBtn" class="contact-btn" href="#">Contact Seller</a>
+        <a id="whatsappBtn" class="whatsapp-btn" href="#" target="_blank" rel="noopener" style="display:none;">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.4a8.4 8.4 0 1 1 16.1-4.1Z"/></svg>
+          Chat on WhatsApp
+        </a>
+        <button id="showContactBtn" class="show-contact-btn" type="button">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2Z"/></svg>
+          <span id="showContactLabel">Show Contact</span>
+        </button>
         <button id="saveBtn" class="heart-btn" type="button">
           <svg class="icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 5c-2.5 4.5-9.5 9-9.5 9Z"/></svg>
           Save
         </button>
       </div>
+
+      <div class="quick-chat-card">
+        <h3>Chat with the seller</h3>
+        <div class="quick-reply-chips">
+          <button type="button" class="quick-reply-chip" data-message="Is this still available?">Is this available</button>
+          <button type="button" class="quick-reply-chip" data-message="Would you accept a lower offer?">Make an offer</button>
+          <button type="button" class="quick-reply-chip" data-message="What's your last price?">Last price</button>
+        </div>
+        <input type="text" id="quickChatInput" class="quick-chat-input" placeholder="Type a message">
+        <button type="button" id="startChatBtn" class="start-chat-btn">Start Chat</button>
+      </div>
+
+      <div class="location-toggle-row" id="locationToggleRow">
+        <strong>
+          <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="M3 21V9l9-6 9 6v12M9 21v-6h6v6"/></svg>
+          Seller Location
+        </strong>
+        <span id="locationToggleLabel">Show</span>
+      </div>
+      <p class="location-detail" id="locationDetail"></p>
 
       <button id="reportBtn" class="report-btn" type="button">
         <svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg>
@@ -457,12 +605,15 @@
         </div>
       </div>
 
-      <div class="buyer-safety-card">
-        <svg class="icon" viewBox="0 0 24 24" style="width:20px;height:20px;"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg>
-        <div>
-          <strong>Deal Safely</strong>
-          <p>Inspect the item before paying. Meet in a public place and avoid sending deposits to unknown sellers.</p>
-        </div>
+      <div class="safety-tips-card">
+        <h3>Safety Tips</h3>
+        <ul>
+          <li>Avoid paying in advance, even for delivery</li>
+          <li>Meet with the seller at a safe public place</li>
+          <li>Inspect the item and ensure it's exactly what you want</li>
+          <li>Make sure the packed item is the one you inspected</li>
+          <li>Only pay if you're satisfied</li>
+        </ul>
       </div>
 
       <div class="product-description">
@@ -477,6 +628,65 @@
     <h2>Similar Listings</h2>
     <div class="product-grid" id="relatedGrid"></div>
   </section>
+
+  <div class="checkout-modal-overlay" id="checkoutModalOverlay">
+    <div class="checkout-modal">
+
+      <div id="checkoutFormScreen">
+        <h3>Complete Your Order</h3>
+        <p class="checkout-modal-subtitle">Choose how you'd like to pay.</p>
+
+        <div class="checkout-summary">
+          <img id="checkoutSummaryImage" src="" alt="">
+          <div>
+            <div class="checkout-summary-title" id="checkoutSummaryTitle"></div>
+            <div class="checkout-summary-price" id="checkoutSummaryPrice"></div>
+          </div>
+        </div>
+
+        <p class="checkout-section-label">Payment Option</p>
+
+        <label class="payment-option-card selected" data-payment-option="instant">
+          <input type="radio" name="paymentOption" value="instant" checked>
+          <div class="payment-option-title">Pay Now</div>
+          <div class="payment-option-desc">Payment goes to the seller right away. Fastest option.</div>
+        </label>
+
+        <label class="payment-option-card" data-payment-option="protected">
+          <input type="radio" name="paymentOption" value="protected">
+          <div class="payment-option-title">Pay With Protection <span class="payment-option-badge">Safer</span></div>
+          <div class="payment-option-desc">LoyaltyMarket holds your payment until you confirm you received the item.</div>
+        </label>
+
+        <p class="checkout-section-label">Pay With</p>
+
+        <div class="provider-row">
+          <button type="button" class="provider-btn selected" id="mtnProviderBtn" data-provider="mtn">MTN Mobile Money</button>
+          <button type="button" class="provider-btn" id="orangeProviderBtn" data-provider="orange">Orange Money</button>
+        </div>
+
+        <input type="tel" id="checkoutPhoneInput" class="checkout-phone-input" placeholder="Mobile Money number to pay from">
+
+        <div class="checkout-note">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg>
+          <span>You'll get a prompt on your phone to approve this payment. Nothing is charged until you approve it there.</span>
+        </div>
+
+        <button type="button" class="checkout-submit-btn" id="checkoutSubmitBtn">Confirm &amp; Pay</button>
+        <button type="button" class="checkout-cancel-btn" id="checkoutCancelBtn">Cancel</button>
+      </div>
+
+      <div class="checkout-pending-screen" id="checkoutPendingScreen">
+        <div class="checkout-pending-icon">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2Z"/></svg>
+        </div>
+        <h4>Check Your Phone</h4>
+        <p id="checkoutPendingText">A payment request has been sent to your Mobile Money number. Approve it there to complete your order.</p>
+        <button type="button" class="checkout-pending-done-btn" id="checkoutPendingDoneBtn">Done</button>
+      </div>
+
+    </div>
+  </div>
 
   <div class="modal-overlay" id="reportModalOverlay">
     <div class="modal-box">
@@ -693,7 +903,15 @@ const sellerEmail = document.getElementById("sellerEmail");
 const sellerNameLink = document.getElementById("sellerNameLink");
 const sellerBadgeRow = document.getElementById("sellerBadgeRow");
 const sellerPhone = document.getElementById("sellerPhone");
-const contactSellerBtn = document.getElementById("contactSellerBtn");
+const whatsappBtn = document.getElementById("whatsappBtn");
+const showContactBtn = document.getElementById("showContactBtn");
+const showContactLabel = document.getElementById("showContactLabel");
+const quickChatInput = document.getElementById("quickChatInput");
+const startChatBtn = document.getElementById("startChatBtn");
+const quickReplyChips = document.querySelectorAll(".quick-reply-chip");
+const locationToggleRow = document.getElementById("locationToggleRow");
+const locationToggleLabel = document.getElementById("locationToggleLabel");
+const locationDetail = document.getElementById("locationDetail");
 const breadcrumbCategory = document.getElementById("breadcrumbCategory");
 const breadcrumbTitle = document.getElementById("breadcrumbTitle");
 const relatedSection = document.getElementById("relatedSection");
@@ -739,8 +957,11 @@ let loadedSellerId = "";
 let loadedPriceUsd = "0";
 let loadedPriceLrd = "0";
 let loadedImage = "";
+let loadedPhone = "";
 let isSaved = false;
 let unsubscribeUnreadMessages = null;
+let contactRevealed = false;
+let locationRevealed = false;
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop";
 
@@ -897,12 +1118,30 @@ async function toggleSave() {
   }
 }
 
-async function buyNow() {
+const checkoutModalOverlay = document.getElementById("checkoutModalOverlay");
+const checkoutFormScreen = document.getElementById("checkoutFormScreen");
+const checkoutPendingScreen = document.getElementById("checkoutPendingScreen");
+const checkoutSummaryImage = document.getElementById("checkoutSummaryImage");
+const checkoutSummaryTitle = document.getElementById("checkoutSummaryTitle");
+const checkoutSummaryPrice = document.getElementById("checkoutSummaryPrice");
+const checkoutPhoneInput = document.getElementById("checkoutPhoneInput");
+const checkoutSubmitBtn = document.getElementById("checkoutSubmitBtn");
+const checkoutCancelBtn = document.getElementById("checkoutCancelBtn");
+const checkoutPendingText = document.getElementById("checkoutPendingText");
+const checkoutPendingDoneBtn = document.getElementById("checkoutPendingDoneBtn");
+const paymentOptionCards = document.querySelectorAll(".payment-option-card");
+const providerButtons = document.querySelectorAll(".provider-btn");
+
+let selectedPaymentOption = "instant";
+let selectedProvider = "mtn";
+
+function openCheckoutModal() {
   if (!currentUser) {
     alert("Please log in to buy a product.");
     window.location.href = "login.html";
     return;
   }
+
   if (!productId) return;
 
   if (currentUser.uid === loadedSellerId) {
@@ -910,15 +1149,63 @@ async function buyNow() {
     return;
   }
 
-  const confirmBuy = confirm(`Confirm order for "${loadedProductTitle}" — US$${loadedPriceUsd} | L$${loadedPriceLrd}?`);
-  if (!confirmBuy) return;
+  checkoutSummaryImage.src = loadedImage || FALLBACK_IMAGE;
+  checkoutSummaryTitle.textContent = loadedProductTitle;
+  checkoutSummaryPrice.textContent = `US$${loadedPriceUsd} | L$${loadedPriceLrd}`;
+  checkoutPhoneInput.value = "";
 
-  buyNowBtn.disabled = true;
-  const originalBtnHtml = buyNowBtn.innerHTML;
-  buyNowBtn.textContent = "Placing order...";
+  checkoutFormScreen.style.display = "block";
+  checkoutPendingScreen.classList.remove("open");
+  checkoutModalOverlay.classList.add("modal-open");
+}
+
+function closeCheckoutModal() {
+  checkoutModalOverlay.classList.remove("modal-open");
+}
+
+paymentOptionCards.forEach((card) => {
+  card.addEventListener("click", () => {
+    paymentOptionCards.forEach((c) => c.classList.remove("selected"));
+    card.classList.add("selected");
+    card.querySelector("input").checked = true;
+    selectedPaymentOption = card.dataset.paymentOption;
+  });
+});
+
+providerButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    providerButtons.forEach((b) => b.classList.remove("selected"));
+    button.classList.add("selected");
+    selectedProvider = button.dataset.provider;
+  });
+});
+
+checkoutCancelBtn.addEventListener("click", closeCheckoutModal);
+
+checkoutModalOverlay.addEventListener("click", (event) => {
+  if (event.target === checkoutModalOverlay) closeCheckoutModal();
+});
+
+async function submitCheckout() {
+  const phone = checkoutPhoneInput.value.trim();
+
+  if (!phone || phone.replace(/[^\d]/g, "").length < 8) {
+    alert("Enter a valid Mobile Money number to continue.");
+    return;
+  }
+
+  checkoutSubmitBtn.disabled = true;
+  checkoutSubmitBtn.textContent = "Sending Request...";
 
   try {
-    await addDoc(collection(db, "orders"), {
+    // NOTE: this creates the order with a real "awaiting_payment" state,
+    // but does not yet trigger an actual MTN/Orange Request-to-Pay —
+    // that call has to happen from a Cloud Function (server-side),
+    // not from this page, since it needs a secret API key. Once that
+    // Cloud Function exists, this is the exact point where it gets
+    // called, and this order's paymentStatus gets updated by its
+    // webhook response instead of staying "awaiting_payment" forever.
+    const orderRef = await addDoc(collection(db, "orders"), {
       productId: productId,
       productTitle: loadedProductTitle,
       productImage: loadedImage,
@@ -928,6 +1215,10 @@ async function buyNow() {
       buyerEmail: currentUser.email,
       sellerId: loadedSellerId,
       status: "pending",
+      paymentMethod: selectedProvider,
+      paymentPhone: phone,
+      protectionEnabled: selectedPaymentOption === "protected",
+      paymentStatus: "awaiting_payment",
       createdAt: serverTimestamp()
     });
 
@@ -936,7 +1227,7 @@ async function buyNow() {
         userId: loadedSellerId,
         type: "order",
         title: "New order for " + loadedProductTitle,
-        body: "A buyer placed an order for US$" + loadedPriceUsd,
+        body: "A buyer started a payment for US$" + loadedPriceUsd,
         link: "my-sales.html",
         read: false,
         createdAt: serverTimestamp()
@@ -946,15 +1237,31 @@ async function buyNow() {
       // from being placed if the notification write fails.
     }
 
-    alert("Order placed! You can track it in My Orders.");
-    window.location.href = "orders.html";
+    const providerName = selectedProvider === "mtn" ? "MTN Mobile Money" : "Orange Money";
+
+    checkoutPendingText.textContent =
+      `A payment request has been sent to ${phone} via ${providerName}. Approve it there to complete your order.`;
+
+    checkoutFormScreen.style.display = "none";
+    checkoutPendingScreen.classList.add("open");
 
   } catch (error) {
-    alert("Could not place order: " + error.message);
+    alert("Could not start checkout: " + error.message);
   } finally {
-    buyNowBtn.disabled = false;
-    buyNowBtn.innerHTML = originalBtnHtml;
+    checkoutSubmitBtn.disabled = false;
+    checkoutSubmitBtn.textContent = "Confirm & Pay";
   }
+}
+
+checkoutSubmitBtn.addEventListener("click", submitCheckout);
+
+checkoutPendingDoneBtn.addEventListener("click", () => {
+  closeCheckoutModal();
+  window.location.href = "orders.html";
+});
+
+function buyNow() {
+  openCheckoutModal();
 }
 
 function renderThumbnails(images, title) {
@@ -1148,15 +1455,28 @@ async function loadProduct() {
     sellerEmail.textContent = email;
     sellerNameLink.textContent = "View Seller Profile";
     sellerNameLink.href = sellerId ? "seller-profile.html?id=" + sellerId : "#";
-    sellerPhone.textContent = phone ? phone : "Phone not listed";
+
+    loadedPhone = phone || "";
+
+    // Show a masked version until the buyer taps "Show Contact" — same
+    // pattern Jiji uses so the number isn't scraped/visible by default.
+    sellerPhone.textContent = loadedPhone ? maskPhone(loadedPhone) : "Phone not listed";
+
+    if (loadedPhone) {
+      const digitsOnly = loadedPhone.replace(/[^\d]/g, "");
+      whatsappBtn.href = `https://wa.me/${digitsOnly}`;
+      whatsappBtn.style.display = "inline-flex";
+    } else {
+      whatsappBtn.style.display = "none";
+    }
+
+    locationDetail.textContent = `${city || "City not listed"}, ${county || "Liberia"}`;
 
     loadSellerBadges(sellerId);
 
     breadcrumbCategory.textContent = category;
     breadcrumbTitle.textContent = title;
     document.title = `${title} - LoyaltyMarket`;
-
-    contactSellerBtn.href = "chat.html?product=" + encodeURIComponent(productId) + "&seller=" + encodeURIComponent(sellerId);
 
     if (currentUser) checkIfSaved();
 
@@ -1242,6 +1562,72 @@ async function submitReport() {
     reportSubmitBtn.textContent = "Submit Report";
   }
 }
+
+// Masks a phone number the way Jiji does before the buyer taps
+// "Show Contact" — keeps the country code and last 2 digits visible,
+// hides the rest so it can't be scraped off the page by default.
+function maskPhone(phone) {
+  const digits = phone.replace(/\s+/g, "");
+  if (digits.length <= 4) return digits;
+  const visibleStart = digits.slice(0, 3);
+  const visibleEnd = digits.slice(-2);
+  return `${visibleStart}${"•".repeat(Math.max(digits.length - 5, 3))}${visibleEnd}`;
+}
+
+showContactBtn.addEventListener("click", () => {
+  if (!loadedPhone) {
+    sellerPhone.textContent = "Phone not listed";
+    return;
+  }
+
+  contactRevealed = !contactRevealed;
+
+  if (contactRevealed) {
+    sellerPhone.textContent = loadedPhone;
+    showContactLabel.textContent = "Hide Contact";
+    showContactBtn.classList.add("revealed");
+  } else {
+    sellerPhone.textContent = maskPhone(loadedPhone);
+    showContactLabel.textContent = "Show Contact";
+    showContactBtn.classList.remove("revealed");
+  }
+});
+
+quickReplyChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    quickReplyChips.forEach((c) => c.classList.remove("active"));
+    chip.classList.add("active");
+    quickChatInput.value = chip.dataset.message || "";
+  });
+});
+
+startChatBtn.addEventListener("click", () => {
+  if (!currentUser) {
+    alert("Please log in to message the seller.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  if (currentUser.uid === loadedSellerId) {
+    alert("You can't message yourself about your own listing.");
+    return;
+  }
+
+  const message = quickChatInput.value.trim();
+
+  const chatUrl =
+    "chat.html?product=" + encodeURIComponent(productId) +
+    "&seller=" + encodeURIComponent(loadedSellerId) +
+    (message ? "&message=" + encodeURIComponent(message) : "");
+
+  window.location.href = chatUrl;
+});
+
+locationToggleRow.addEventListener("click", () => {
+  locationRevealed = !locationRevealed;
+  locationDetail.classList.toggle("open", locationRevealed);
+  locationToggleLabel.textContent = locationRevealed ? "Hide" : "Show";
+});
 
 reportBtn.addEventListener("click", openReportModal);
 reportCancelBtn.addEventListener("click", closeReportModal);
