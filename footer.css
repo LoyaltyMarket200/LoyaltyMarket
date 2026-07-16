@@ -1,558 +1,304 @@
-/* ==================================================
-   LOYALTYMARKET FOOTER — JIJI-STYLE FOOTER (BRAND COLORS)
-   DESKTOP + MOBILE
-================================================== */
+/* ============================================
+   LOYALTYMARKET — FOOTER.CSS
+   Matches the lm-footer HTML structure already
+   used across every page. Rebuilt to Jiji's
+   actual footer pattern: compact, single accent
+   color, no heavy decorative graphics, simple
+   link columns. The skyline illustration and the
+   full county button grid (both real weight
+   contributors flagged earlier) are removed —
+   the county list becomes a slim horizontal
+   scroll strip instead of a tall grid.
+   ============================================ */
 
 :root {
-  --lm-footer-green: #0f2d67;
-  --lm-footer-green-dark: #123b8d;
-  --lm-footer-white: #ffffff;
-  --lm-footer-text: rgba(255, 255, 255, 0.92);
-  --lm-footer-muted: rgba(255, 255, 255, 0.72);
-  --lm-footer-border: rgba(255, 255, 255, 0.18);
+  --lf-navy: #0f2d67;
+  --lf-navy-soft: rgba(255,255,255,0.08);
+  --lf-orange: #f97316;
+  --lf-line: rgba(255,255,255,0.14);
+  --lf-text: #cdd8ef;
+  --lf-text-strong: #ffffff;
 }
 
 .lm-footer {
-  position: relative;
-  overflow: hidden;
-  background: var(--lm-footer-green);
-  color: var(--lm-footer-white);
+  background: var(--lf-navy);
+  color: var(--lf-text);
 }
 
+/* Mobile-only collapsible toggle bar */
 .lm-footer-toggle {
   display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px max(20px, 4vw);
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
 }
 
-.lm-footer-content {
-  display: block;
+.lm-footer-toggle-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-/* SKYLINE GRAPHIC — REMOVED (this was the "overlay") */
-
-.lm-skyline-wrap {
-  display: none;
+.lm-footer-toggle-brand img {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
 }
 
-/* MAIN FOOTER */
+.lm-footer-toggle-lr {
+  color: var(--lf-orange);
+  font-weight: 700;
+  margin-right: 2px;
+}
+
+.lm-footer-toggle-label {
+  flex: 1;
+  text-align: left;
+  font-size: 12px;
+  color: var(--lf-text);
+}
+
+.lm-footer-arrow {
+  transition: transform 0.2s ease;
+  font-size: 14px;
+}
+
+.lm-footer-toggle-open .lm-footer-arrow {
+  transform: rotate(180deg);
+}
+
+/* Old skyline illustration — intentionally not styled/shown.
+   Kept as an empty, zero-height element so pages that still
+   reference the markup don't need HTML edits everywhere. */
+.lm-skyline-wrap,
+.lm-skyline,
+.lm-building,
+.lm-capitol,
+.lm-capitol-dome,
+.lm-capitol-roof,
+.lm-capitol-body {
+  display: none !important;
+  height: 0 !important;
+}
 
 .lm-footer-main {
-  position: relative;
-  background: var(--lm-footer-green);
+  padding: 22px 0 0;
 }
 
 .lm-footer-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 max(20px, 4vw) 18px;
   display: grid;
-  grid-template-columns: 1.6fr repeat(4, 1fr);
-  gap: 40px;
-  padding-top: 40px;
-  padding-bottom: 32px;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr 1fr;
+  gap: 22px;
 }
 
-.lm-footer-brand {
-  min-width: 0;
-}
-
-.lm-footer-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-  color: var(--lm-footer-white);
-  text-decoration: none;
-  font-size: 22px;
-  font-weight: 900;
-}
-
-.lm-footer-logo img {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-}
-
-.lm-footer-lr {
-  margin-right: 4px;
-  color: var(--lm-footer-white);
-}
-
-.lm-footer-description {
-  max-width: 400px;
+.lm-footer-brand .lm-footer-description {
   margin: 0 0 14px;
-  color: var(--lm-footer-text);
-  font-size: 14px;
+  font-size: 12.5px;
   line-height: 1.6;
+  color: var(--lf-text);
 }
 
 .lm-footer-support {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
+  gap: 9px;
+  margin-bottom: 14px;
 }
 
 .lm-footer-support p {
   margin: 0;
-  color: var(--lm-footer-muted);
   font-size: 12px;
-  line-height: 1.6;
-  overflow-wrap: anywhere;
+  color: var(--lf-text);
 }
 
 .lm-footer-help-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  padding: 0 16px;
+  width: fit-content;
+  padding: 8px 14px;
   border-radius: 8px;
-  background: var(--lm-footer-white);
-  color: var(--lm-footer-green);
-  font-size: 13px;
-  font-weight: 700;
+  background: #fff;
+  color: var(--lf-navy);
   text-decoration: none;
-}
-
-.lm-footer-help-button:hover {
-  background: #eff6ff;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .lm-footer-app {
-  margin-top: 18px;
-  padding: 12px 14px;
-  border: 1px solid var(--lm-footer-border);
+  padding: 11px 13px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.lm-footer-app strong,
-.lm-footer-app span {
-  display: block;
+  background: var(--lf-navy-soft);
+  border: 1px solid var(--lf-line);
 }
 
 .lm-footer-app strong {
-  margin-bottom: 4px;
-  color: var(--lm-footer-white);
-  font-size: 13px;
+  display: block;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-bottom: 2px;
 }
 
 .lm-footer-app span {
-  color: var(--lm-footer-muted);
   font-size: 11px;
-}
-
-.lm-footer-column {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  color: var(--lf-text);
 }
 
 .lm-footer-column h3 {
-  margin: 0 0 6px;
-  color: var(--lm-footer-white);
-  font-size: 14px;
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: 12px;
   font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
 }
 
 .lm-footer-column a {
-  width: fit-content;
-  color: var(--lm-footer-text);
-  font-size: 13px;
-  line-height: 1.5;
+  display: block;
+  margin-bottom: 9px;
+  color: var(--lf-text);
+  font-size: 12.5px;
   text-decoration: none;
 }
 
 .lm-footer-column a:hover {
+  color: #fff;
   text-decoration: underline;
 }
 
-/* COUNTIES — plain text links, no pill buttons, like Jiji flags row */
-
+/* County list — a slim horizontal scroll strip instead of a
+   tall multi-column grid, matching Jiji's compact footer weight. */
 .lm-county-section {
-  padding-top: 24px;
-  padding-bottom: 28px;
-  border-top: 1px solid var(--lm-footer-border);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 14px max(20px, 4vw);
+  border-top: 1px solid var(--lf-line);
 }
 
 .lm-county-heading {
-  margin-bottom: 16px;
-}
-
-.lm-county-heading > div {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.lm-country-flag {
-  font-size: 26px;
-}
-
-.lm-county-heading strong,
-.lm-county-heading small {
-  display: block;
+  margin-bottom: 10px;
 }
 
 .lm-county-heading strong {
-  margin-bottom: 3px;
-  color: var(--lm-footer-white);
-  font-size: 14px;
+  display: block;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 .lm-county-heading small {
-  color: var(--lm-footer-muted);
+  display: block;
+  color: var(--lf-text);
   font-size: 11px;
+  font-weight: 400;
+  margin-top: 2px;
 }
 
 .lm-county-list {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px 16px;
-}
-
-.lm-county-list button {
-  min-height: auto;
-  padding: 0;
-  border: none;
-  border-radius: 0;
-  background: none;
-  color: var(--lm-footer-text);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 400;
-  text-align: left;
-  cursor: pointer;
-}
-
-.lm-county-list button:hover {
-  text-decoration: underline;
-  color: var(--lm-footer-white);
-}
-
-/* FOOTER BOTTOM */
-
-.lm-footer-bottom {
-  border-top: 1px solid var(--lm-footer-border);
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.lm-footer-bottom-inner {
-  min-height: 60px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  gap: 7px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
 }
 
-.lm-footer-bottom p {
-  margin: 0;
-  color: var(--lm-footer-muted);
-  font-size: 12px;
-}
-
-/* MOBILE NAVIGATION (bottom tab bar — separate from footer) */
-
-.mobile-bottom-nav {
+.lm-county-list::-webkit-scrollbar {
   display: none;
 }
 
-/* TABLET */
-
-@media (max-width: 1100px) {
-  .lm-footer-grid {
-    grid-template-columns: 1.5fr repeat(2, 1fr);
-  }
-
-  .lm-footer-brand {
-    grid-row: span 2;
-  }
+.lm-county-list button {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--lf-line);
+  background: transparent;
+  color: var(--lf-text);
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
-/* MOBILE */
+.lm-county-list button:hover {
+  border-color: var(--lf-orange);
+  color: #fff;
+}
 
-@media (max-width: 680px) {
-  body.homepage {
-    padding-bottom: 74px;
-  }
+.lm-footer-bottom {
+  border-top: 1px solid var(--lf-line);
+  padding: 14px 0;
+}
 
-  .lm-footer {
-    overflow: visible;
-  }
+.lm-footer-bottom-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 max(20px, 4vw);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-  .lm-footer-toggle {
-    width: 100%;
-    min-height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 18px;
-    border: 0;
-    background: var(--lm-footer-green);
-    color: var(--lm-footer-white);
-    text-align: left;
-    cursor: pointer;
-  }
+.lm-footer-bottom-inner p {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--lf-text);
+}
 
-  .lm-footer-toggle-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-    font-size: 16px;
-    font-weight: 700;
-  }
+/* ---------- RESPONSIVE ---------- */
 
-  .lm-footer-toggle-brand img {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-    object-fit: contain;
-  }
-
-  .lm-footer-toggle-lr {
-    margin-right: 4px;
-    color: var(--lm-footer-white);
-  }
-
-  .lm-footer-toggle-label {
-    display: none;
-  }
-
-  .lm-footer-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    font-size: 0;
-    flex-shrink: 0;
-  }
-
-  .lm-footer-arrow::before {
-    content: "";
-    width: 12px;
-    height: 12px;
-    border-right: 3px solid var(--lm-footer-white);
-    border-bottom: 3px solid var(--lm-footer-white);
-    transform: rotate(45deg);
-    transition: transform 0.25s ease;
-  }
-
-  .footer-toggle-open .lm-footer-arrow::before {
-    transform: rotate(225deg);
-  }
-
-  .lm-footer-content {
-    display: none;
-  }
-
-  .lm-footer-content.footer-open {
-    display: block;
-  }
-
+@media (max-width: 900px) {
   .lm-footer-grid {
-    width: 100%;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px 20px;
-    padding: 28px 20px 26px;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
   .lm-footer-brand {
     grid-column: 1 / -1;
-    grid-row: auto;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--lm-footer-border);
   }
+}
 
-  .lm-footer-logo {
-    margin-bottom: 12px;
-    font-size: 18px;
-  }
-
-  .lm-footer-logo img {
-    width: 38px;
-    height: 38px;
-  }
-
-  .lm-footer-description {
-    max-width: 100%;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  .lm-footer-support {
-    align-items: stretch;
-  }
-
-  .lm-footer-support p {
-    font-size: 12px;
-  }
-
-  .lm-footer-help-button {
-    width: 100%;
-  }
-
-  .lm-footer-app {
-    margin-top: 16px;
-  }
-
-  .lm-footer-column h3 {
-    font-size: 13px;
-  }
-
-  .lm-footer-column a {
-    font-size: 13px;
-  }
-
-  .lm-county-section {
-    width: 100%;
-    padding: 22px 20px 26px;
-  }
-
-  .lm-county-list {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px 16px;
-  }
-
-  .lm-county-list button {
-    font-size: 13px;
-  }
-
-  .lm-footer-bottom-inner {
-    width: 100%;
-    min-height: auto;
-    display: block;
-    padding: 18px 20px 22px;
-    text-align: center;
-  }
-
-  .lm-footer-bottom p {
-    margin: 4px 0;
-  }
-
-  .mobile-bottom-nav {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    min-height: 74px;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    background: var(--lm-footer-white);
-    border-top: 1px solid #dbe3ea;
-    box-shadow: 0 -4px 18px rgba(15, 23, 42, 0.13);
-  }
-
-  .mobile-bottom-link {
+@media (max-width: 760px) {
+  .lm-footer-toggle {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    min-width: 0;
-    padding: 8px 3px;
-    color: #334155;
-    font-size: 11px;
-    font-weight: 700;
-    text-decoration: none;
   }
 
-  .mobile-bottom-link.active {
-    color: var(--lm-footer-green);
-  }
-
-  .mobile-bottom-icon {
-    font-size: 27px;
-    line-height: 1;
-  }
-}
-
-@media (max-width: 390px) {
-  .lm-footer-grid {
-    gap: 24px 14px;
-    padding-right: 16px;
-    padding-left: 16px;
-  }
-
-  .lm-footer-column a {
-    font-size: 12px;
-  }
-
-  .lm-footer-toggle-brand {
-    font-size: 15px;
-  }
-
-  .lm-footer-toggle-brand img {
-    width: 30px;
-    height: 30px;
-  }
-
-  .lm-county-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* TIGHTER DESKTOP FOOTER */
-
-@media (min-width: 681px) {
-  .lm-footer-grid {
-    padding-top: 42px;
-    padding-bottom: 34px;
-    gap: 34px;
-  }
-
-  .lm-county-section {
-    padding-top: 24px;
-    padding-bottom: 28px;
-  }
-
-  .lm-county-list {
-    grid-template-columns: repeat(5, 1fr);
-  }
-
-  .lm-footer-bottom-inner {
-    min-height: 56px;
-  }
-
-  .lm-footer-description {
-    line-height: 1.55;
-  }
-
-  .lm-footer-app {
-    margin-top: 16px;
-  }
-}
-
-/* FIX MOBILE PAGE SCROLL */
-
-@media (max-width: 680px) {
-  html,
-  body {
-    height: auto !important;
-    min-height: 100% !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-  }
-
-  body.homepage {
-    position: static !important;
-    padding-bottom: 74px !important;
-  }
-
-  #normalSiteContent,
-  .lm-footer,
   .lm-footer-content {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
+    display: none;
   }
 
   .lm-footer-content.footer-open {
-    display: block !important;
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
+    display: block;
+  }
+
+  .lm-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .lm-footer-bottom-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lm-footer-grid {
+    grid-template-columns: 1fr;
   }
 }
