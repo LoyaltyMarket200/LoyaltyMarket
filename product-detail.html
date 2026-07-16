@@ -625,7 +625,7 @@
   </main>
 
   <section class="related-section" id="relatedSection" style="display:none;">
-    <h2>Similar Listings</h2>
+   <h2>Similar Ads</h2>
     <div class="product-grid" id="relatedGrid"></div>
   </section>
 
@@ -1331,7 +1331,7 @@ async function loadRelatedListings(category, excludeId) {
     const relatedQuery = query(
       collection(db, "products"),
       where("category", "==", category),
-      limit(9)
+      limit(20)
     );
 
     const snapshot = await getDocs(relatedQuery);
@@ -1339,6 +1339,14 @@ async function loadRelatedListings(category, excludeId) {
     const items = snapshot.docs
       .filter((docSnap) => docSnap.id !== excludeId)
       .filter((docSnap) => !HIDDEN_STATUSES.includes(docSnap.data().status) && docSnap.data().status !== "sold")
+      .sort((a, b) => {
+        const aFeatured = a.data().featured === true ? 1 : 0;
+        const bFeatured = b.data().featured === true ? 1 : 0;
+        if (bFeatured !== aFeatured) return bFeatured - aFeatured;
+        const aTime = a.data().createdAt?.seconds || 0;
+        const bTime = b.data().createdAt?.seconds || 0;
+        return bTime - aTime;
+      })
       .slice(0, 8);
 
     if (items.length === 0) {
