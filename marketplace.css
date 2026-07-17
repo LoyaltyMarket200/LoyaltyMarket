@@ -17,9 +17,6 @@
   --mp-soft: #f8fafc;
 }
 
-/* Base icon sizing — used site-wide for the SVG icons that replaced
-   emoji. Individual contexts (search fields, trust cards, etc.)
-   override width/height/color as needed above. */
 .icon {
   display: inline-block;
   width: 20px;
@@ -38,10 +35,13 @@
   color: var(--mp-navy);
 }
 
+/* ---------- HEADER — merged into the hero band below,
+   no seam/border between them (Jiji-style) ---------- */
+
 .mp-header {
-  background: #ffffff;
-  border-bottom: 1px solid var(--mp-line);
-  padding: 9px max(20px, 4vw) 10px;
+  background: var(--mp-navy);
+  border-bottom: none;
+  padding: 9px max(20px, 4vw) 0;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -55,6 +55,7 @@
   flex-wrap: wrap;
   max-width: 1280px;
   margin: 0 auto;
+  padding-bottom: 10px;
 }
 
 .mp-logo {
@@ -72,14 +73,14 @@
   letter-spacing: -0.02em;
 }
 
-.mp-logo-water { color: var(--mp-navy); }
+.mp-logo-water { color: #ffffff; }
 .mp-logo-side { color: var(--mp-orange); }
 
 .mp-logo-sub {
   flex-basis: 100%;
   font-size: 10px;
   font-weight: 500;
-  color: var(--mp-muted);
+  color: #b9e6e6;
   letter-spacing: 0.02em;
 }
 
@@ -97,12 +98,12 @@
   text-decoration: none;
   font-size: 12.5px;
   font-weight: 600;
-  color: var(--mp-navy);
-  background: var(--mp-soft);
-  border: 1px solid var(--mp-line);
+  color: #ffffff;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
-.mp-action-link:hover { border-color: var(--mp-navy); }
+.mp-action-link:hover { border-color: #ffffff; }
 .mp-messages-link { padding-right: 24px; }
 
 .mp-post-ad {
@@ -119,9 +120,8 @@
 .disabled-link { opacity: 0.55; pointer-events: none; }
 
 /* ---------- HERO SEARCH BAND ----------
-   Matches Jiji's actual homepage: a colored band directly under the
-   header holding a single "What are you looking for?" search bar.
-   Jiji uses green; LM keeps its own navy here. */
+   Now flows directly out of the header — same navy
+   background, no top padding gap, no border between them. */
 
 .mp-hero-search {
   background: var(--mp-navy);
@@ -132,7 +132,7 @@
     transparent 2px,
     transparent 14px
   );
-  padding: 22px max(20px, 4vw);
+  padding: 14px max(20px, 4vw) 22px;
 }
 
 .mp-hero-search-inner {
@@ -211,7 +211,7 @@
   font-size: 12.5px; color: var(--mp-muted); background: #ffffff;
 }
 
-.mp-nav-strip { background: var(--mp-navy); }
+.mp-nav-strip { background: var(--mp-blue-dark); }
 
 .mp-nav-inner {
   max-width: 1280px; margin: 0 auto;
@@ -317,8 +317,6 @@
 
 .mp-quick-actions-row::-webkit-scrollbar { display: none; }
 
-/* When nested in the main column next to the category sidebar
-   (Jiji's actual position) rather than as a standalone full-width bar */
 .mp-quick-actions-row-inline {
   padding: 0;
   background: transparent;

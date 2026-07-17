@@ -113,6 +113,15 @@
     .boost-payment-steps ol{margin:6px 0 0 18px;padding:0}
     .boost-payment-done-btn{width:100%;margin-top:18px;padding:11px;border-radius:8px;border:none;background:var(--navy);color:#fff;font-size:13.5px;font-weight:600;cursor:pointer}
 
+    /* Payment-reference form inside the "send money" screen */
+    .boost-payment-field-label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin:14px 0 6px}
+    .boost-payment-method-option{display:block;border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--ink)}
+    .boost-payment-method-option:hover{border-color:var(--navy)}
+    .boost-payment-method-option.selected{border-color:var(--navy);background:var(--navy-soft)}
+    .boost-payment-method-option input{margin-right:8px}
+    .boost-payment-input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;font-family:inherit;margin-top:2px}
+    .boost-payment-input:focus{outline:none;border-color:var(--navy)}
+
     .business-badge{display:inline-flex;align-items:center;gap:4px;background:var(--navy-soft);color:var(--navy);font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;margin-top:5px}
     .dashboard-business-name{font-size:12.5px;color:var(--muted);margin-top:2px}
 
@@ -297,7 +306,7 @@
       <h3>Boost This Listing</h3>
       <p class="boost-modal-subtitle">Higher tiers get more visibility and refresh more often, keeping your ad near the top.</p>
 
-      <div class="launch-free-banner">
+      <div class="launch-free-banner" id="launchFreeBanner">
         Free for a limited time — every tier is US$0 during Waterside's launch period.
       </div>
 
@@ -306,42 +315,42 @@
         <label class="boost-plan-option" data-plan="basic">
           <input type="radio" name="boostPlan" value="basic">
           <span class="boost-plan-title">Basic</span>
-          <span class="boost-plan-price">Free</span>
+          <span class="boost-plan-price" data-price-for="basic">Free</span>
           <p class="boost-plan-desc">Up to 2x more views. Refreshes every 48 hours. 3 days.</p>
         </label>
 
         <label class="boost-plan-option" data-plan="business">
           <input type="radio" name="boostPlan" value="business">
           <span class="boost-plan-title">Business</span>
-          <span class="boost-plan-price">Free</span>
+          <span class="boost-plan-price" data-price-for="business">Free</span>
           <p class="boost-plan-desc">Up to 3x more views. Refreshes every 48 hours. 7 days.</p>
         </label>
 
         <label class="boost-plan-option" data-plan="premium">
           <input type="radio" name="boostPlan" value="premium">
           <span class="boost-plan-title">Premium</span>
-          <span class="boost-plan-price">Free</span>
+          <span class="boost-plan-price" data-price-for="premium">Free</span>
           <p class="boost-plan-desc">Up to 5x more views. Refreshes every 24 hours. 14 days.</p>
         </label>
 
         <label class="boost-plan-option" data-plan="vip">
           <input type="radio" name="boostPlan" value="vip">
           <span class="boost-plan-title">VIP</span>
-          <span class="boost-plan-price">Free</span>
+          <span class="boost-plan-price" data-price-for="vip">Free</span>
           <p class="boost-plan-desc">Up to 7x more views. Refreshes every 12 hours. 14 days.</p>
         </label>
 
         <label class="boost-plan-option" data-plan="vipgold">
           <input type="radio" name="boostPlan" value="vipgold">
           <span class="boost-plan-title">VIP Gold</span>
-          <span class="boost-plan-price">Free</span>
+          <span class="boost-plan-price" data-price-for="vipgold">Free</span>
           <p class="boost-plan-desc">Up to 10x more views. Refreshes every 6 hours. Website link on your profile. 30 days.</p>
         </label>
 
         <label class="boost-plan-option" data-plan="diamond">
           <input type="radio" name="boostPlan" value="diamond">
           <span class="boost-plan-title">Diamond</span>
-          <span class="boost-plan-price">Free</span>
+          <span class="boost-plan-price" data-price-for="diamond">Free</span>
           <p class="boost-plan-desc">Highest reach for high-volume sellers. Refreshes every 3 hours. Website link on your profile. 30 days.</p>
         </label>
         </div>
@@ -354,12 +363,59 @@
 
       <p class="boost-scroll-hint">Scroll to see all 6 tiers</p>
 
-      <p class="boost-modal-note">Your boost activates automatically — no payment needed during launch.</p>
+      <p class="boost-modal-note" id="boostPlanNote">Your boost activates automatically — no payment needed during launch.</p>
+    </div>
+
+    <div class="boost-payment-screen" id="boostPaymentInstructionsScreen">
+      <h3>Send Payment To Activate</h3>
+      <p class="boost-modal-subtitle">Send the exact amount below via Mobile Money, then tell us how you paid so we can confirm and activate your boost.</p>
+
+      <div class="boost-payment-amount">
+        <div class="boost-payment-amount-label">Amount to send</div>
+        <div class="boost-payment-amount-value" id="boostInstructionsAmountValue">US$0</div>
+      </div>
+
+      <div class="boost-payment-method">
+        <div class="boost-payment-method-name">
+          <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          MTN Mobile Money
+        </div>
+        <div class="boost-payment-method-number" id="boostMtnNumberDisplay">Not set</div>
+      </div>
+
+      <div class="boost-payment-method">
+        <div class="boost-payment-method-name">
+          <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          Orange Money
+        </div>
+        <div class="boost-payment-method-number" id="boostOrangeNumberDisplay">Not set</div>
+      </div>
+
+      <form id="boostPaymentForm">
+        <span class="boost-payment-field-label">Which number did you pay from?</span>
+
+        <label class="boost-payment-method-option" data-method="mtn">
+          <input type="radio" name="paymentMethod" value="mtn" required> Sent via MTN Mobile Money
+        </label>
+        <label class="boost-payment-method-option" data-method="orange">
+          <input type="radio" name="paymentMethod" value="orange"> Sent via Orange Money
+        </label>
+
+        <span class="boost-payment-field-label" for="boostPaymentPhoneInput">Your phone number (the one you paid from)</span>
+        <input class="boost-payment-input" id="boostPaymentPhoneInput" type="tel" placeholder="e.g. 088 147 1694" required>
+
+        <div class="boost-modal-actions">
+          <button type="button" class="boost-cancel-btn" id="boostInstructionsCancelBtn">Cancel</button>
+          <button type="submit" class="boost-submit-btn" id="boostInstructionsSubmitBtn">I've Sent Payment</button>
+        </div>
+      </form>
+
+      <p class="boost-modal-note">Your boost activates as soon as an admin confirms your payment — usually within a few hours.</p>
     </div>
 
     <div class="boost-payment-screen" id="boostPaymentScreen">
-      <h3>Boost Activated</h3>
-      <p class="boost-modal-subtitle">Your listing is now boosted and featured — free during Waterside's launch period.</p>
+      <h3 id="boostResultTitle">Boost Activated</h3>
+      <p class="boost-modal-subtitle" id="boostResultSubtitle">Your listing is now boosted and featured — free during Waterside's launch period.</p>
 
       <div class="boost-payment-amount">
         <div class="boost-payment-amount-label">Amount charged</div>
@@ -368,7 +424,7 @@
 
       <div class="boost-payment-steps">
         <strong>What happens now:</strong>
-        <ol>
+        <ol id="boostResultSteps">
           <li>Your listing shows a "Featured" badge immediately</li>
           <li>It appears higher in search results for the boost duration</li>
           <li>Boosting will move to paid pricing after the launch period ends</li>
@@ -423,6 +479,7 @@ const archivedListingsStat = document.getElementById("archivedListingsStat");
 
 const boostModalOverlay = document.getElementById("boostModalOverlay");
 const boostPlanScreen = document.getElementById("boostPlanScreen");
+const boostPaymentInstructionsScreen = document.getElementById("boostPaymentInstructionsScreen");
 const boostPaymentScreen = document.getElementById("boostPaymentScreen");
 const boostForm = document.getElementById("boostForm");
 const boostCancelBtn = document.getElementById("boostCancelBtn");
@@ -430,6 +487,19 @@ const boostSubmitBtn = document.getElementById("boostSubmitBtn");
 const boostPlanOptions = document.querySelectorAll(".boost-plan-option");
 const boostPaymentAmountValue = document.getElementById("boostPaymentAmountValue");
 const boostPaymentDoneBtn = document.getElementById("boostPaymentDoneBtn");
+const launchFreeBanner = document.getElementById("launchFreeBanner");
+const boostPlanNote = document.getElementById("boostPlanNote");
+const boostInstructionsAmountValue = document.getElementById("boostInstructionsAmountValue");
+const boostMtnNumberDisplay = document.getElementById("boostMtnNumberDisplay");
+const boostOrangeNumberDisplay = document.getElementById("boostOrangeNumberDisplay");
+const boostPaymentForm = document.getElementById("boostPaymentForm");
+const boostInstructionsCancelBtn = document.getElementById("boostInstructionsCancelBtn");
+const boostInstructionsSubmitBtn = document.getElementById("boostInstructionsSubmitBtn");
+const boostPaymentMethodOptions = document.querySelectorAll(".boost-payment-method-option");
+const boostPaymentPhoneInput = document.getElementById("boostPaymentPhoneInput");
+const boostResultTitle = document.getElementById("boostResultTitle");
+const boostResultSubtitle = document.getElementById("boostResultSubtitle");
+const boostResultSteps = document.getElementById("boostResultSteps");
 
 const ADMIN_EMAILS = ["princeteah200@gmail.com"];
 
@@ -437,14 +507,30 @@ let currentUser = null;
 let allMyProducts = [];
 let currentArchiveFilter = "all";
 let boostTargetProductId = null;
+let selectedPlanKey = null;
+let selectedPlanPrice = 0;
 
 const boostPlanDetails = {
-  "basic": { label: "Basic", price: "Free", days: 3, multiplier: "2x", refreshHours: 48 },
-  "business": { label: "Business", price: "Free", days: 7, multiplier: "3x", refreshHours: 48 },
-  "premium": { label: "Premium", price: "Free", days: 14, multiplier: "5x", refreshHours: 24 },
-  "vip": { label: "VIP", price: "Free", days: 14, multiplier: "7x", refreshHours: 12 },
-  "vipgold": { label: "VIP Gold", price: "Free", days: 30, multiplier: "10x", refreshHours: 6 },
-  "diamond": { label: "Diamond", price: "Free", days: 30, multiplier: "15x+", refreshHours: 3 }
+  "basic": { label: "Basic", days: 3, multiplier: "2x", refreshHours: 48, settingsField: "boostBasicPrice" },
+  "business": { label: "Business", days: 7, multiplier: "3x", refreshHours: 48, settingsField: "boostBusinessPrice" },
+  "premium": { label: "Premium", days: 14, multiplier: "5x", refreshHours: 24, settingsField: "boostPremiumPrice" },
+  "vip": { label: "VIP", days: 14, multiplier: "7x", refreshHours: 12, settingsField: "boostVipPrice" },
+  "vipgold": { label: "VIP Gold", days: 30, multiplier: "10x", refreshHours: 6, settingsField: "boostVipGoldPrice" },
+  "diamond": { label: "Diamond", days: 30, multiplier: "15x+", refreshHours: 3, settingsField: "boostDiamondPrice" }
+};
+
+// Loaded from settings/marketplace — every tier price defaults to 0
+// (free) until an admin types a real number into Marketplace Settings.
+// Manual MTN/Orange payment flow only kicks in once a tier's price > 0.
+let marketplaceSettings = {
+  boostBasicPrice: 0,
+  boostBusinessPrice: 0,
+  boostPremiumPrice: 0,
+  boostVipPrice: 0,
+  boostVipGoldPrice: 0,
+  boostDiamondPrice: 0,
+  mtnMobileMoney: "",
+  orangeMoney: ""
 };
 
 function safeText(value) {
@@ -454,6 +540,46 @@ function safeText(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+async function loadMarketplaceSettings() {
+  try {
+    const snapshot = await getDoc(doc(db, "settings", "marketplace"));
+
+    if (snapshot.exists()) {
+      marketplaceSettings = { ...marketplaceSettings, ...snapshot.data() };
+    }
+  } catch (error) {
+    console.error("Could not load marketplace settings:", error);
+  }
+
+  applyTierPricesToModal();
+}
+
+function getTierPrice(planKey) {
+  const field = boostPlanDetails[planKey]?.settingsField;
+  const value = Number(marketplaceSettings[field]);
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+function applyTierPricesToModal() {
+  let allFree = true;
+
+  Object.keys(boostPlanDetails).forEach((planKey) => {
+    const price = getTierPrice(planKey);
+    const priceEl = document.querySelector(`[data-price-for="${planKey}"]`);
+
+    if (priceEl) {
+      priceEl.textContent = price > 0 ? `US$${price.toFixed(2)}` : "Free";
+    }
+
+    if (price > 0) allFree = false;
+  });
+
+  launchFreeBanner.style.display = allFree ? "block" : "none";
+  boostPlanNote.textContent = allFree
+    ? "Your boost activates automatically — no payment needed during launch."
+    : "Free tiers activate instantly. Paid tiers require Mobile Money payment before activation.";
 }
 
 async function loadUserProfile() {
@@ -683,10 +809,16 @@ function renderListings() {
 
 function openBoostModal(productId) {
   boostTargetProductId = productId;
+  selectedPlanKey = null;
+  selectedPlanPrice = 0;
   boostForm.reset();
+  boostPaymentForm.reset();
   boostPlanOptions.forEach((option) => option.classList.remove("selected"));
+  boostPaymentMethodOptions.forEach((option) => option.classList.remove("selected"));
   boostSubmitBtn.disabled = true;
+  applyTierPricesToModal();
   boostPlanScreen.style.display = "block";
+  boostPaymentInstructionsScreen.classList.remove("open");
   boostPaymentScreen.classList.remove("open");
   boostModalOverlay.classList.add("open");
 }
@@ -694,6 +826,8 @@ function openBoostModal(productId) {
 function closeBoostModal() {
   boostModalOverlay.classList.remove("open");
   boostTargetProductId = null;
+  selectedPlanKey = null;
+  selectedPlanPrice = 0;
 }
 
 boostPlanOptions.forEach((option) => {
@@ -706,7 +840,17 @@ boostPlanOptions.forEach((option) => {
   });
 });
 
+boostPaymentMethodOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    boostPaymentMethodOptions.forEach((o) => o.classList.remove("selected"));
+    option.classList.add("selected");
+    const radio = option.querySelector("input[type=radio]");
+    radio.checked = true;
+  });
+});
+
 boostCancelBtn.addEventListener("click", closeBoostModal);
+boostInstructionsCancelBtn.addEventListener("click", closeBoostModal);
 
 boostModalOverlay.addEventListener("click", (event) => {
   if (event.target === boostModalOverlay) {
@@ -727,46 +871,134 @@ boostForm.addEventListener("submit", async (event) => {
 
   const planKey = selectedPlan.value;
   const planInfo = boostPlanDetails[planKey];
+  const price = getTierPrice(planKey);
 
-  boostSubmitBtn.disabled = true;
-  boostSubmitBtn.textContent = "Activating...";
+  selectedPlanKey = planKey;
+  selectedPlanPrice = price;
+
+  // Free tier (either still $0 during launch, or admin hasn't priced it
+  // yet): activate instantly, same as before — no payment flow needed.
+  if (price <= 0) {
+    boostSubmitBtn.disabled = true;
+    boostSubmitBtn.textContent = "Activating...";
+
+    try {
+      const activatedAt = Timestamp.now();
+      const boostExpiresAt = Timestamp.fromMillis(
+        activatedAt.toMillis() + planInfo.days * 24 * 60 * 60 * 1000
+      );
+
+      await updateDoc(doc(db, "products", boostTargetProductId), {
+        boostStatus: "active",
+        featured: true,
+        boostPlan: planKey,
+        boostPlanLabel: planInfo.label,
+        boostPrice: "Free",
+        boostDurationDays: planInfo.days,
+        boostMultiplier: planInfo.multiplier,
+        boostRefreshHours: planInfo.refreshHours,
+        boostRequestedAt: serverTimestamp(),
+        boostActivatedAt: activatedAt,
+        boostExpiresAt,
+        boostExpiredAt: null,
+        paymentMethod: null,
+        paymentPhone: null,
+        sellerEmail: currentUser.email
+      });
+
+      boostResultTitle.textContent = "Boost Activated";
+      boostResultSubtitle.textContent = "Your listing is now boosted and featured — free during Waterside's launch period.";
+      boostPaymentAmountValue.textContent = "Free";
+      boostResultSteps.innerHTML = `
+        <li>Your listing shows a "Featured" badge immediately</li>
+        <li>It appears higher in search results for the boost duration</li>
+        <li>Boosting will move to paid pricing after the launch period ends</li>
+      `;
+
+      boostPlanScreen.style.display = "none";
+      boostPaymentScreen.classList.add("open");
+
+      loadMyListings();
+
+    } catch (error) {
+      alert("Could not activate your boost: " + error.message);
+    } finally {
+      boostSubmitBtn.disabled = false;
+      boostSubmitBtn.textContent = "Submit Boost Request";
+    }
+
+    return;
+  }
+
+  // Paid tier: don't activate yet — show Mobile Money payment
+  // instructions and collect a payment reference first.
+  boostInstructionsAmountValue.textContent = `US$${price.toFixed(2)}`;
+  boostMtnNumberDisplay.textContent = marketplaceSettings.mtnMobileMoney || "Not set — contact support";
+  boostOrangeNumberDisplay.textContent = marketplaceSettings.orangeMoney || "Not set — contact support";
+
+  boostPlanScreen.style.display = "none";
+  boostPaymentInstructionsScreen.classList.add("open");
+});
+
+boostPaymentForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const selectedMethod = boostPaymentForm.querySelector("input[name=paymentMethod]:checked");
+  const phoneValue = boostPaymentPhoneInput.value.trim();
+
+  if (!selectedMethod) {
+    alert("Please select which Mobile Money service you paid with.");
+    return;
+  }
+
+  if (!phoneValue) {
+    alert("Please enter the phone number you paid from.");
+    return;
+  }
+
+  if (!boostTargetProductId || !selectedPlanKey) {
+    return;
+  }
+
+  const planInfo = boostPlanDetails[selectedPlanKey];
+
+  boostInstructionsSubmitBtn.disabled = true;
+  boostInstructionsSubmitBtn.textContent = "Submitting...";
 
   try {
-    // Launch-period behavior: boosts are free, so activate immediately
-    // instead of waiting for a Mobile Money payment confirmation. Once
-    // the 6-month free period ends, this should go back to boostStatus:
-    // "pending" and wait for the real payment flow, same as before.
-    const activatedAt = Timestamp.now();
-    const boostExpiresAt = Timestamp.fromMillis(
-      activatedAt.toMillis() + planInfo.days * 24 * 60 * 60 * 1000
-    );
-
     await updateDoc(doc(db, "products", boostTargetProductId), {
-      boostStatus: "active",
-      featured: true,
-      boostPlan: planKey,
+      boostStatus: "pending",
+      boostPlan: selectedPlanKey,
       boostPlanLabel: planInfo.label,
-      boostPrice: planInfo.price,
+      boostPrice: `US$${selectedPlanPrice.toFixed(2)}`,
       boostDurationDays: planInfo.days,
       boostMultiplier: planInfo.multiplier,
       boostRefreshHours: planInfo.refreshHours,
       boostRequestedAt: serverTimestamp(),
-      boostActivatedAt: activatedAt,
-      boostExpiresAt,
-      boostExpiredAt: null,
+      paymentMethod: selectedMethod.value === "mtn" ? "MTN Mobile Money" : "Orange Money",
+      paymentPhone: phoneValue,
       sellerEmail: currentUser.email
     });
 
-    boostPlanScreen.style.display = "none";
+    boostResultTitle.textContent = "Payment Submitted";
+    boostResultSubtitle.textContent = "We're reviewing your payment. Your boost activates as soon as an admin confirms it.";
+    boostPaymentAmountValue.textContent = `US$${selectedPlanPrice.toFixed(2)}`;
+    boostResultSteps.innerHTML = `
+      <li>An admin will confirm your Mobile Money payment</li>
+      <li>Your listing activates and shows a boost badge once confirmed</li>
+      <li>This usually takes a few hours — check My Listings for the status</li>
+    `;
+
+    boostPaymentInstructionsScreen.classList.remove("open");
     boostPaymentScreen.classList.add("open");
 
     loadMyListings();
 
   } catch (error) {
-    alert("Could not activate your boost: " + error.message);
+    alert("Could not submit your payment details: " + error.message);
   } finally {
-    boostSubmitBtn.disabled = false;
-    boostSubmitBtn.textContent = "Submit Boost Request";
+    boostInstructionsSubmitBtn.disabled = false;
+    boostInstructionsSubmitBtn.textContent = "I've Sent Payment";
   }
 });
 
@@ -1024,6 +1256,7 @@ onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   touchLastActive(user.uid);
   await loadUserProfile();
+  await loadMarketplaceSettings();
   await loadMyListings();
   listenForUnreadMessages();
 });

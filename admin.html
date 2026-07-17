@@ -618,6 +618,16 @@
       line-height: 1.5;
     }
 
+    .settings-subgroup-title {
+      grid-column: 1 / -1;
+      margin: 6px 0 -4px;
+      color: #0d6e6e;
+      font-size: 12.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
     .toggle-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -1060,19 +1070,55 @@
                 <input class="settings-input" id="settingOrangeNumber" type="tel">
               </div>
 
+              <div class="settings-field full">
+                <div class="settings-help">
+                  Buyers send Mobile Money payments to the two numbers above.
+                  Sellers see them when boosting a paid tier and enter their
+                  own payment reference for you to confirm below in
+                  <strong>Boost Requests</strong>.
+                </div>
+              </div>
+
+              <div class="settings-subgroup-title">Featured Listing (Boost) Tier Pricing — US$</div>
+
               <div class="settings-field">
-                <label for="settingBoost3">3-Day Boost Price (US$)</label>
-                <input class="settings-input" id="settingBoost3" type="number" min="0" step="0.01">
+                <label for="settingBoostBasic">Basic (3 days)</label>
+                <input class="settings-input" id="settingBoostBasic" type="number" min="0" step="0.01">
               </div>
 
               <div class="settings-field">
-                <label for="settingBoost7">7-Day Boost Price (US$)</label>
-                <input class="settings-input" id="settingBoost7" type="number" min="0" step="0.01">
+                <label for="settingBoostBusiness">Business (7 days)</label>
+                <input class="settings-input" id="settingBoostBusiness" type="number" min="0" step="0.01">
               </div>
 
               <div class="settings-field">
-                <label for="settingBoost14">14-Day Boost Price (US$)</label>
-                <input class="settings-input" id="settingBoost14" type="number" min="0" step="0.01">
+                <label for="settingBoostPremium">Premium (14 days)</label>
+                <input class="settings-input" id="settingBoostPremium" type="number" min="0" step="0.01">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingBoostVip">VIP (14 days)</label>
+                <input class="settings-input" id="settingBoostVip" type="number" min="0" step="0.01">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingBoostVipGold">VIP Gold (30 days)</label>
+                <input class="settings-input" id="settingBoostVipGold" type="number" min="0" step="0.01">
+              </div>
+
+              <div class="settings-field">
+                <label for="settingBoostDiamond">Diamond (30 days)</label>
+                <input class="settings-input" id="settingBoostDiamond" type="number" min="0" step="0.01">
+              </div>
+
+              <div class="settings-field full">
+                <div class="settings-help">
+                  Leave a tier at 0 to keep it free — sellers get it activated
+                  instantly with no payment step. Set a tier above 0 and
+                  sellers will be shown your MTN/Orange numbers and asked to
+                  submit a payment reference, which then shows up under
+                  <strong>Boost Requests → Pending</strong> for you to confirm.
+                </div>
               </div>
 
               <div class="settings-field">
@@ -1207,9 +1253,12 @@
       commissionPercent: document.getElementById("settingCommission"),
       mtnMobileMoney: document.getElementById("settingMtnNumber"),
       orangeMoney: document.getElementById("settingOrangeNumber"),
-      boost3DayPrice: document.getElementById("settingBoost3"),
-      boost7DayPrice: document.getElementById("settingBoost7"),
-      boost14DayPrice: document.getElementById("settingBoost14"),
+      boostBasicPrice: document.getElementById("settingBoostBasic"),
+      boostBusinessPrice: document.getElementById("settingBoostBusiness"),
+      boostPremiumPrice: document.getElementById("settingBoostPremium"),
+      boostVipPrice: document.getElementById("settingBoostVip"),
+      boostVipGoldPrice: document.getElementById("settingBoostVipGold"),
+      boostDiamondPrice: document.getElementById("settingBoostDiamond"),
       usdToLrdRate: document.getElementById("settingCurrencyRate"),
       allowNewListings: document.getElementById("settingAllowListings"),
       allowNewRegistrations: document.getElementById("settingAllowRegistrations"),
@@ -1972,33 +2021,15 @@
                 ` : ""}
 
                 ${reportStatus !== "reviewed" ? `
-
-
                   <button class="btn-reviewed" data-report-id="${safeText(report.id)}" data-report-status="reviewed">
-
-
                     Mark Reviewed
-
-
                   </button>
-
-
                 ` : ""}
 
-
-
                 ${reportStatus !== "dismissed" ? `
-
-
                   <button class="btn-dismiss" data-report-id="${safeText(report.id)}" data-report-status="dismissed">
-
-
                     Dismiss
-
-
                   </button>
-
-
                 ` : ""}
               </div>
             </article>
@@ -2038,33 +2069,15 @@
               ` : ""}
 
               ${reportStatus !== "reviewed" ? `
-
-
                 <button class="btn-reviewed" data-report-id="${safeText(report.id)}" data-report-status="reviewed">
-
-
                   Mark Reviewed
-
-
                 </button>
-
-
               ` : ""}
 
-
-
               ${reportStatus !== "dismissed" ? `
-
-
                 <button class="btn-dismiss" data-report-id="${safeText(report.id)}" data-report-status="dismissed">
-
-
                   Dismiss
-
-
                 </button>
-
-
               ` : ""}
             </div>
           </article>
@@ -2262,6 +2275,8 @@
               Amount due: <strong>${safeText(product.boostPrice || "Unknown")}</strong>
               <br>
               Duration: ${safeText(product.boostDurationDays || "?")} days
+              ${product.paymentMethod ? `<br>Payment method: <strong>${safeText(product.paymentMethod)}</strong>` : ""}
+              ${product.paymentPhone ? `<br>Sent from phone: <strong>${safeText(product.paymentPhone)}</strong>` : ""}
             </div>
 
             <div class="report-meta">
@@ -2381,9 +2396,12 @@
           commissionPercent: 0,
           mtnMobileMoney: "+231 88 147 1694",
           orangeMoney: "+231 77 002 5588",
-          boost3DayPrice: 0,
-          boost7DayPrice: 0,
-          boost14DayPrice: 0,
+          boostBasicPrice: 0,
+          boostBusinessPrice: 0,
+          boostPremiumPrice: 0,
+          boostVipPrice: 0,
+          boostVipGoldPrice: 0,
+          boostDiamondPrice: 0,
           usdToLrdRate: 180,
           allowNewListings: true,
           allowNewRegistrations: true,
@@ -2400,9 +2418,12 @@
         settingsInputs.commissionPercent.value = Number(settings.commissionPercent ?? 0);
         settingsInputs.mtnMobileMoney.value = settings.mtnMobileMoney || "";
         settingsInputs.orangeMoney.value = settings.orangeMoney || "";
-        settingsInputs.boost3DayPrice.value = Number(settings.boost3DayPrice ?? 0);
-        settingsInputs.boost7DayPrice.value = Number(settings.boost7DayPrice ?? 0);
-        settingsInputs.boost14DayPrice.value = Number(settings.boost14DayPrice ?? 0);
+        settingsInputs.boostBasicPrice.value = Number(settings.boostBasicPrice ?? 0);
+        settingsInputs.boostBusinessPrice.value = Number(settings.boostBusinessPrice ?? 0);
+        settingsInputs.boostPremiumPrice.value = Number(settings.boostPremiumPrice ?? 0);
+        settingsInputs.boostVipPrice.value = Number(settings.boostVipPrice ?? 0);
+        settingsInputs.boostVipGoldPrice.value = Number(settings.boostVipGoldPrice ?? 0);
+        settingsInputs.boostDiamondPrice.value = Number(settings.boostDiamondPrice ?? 0);
         settingsInputs.usdToLrdRate.value = Number(settings.usdToLrdRate ?? 180);
         settingsInputs.allowNewListings.checked = settings.allowNewListings !== false;
         settingsInputs.allowNewRegistrations.checked = settings.allowNewRegistrations !== false;
@@ -2421,9 +2442,12 @@
       clearMessages();
 
       const commission = Number(settingsInputs.commissionPercent.value);
-      const boost3 = Number(settingsInputs.boost3DayPrice.value);
-      const boost7 = Number(settingsInputs.boost7DayPrice.value);
-      const boost14 = Number(settingsInputs.boost14DayPrice.value);
+      const boostBasic = Number(settingsInputs.boostBasicPrice.value);
+      const boostBusiness = Number(settingsInputs.boostBusinessPrice.value);
+      const boostPremium = Number(settingsInputs.boostPremiumPrice.value);
+      const boostVip = Number(settingsInputs.boostVipPrice.value);
+      const boostVipGold = Number(settingsInputs.boostVipGoldPrice.value);
+      const boostDiamond = Number(settingsInputs.boostDiamondPrice.value);
       const exchangeRate = Number(settingsInputs.usdToLrdRate.value);
 
       if (commission < 0 || commission > 100) {
@@ -2431,8 +2455,10 @@
         return;
       }
 
-      if ([boost3, boost7, boost14, exchangeRate].some((value) => value < 0 || Number.isNaN(value))) {
-        showError("Boost prices and the currency rate must be valid positive numbers.");
+      const boostPrices = [boostBasic, boostBusiness, boostPremium, boostVip, boostVipGold, boostDiamond];
+
+      if ([...boostPrices, exchangeRate].some((value) => value < 0 || Number.isNaN(value))) {
+        showError("Boost tier prices and the currency rate must be valid positive numbers.");
         return;
       }
 
@@ -2447,9 +2473,12 @@
           commissionPercent: commission,
           mtnMobileMoney: settingsInputs.mtnMobileMoney.value.trim(),
           orangeMoney: settingsInputs.orangeMoney.value.trim(),
-          boost3DayPrice: boost3,
-          boost7DayPrice: boost7,
-          boost14DayPrice: boost14,
+          boostBasicPrice: boostBasic,
+          boostBusinessPrice: boostBusiness,
+          boostPremiumPrice: boostPremium,
+          boostVipPrice: boostVip,
+          boostVipGoldPrice: boostVipGold,
+          boostDiamondPrice: boostDiamond,
           usdToLrdRate: exchangeRate,
           allowNewListings: settingsInputs.allowNewListings.checked,
           allowNewRegistrations: settingsInputs.allowNewRegistrations.checked,
