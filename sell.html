@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sell Product - LoyaltyMarket</title>
+  <title>Sell Product - Waterside</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#0f2d67">
+  <meta name="theme-color" content="#0d6e6e">
 
   <style>
     /* ==================================================
        SELL PAGE — RESTRAINED 2-COLOR SYSTEM
-       Navy (#0f2d67) is the only structural/brand color.
-       Orange (#f97316) is the ONLY accent, reserved for
+       Navy (#0d6e6e) is the only structural/brand color.
+       Orange (#ff6b4a) is the ONLY accent, reserved for
        the single primary action (Post button) and small
        selection states. No third color anywhere on this
        page. Font weight is mostly 400/500 — bold (700+)
@@ -22,10 +22,10 @@
        ================================================== */
 
     :root {
-      --navy: #0f2d67;
-      --navy-soft: #eef1f7;
-      --orange: #f97316;
-      --orange-soft: #fff4ec;
+      --navy: #0d6e6e;
+      --navy-soft: #e3f2f2;
+      --orange: #ff6b4a;
+      --orange-soft: #ffece7;
       --ink: #1f2937;
       --muted: #6b7280;
       --line: #e5e7eb;
@@ -400,7 +400,7 @@
       cursor: pointer;
     }
 
-    .post-btn:hover { background: #ea680a; }
+    .post-btn:hover { background: #e5522f; }
     .post-btn:disabled { opacity: .6; cursor: not-allowed; }
 
     /* ---------- FOOTER ---------- */
@@ -412,7 +412,7 @@
       gap: 16px;
       padding: 26px max(24px, 6vw);
       background: var(--navy);
-      color: #dbe4f5;
+      color: #d8f3f1;
     }
 
     .sell-footer h2 {
@@ -447,8 +447,8 @@
 <body>
 <header class="navbar sell-navbar">
   <a href="index.html" class="logo-link">
-    <img src="icons/icon-512.png" alt="LoyaltyMarket">
-    <span class="logo-text">LoyaltyMarket</span>
+    <img src="icons/icon-512.png" alt="Waterside">
+    <span class="logo-text">Waterside</span>
   </a>
 
   <div class="sell-nav-actions">
@@ -624,10 +624,10 @@
 <footer class="footer sell-footer">
 
   <div>
-    <h2>LoyaltyMarket</h2>
+    <h2>Waterside</h2>
     <p>You Get Market, We Get Buyer.</p>
   </div>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  <p>&copy; 2026 Waterside. All Rights Reserved.</p>
 </footer>
 
 <script type="module">
@@ -732,19 +732,19 @@
 
       if (userData.suspended === true && !isAdmin) {
         await signOut(auth);
-        alert("Your LoyaltyMarket account has been suspended. You cannot post listings.");
+        alert("Your Waterside account has been suspended. You cannot post listings.");
         window.location.href = "login.html";
         return false;
       }
 
       if (settings.maintenanceMode === true && !isAdmin) {
-        alert("LoyaltyMarket is under maintenance. New listings are temporarily unavailable.");
+        alert("Waterside is under maintenance. New listings are temporarily unavailable.");
         window.location.href = "dashboard.html";
         return false;
       }
 
       if (settings.allowNewListings === false && !isAdmin) {
-        alert("New listings are temporarily paused by LoyaltyMarket.");
+        alert("New listings are temporarily paused by Waterside.");
         window.location.href = "dashboard.html";
         return false;
       }

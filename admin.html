@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Admin Dashboard - LoyaltyMarket</title>
+  <title>Admin Dashboard - Waterside</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <meta name="theme-color" content="#0f2d67">
+  <meta name="theme-color" content="#0d6e6e">
 
   <style>
     * { box-sizing: border-box; }
@@ -61,7 +61,7 @@
     }
 
     .status-box h2 { margin-top: 0; }
-    .status-box a { color: #0f2d67; font-weight: 700; }
+    .status-box a { color: #0d6e6e; font-weight: 700; }
 
     .error-box,
     .success-box {
@@ -80,8 +80,8 @@
 
     .success-box {
       border: 1px solid #e5e7eb;
-      background: #eef1f7;
-      color: #0f2d67;
+      background: #e3f2f2;
+      color: #0d6e6e;
     }
 
     .admin-section-tabs {
@@ -104,8 +104,8 @@
     }
 
     .admin-section-tab-btn.active {
-      color: #0f2d67;
-      border-bottom-color: #0f2d67;
+      color: #0d6e6e;
+      border-bottom-color: #0d6e6e;
     }
 
     .report-count-badge {
@@ -139,8 +139,8 @@
     .admin-tab-btn:hover { background: #e2e8f0; }
 
     .admin-tab-btn.active {
-      border-color: #0f2d67;
-      background: #0f2d67;
+      border-color: #0d6e6e;
+      background: #0d6e6e;
       color: white;
     }
 
@@ -149,7 +149,7 @@
       padding: 10px 17px;
       border: none;
       border-radius: 9px;
-      background: #0f2d67;
+      background: #0d6e6e;
       color: white;
       font-size: 13.5px;
       font-weight: 600;
@@ -157,7 +157,7 @@
     }
 
     .save-settings-btn {
-      background: #f97316;
+      background: #ff6b4a;
       min-width: 190px;
     }
 
@@ -190,8 +190,8 @@
       justify-content: center;
       margin-bottom: 10px;
       border-radius: 10px;
-      background: #eef1f7;
-      color: #0f2d67;
+      background: #e3f2f2;
+      color: #0d6e6e;
     }
 
     .stat-card-icon .icon { width: 18px; height: 18px; }
@@ -240,7 +240,7 @@
     .user-search-box:focus,
     .settings-input:focus,
     .settings-select:focus {
-      border-color: #0f2d67;
+      border-color: #0d6e6e;
     }
 
     .user-card,
@@ -303,19 +303,19 @@
       text-transform: capitalize;
     }
 
-    .badge-verified { background: #eef1f7; color: #0f2d67; }
+    .badge-verified { background: #e3f2f2; color: #0d6e6e; }
     .badge-unverified { background: #e2e8f0; color: #475569; }
     .badge-suspended { background: #fee2e2; color: #b91c1c; }
-    .badge-business { background: #eef1f7; color: #0f2d67; }
-    .badge-business-verified { background: #fff4ec; color: #9a3412; }
+    .badge-business { background: #e3f2f2; color: #0d6e6e; }
+    .badge-business-verified { background: #ffece7; color: #c23f24; }
     .report-reason { background: #fee2e2; color: #b91c1c; }
-    .status-pending { background: #fff4ec; color: #9a3412; }
-    .status-reviewed { background: #eef1f7; color: #0f2d67; }
+    .status-pending { background: #ffece7; color: #c23f24; }
+    .status-reviewed { background: #e3f2f2; color: #0d6e6e; }
     .status-dismissed { background: #e2e8f0; color: #475569; }
-    .status-active { background: #eef1f7; color: #0f2d67; }
+    .status-active { background: #e3f2f2; color: #0d6e6e; }
     .status-expired { background: #e2e8f0; color: #475569; }
     .status-rejected { background: #fee2e2; color: #b91c1c; }
-    .status-pending_review { background: #fff4ec; color: #9a3412; }
+    .status-pending_review { background: #ffece7; color: #c23f24; }
 
     .user-actions,
     .report-actions {
@@ -347,7 +347,7 @@
 
     .btn-reviewed,
     .btn-verify,
-    .btn-business-verify { background: #0f2d67; color: white; }
+    .btn-business-verify { background: #0d6e6e; color: white; }
 
     .btn-dismiss,
     .btn-unverify,
@@ -359,14 +359,14 @@
 
     .btn-unsuspend,
     .btn-confirm-boost,
-    .btn-approve-review { background: #0f2d67; color: white; }
+    .btn-approve-review { background: #0d6e6e; color: white; }
 
     .boost-payment-info {
       margin-top: 13px;
       padding: 10px 12px;
       border-radius: 8px;
-      background: #eef1f7;
-      color: #0f2d67;
+      background: #e3f2f2;
+      color: #0d6e6e;
       font-size: 13px;
       line-height: 1.6;
     }
@@ -375,8 +375,8 @@
       margin-top: 13px;
       padding: 10px 12px;
       border-radius: 8px;
-      background: #fff4ec;
-      color: #9a3412;
+      background: #ffece7;
+      color: #c23f24;
       font-size: 13px;
       line-height: 1.6;
     }
@@ -487,14 +487,14 @@
     .bar-fill {
       height: 100%;
       border-radius: 999px;
-      background: #0f2d67;
+      background: #0d6e6e;
     }
 
     .bar-fill.color-sky { background: #3355a0; }
-    .bar-fill.color-amber { background: #f97316; }
+    .bar-fill.color-amber { background: #ff6b4a; }
     .bar-fill.color-red { background: #b91c1c; }
-    .bar-fill.color-purple { background: #0f2d67; opacity: .7; }
-    .bar-fill.color-pink { background: #f97316; opacity: .7; }
+    .bar-fill.color-purple { background: #0d6e6e; opacity: .7; }
+    .bar-fill.color-pink { background: #ff6b4a; opacity: .7; }
 
     .week-chart {
       display: flex;
@@ -517,7 +517,7 @@
       width: 100%;
       max-width: 34px;
       border-radius: 6px 6px 0 0;
-      background: #0f2d67;
+      background: #0d6e6e;
       min-height: 3px;
     }
 
@@ -557,11 +557,11 @@
       box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
     }
 
-    .quick-action-btn .icon { width: 17px; height: 17px; color: #0f2d67; flex-shrink: 0; }
+    .quick-action-btn .icon { width: 17px; height: 17px; color: #0d6e6e; flex-shrink: 0; }
 
     .quick-action-btn:hover {
-      border-color: #0f2d67;
-      color: #0f2d67;
+      border-color: #0d6e6e;
+      color: #0d6e6e;
     }
 
     .settings-shell {
@@ -686,7 +686,7 @@
     }
 
     .switch input:checked + .slider {
-      background: #0f2d67;
+      background: #0d6e6e;
     }
 
     .switch input:checked + .slider::before {
@@ -744,7 +744,7 @@
     }
 
     .admin-navbar .logo-link img { width: 26px; height: 26px; object-fit: contain; }
-    .admin-navbar .logo-text { color: #0f2d67; font-size: 14px; font-weight: 700; }
+    .admin-navbar .logo-text { color: #0d6e6e; font-size: 14px; font-weight: 700; }
 
     .admin-navbar-actions { display: flex; align-items: center; gap: 8px; }
 
@@ -763,7 +763,7 @@
     }
 
     .admin-navbar-link { color: #334155; background: #f8fafc; border-color: #e2e8f0; }
-    .admin-navbar-dashboard { color: #ffffff; background: #f97316; }
+    .admin-navbar-dashboard { color: #ffffff; background: #ff6b4a; }
 
     .admin-wrap { width: min(1180px, 94%); margin: 26px auto 60px; }
 
@@ -776,12 +776,12 @@
       padding: 20px 22px;
       border-radius: 16px;
       color: #ffffff;
-      background: #0f2d67;
+      background: #0d6e6e;
     }
 
     .admin-hero-kicker {
       margin: 0 0 6px;
-      color: #cdd8ef;
+      color: #b9e6e6;
       font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.1em;
@@ -789,8 +789,8 @@
     }
 
     .admin-hero h1 { margin: 0 0 6px; color: #ffffff; font-size: clamp(20px, 3vw, 26px); font-weight: 700; line-height: 1.15; }
-    .admin-hero p { margin: 0; color: #cdd8ef; line-height: 1.55; font-size: 13px; font-weight: 400; }
-    .admin-hero .refresh-btn { min-width: 135px; background: #f97316; }
+    .admin-hero p { margin: 0; color: #b9e6e6; line-height: 1.55; font-size: 13px; font-weight: 400; }
+    .admin-hero .refresh-btn { min-width: 135px; background: #ff6b4a; }
 
     .status-box { border-radius: 16px; border-color: #e2e8f0; }
 
@@ -806,7 +806,7 @@
     .admin-section-tab-btn.active {
       color: #ffffff;
       border-bottom-color: transparent;
-      background: #0f2d67;
+      background: #0d6e6e;
     }
 
     .stat-card,
@@ -828,8 +828,8 @@
       gap: 20px;
       text-align: left;
       padding: 24px max(24px, 6vw);
-      background: #0f2d67;
-      color: #cdd8ef;
+      background: #0d6e6e;
+      color: #b9e6e6;
     }
 
     .admin-footer h2 { margin: 0 0 3px; color: #fff; font-size: 15px; font-weight: 600; }
@@ -856,8 +856,8 @@
 <body>
   <header class="navbar admin-navbar">
     <a href="index.html" class="logo-link">
-      <img src="icons/icon-512.png" alt="LoyaltyMarket">
-      <span class="logo-text">LoyaltyMarket</span>
+      <img src="icons/icon-512.png" alt="Waterside">
+      <span class="logo-text">Waterside</span>
     </a>
 
     <div class="admin-navbar-actions">
@@ -873,7 +873,7 @@
 
   <div id="notAuthorizedBox" class="status-box" style="display:none;">
     <h2>Access Restricted</h2>
-    <p>This page is only available to authorized LoyaltyMarket administrators.</p>
+    <p>This page is only available to authorized Waterside administrators.</p>
     <a href="index.html">Return To Homepage</a>
   </div>
 
@@ -883,7 +883,7 @@
 
     <section class="admin-hero">
       <div>
-        <p class="admin-hero-kicker">LoyaltyMarket Administration</p>
+        <p class="admin-hero-kicker">Waterside Administration</p>
         <h1>Admin Control Center</h1>
         <p id="adminWelcomeText">Manage users, listings, reports, boosts, analytics, and marketplace settings.</p>
       </div>
@@ -994,7 +994,7 @@
 
     <section id="pendingReviewSection" style="display:none;">
       <p style="color:#64748b; margin-top:0;">
-        These listings were automatically flagged by LoyaltyMarket's rule-based
+        These listings were automatically flagged by Waterside's rule-based
         scam checks (unusually low price, suspicious wording, missing photo, or
         a burst of new listings from one seller) and are hidden from the public
         marketplace until you approve or reject them.
@@ -1131,10 +1131,10 @@
 
   <footer class="footer admin-footer">
     <div>
-      <h2>LoyaltyMarket</h2>
+      <h2>Waterside</h2>
       <p>You Get Market, We Get Buyer.</p>
     </div>
-    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+    <p>&copy; 2026 Waterside. All Rights Reserved.</p>
   </footer>
 
   <script type="module">
@@ -2375,7 +2375,7 @@
         const snapshot = await getDoc(doc(db, "settings", "marketplace"));
 
         const defaults = {
-          marketplaceName: "LoyaltyMarket",
+          marketplaceName: "Waterside",
           supportEmail: "princeteah200@gmail.com",
           supportPhone: "+231 88 147 1694",
           commissionPercent: 0,
@@ -2441,7 +2441,7 @@
 
       try {
         const payload = {
-          marketplaceName: settingsInputs.marketplaceName.value.trim() || "LoyaltyMarket",
+          marketplaceName: settingsInputs.marketplaceName.value.trim() || "Waterside",
           supportEmail: settingsInputs.supportEmail.value.trim(),
           supportPhone: settingsInputs.supportPhone.value.trim(),
           commissionPercent: commission,

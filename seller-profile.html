@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seller Profile - LoyaltyMarket</title>
+  <title>Seller Profile - Waterside</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#0f2d67">
+  <meta name="theme-color" content="#0d6e6e">
 
   <style>
     /* ==================================================
        SELLER PROFILE — RESTRAINED 2-COLOR SYSTEM
-       Navy (#0f2d67) = structure/brand/hero. Orange
-       (#f97316) = the ONLY accent, reserved for the
+       Navy (#0d6e6e) = structure/brand/hero. Orange
+       (#ff6b4a) = the ONLY accent, reserved for the
        Message Seller button (the one primary conversion
        action). Everything else is navy, neutral, or
        outline-on-navy. Bold reserved for name/stats/price.
        ================================================== */
     :root{
-      --navy:#0f2d67;
-      --navy-soft:#eef1f7;
-      --orange:#f97316;
-      --orange-soft:#fff4ec;
+      --navy:#0d6e6e;
+      --navy-soft:#e3f2f2;
+      --orange:#ff6b4a;
+      --orange-soft:#ffece7;
       --ink:#1f2937;
       --muted:#6b7280;
       --line:#e5e7eb;
@@ -52,7 +52,7 @@
     .seller-nav-link{color:var(--ink);background:#fff}
     .seller-nav-link:hover{color:var(--navy);border-color:var(--navy)}
     .seller-post-link{color:#fff;background:var(--orange);border-color:var(--orange)}
-    .seller-post-link:hover{background:#ea680a}
+    .seller-post-link:hover{background:#e5522f}
 
     .seller-page{width:min(1180px,94%);margin:22px auto 50px}
 
@@ -77,7 +77,7 @@
     .seller-badge-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
     .seller-badge{
       display:inline-flex;padding:4px 10px;border-radius:999px;
-      background:var(--orange-soft);color:#9a3412;font-size:11px;font-weight:600
+      background:var(--orange-soft);color:#c23f24;font-size:11px;font-weight:600
     }
     .seller-years-badge{
       display:inline-flex;padding:4px 10px;border-radius:999px;
@@ -98,7 +98,7 @@
 
     .call-seller-btn{color:var(--navy);background:#fff;border:1px solid var(--navy);text-decoration:none}
     .message-seller-btn{color:#fff;background:var(--orange);border:none;text-decoration:none}
-    .message-seller-btn:hover{background:#ea680a}
+    .message-seller-btn:hover{background:#e5522f}
 
     .follow-seller-btn,.invite-seller-btn{
       width:100%;border:1px solid var(--navy);cursor:pointer;font:inherit;font-weight:600
@@ -141,7 +141,7 @@
     .seller-product-body h3{margin:0 0 6px;font-size:12.5px;font-weight:500;line-height:1.35}
     .seller-price{margin:0 0 5px;color:var(--orange);font-size:13px;font-weight:700}
     .seller-location{margin:0;color:var(--muted);font-size:11px;display:flex;align-items:center;gap:4px;font-weight:400}
-    .listing-featured-badge{display:inline-flex;margin-left:5px;padding:2px 6px;border-radius:999px;background:var(--orange-soft);color:#9a3412;font-size:9px;font-weight:600}
+    .listing-featured-badge{display:inline-flex;margin-left:5px;padding:2px 6px;border-radius:999px;background:var(--orange-soft);color:#c23f24;font-size:9px;font-weight:600}
 
     .review-grid{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px}
     .review-form-card{display:none;padding:17px;border:1px solid var(--line);border-radius:13px;background:var(--bg)}
@@ -169,7 +169,7 @@
 
     .seller-empty{grid-column:1/-1;padding:36px 20px;text-align:center;border:1px dashed var(--line);border-radius:13px;background:var(--bg);color:var(--muted);font-size:13px}
 
-    .seller-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:22px max(20px,5vw);background:var(--navy);color:#cdd8ef}
+    .seller-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:22px max(20px,5vw);background:var(--navy);color:#b9e6e6}
     .seller-footer h2{margin:0 0 3px;color:#fff;font-size:15px;font-weight:600}
     .seller-footer p{margin:0;font-size:12px}
 
@@ -206,8 +206,8 @@
   <header class="navbar seller-navbar">
     <div class="logo">
       <a href="index.html" class="logo-link">
-        <img src="icons/icon-512.png" alt="LoyaltyMarket">
-        <span class="logo-text">LoyaltyMarket</span>
+        <img src="icons/icon-512.png" alt="Waterside">
+        <span class="logo-text">Waterside</span>
       </a>
     </div>
 
@@ -409,10 +409,10 @@
 
   <footer class="footer seller-footer">
     <div>
-      <h2>LoyaltyMarket</h2>
+      <h2>Waterside</h2>
       <p>You Get Market, We Get Buyer.</p>
     </div>
-    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+    <p>&copy; 2026 Waterside. All Rights Reserved.</p>
   </footer>
 
   <script type="module">
@@ -656,7 +656,7 @@
             businessRedirectNotice.style.display = "block";
           }
 
-          const displayName = userData.name || "LoyaltyMarket Seller";
+          const displayName = userData.name || "Waterside Seller";
           sellerName.textContent = displayName;
           aboutName.textContent = displayName;
 
@@ -682,14 +682,14 @@
 
             if (yearsOn >= 1) {
               sellerYearsBadge.textContent =
-                yearsOn + (yearsOn === 1 ? "+ year on LoyaltyMarket" : "+ years on LoyaltyMarket");
+                yearsOn + (yearsOn === 1 ? "+ year on Waterside" : "+ years on Waterside");
               sellerYearsBadge.style.display = "inline-flex";
             } else {
-              sellerYearsBadge.textContent = "New on LoyaltyMarket";
+              sellerYearsBadge.textContent = "New on Waterside";
               sellerYearsBadge.style.display = "inline-flex";
             }
           } else {
-            sellerMemberSince.textContent = "LoyaltyMarket member";
+            sellerMemberSince.textContent = "Waterside member";
             aboutMemberSince.textContent = "—";
           }
 
@@ -734,10 +734,10 @@
           }
 
         } else {
-          sellerName.textContent = "LoyaltyMarket Seller";
-          aboutName.textContent = "LoyaltyMarket Seller";
+          sellerName.textContent = "Waterside Seller";
+          aboutName.textContent = "Waterside Seller";
           sellerVerified.textContent = "Unverified Seller";
-          sellerMemberSince.textContent = "LoyaltyMarket member";
+          sellerMemberSince.textContent = "Waterside member";
           sellerLastActive.style.display = "none";
           aboutLastActive.textContent = "Not available";
         }
@@ -991,8 +991,8 @@
       profileUrl.searchParams.set("id", sellerId);
 
       const shareData = {
-        title: `${sellerDisplayName} on LoyaltyMarket`,
-        text: `Check out ${sellerDisplayName} on LoyaltyMarket and follow their latest listings.`,
+        title: `${sellerDisplayName} on Waterside`,
+        text: `Check out ${sellerDisplayName} on Waterside and follow their latest listings.`,
         url: profileUrl.toString()
       };
 

@@ -1,4 +1,4 @@
-// Firebase connection for LoyaltyMarket
+// Firebase connection for Waterside
 
 import {
   initializeApp

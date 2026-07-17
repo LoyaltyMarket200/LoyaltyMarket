@@ -12,11 +12,11 @@
    ============================================ */
 
 :root {
-  --lf-navy: #0f2d67;
+  --lf-navy: #0d6e6e;
   --lf-navy-soft: rgba(255,255,255,0.08);
-  --lf-orange: #f97316;
+  --lf-orange: #ff6b4a;
   --lf-line: rgba(255,255,255,0.14);
-  --lf-text: #cdd8ef;
+  --lf-text: #b9e6e6;
   --lf-text-strong: #ffffff;
 }
 
@@ -476,7 +476,7 @@
   }
 
   .mobile-bottom-link.active {
-    color: var(--lf-navy, #0f2d67);
+    color: var(--lf-navy, #0d6e6e);
   }
 
   .mobile-bottom-icon {

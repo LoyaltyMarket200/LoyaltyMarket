@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Messages - LoyaltyMarket</title>
+  <title>My Messages - Waterside</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0d6e6e">
   <style>
     *{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#0f172a}
     .messages-navbar{min-height:78px;height:auto;padding:12px max(24px,5vw);background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(15,23,42,.06);justify-content:space-between;position:sticky;top:0;z-index:40}
-    .messages-navbar .logo-link img{width:48px;height:48px;object-fit:contain}.messages-navbar .logo-text{color:#0f2d67;font-size:21px}
+    .messages-navbar .logo-link img{width:48px;height:48px;object-fit:contain}.messages-navbar .logo-text{color:#0d6e6e;font-size:21px}
     .messages-nav-actions{display:flex;align-items:center;gap:10px}.messages-nav-link,.messages-post-link{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;border:1px solid transparent}
-    .messages-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}.messages-post-link{color:#fff;background:#f97316}
+    .messages-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}.messages-post-link{color:#fff;background:#ff6b4a}
     .messages-page{width:min(1180px,94%);margin:32px auto 70px;display:grid;grid-template-columns:330px minmax(0,1fr);gap:24px;align-items:start}
-    .messages-sidebar{position:sticky;top:104px;padding:28px;border-radius:22px;color:#fff;background:linear-gradient(145deg,#0f2d67,#1d4ed8 65%,#0ea5e9);box-shadow:0 18px 42px rgba(30,58,138,.2)}
-    .messages-kicker{margin-bottom:10px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.16em}.messages-sidebar h1{margin:0 0 12px;font-size:36px}.messages-sidebar>p{color:#dbeafe;line-height:1.7}
-    .message-tips{display:grid;gap:12px;margin-top:24px}.message-tip{display:flex;gap:11px;padding:14px;border:1px solid rgba(255,255,255,.17);border-radius:14px;background:rgba(255,255,255,.08)}.message-tip span{font-size:22px}.message-tip strong{display:block;margin-bottom:3px}.message-tip p{margin:0;color:#dbeafe;font-size:12px;line-height:1.5}
+    .messages-sidebar{position:sticky;top:104px;padding:28px;border-radius:22px;color:#fff;background:linear-gradient(145deg,#0d6e6e,#14b8a6 65%,#0ea5e9);box-shadow:0 18px 42px rgba(30,58,138,.2)}
+    .messages-kicker{margin-bottom:10px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.16em}.messages-sidebar h1{margin:0 0 12px;font-size:36px}.messages-sidebar>p{color:#d3f0ef;line-height:1.7}
+    .message-tips{display:grid;gap:12px;margin-top:24px}.message-tip{display:flex;gap:11px;padding:14px;border:1px solid rgba(255,255,255,.17);border-radius:14px;background:rgba(255,255,255,.08)}.message-tip span{font-size:22px}.message-tip strong{display:block;margin-bottom:3px}.message-tip p{margin:0;color:#d3f0ef;font-size:12px;line-height:1.5}
     .inbox-panel{min-width:0;padding:28px;border:1px solid #e2e8f0;border-radius:22px;background:#fff;box-shadow:0 14px 34px rgba(15,23,42,.08)}
-    .inbox-header{display:flex;align-items:end;justify-content:space-between;gap:18px;padding-bottom:18px;border-bottom:1px solid #e2e8f0}.inbox-header h2{margin:0 0 6px;font-size:30px}.inbox-subtitle{margin:0;color:#64748b}.inbox-count{min-width:44px;height:44px;display:grid;place-items:center;padding:0 12px;border-radius:999px;background:#eff6ff;color:#1e3a8a;font-weight:900}
+    .inbox-header{display:flex;align-items:end;justify-content:space-between;gap:18px;padding-bottom:18px;border-bottom:1px solid #e2e8f0}.inbox-header h2{margin:0 0 6px;font-size:30px}.inbox-subtitle{margin:0;color:#64748b}.inbox-count{min-width:44px;height:44px;display:grid;place-items:center;padding:0 12px;border-radius:999px;background:#e6f5f5;color:#0d6e6e;font-weight:900}
     .conversation-list{margin-top:18px}.conversation-card{position:relative;display:grid;grid-template-columns:68px minmax(0,1fr) auto;align-items:center;gap:14px;padding:14px;margin-bottom:12px;border:1px solid #e2e8f0;border-radius:16px;background:#fff;color:inherit;text-decoration:none;transition:.2s}
-    .conversation-card.unread{border-color:#93c5fd;background:#eff6ff}.conversation-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(37,99,235,.08)}
-    .conversation-card img{width:68px;height:68px;object-fit:cover;border-radius:13px;background:#f1f5f9}.conversation-info{min-width:0}.conversation-person{margin:0 0 4px;color:#1e3a8a;font-size:12px;font-weight:900}.conversation-info h4{margin:0 0 5px;font-size:16px}.conversation-last-message{margin:0;color:#64748b;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.conversation-time{align-self:start;color:#94a3b8;font-size:12px;font-weight:700}
+    .conversation-card.unread{border-color:#99e6df;background:#e6f5f5}.conversation-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(37,99,235,.08)}
+    .conversation-card img{width:68px;height:68px;object-fit:cover;border-radius:13px;background:#f1f5f9}.conversation-info{min-width:0}.conversation-person{margin:0 0 4px;color:#0d6e6e;font-size:12px;font-weight:900}.conversation-info h4{margin:0 0 5px;font-size:16px}.conversation-last-message{margin:0;color:#64748b;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.conversation-time{align-self:start;color:#94a3b8;font-size:12px;font-weight:700}
     .conversation-unread{position:absolute;right:13px;bottom:12px;min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:#dc2626;color:#fff;font-size:11px;font-weight:900;line-height:22px;text-align:center}
     .inbox-empty-state{text-align:center;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:16px;padding:52px 24px}.empty-icon{display:block;margin-bottom:12px;font-size:42px}
     .messages-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:30px max(24px,6vw)}
@@ -31,7 +31,7 @@
 </head>
 <body>
 <header class="navbar messages-navbar">
-  <div class="logo"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="LoyaltyMarket"><span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span></a></div>
+  <div class="logo"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text"><span class="lr-tag">LR</span>Waterside</span></a></div>
   <div class="messages-nav-actions"><a href="index.html" class="messages-nav-link">Home</a><a href="dashboard.html" class="messages-nav-link">Dashboard</a><a href="sell.html" class="messages-post-link">Post An Ad</a></div>
 </header>
 <main class="messages-page">
@@ -48,7 +48,7 @@
     <div id="conversationsList" class="conversation-list"><div class="inbox-empty-state"><span class="empty-icon">💬</span><h3>Loading conversations...</h3></div></div>
   </section>
 </main>
-<footer class="footer messages-footer"><div><h2>🇱🇷 LoyaltyMarket</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p></footer>
+<footer class="footer messages-footer"><div><h2>🇱🇷 Waterside</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 Waterside. All Rights Reserved.</p></footer>
 <script type="module">
 import {db,auth} from "./firebase.js";
 import {collection,query,where,onSnapshot,doc,getDoc} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";

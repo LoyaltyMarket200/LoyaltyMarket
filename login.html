@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Login - LoyaltyMarket</title>
+  <title>Login - Waterside</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <meta name="theme-color" content="#0f2d67">
+  <meta name="theme-color" content="#0d6e6e">
 
   <style>
     :root {
-      --navy: #0f2d67;
-      --navy-soft: #eef1f7;
-      --orange: #f97316;
-      --orange-soft: #fff4ec;
+      --navy: #0d6e6e;
+      --navy-soft: #e3f2f2;
+      --orange: #ff6b4a;
+      --orange-soft: #ffece7;
       --ink: #1f2937;
       --muted: #6b7280;
       --line: #e5e7eb;
@@ -220,7 +220,7 @@
       cursor: pointer;
     }
 
-    button:hover { background: #ea680a; }
+    button:hover { background: #e5522f; }
 
     button:disabled {
       opacity: 0.65;
@@ -268,7 +268,7 @@
       align-items: center;
       padding: 20px max(20px, 5vw);
       background: var(--navy);
-      color: #cdd8ef;
+      color: #b9e6e6;
     }
 
     .footer h2 {
@@ -320,8 +320,8 @@
 <body>
   <header class="navbar">
     <a href="index.html" class="logo-link">
-      <img src="icons/icon-512.png" alt="LoyaltyMarket">
-      <span class="logo-text">LoyaltyMarket</span>
+      <img src="icons/icon-512.png" alt="Waterside">
+      <span class="logo-text">Waterside</span>
     </a>
 
     <div class="nav-actions">
@@ -335,7 +335,7 @@
       <h2>Welcome Back</h2>
 
       <p class="subtitle">
-        Login to your LoyaltyMarket account.
+        Login to your Waterside account.
       </p>
 
       <form id="loginForm">
@@ -395,11 +395,11 @@
 
   <footer class="footer">
     <div>
-      <h2>LoyaltyMarket</h2>
+      <h2>Waterside</h2>
       <p>You Get Market, We Get Buyer.</p>
     </div>
 
-    <p>&copy; 2026 LoyaltyMarket.</p>
+    <p>&copy; 2026 Waterside.</p>
   </footer>
 
   <script type="module">
@@ -510,7 +510,7 @@
           await signOut(auth);
 
           show(
-            "LoyaltyMarket is temporarily under maintenance. Please try again later.",
+            "Waterside is temporarily under maintenance. Please try again later.",
             "error"
           );
 

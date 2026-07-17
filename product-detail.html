@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product Details - LoyaltyMarket</title>
+  <title>Product Details - Waterside</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="footer.css">
@@ -12,23 +12,23 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <meta name="theme-color" content="#0f2d67">
+  <meta name="theme-color" content="#0d6e6e">
 
   <style>
     /* ==================================================
        PRODUCT DETAIL — RESTRAINED 2-COLOR SYSTEM
-       Navy (#0f2d67) = structure/brand/primary action.
-       Orange (#f97316) = the ONLY accent, reserved for
+       Navy (#0d6e6e) = structure/brand/primary action.
+       Orange (#ff6b4a) = the ONLY accent, reserved for
        price and the Contact Seller button. Everything
        else (badges, pills, buttons) is either navy,
        neutral gray, or an outline — no stray blues or
        greens. Bold reserved for the price and headings.
        ================================================== */
     :root{
-      --navy:#0f2d67;
-      --navy-soft:#eef1f7;
-      --orange:#f97316;
-      --orange-soft:#fff4ec;
+      --navy:#0d6e6e;
+      --navy-soft:#e3f2f2;
+      --orange:#ff6b4a;
+      --orange-soft:#ffece7;
       --ink:#1f2937;
       --muted:#6b7280;
       --line:#e5e7eb;
@@ -119,11 +119,11 @@
     }
 
     .buy-now-btn { grid-column: span 2; background: var(--navy); color: #fff; }
-    .buy-now-btn:hover { background: #0b2350; }
+    .buy-now-btn:hover { background: #095454; }
     .buy-now-btn:disabled { opacity: .6; cursor: not-allowed; }
 
     .contact-btn { background: var(--orange); color: #fff; }
-    .contact-btn:hover { background: #ea680a; }
+    .contact-btn:hover { background: #e5522f; }
 
     .heart-btn { background: #fff; border: 1px solid var(--line); color: var(--ink); }
     .heart-btn.is-saved { background: var(--navy-soft); color: var(--navy); border-color: var(--navy); }
@@ -135,7 +135,7 @@
       color: var(--navy);
     }
     .whatsapp-btn:hover, .show-contact-btn:hover { background: var(--navy-soft); }
-    .show-contact-btn.revealed { border-color: var(--orange); color: #9a3412; background: var(--orange-soft); }
+    .show-contact-btn.revealed { border-color: var(--orange); color: #c23f24; background: var(--orange-soft); }
 
     /* Jiji-style quick-reply chat starter */
     .quick-chat-card {
@@ -181,7 +181,7 @@
       font-size: 13.5px;
       cursor: pointer;
     }
-    .start-chat-btn:hover { background: #ea680a; }
+    .start-chat-btn:hover { background: #e5522f; }
 
     /* Jiji-style collapsible location row */
     .location-toggle-row {
@@ -257,7 +257,7 @@
     .seller-verified-pill {
       display: inline-flex; align-items: center; gap: 4px;
       padding: 2px 9px; border-radius: 999px;
-      background: var(--orange-soft); color: #9a3412;
+      background: var(--orange-soft); color: #c23f24;
       font-size: 10px; font-weight: 600;
     }
 
@@ -310,7 +310,7 @@
     .payment-option-card.selected { border-color: var(--navy); background: var(--navy-soft); }
     .payment-option-card input { display: none; }
     .payment-option-title { font-size: 13.5px; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 7px; }
-    .payment-option-badge { font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--orange-soft); color: #9a3412; text-transform: uppercase; letter-spacing: .04em; }
+    .payment-option-badge { font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--orange-soft); color: #c23f24; text-transform: uppercase; letter-spacing: .04em; }
     .payment-option-desc { font-size: 11.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
 
     .provider-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 4px; }
@@ -321,7 +321,7 @@
     .checkout-phone-input:focus { outline: none; border-color: var(--navy); }
 
     .checkout-submit-btn { width: 100%; min-height: 48px; margin-top: 18px; border: none; border-radius: 11px; background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; cursor: pointer; }
-    .checkout-submit-btn:hover { background: #ea680a; }
+    .checkout-submit-btn:hover { background: #e5522f; }
     .checkout-submit-btn:disabled { opacity: .6; cursor: not-allowed; }
 
     .checkout-cancel-btn { width: 100%; min-height: 40px; margin-top: 8px; border: none; background: transparent; color: var(--muted); font-weight: 600; font-size: 12.5px; cursor: pointer; }
@@ -332,7 +332,7 @@
     /* Pending / confirmation screen shown after submitting */
     .checkout-pending-screen { display: none; text-align: center; padding: 10px 4px; }
     .checkout-pending-screen.open { display: block; }
-    .checkout-pending-icon { width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%; background: var(--orange-soft); display: flex; align-items: center; justify-content: center; color: #9a3412; }
+    .checkout-pending-icon { width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%; background: var(--orange-soft); display: flex; align-items: center; justify-content: center; color: #c23f24; }
     .checkout-pending-icon .icon { width: 26px; height: 26px; }
     .checkout-pending-screen h4 { font-size: 15px; font-weight: 700; margin: 0 0 6px; color: var(--ink); }
     .checkout-pending-screen p { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin: 0 0 16px; }
@@ -385,8 +385,8 @@
 
   <header class="mp-header">
     <div class="mp-header-top">
-      <a href="index.html" class="mp-logo" aria-label="LoyaltyMarket home">
-        <span class="mp-logo-word mp-logo-loyalty">Loyalty</span><span class="mp-logo-word mp-logo-market">Market</span>
+      <a href="index.html" class="mp-logo" aria-label="Waterside home">
+        <span class="mp-logo-word mp-logo-water">Water</span><span class="mp-logo-word mp-logo-side">side</span>
         <span class="mp-logo-sub">Liberia's No.1 Marketplace</span>
       </a>
 
@@ -598,7 +598,7 @@
         </div>
         <div class="seller-info">
           <h4>Seller Information</h4>
-          <p><a id="sellerNameLink" href="#" style="color:#0f2d67; text-decoration:none; font-weight:600;">Loading...</a></p>
+          <p><a id="sellerNameLink" href="#" style="color:#0d6e6e; text-decoration:none; font-weight:600;">Loading...</a></p>
           <div id="sellerBadgeRow" class="seller-badge-row"></div>
           <p id="sellerEmail">Loading...</p>
           <p id="sellerPhone">Phone not listed</p>
@@ -655,7 +655,7 @@
         <label class="payment-option-card" data-payment-option="protected">
           <input type="radio" name="paymentOption" value="protected">
           <div class="payment-option-title">Pay With Protection <span class="payment-option-badge">Safer</span></div>
-          <div class="payment-option-desc">LoyaltyMarket holds your payment until you confirm you received the item.</div>
+          <div class="payment-option-desc">Waterside holds your payment until you confirm you received the item.</div>
         </label>
 
         <p class="checkout-section-label">Pay With</p>
@@ -719,15 +719,15 @@
       aria-controls="mobileFooterContent"
     >
       <span class="lm-footer-toggle-brand">
-        <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+        <img src="icons/icon-512.png" alt="Waterside logo">
 
         <span>
           <span class="lm-footer-toggle-lr">LR</span>
-          <span data-marketplace-name>LoyaltyMarket</span>
+          <span data-marketplace-name>Waterside</span>
         </span>
       </span>
 
-      <span class="lm-footer-toggle-label">Explore LoyaltyMarket</span>
+      <span class="lm-footer-toggle-label">Explore Waterside</span>
       <span class="lm-footer-arrow" aria-hidden="true">⌄</span>
     </button>
 
@@ -766,7 +766,7 @@
             </div>
 
             <div class="lm-footer-app">
-              <strong>LoyaltyMarket Mobile App</strong>
+              <strong>Waterside Mobile App</strong>
               <span>Android and iPhone apps coming soon.</span>
             </div>
           </section>
@@ -837,7 +837,7 @@
           <div class="site-shell lm-footer-bottom-inner">
             <p>
               &copy; 2026
-              <span data-marketplace-name>LoyaltyMarket</span>.
+              <span data-marketplace-name>Waterside</span>.
               All Rights Reserved.
             </p>
 
@@ -883,7 +883,7 @@ import {
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 const DEFAULT_SETTINGS = {
-  marketplaceName: "LoyaltyMarket",
+  marketplaceName: "Waterside",
   supportEmail: "princeteah200@gmail.com",
   supportPhone: "+231 88 147 1694"
 };
@@ -1309,7 +1309,7 @@ async function loadSellerBadges(sellerId) {
       const yearsOn = new Date().getFullYear() - joinYear;
 
       if (yearsOn >= 1) {
-        html += `<span class="seller-years-pill">${yearsOn}+ yr${yearsOn === 1 ? "" : "s"} on LoyaltyMarket</span>`;
+        html += `<span class="seller-years-pill">${yearsOn}+ yr${yearsOn === 1 ? "" : "s"} on Waterside</span>`;
       } else {
         html += '<span class="seller-years-pill">New Seller</span>';
       }
@@ -1395,7 +1395,7 @@ function showUnavailable(message) {
   unavailableBox.style.display = "block";
   unavailableMessage.textContent = message;
   breadcrumbTitle.textContent = "Unavailable";
-  document.title = "Listing Unavailable - LoyaltyMarket";
+  document.title = "Listing Unavailable - Waterside";
 }
 
 async function loadProduct() {
@@ -1484,7 +1484,7 @@ async function loadProduct() {
 
     breadcrumbCategory.textContent = category;
     breadcrumbTitle.textContent = title;
-    document.title = `${title} - LoyaltyMarket`;
+    document.title = `${title} - Waterside`;
 
     if (currentUser) checkIfSaved();
 

@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - LoyaltyMarket</title>
+  <title>Dashboard - Waterside</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#0f2d67">
+  <meta name="theme-color" content="#0d6e6e">
   <style>
     /* ==================================================
        DASHBOARD — RESTRAINED 2-COLOR SYSTEM
-       Navy (#0f2d67) = structure/brand. Orange (#f97316)
+       Navy (#0d6e6e) = structure/brand. Orange (#ff6b4a)
        = the ONLY accent, reserved for primary actions
        (Post An Ad, Feature toggle when active, Boost).
        All other listing-card actions are plain outline
@@ -20,10 +20,10 @@
        reserved for numbers/headings only.
        ================================================== */
     :root{
-      --navy:#0f2d67;
-      --navy-soft:#eef1f7;
-      --orange:#f97316;
-      --orange-soft:#fff4ec;
+      --navy:#0d6e6e;
+      --navy-soft:#e3f2f2;
+      --orange:#ff6b4a;
+      --orange-soft:#ffece7;
       --ink:#1f2937;
       --muted:#6b7280;
       --line:#e5e7eb;
@@ -41,7 +41,7 @@
       display:inline-flex;align-items:center;gap:4px;
       font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;margin-left:6px;
     }
-    .featured-badge{background:var(--orange-soft);color:#9a3412}
+    .featured-badge{background:var(--orange-soft);color:#c23f24}
     .boost-pending-badge{background:var(--navy-soft);color:var(--navy)}
     .boost-expired-badge{background:#f1f5f9;color:var(--muted)}
 
@@ -54,11 +54,11 @@
     .feature-btn.is-featured{background:var(--orange);border-color:var(--orange);color:#fff}
     .sold-btn.is-sold{background:var(--navy-soft);border-color:var(--navy);color:var(--navy)}
     .archive-btn.is-archived{background:var(--navy-soft);border-color:var(--navy);color:var(--navy)}
-    .boost-btn.is-pending{background:var(--orange-soft);border-color:var(--orange);color:#9a3412}
+    .boost-btn.is-pending{background:var(--orange-soft);border-color:var(--orange);color:#c23f24}
     .feature-btn:disabled,.sold-btn:disabled,.duplicate-btn:disabled,.archive-btn:disabled,.boost-btn:disabled{opacity:.55;cursor:not-allowed}
 
     .status-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;text-transform:capitalize}
-    .status-badge.active{background:var(--orange-soft);color:#9a3412}
+    .status-badge.active{background:var(--orange-soft);color:#c23f24}
     .status-badge.sold{background:#e5e7eb;color:#374151}
     .status-badge.archived{background:var(--navy-soft);color:var(--navy)}
     .dashboard-listing-card.is-archived-card{opacity:.7}
@@ -84,7 +84,7 @@
     .boost-modal{background:#fff;border-radius:14px;padding:26px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto}
     .boost-modal h3{margin:0 0 4px;font-size:17px;font-weight:700;color:var(--ink)}
     .boost-modal-subtitle{color:var(--muted);font-size:13px;margin-bottom:18px}
-    .launch-free-banner{margin-bottom:16px;padding:10px 13px;border-radius:10px;background:var(--orange-soft);color:#9a3412;font-size:12px;font-weight:600;text-align:center}
+    .launch-free-banner{margin-bottom:16px;padding:10px 13px;border-radius:10px;background:var(--orange-soft);color:#c23f24;font-size:12px;font-weight:600;text-align:center}
     .boost-plan-option{display:block;border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-bottom:10px;cursor:pointer}
     .boost-plan-option:hover{border-color:var(--navy)}
     .boost-plan-option.selected{border-color:var(--navy);background:var(--navy-soft)}
@@ -103,7 +103,7 @@
 
     .boost-payment-screen{display:none}
     .boost-payment-screen.open{display:block}
-    .boost-payment-amount{background:var(--orange-soft);border:1px solid #fed7aa;border-radius:10px;padding:15px;text-align:center;margin-bottom:16px}
+    .boost-payment-amount{background:var(--orange-soft);border:1px solid #ffd4c4;border-radius:10px;padding:15px;text-align:center;margin-bottom:16px}
     .boost-payment-amount-label{font-size:12px;color:var(--muted);margin-bottom:3px}
     .boost-payment-amount-value{font-size:24px;font-weight:700;color:var(--navy)}
     .boost-payment-method{border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-bottom:10px}
@@ -126,7 +126,7 @@
     .dashboard-top-link{color:var(--ink);background:#fff}
     .dashboard-top-link:hover{color:var(--navy);border-color:var(--navy)}
     .dashboard-post-btn{color:#fff;background:var(--orange);border-color:var(--orange)}
-    .dashboard-post-btn:hover{background:#ea680a}
+    .dashboard-post-btn:hover{background:#e5522f}
     .dashboard-logout-btn{color:var(--danger);background:#fff;border-color:#f3d0d0}
 
     /* Shell */
@@ -134,9 +134,9 @@
     .dashboard-plain-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
     .dashboard-plain-header h1{margin:0;font-size:19px;font-weight:600;color:var(--ink)}
     .dashboard-welcome{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;border-radius:14px;background:var(--navy);color:#fff}
-    .dashboard-kicker{margin-bottom:7px;color:#cdd8ef;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+    .dashboard-kicker{margin-bottom:7px;color:#b9e6e6;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
     .dashboard-welcome h1{margin:0 0 6px;font-size:clamp(17px,2.3vw,21px);font-weight:700;line-height:1.2}
-    .dashboard-welcome p:last-child{color:#cdd8ef;font-size:14px;line-height:1.55;font-weight:400}
+    .dashboard-welcome p:last-child{color:#b9e6e6;font-size:14px;line-height:1.55;font-weight:400}
     .dashboard-welcome-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:9px;color:#fff;background:var(--orange);text-decoration:none;font-weight:600;font-size:12.5px}
 
     .dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0}
@@ -172,7 +172,7 @@
     .empty-hint{margin-top:20px;color:var(--muted);font-size:13px}
     .empty-hint a{color:var(--navy);font-weight:600;text-decoration:none}
 
-    .footer{background:var(--navy);color:#dbe4f5;text-align:center;padding:30px 20px}
+    .footer{background:var(--navy);color:#d8f3f1;text-align:center;padding:30px 20px}
     .footer h2{color:#fff;margin-bottom:8px;font-size:16px;font-weight:600}
     .footer p{margin-bottom:6px;font-size:12px}
 
@@ -186,8 +186,8 @@
 <header class="navbar dashboard-navbar">
   <div class="logo">
     <a href="index.html" class="logo-link">
-      <img src="icons/icon-512.png" alt="LoyaltyMarket">
-      <span class="logo-text">LoyaltyMarket</span>
+      <img src="icons/icon-512.png" alt="Waterside">
+      <span class="logo-text">Waterside</span>
     </a>
   </div>
   <div class="dashboard-nav-actions">
@@ -270,7 +270,7 @@
   </aside>
 
   <main class="dashboard-main">
-    <p class="dashboard-subtitle">Manage your LoyaltyMarket account and listings.</p>
+    <p class="dashboard-subtitle">Manage your Waterside account and listings.</p>
 
     <div class="archive-filter-row">
       <button class="archive-filter-btn active" data-filter="all">All</button>
@@ -298,7 +298,7 @@
       <p class="boost-modal-subtitle">Higher tiers get more visibility and refresh more often, keeping your ad near the top.</p>
 
       <div class="launch-free-banner">
-        Free for a limited time — every tier is US$0 during LoyaltyMarket's launch period.
+        Free for a limited time — every tier is US$0 during Waterside's launch period.
       </div>
 
       <form id="boostForm">
@@ -359,7 +359,7 @@
 
     <div class="boost-payment-screen" id="boostPaymentScreen">
       <h3>Boost Activated</h3>
-      <p class="boost-modal-subtitle">Your listing is now boosted and featured — free during LoyaltyMarket's launch period.</p>
+      <p class="boost-modal-subtitle">Your listing is now boosted and featured — free during Waterside's launch period.</p>
 
       <div class="boost-payment-amount">
         <div class="boost-payment-amount-label">Amount charged</div>
@@ -382,9 +382,9 @@
 </div>
 
 <footer class="footer">
-  <h2>LoyaltyMarket</h2>
+  <h2>Waterside</h2>
   <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+  <p>&copy; 2026 Waterside. All Rights Reserved.</p>
 </footer>
 
 <script type="module">
@@ -986,14 +986,14 @@ async function verifyDashboardAccess(user) {
 
     if (userData.suspended === true && !isAdmin) {
       await signOut(auth);
-      alert("Your LoyaltyMarket account has been suspended. Contact support for assistance.");
+      alert("Your Waterside account has been suspended. Contact support for assistance.");
       window.location.href = "login.html";
       return false;
     }
 
     if (settings.maintenanceMode === true && !isAdmin) {
       await signOut(auth);
-      alert("LoyaltyMarket is temporarily under maintenance. Please try again later.");
+      alert("Waterside is temporarily under maintenance. Please try again later.");
       window.location.href = "login.html";
       return false;
     }

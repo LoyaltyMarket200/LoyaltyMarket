@@ -1,13 +1,13 @@
 {
-  "name": "LoyaltyMarket",
-  "short_name": "LoyaltyMarket",
+  "name": "Waterside",
+  "short_name": "Waterside",
   "description": "Buy and sell products across Liberia.",
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#1e3a8a",
+  "theme_color": "#0d6e6e",
   "icons": [
     {
       "src": "icons/icon-192.png",

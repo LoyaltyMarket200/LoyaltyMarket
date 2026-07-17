@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Business Profile - LoyaltyMarket</title>
+  <title>Business Profile - Waterside</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="footer.css">
@@ -12,14 +12,14 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <meta name="theme-color" content="#0f2d67">
+  <meta name="theme-color" content="#0d6e6e">
 
   <style>
     :root{
-      --navy:#0f2d67;
-      --navy-soft:#eef1f7;
-      --orange:#f97316;
-      --orange-soft:#fff4ec;
+      --navy:#0d6e6e;
+      --navy-soft:#e3f2f2;
+      --orange:#ff6b4a;
+      --orange-soft:#ffece7;
       --ink:#1f2937;
       --muted:#6b7280;
       --line:#e5e7eb;
@@ -65,7 +65,7 @@
       font-size:11.5px;font-weight:600
     }
     .business-verified{background:var(--navy-soft);color:var(--navy)}
-    .business-verified.verified{background:var(--orange-soft);color:#9a3412}
+    .business-verified.verified{background:var(--orange-soft);color:#c23f24}
     .business-category{display:none;background:var(--navy-soft);color:var(--navy)}
 
     .business-member{margin:9px 0 0;color:var(--muted);font-size:12.5px;font-weight:400}
@@ -77,7 +77,7 @@
       padding:8px 16px;border-radius:9px;color:#fff;background:var(--orange);
       text-decoration:none;font-weight:600;white-space:nowrap;font-size:12.5px
     }
-    .message-business-btn:hover{background:#ea680a}
+    .message-business-btn:hover{background:#e5522f}
 
     .business-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:20px}
     .business-stat{padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff;text-align:center}
@@ -99,7 +99,7 @@
     .business-product-body h3{margin:0 0 7px;font-size:14.5px;font-weight:500;line-height:1.35}
     .business-price{margin:0 0 6px;color:var(--orange);font-size:14px;font-weight:700}
     .business-location{margin:0;color:var(--muted);font-size:11.5px;display:flex;align-items:center;gap:4px;font-weight:400}
-    .listing-featured-badge{display:inline-flex;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--orange-soft);color:#9a3412;font-size:10px;font-weight:600}
+    .listing-featured-badge{display:inline-flex;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--orange-soft);color:#c23f24;font-size:10px;font-weight:600}
 
     .review-grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px}
     .review-form-card{display:none;padding:19px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
@@ -158,8 +158,8 @@
 
   <header class="mp-header">
     <div class="mp-header-top">
-      <a href="index.html" class="mp-logo" aria-label="LoyaltyMarket home">
-        <span class="mp-logo-word mp-logo-loyalty">Loyalty</span><span class="mp-logo-word mp-logo-market">Market</span>
+      <a href="index.html" class="mp-logo" aria-label="Waterside home">
+        <span class="mp-logo-word mp-logo-water">Water</span><span class="mp-logo-word mp-logo-side">side</span>
         <span class="mp-logo-sub">Liberia's No.1 Marketplace</span>
       </a>
 
@@ -334,15 +334,15 @@
       aria-controls="mobileFooterContent"
     >
       <span class="lm-footer-toggle-brand">
-        <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+        <img src="icons/icon-512.png" alt="Waterside logo">
 
         <span>
           <span class="lm-footer-toggle-lr">LR</span>
-          <span data-marketplace-name>LoyaltyMarket</span>
+          <span data-marketplace-name>Waterside</span>
         </span>
       </span>
 
-      <span class="lm-footer-toggle-label">Explore LoyaltyMarket</span>
+      <span class="lm-footer-toggle-label">Explore Waterside</span>
       <span class="lm-footer-arrow" aria-hidden="true">⌄</span>
     </button>
 
@@ -381,7 +381,7 @@
             </div>
 
             <div class="lm-footer-app">
-              <strong>LoyaltyMarket Mobile App</strong>
+              <strong>Waterside Mobile App</strong>
               <span>Android and iPhone apps coming soon.</span>
             </div>
           </section>
@@ -452,7 +452,7 @@
           <div class="site-shell lm-footer-bottom-inner">
             <p>
               &copy; 2026
-              <span data-marketplace-name>LoyaltyMarket</span>.
+              <span data-marketplace-name>Waterside</span>.
               All Rights Reserved.
             </p>
 
@@ -511,7 +511,7 @@
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const DEFAULT_SETTINGS = {
-      marketplaceName: "LoyaltyMarket",
+      marketplaceName: "Waterside",
       supportEmail: "princeteah200@gmail.com",
       supportPhone: "+231 88 147 1694"
     };
@@ -660,7 +660,7 @@
         businessNameEl.textContent =
           userData.businessName ||
           userData.name ||
-          "LoyaltyMarket Business";
+          "Waterside Business";
 
         if (userData.businessLogoUrl) {
           businessAvatar.innerHTML = `

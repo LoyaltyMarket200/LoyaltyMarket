@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notifications - LoyaltyMarket</title>
+  <title>Notifications - Waterside</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0d6e6e">
 
   <style>
     *{box-sizing:border-box}
@@ -21,7 +21,7 @@
     }
 
     .notifications-navbar .logo-link img{width:48px;height:48px;object-fit:contain}
-    .notifications-navbar .logo-text{color:#0f2d67;font-size:21px}
+    .notifications-navbar .logo-text{color:#0d6e6e;font-size:21px}
 
     .notifications-nav-actions{display:flex;align-items:center;gap:10px}
     .notifications-nav-link,.notifications-post-link{
@@ -31,8 +31,8 @@
     }
 
     .notifications-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}
-    .notifications-nav-link:hover{color:#1e3a8a;border-color:#bfdbfe;background:#eff6ff}
-    .notifications-post-link{color:#fff;background:#f97316}
+    .notifications-nav-link:hover{color:#0d6e6e;border-color:#b0e5e3;background:#e6f5f5}
+    .notifications-post-link{color:#fff;background:#ff6b4a}
 
     .nav-messages-link,.nav-notifications-link{position:relative}
 
@@ -51,13 +51,13 @@
       padding:32px;border-radius:24px;color:#fff;
       background:
         radial-gradient(circle at top right,rgba(255,255,255,.15),transparent 32%),
-        linear-gradient(135deg,#0f2d67,#1d4ed8);
+        linear-gradient(135deg,#0d6e6e,#14b8a6);
       box-shadow:0 18px 42px rgba(30,58,138,.2)
     }
 
     .notifications-kicker{margin:0 0 8px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.16em}
     .notifications-hero h1{margin:0 0 8px;font-size:clamp(32px,5vw,48px);line-height:1.08}
-    .notifications-hero p{margin:0;color:#dbeafe;font-size:15px;line-height:1.6}
+    .notifications-hero p{margin:0;color:#d3f0ef;font-size:15px;line-height:1.6}
 
     .notifications-summary-card{
       min-width:170px;padding:20px;border:1px solid rgba(255,255,255,.18);
@@ -65,7 +65,7 @@
     }
 
     .notifications-summary-card strong{display:block;font-size:30px}
-    .notifications-summary-card span{color:#dbeafe;font-size:12px;font-weight:700}
+    .notifications-summary-card span{color:#d3f0ef;font-size:12px;font-weight:700}
 
     .notifications-panel{
       margin-top:24px;padding:24px;border:1px solid #e2e8f0;border-radius:22px;
@@ -86,7 +86,7 @@
       font-size:13px;font-weight:900;cursor:pointer
     }
 
-    .mark-all-btn{border:none;background:#2563eb;color:#fff}
+    .mark-all-btn{border:none;background:#14b8a6;color:#fff}
     .clear-read-btn{border:1px solid #cbd5e1;background:#fff;color:#334155}
     .mark-all-btn:disabled,.clear-read-btn:disabled{opacity:.65;cursor:not-allowed}
 
@@ -97,8 +97,8 @@
     }
 
     .notification-filter-btn.active{
-      background:linear-gradient(135deg,#1e3a8a,#2563eb);
-      color:#fff;border-color:#2563eb
+      background:linear-gradient(135deg,#0d6e6e,#14b8a6);
+      color:#fff;border-color:#14b8a6
     }
 
     .notifications-list{display:grid;gap:14px}
@@ -110,12 +110,12 @@
     }
 
     .notification-card.unread{
-      border-left:5px solid #2563eb;background:#eff6ff
+      border-left:5px solid #14b8a6;background:#e6f5f5
     }
 
     .notification-icon{
       width:54px;height:54px;border-radius:50%;display:grid;place-items:center;
-      background:#dbeafe;font-size:24px
+      background:#d3f0ef;font-size:24px
     }
 
     .notification-content h3{margin:0 0 6px;font-size:16px}
@@ -131,7 +131,7 @@
       text-align:center;cursor:pointer;text-decoration:none
     }
 
-    .notification-action-btn{border:none;background:#2563eb;color:#fff}
+    .notification-action-btn{border:none;background:#14b8a6;color:#fff}
     .notification-open-link{border:1px solid #cbd5e1;background:#fff;color:#334155}
     .notification-delete-btn{border:none;background:#fee2e2;color:#dc2626}
 
@@ -144,7 +144,7 @@
     .notifications-empty h3{margin:0 0 8px;color:#0f172a;font-size:22px}
     .notifications-empty a{
       display:inline-flex;margin-top:16px;padding:10px 18px;border-radius:10px;
-      background:#2563eb;color:#fff;font-weight:800;text-decoration:none
+      background:#14b8a6;color:#fff;font-weight:800;text-decoration:none
     }
 
     .notifications-footer{
@@ -177,8 +177,8 @@
   <header class="navbar notifications-navbar">
     <div class="logo">
       <a href="index.html" class="logo-link">
-        <img src="icons/icon-512.png" alt="LoyaltyMarket">
-        <span class="logo-text"><span class="lr-tag">LR</span>LoyaltyMarket</span>
+        <img src="icons/icon-512.png" alt="Waterside">
+        <span class="logo-text"><span class="lr-tag">LR</span>Waterside</span>
       </a>
     </div>
 
@@ -238,10 +238,10 @@
 
   <footer class="footer notifications-footer">
     <div>
-      <h2>🇱🇷 LoyaltyMarket</h2>
+      <h2>🇱🇷 Waterside</h2>
       <p>You Get Market, We Get Buyer.</p>
     </div>
-    <p>&copy; 2026 LoyaltyMarket. All Rights Reserved.</p>
+    <p>&copy; 2026 Waterside. All Rights Reserved.</p>
   </footer>
 
   <script type="module">
@@ -385,7 +385,7 @@
       }
 
       notificationsList.innerHTML = filteredNotifications.map((notification) => {
-        const title = notification.title || "LoyaltyMarket Notification";
+        const title = notification.title || "Waterside Notification";
         const message =
           notification.message ||
           notification.body ||

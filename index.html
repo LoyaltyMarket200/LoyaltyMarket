@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>LoyaltyMarket - Liberia's Marketplace</title>
+  <title>Waterside - Liberia's Marketplace</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="footer.css">
@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <meta name="theme-color" content="#1e3a8a">
+  <meta name="theme-color" content="#0d6e6e">
   <style>
     /* Category icons are now real photos (Jiji's actual pattern),
        not SVG line icons — this overrides whatever sizing style.css
@@ -41,8 +41,8 @@
 <body class="homepage">
   <header class="mp-header">
     <div class="mp-header-top">
-      <a href="index.html" class="mp-logo" aria-label="LoyaltyMarket home">
-        <span class="mp-logo-word mp-logo-loyalty">Loyalty</span><span class="mp-logo-word mp-logo-market">Market</span>
+      <a href="index.html" class="mp-logo" aria-label="Waterside home">
+        <span class="mp-logo-word mp-logo-water">Water</span><span class="mp-logo-word mp-logo-side">side</span>
         <span class="mp-logo-sub">Liberia's No.1 Marketplace</span>
       </a>
 
@@ -184,7 +184,7 @@
     <div class="maintenance-card">
       <h1>
         🛠️
-        <span data-marketplace-name>LoyaltyMarket</span>
+        <span data-marketplace-name>Waterside</span>
         Is Under Maintenance
       </h1>
 
@@ -279,15 +279,15 @@
       aria-controls="mobileFooterContent"
     >
       <span class="lm-footer-toggle-brand">
-        <img src="icons/icon-512.png" alt="LoyaltyMarket logo">
+        <img src="icons/icon-512.png" alt="Waterside logo">
 
         <span>
           <span class="lm-footer-toggle-lr">LR</span>
-          <span data-marketplace-name>LoyaltyMarket</span>
+          <span data-marketplace-name>Waterside</span>
         </span>
       </span>
 
-      <span class="lm-footer-toggle-label">Explore LoyaltyMarket</span>
+      <span class="lm-footer-toggle-label">Explore Waterside</span>
       <span class="lm-footer-arrow" aria-hidden="true">⌄</span>
     </button>
 
@@ -326,7 +326,7 @@
             </div>
 
             <div class="lm-footer-app">
-              <strong>LoyaltyMarket Mobile App</strong>
+              <strong>Waterside Mobile App</strong>
               <span>Android and iPhone apps coming soon.</span>
 
               <div class="lm-app-badges">
@@ -417,7 +417,7 @@
           <div class="site-shell lm-footer-bottom-inner">
             <p>
               &copy; 2026
-              <span data-marketplace-name>LoyaltyMarket</span>.
+              <span data-marketplace-name>Waterside</span>.
               All Rights Reserved.
             </p>
 
@@ -478,7 +478,7 @@
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
     const DEFAULT_SETTINGS = {
-      marketplaceName: "LoyaltyMarket",
+      marketplaceName: "Waterside",
       supportEmail: "princeteah200@gmail.com",
       supportPhone: "+231 88 147 1694",
       usdToLrdRate: 180,
@@ -616,7 +616,7 @@
     function applyMarketplaceSettings() {
       const name =
         marketplaceSettings.marketplaceName ||
-        "LoyaltyMarket";
+        "Waterside";
 
       document.title =
         `${name} - Liberia's Marketplace`;
@@ -1363,7 +1363,7 @@
     window.addEventListener("appinstalled", () => {
       pwaInstallBtn.style.display = "none";
       iosInstallHint.style.display = "none";
-      console.log("LoyaltyMarket installed as an app");
+      console.log("Waterside installed as an app");
     });
   </script>
 </body>
