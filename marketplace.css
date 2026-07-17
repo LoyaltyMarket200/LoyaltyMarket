@@ -434,4 +434,57 @@
 
 @media (max-width: 480px) {
   .mp-logo-word { font-size: 17px; }
+}/* ---------- RECOMMENDED FOR YOU (horizontal scroll row of small photo cards) ---------- */
+
+.mp-recommended {
+  padding: 18px max(20px, 4vw) 4px;
+}
+
+.mp-recommended-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 12px;
+}
+
+.mp-recommended-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.mp-recommended-row::-webkit-scrollbar {
+  display: none;
+}
+
+.mp-recommended-card {
+  flex-shrink: 0;
+  width: 108px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.mp-recommended-card img {
+  width: 108px;
+  height: 108px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #f1f5f9;
+  display: block;
+}
+
+.mp-recommended-card span {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #1f2937;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
