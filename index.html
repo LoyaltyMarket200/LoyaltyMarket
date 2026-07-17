@@ -540,7 +540,9 @@
         ? `Support: ${support.join(" | ")}`
         : "";
 
-      footerSupport.textContent = supportText;
+      if (footerSupport) {
+        footerSupport.textContent = supportText;
+      }
       maintenanceSupportText.textContent = supportText;
 
       const listingsAllowed =
@@ -1206,54 +1208,11 @@
   </script>
 
   <script>
-    const pwaInstallBtn = document.getElementById("pwaInstallBtn");
-    const iosInstallHint = document.getElementById("iosInstallHint");
-    let deferredInstallPrompt = null;
-
-    function isRunningStandalone() {
-      return (
-        window.matchMedia("(display-mode: standalone)").matches ||
-        window.navigator.standalone === true
-      );
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("appinstalled", () => {
+        console.log("Waterside installed as an app");
+      });
     }
-
-    function isIos() {
-      return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-    }
-
-    if (!isRunningStandalone()) {
-      if (isIos()) {
-        iosInstallHint.style.display = "inline-flex";
-      } else {
-        window.addEventListener("beforeinstallprompt", (event) => {
-          event.preventDefault();
-          deferredInstallPrompt = event;
-          pwaInstallBtn.style.display = "inline-flex";
-        });
-      }
-    }
-
-    pwaInstallBtn?.addEventListener("click", async () => {
-      if (!deferredInstallPrompt) {
-        return;
-      }
-
-      pwaInstallBtn.disabled = true;
-      deferredInstallPrompt.prompt();
-
-      const { outcome } = await deferredInstallPrompt.userChoice;
-      console.log("Install prompt outcome:", outcome);
-
-      deferredInstallPrompt = null;
-      pwaInstallBtn.style.display = "none";
-      pwaInstallBtn.disabled = false;
-    });
-
-    window.addEventListener("appinstalled", () => {
-      pwaInstallBtn.style.display = "none";
-      iosInstallHint.style.display = "none";
-      console.log("Waterside installed as an app");
-    });
   </script>
 </body>
 </html>
