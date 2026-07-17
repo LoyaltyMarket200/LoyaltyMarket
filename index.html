@@ -15,9 +15,6 @@
 
   <meta name="theme-color" content="#0d6e6e">
   <style>
-    /* Category icons are now real photos (Jiji's actual pattern),
-       not SVG line icons — this overrides whatever sizing style.css
-       had for the old SVG version. */
     .category-sidebar-icon {
       width: 40px;
       height: 40px;
@@ -55,8 +52,7 @@
         <a href="login.html" id="loginBtn" class="mp-action-link">Sign In</a>
         <a href="register.html" id="registerBtn" class="mp-action-link">Register</a>
 
-        <a
-          href="dashboard.html"
+        <a href="dashboard.html"
           id="dashboardBtn"
           class="mp-action-link mp-icon-btn"
           style="display:none;"
@@ -65,8 +61,7 @@
           <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
         </a>
 
-        <a
-          href="messages.html"
+        <a href="messages.html"
           id="messagesBtn"
           class="mp-action-link mp-messages-link mp-icon-btn"
           style="display:none;"
@@ -182,6 +177,40 @@
     </div>
   </nav>
 
+  <div class="mp-quick-actions-row mp-quick-actions-row-inline site-shell" style="padding-top:14px;">
+    <a href="sell.html" class="mp-quick-action-card mp-quick-action-highlight">
+      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+      <span>Post Ad</span>
+    </a>
+
+    <a href="search.html" class="mp-quick-action-card">
+      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span>
+      <span>Trending</span>
+    </a>
+
+    <a href="safety.html" class="mp-quick-action-card">
+      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg></span>
+      <span>How To Sell</span>
+    </a>
+
+    <a href="category-jobs.html" class="mp-quick-action-card">
+      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span>
+      <span>Find A Job</span>
+    </a>
+
+    <a href="#services" class="mp-quick-action-card">
+      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 1 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4Z"/></svg></span>
+      <span>Find A Service</span>
+    </a>
+  </div>
+
+  <section class="mp-recommended site-shell">
+    <h2 class="mp-recommended-heading">Recommended for you</h2>
+    <div class="mp-recommended-row" id="recommendedRow">
+      <p style="color:#94a3b8;font-size:13px;">Loading...</p>
+    </div>
+  </section>
+
   <div id="siteNotice" class="site-notice"></div>
 
   <section id="maintenanceScreen" class="maintenance-screen">
@@ -226,33 +255,6 @@
       </aside>
 
       <main class="browse-main">
-        <div class="mp-quick-actions-row mp-quick-actions-row-inline">
-          <a href="sell.html" class="mp-quick-action-card mp-quick-action-highlight">
-            <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
-            <span>Post Ad</span>
-          </a>
-
-          <a href="search.html" class="mp-quick-action-card">
-            <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span>
-            <span>Trending</span>
-          </a>
-
-          <a href="safety.html" class="mp-quick-action-card">
-            <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg></span>
-            <span>How To Sell</span>
-          </a>
-
-          <a href="category-jobs.html" class="mp-quick-action-card">
-            <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span>
-            <span>Find A Job</span>
-          </a>
-
-          <a href="#services" class="mp-quick-action-card">
-            <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 1 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4Z"/></svg></span>
-            <span>Find A Service</span>
-          </a>
-        </div>
-
         <div class="section-heading-row">
           <div>
             <span class="section-kicker">🔥 Trending</span>
@@ -274,160 +276,63 @@
   </div>
 
   <footer class="lm-footer" id="marketplaceFooter">
-    <button
-      type="button"
-      id="mobileFooterToggle"
-      class="lm-footer-toggle"
-      aria-expanded="false"
-      aria-controls="mobileFooterContent"
-    >
-      <span class="lm-footer-toggle-brand">
-        <img src="icons/icon-512.png" alt="Waterside logo">
-
-        <span>
-          <span class="lm-footer-toggle-lr">LR</span>
-          <span data-marketplace-name>Waterside</span>
+    <div class="lm-footer-simple site-shell">
+      <div class="lm-footer-app-badges">
+        <span class="lm-app-badge-btn">
+          <svg viewBox="0 0 24 24"><path d="M16.7 12.4c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.9-.8-3.1-.8c-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.9.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.6-3.1Z"/><path d="M14.4 5.1c.6-.8 1.1-1.9 1-3-.9.1-2 .6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2-.5 2.7-1.3Z"/></svg>
+          <span class="lm-app-badge-text"><small>Coming Soon</small><strong>App Store</strong></span>
         </span>
-      </span>
 
-      <span class="lm-footer-toggle-label">Explore Waterside</span>
-      <span class="lm-footer-arrow" aria-hidden="true">⌄</span>
-    </button>
-
-    <div id="mobileFooterContent" class="lm-footer-content">
-      <div class="lm-skyline-wrap" aria-label="Liberia-inspired skyline">
-        <div class="lm-skyline site-shell">
-          <div class="lm-building lm-building-one"></div>
-          <div class="lm-building lm-building-two"></div>
-          <div class="lm-capitol">
-            <span class="lm-capitol-dome"></span>
-            <span class="lm-capitol-roof"></span>
-            <span class="lm-capitol-body">
-              <i></i><i></i><i></i><i></i><i></i>
-            </span>
-          </div>
-          <div class="lm-building lm-building-three"></div>
-          <div class="lm-building lm-building-four"></div>
-          <div class="lm-building lm-building-five"></div>
-        </div>
+        <span class="lm-app-badge-btn">
+          <svg viewBox="0 0 24 24"><path d="m4 3 16 9-16 9V3Z"/></svg>
+          <span class="lm-app-badge-text"><small>Coming Soon</small><strong>Google Play</strong></span>
+        </span>
       </div>
 
-      <div class="lm-footer-main">
-        <div class="site-shell lm-footer-grid">
-          <section class="lm-footer-brand">
-            <p class="lm-footer-description">
-              Liberia's trusted marketplace for products, vehicles,
-              property, jobs and professional services.
-            </p>
+      <nav class="lm-footer-link-row">
+        <a href="#">About Waterside</a>
+        <a href="contact.html">We Are Hiring!</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="#">Billing Policy</a>
+        <a href="safety.html">Waterside Tips</a>
+      </nav>
 
-            <div class="lm-footer-support">
-              <p id="footerSupport"></p>
+      <nav class="lm-footer-link-row">
+        <a href="#">Waterside on FB</a>
+        <a href="#">Our Instagram</a>
+        <a href="#">Our YouTube</a>
+        <a href="#">Our Twitter</a>
+      </nav>
 
-              <a href="contact.html" class="lm-footer-help-button">
-                Contact Support
-              </a>
-            </div>
+      <nav class="lm-footer-link-row">
+        <a href="faq.html">FAQ</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="prohibited-items.html">Prohibited Items</a>
+        <a href="community-rules.html">Community Rules</a>
+        <a href="report.html">Report A Problem</a>
+      </nav>
 
-            <div class="lm-footer-app">
-              <strong>Waterside Mobile App</strong>
-              <span>Android and iPhone apps coming soon.</span>
+      <nav class="lm-footer-link-row lm-footer-county-row">
+        <button type="button" data-footer-county="Bomi">Bomi</button>
+        <button type="button" data-footer-county="Bong">Bong</button>
+        <button type="button" data-footer-county="Gbarpolu">Gbarpolu</button>
+        <button type="button" data-footer-county="Grand Bassa">Grand Bassa</button>
+        <button type="button" data-footer-county="Grand Cape Mount">Grand Cape Mount</button>
+        <button type="button" data-footer-county="Grand Gedeh">Grand Gedeh</button>
+        <button type="button" data-footer-county="Grand Kru">Grand Kru</button>
+        <button type="button" data-footer-county="Lofa">Lofa</button>
+        <button type="button" data-footer-county="Margibi">Margibi</button>
+        <button type="button" data-footer-county="Maryland">Maryland</button>
+        <button type="button" data-footer-county="Montserrado">Montserrado</button>
+        <button type="button" data-footer-county="Nimba">Nimba</button>
+        <button type="button" data-footer-county="River Cess">River Cess</button>
+        <button type="button" data-footer-county="River Gee">River Gee</button>
+        <button type="button" data-footer-county="Sinoe">Sinoe</button>
+      </nav>
 
-              <div class="lm-app-badges">
-                <span class="lm-app-badge-btn">
-                  <svg viewBox="0 0 24 24"><path d="M16.7 12.4c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.9-.8-3.1-.8c-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.9.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.6-3.1Z"/><path d="M14.4 5.1c.6-.8 1.1-1.9 1-3-.9.1-2 .6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2-.5 2.7-1.3Z"/></svg>
-                  <span class="lm-app-badge-text"><small>Coming Soon</small><strong>App Store</strong></span>
-                </span>
-
-                <span class="lm-app-badge-btn">
-                  <svg viewBox="0 0 24 24"><path d="m4 3 16 9-16 9V3Z"/></svg>
-                  <span class="lm-app-badge-text"><small>Coming Soon</small><strong>Google Play</strong></span>
-                </span>
-              </div>
-
-              <button type="button" id="pwaInstallBtn" class="mp-cta mp-cta-primary" style="display:none;margin-top:10px;">
-                Install App
-              </button>
-
-              <span id="iosInstallHint" class="mp-app-badge" style="display:none;margin-top:10px;">
-                On iPhone: tap Share, then "Add to Home Screen"
-              </span>
-            </div>
-          </section>
-
-          <section class="lm-footer-column">
-            <h3>Marketplace</h3>
-            <a href="index.html#products">Browse Listings</a>
-            <a href="sell.html">Post An Ad</a>
-            <a href="business-profile.html">Business Accounts</a>
-            <a href="category-jobs.html">Jobs</a>
-          </section>
-
-          <section class="lm-footer-column">
-            <h3>Support</h3>
-            <a href="safety.html">Safety Tips</a>
-            <a href="contact.html">Contact Us</a>
-            <a href="faq.html">Help Center</a>
-            <a href="report.html">Report A Problem</a>
-          </section>
-
-          <section class="lm-footer-column">
-            <h3>Legal</h3>
-            <a href="terms.html">Terms &amp; Conditions</a>
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="prohibited-items.html">Prohibited Items</a>
-            <a href="community-rules.html">Community Rules</a>
-          </section>
-
-          <section class="lm-footer-column">
-            <h3>Follow Us</h3>
-            <a href="#">Facebook</a>
-            <a href="#">Instagram</a>
-            <a href="#">YouTube</a>
-            <a href="#">TikTok</a>
-          </section>
-        </div>
-
-        <div class="site-shell lm-county-section">
-          <div class="lm-county-heading">
-            <div>
-              <span>
-                <strong>Browse Across Liberia</strong>
-                <small>Serving buyers and sellers in all 15 counties</small>
-              </span>
-            </div>
-          </div>
-
-          <div class="lm-county-list">
-            <button type="button" data-footer-county="Bomi">Bomi</button>
-            <button type="button" data-footer-county="Bong">Bong</button>
-            <button type="button" data-footer-county="Gbarpolu">Gbarpolu</button>
-            <button type="button" data-footer-county="Grand Bassa">Grand Bassa</button>
-            <button type="button" data-footer-county="Grand Cape Mount">Grand Cape Mount</button>
-            <button type="button" data-footer-county="Grand Gedeh">Grand Gedeh</button>
-            <button type="button" data-footer-county="Grand Kru">Grand Kru</button>
-            <button type="button" data-footer-county="Lofa">Lofa</button>
-            <button type="button" data-footer-county="Margibi">Margibi</button>
-            <button type="button" data-footer-county="Maryland">Maryland</button>
-            <button type="button" data-footer-county="Montserrado">Montserrado</button>
-            <button type="button" data-footer-county="Nimba">Nimba</button>
-            <button type="button" data-footer-county="River Cess">River Cess</button>
-            <button type="button" data-footer-county="River Gee">River Gee</button>
-            <button type="button" data-footer-county="Sinoe">Sinoe</button>
-          </div>
-        </div>
-
-        <div class="lm-footer-bottom">
-          <div class="site-shell lm-footer-bottom-inner">
-            <p>
-              &copy; 2026
-              <span data-marketplace-name>Waterside</span>.
-              All Rights Reserved.
-            </p>
-
-            <p>Made For Liberia</p>
-          </div>
-        </div>
-      </div>
+      <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+      <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
     </div>
   </footer>
 
@@ -511,6 +416,7 @@
     const footerSupport = document.getElementById("footerSupport");
     const navSellBtn = document.getElementById("navSellBtn");
     const heroSellBtn = document.getElementById("heroSellBtn");
+    const recommendedRow = document.getElementById("recommendedRow");
 
     let allProducts = [];
     let marketplaceSettings = { ...DEFAULT_SETTINGS };
@@ -741,6 +647,34 @@
         sellerVerifiedCache[sellerId] = false;
         return false;
       }
+    }
+
+    function renderRecommended() {
+      if (!recommendedRow) {
+        return;
+      }
+
+      const recent = allProducts.slice(0, 8);
+
+      if (!recent.length) {
+        recommendedRow.innerHTML = "";
+        return;
+      }
+
+      recommendedRow.innerHTML = recent.map(({ id, data }) => {
+        const image =
+          data.imageUrl ||
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
+
+        const title = data.title || "Untitled";
+
+        return `
+          <a class="mp-recommended-card" href="product-detail.html?id=${encodeURIComponent(id)}">
+            <img src="${safeText(image)}" alt="${safeText(title)}" loading="lazy">
+            <span>${safeText(title)}</span>
+          </a>
+        `;
+      }).join("");
     }
 
     async function renderProducts(products) {
@@ -1010,6 +944,7 @@
 
         await applyFiltersAndSearch();
         loadCategoryCounts();
+        renderRecommended();
       } catch (error) {
         console.error(error);
 
@@ -1250,43 +1185,6 @@
     }
 
     startHomepage();
-  </script>
-
-  <script>
-    const mobileFooterToggle =
-      document.getElementById(
-        "mobileFooterToggle"
-      );
-
-    const mobileFooterContent =
-      document.getElementById(
-        "mobileFooterContent"
-      );
-
-    if (
-      mobileFooterToggle &&
-      mobileFooterContent
-    ) {
-      mobileFooterToggle.addEventListener(
-        "click",
-        () => {
-          const isOpen =
-            mobileFooterContent.classList.toggle(
-              "footer-open"
-            );
-
-          mobileFooterToggle.classList.toggle(
-            "footer-toggle-open",
-            isOpen
-          );
-
-          mobileFooterToggle.setAttribute(
-            "aria-expanded",
-            String(isOpen)
-          );
-        }
-      );
-    }
   </script>
 
   <script>

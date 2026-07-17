@@ -1,8 +1,5 @@
 /* ============================================
    LOYALTYMARKET — MARKETPLACE.CSS
-   Restrained 2-color system: navy is the only
-   structural/brand color, orange is the ONLY
-   accent. No stray blues. Compact sizing.
    ============================================ */
 
 :root {
@@ -34,9 +31,6 @@
   height: 24px;
   color: var(--mp-navy);
 }
-
-/* ---------- HEADER — merged into the hero band below,
-   no seam/border between them (Jiji-style) ---------- */
 
 .mp-header {
   background: var(--mp-navy);
@@ -118,10 +112,6 @@
 
 .mp-post-ad:hover { background: var(--mp-orange-dark); }
 .disabled-link { opacity: 0.55; pointer-events: none; }
-
-/* ---------- HERO SEARCH BAND ----------
-   Now flows directly out of the header — same navy
-   background, no top padding gap, no border between them. */
 
 .mp-hero-search {
   background: var(--mp-navy);
@@ -288,23 +278,6 @@
 .cat-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .cat-page-btn.active { background: var(--mp-navy); border-color: transparent; color: #ffffff; }
 
-@media (max-width: 900px) {
-  .cat-layout { grid-template-columns: 1fr; }
-  .cat-filters { position: static; }
-}
-
-@media (max-width: 720px) {
-  .mp-search-row { grid-template-columns: 1fr; }
-  .mp-search-btn { width: 100%; }
-  .mp-header-top { justify-content: center; text-align: center; }
-  .mp-header-actions { justify-content: center; width: 100%; }
-  .cat-band-inner { justify-content: center; text-align: center; }
-}
-
-@media (max-width: 480px) {
-  .mp-logo-word { font-size: 17px; }
-}
-
 /* ---------- QUICK ACTIONS (Jiji-style horizontal banner row) ---------- */
 
 .mp-quick-actions-row {
@@ -312,7 +285,7 @@
   gap: 10px;
   overflow-x: auto;
   scrollbar-width: none;
-  margin-bottom: 18px;
+  margin-bottom: 4px;
 }
 
 .mp-quick-actions-row::-webkit-scrollbar { display: none; }
@@ -357,4 +330,108 @@
   font-weight: 600;
   color: var(--mp-ink);
   line-height: 1.25;
+}
+
+/* ---------- RECOMMENDED FOR YOU (Jiji-style photo tiles) ---------- */
+
+.mp-recommended {
+  padding: 18px max(20px, 4vw) 4px;
+}
+
+.mp-recommended-heading {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--mp-ink);
+  margin-bottom: 12px;
+}
+
+.mp-recommended-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.mp-recommended-row::-webkit-scrollbar { display: none; }
+
+.mp-recommended-card {
+  flex-shrink: 0;
+  width: 130px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.mp-recommended-card img {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  background: var(--mp-soft);
+}
+
+.mp-recommended-card span {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mp-ink);
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+  .cat-layout { grid-template-columns: 1fr; }
+  .cat-filters { position: static; }
+}
+
+@media (max-width: 720px) {
+  .mp-search-row {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "location search"
+      "category category"
+      "button button";
+  }
+
+  .mp-search-location { grid-area: location; }
+  .mp-search-keyword { grid-area: search; }
+  .mp-search-category { grid-area: category; }
+  .mp-search-btn { grid-area: button; width: 100%; }
+
+  .mp-header-top {
+    justify-content: space-between;
+    text-align: left;
+    flex-wrap: nowrap;
+  }
+
+  .mp-logo {
+    flex-shrink: 0;
+  }
+
+  .mp-logo-sub {
+    display: none;
+  }
+
+  .mp-header-actions {
+    justify-content: flex-end;
+    width: auto;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .mp-action-link {
+    padding: 6px 9px;
+    font-size: 11.5px;
+  }
+
+  .mp-lang-switch {
+    display: none;
+  }
+
+  .cat-band-inner { justify-content: center; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .mp-logo-word { font-size: 17px; }
 }

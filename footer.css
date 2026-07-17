@@ -1,447 +1,116 @@
 /* ============================================
-   LOYALTYMARKET — FOOTER.CSS
-   Matches the lm-footer HTML structure already
-   used across every page. Rebuilt to Jiji's
-   actual footer pattern: compact, single accent
-   color, no heavy decorative graphics, simple
-   link columns. The skyline illustration and the
-   full county button grid (both real weight
-   contributors flagged earlier) are removed —
-   the county list becomes a slim horizontal
-   scroll strip instead of a tall grid.
+   WATERSIDE — FOOTER.CSS
+   Flat, simple Jiji-style footer: App Store/Google
+   Play badges, then plain centered link rows, then
+   county browse row, tagline, copyright. No skyline
+   graphic, no gold pill buttons, no collapsible
+   mobile toggle.
    ============================================ */
 
-:root {
-  --lf-navy: #0d6e6e;
-  --lf-navy-soft: rgba(255,255,255,0.08);
-  --lf-orange: #ff6b4a;
-  --lf-line: rgba(255,255,255,0.14);
-  --lf-text: #b9e6e6;
-  --lf-text-strong: #ffffff;
-}
-
 .lm-footer {
-  background: var(--lf-navy);
-  color: var(--lf-text);
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
 }
 
-/* Mobile-only collapsible toggle bar */
-.lm-footer-toggle {
-  display: none;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 12px max(20px, 4vw);
-  border: none;
-  background: transparent;
-  color: #fff;
-  cursor: pointer;
+.lm-footer-simple {
+  padding: 32px max(20px, 4vw) 24px;
+  text-align: center;
 }
 
-.lm-footer-toggle-brand {
+.lm-footer-app-badges {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.lm-footer-toggle-brand img {
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-}
-
-.lm-footer-toggle-lr {
-  color: var(--lf-orange);
-  font-weight: 700;
-  margin-right: 2px;
-}
-
-.lm-footer-toggle-label {
-  flex: 1;
-  text-align: left;
-  font-size: 12px;
-  color: var(--lf-text);
-}
-
-.lm-footer-arrow {
-  transition: transform 0.2s ease;
-  font-size: 14px;
-}
-
-.lm-footer-toggle-open .lm-footer-arrow {
-  transform: rotate(180deg);
-}
-
-/* ---------- SKYLINE SILHOUETTE ----------
-   Jiji's real footer has a silhouette skyline (bridge + buildings)
-   spanning the top of the footer, in a lighter shade of the footer's
-   own background color. This restyles LM's existing skyline markup
-   (already in every page's HTML) to actually render that way instead
-   of being hidden — still strictly navy + transparent-white, no new
-   colors, matching the 2-color rule. */
-
-.lm-skyline-wrap {
-  display: block !important;
-  height: auto !important;
-  background: var(--lf-navy);
-  overflow: hidden;
-  border-bottom: 1px solid var(--lf-line);
-}
-
-.lm-skyline {
-  display: flex !important;
-  height: 72px !important;
-  align-items: flex-end;
   justify-content: center;
-  gap: 7px;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 max(20px, 4vw);
-}
-
-.lm-building {
-  display: block !important;
-  height: auto !important;
-  width: 32px;
-  border-radius: 3px 3px 0 0;
-  background: rgba(255,255,255,0.12);
-}
-
-.lm-building-one { height: 42px !important; }
-.lm-building-two { height: 58px !important; }
-.lm-building-three { height: 34px !important; }
-.lm-building-four { height: 50px !important; }
-.lm-building-five { height: 28px !important; }
-
-.lm-capitol {
-  display: flex !important;
-  height: auto !important;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  width: 64px;
-}
-
-.lm-capitol-dome {
-  display: block !important;
-  height: 13px !important;
-  width: 24px;
-  border-radius: 50% 50% 0 0;
-  background: rgba(255,255,255,0.22);
-  margin-bottom: -2px;
-}
-
-.lm-capitol-roof {
-  display: block !important;
-  height: 7px !important;
-  width: 54px;
-  border-radius: 3px 3px 0 0;
-  background: rgba(255,255,255,0.18);
-}
-
-.lm-capitol-body {
-  display: flex !important;
-  height: 44px !important;
-  width: 54px;
-  background: rgba(255,255,255,0.12);
-  align-items: flex-end;
-  justify-content: space-evenly;
-  padding-bottom: 6px;
-}
-
-.lm-capitol-body i {
-  width: 5px;
-  height: 28px;
-  background: rgba(255,255,255,0.24);
-  border-radius: 2px;
-}
-
-@media (max-width: 620px) {
-  .lm-skyline { height: 52px !important; gap: 4px; }
-  .lm-building { width: 22px; }
-  .lm-capitol { width: 46px; }
-  .lm-capitol-body { width: 40px; height: 30px !important; }
-  .lm-capitol-roof { width: 40px; }
-}
-
-.lm-footer-main {
-  padding: 22px 0 0;
-}
-
-.lm-footer-grid {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 max(20px, 4vw) 18px;
-  display: grid;
-  grid-template-columns: 1.3fr 1fr 1fr 1fr 1fr;
-  gap: 22px;
-}
-
-.lm-footer-brand .lm-footer-description {
-  margin: 0 0 14px;
-  font-size: 12.5px;
-  line-height: 1.6;
-  color: var(--lf-text);
-}
-
-.lm-footer-support {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  margin-bottom: 14px;
-}
-
-.lm-footer-support p {
-  margin: 0;
-  font-size: 12px;
-  color: var(--lf-text);
-}
-
-.lm-footer-help-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  padding: 8px 14px;
-  border-radius: 8px;
-  background: #fff;
-  color: var(--lf-navy);
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.lm-footer-app {
-  padding: 11px 13px;
-  border-radius: 10px;
-  background: var(--lf-navy-soft);
-  border: 1px solid var(--lf-line);
-}
-
-.lm-footer-app strong {
-  display: block;
-  color: #fff;
-  font-size: 12.5px;
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-
-.lm-footer-app span {
-  font-size: 11px;
-  color: var(--lf-text);
-}
-
-/* ---------- APP STORE / GOOGLE PLAY BADGES ----------
-   Jiji shows real store badges in its footer. LM's apps aren't
-   published yet, so these are styled the same shape/position but
-   marked "Coming Soon" rather than linking to live store listings.
-   Kept strictly navy/white/transparent — no Apple/Google brand
-   colors, matching LM's 2-color rule. */
-
-.lm-app-badges {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
 .lm-app-badge-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 7px 12px;
+  padding: 8px 14px;
   border-radius: 8px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--lf-line);
-  color: #fff;
-  opacity: 0.85;
+  background: #0f172a;
+  color: #ffffff;
 }
 
 .lm-app-badge-btn svg {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  stroke: #fff;
-  fill: none;
-  stroke-width: 1.6;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
 }
 
-.lm-app-badge-btn .lm-app-badge-text {
+.lm-app-badge-text {
   display: flex;
   flex-direction: column;
+  text-align: left;
   line-height: 1.2;
 }
 
-.lm-app-badge-btn small {
-  font-size: 8.5px;
-  color: var(--lf-text);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+.lm-app-badge-text small {
+  font-size: 9px;
+  opacity: 0.8;
 }
 
-.lm-app-badge-btn strong {
-  font-size: 12px;
+.lm-app-badge-text strong {
+  font-size: 13px;
   font-weight: 700;
-  color: #fff;
 }
 
-.lm-footer-column h3 {
-  margin: 0 0 12px;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+.lm-footer-link-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-bottom: 14px;
 }
 
-.lm-footer-column a {
-  display: block;
-  margin-bottom: 9px;
-  color: var(--lf-text);
+.lm-footer-link-row a,
+.lm-footer-link-row button {
   font-size: 12.5px;
+  color: #64748b;
   text-decoration: none;
+  background: none;
+  border: none;
+  padding: 2px 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
-.lm-footer-column a:hover {
-  color: #fff;
+.lm-footer-link-row a:hover,
+.lm-footer-link-row button:hover {
+  color: #0d6e6e;
   text-decoration: underline;
 }
 
-/* County list — a slim horizontal scroll strip instead of a
-   tall multi-column grid, matching Jiji's compact footer weight. */
-.lm-county-section {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 14px max(20px, 4vw);
-  border-top: 1px solid var(--lf-line);
+.lm-footer-county-row {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.lm-county-heading {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+.lm-footer-tagline {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 18px;
 }
 
-.lm-county-heading strong {
-  display: block;
-  color: #fff;
-  font-size: 12.5px;
-  font-weight: 600;
-}
-
-.lm-county-heading small {
-  display: block;
-  color: var(--lf-text);
-  font-size: 11px;
-  font-weight: 400;
-  margin-top: 2px;
-}
-
-.lm-county-list {
-  display: flex;
-  gap: 7px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: none;
-}
-
-.lm-county-list::-webkit-scrollbar {
-  display: none;
-}
-
-.lm-county-list button {
-  flex-shrink: 0;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--lf-line);
-  background: transparent;
-  color: var(--lf-text);
-  font-size: 11.5px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.lm-county-list button:hover {
-  border-color: var(--lf-orange);
-  color: #fff;
-}
-
-.lm-footer-bottom {
-  border-top: 1px solid var(--lf-line);
-  padding: 14px 0;
-}
-
-.lm-footer-bottom-inner {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 max(20px, 4vw);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.lm-footer-bottom-inner p {
-  margin: 0;
-  font-size: 11.5px;
-  color: var(--lf-text);
-}
-
-/* ---------- RESPONSIVE ---------- */
-
-@media (max-width: 900px) {
-  .lm-footer-grid {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
-  .lm-footer-brand {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 760px) {
-  .lm-footer-toggle {
-    display: flex;
-  }
-
-  .lm-footer-content {
-    display: none;
-  }
-
-  .lm-footer-content.footer-open {
-    display: block;
-  }
-
-  .lm-footer-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-  }
-
-  .lm-footer-bottom-inner {
-    flex-direction: column;
-    text-align: center;
-    gap: 4px;
-  }
-}
-
-@media (max-width: 480px) {
-  .lm-footer-grid {
-    grid-template-columns: 1fr;
-  }
+.lm-footer-copyright {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 4px;
 }
 
 /* ============================================
-   MOBILE BOTTOM NAV — defined explicitly here
-   (not just relying on style.css) since this
-   component was found rendering as unstyled
-   plain text links after the footer rebuild.
-   Fixed to the bottom of the viewport, icon +
-   label per item, only shown on small screens.
+   MOBILE BOTTOM NAV — kept from the earlier fix
+   session. index.html still includes the
+   <nav class="mobile-bottom-nav"> markup, and this
+   footer.css is its only styling source, so this
+   must stay here even though the footer above it
+   was rebuilt — dropping it would silently bring
+   back the "unstyled blue text links" bug that was
+   already fixed once before.
    ============================================ */
 
 .mobile-bottom-nav {
@@ -476,7 +145,7 @@
   }
 
   .mobile-bottom-link.active {
-    color: var(--lf-navy, #0d6e6e);
+    color: #0d6e6e;
   }
 
   .mobile-bottom-icon {
