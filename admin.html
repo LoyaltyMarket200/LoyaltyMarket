@@ -316,6 +316,9 @@
     .status-expired { background: #e2e8f0; color: #475569; }
     .status-rejected { background: #fee2e2; color: #b91c1c; }
     .status-pending_review { background: #ffece7; color: #c23f24; }
+    .status-confirmed { background: #e3f2f2; color: #0d6e6e; }
+    .status-completed { background: #e3f2f2; color: #0d6e6e; }
+    .status-cancelled { background: #fee2e2; color: #b91c1c; }
 
     .user-actions,
     .report-actions {
@@ -1040,6 +1043,10 @@
         <span id="pendingBoostsBadge" class="report-count-badge" aria-label="Pending boost requests"></span>
       </button>
 
+      <button class="admin-section-tab-btn" data-section="payments">
+        Payments
+      </button>
+
       <button class="admin-section-tab-btn" data-section="content">
         Content
       </button>
@@ -1078,6 +1085,7 @@
         <button class="quick-action-btn" type="button" data-goto-section="reports"><svg class="icon" viewBox="0 0 24 24"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg> View Reports</button>
         <button class="quick-action-btn" type="button" data-goto-section="pendingReview"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg> Pending Review</button>
         <button class="quick-action-btn" type="button" data-goto-section="boosts"><svg class="icon" viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3Z"/></svg> View Boost Requests</button>
+        <button class="quick-action-btn" type="button" data-goto-section="payments"><svg class="icon" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> View Payments</button>
         <a class="quick-action-btn" href="dashboard.html"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Manage Listings</a>
         <button class="quick-action-btn" type="button" data-goto-section="content"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg> Edit Site Content</button>
         <button class="quick-action-btn" type="button" data-goto-section="settings"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg> Marketplace Settings</button>
@@ -1149,6 +1157,20 @@
 
       <div id="boostsContainer">
         <p class="empty-state">Loading boost requests...</p>
+      </div>
+    </section>
+
+    <section id="paymentsSection" style="display:none;">
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-payment-filter="all">All</button>
+        <button class="admin-tab-btn" data-payment-filter="pending">Awaiting Payment</button>
+        <button class="admin-tab-btn" data-payment-filter="confirmed">Confirmed</button>
+        <button class="admin-tab-btn" data-payment-filter="completed">Completed</button>
+        <button class="admin-tab-btn" data-payment-filter="cancelled">Cancelled</button>
+      </div>
+
+      <div id="paymentsContainer">
+        <p class="empty-state">Loading orders...</p>
       </div>
     </section>
 
@@ -1368,6 +1390,7 @@
     const reportsSection = document.getElementById("reportsSection");
     const pendingReviewSection = document.getElementById("pendingReviewSection");
     const boostsSection = document.getElementById("boostsSection");
+    const paymentsSection = document.getElementById("paymentsSection");
     const contentSection = document.getElementById("contentSection");
     const settingsSection = document.getElementById("settingsSection");
 
@@ -1375,6 +1398,7 @@
     const reportsContainer = document.getElementById("reportsContainer");
     const pendingReviewContainer = document.getElementById("pendingReviewContainer");
     const boostsContainer = document.getElementById("boostsContainer");
+    const paymentsContainer = document.getElementById("paymentsContainer");
     const userSearchInput = document.getElementById("userSearchInput");
     const clearUserSearchBtn = document.getElementById("clearUserSearchBtn");
     const refreshBtn = document.getElementById("refreshBtn");
@@ -1384,6 +1408,7 @@
     const sectionButtons = document.querySelectorAll(".admin-section-tab-btn");
     const reportFilterButtons = document.querySelectorAll(".admin-tab-btn[data-filter]");
     const boostFilterButtons = document.querySelectorAll(".admin-tab-btn[data-boost-filter]");
+    const paymentFilterButtons = document.querySelectorAll(".admin-tab-btn[data-payment-filter]");
     const quickActionButtons = document.querySelectorAll("[data-goto-section]");
 
     const recentUsersList = document.getElementById("recentUsersList");
@@ -1426,6 +1451,7 @@
     let allOrdersCache = [];
     let currentReportFilter = "all";
     let currentBoostFilter = "pending";
+    let currentPaymentFilter = "all";
     let currentAdminUser = null;
     let currentCommissionPercent = 0;
 
@@ -1501,6 +1527,7 @@
       reportsSection.style.display = sectionName === "reports" ? "block" : "none";
       pendingReviewSection.style.display = sectionName === "pendingReview" ? "block" : "none";
       boostsSection.style.display = sectionName === "boosts" ? "block" : "none";
+      paymentsSection.style.display = sectionName === "payments" ? "block" : "none";
       contentSection.style.display = sectionName === "content" ? "block" : "none";
       settingsSection.style.display = sectionName === "settings" ? "block" : "none";
 
@@ -1863,6 +1890,7 @@
         renderReports();
         renderPendingReview();
         renderBoosts();
+        renderPayments();
         renderRecentActivity(allProductsCache, allOrdersCache);
         renderBreakdowns(allProductsCache, allOrdersCache);
         renderWeekChart(usersWeekChart, allUsers, "createdAt");
@@ -2548,6 +2576,171 @@
         });
 
         renderBoosts();
+      });
+    });
+
+    // ---------- PAYMENTS / ORDERS ----------
+    // Orders only ever showed as a 6-line "Recent Orders" preview in
+    // Overview with no way to filter, investigate, or manually fix a
+    // stuck transaction. This tab mirrors the Boost Requests pattern:
+    // filter by lifecycle status, see the MTN/Orange payment details,
+    // and let an admin manually correct a payment if the automatic
+    // polling (checkMomoPaymentStatus) never resolved it — e.g. the
+    // buyer closed the tab before the status finished updating.
+    function renderPayments() {
+      const filteredOrders = currentPaymentFilter === "all"
+        ? allOrdersCache
+        : allOrdersCache.filter((order) => (order.status || "pending") === currentPaymentFilter);
+
+      if (filteredOrders.length === 0) {
+        paymentsContainer.innerHTML =
+          '<p class="empty-state">No orders were found for this filter.</p>';
+        return;
+      }
+
+      const sortedOrders = [...filteredOrders].sort(
+        (a, b) => timestampToMilliseconds(b.createdAt) - timestampToMilliseconds(a.createdAt)
+      );
+
+      paymentsContainer.innerHTML = sortedOrders.map((order) => {
+        const orderStatus = order.status || "pending";
+        const paymentStatus = order.paymentStatus || "awaiting_payment";
+        const providerName = order.paymentMethod === "orange" ? "Orange Money" : "MTN Mobile Money";
+        const productLink = order.productId
+          ? `product-detail.html?id=${encodeURIComponent(order.productId)}`
+          : "";
+
+        const canMarkPaid = orderStatus === "pending" && paymentStatus !== "paid";
+        const canComplete = orderStatus === "confirmed";
+        const canCancel = orderStatus === "pending" || orderStatus === "confirmed";
+
+        return `
+          <article class="report-card">
+            <div class="report-top">
+              <div>
+                <span class="report-title">${safeText(order.productTitle || "Untitled Order")}</span>
+                <span class="report-reason">US$${safeText(order.priceUsd || "0")} | L$${safeText(order.priceLrd || "0")}</span>
+              </div>
+
+              <span class="report-status status-${safeText(orderStatus)}">
+                ${safeText(orderStatus)}
+              </span>
+            </div>
+
+            <div class="boost-payment-info">
+              Payment method: <strong>${safeText(providerName)}</strong>
+              <br>
+              Payment status: <strong>${safeText(paymentStatus)}</strong>
+              ${order.paymentPhone ? `<br>Paid from phone: <strong>${safeText(order.paymentPhone)}</strong>` : ""}
+              ${order.momoReferenceId ? `<br>MTN reference: <strong>${safeText(order.momoReferenceId)}</strong>` : ""}
+              ${order.protectionEnabled ? `<br>Buyer Protection: <strong>Enabled</strong>` : ""}
+            </div>
+
+            <div class="report-meta">
+              Placed: ${formatDate(order.createdAt)}
+              <br>
+              Buyer: ${safeText(order.buyerEmail || order.buyerId || "Unknown")}
+              <br>
+              Seller ID: ${safeText(order.sellerId || "Unknown")}
+              <br>
+              Order ID: ${safeText(order.id)}
+            </div>
+
+            <div class="report-actions">
+              ${productLink ? `
+                <a class="btn-view" href="${productLink}" target="_blank" rel="noopener noreferrer">
+                  View Listing
+                </a>
+              ` : ""}
+
+              ${canMarkPaid ? `
+                <button class="btn-confirm-boost" data-payment-id="${safeText(order.id)}" data-payment-action="markPaid">
+                  Mark As Paid
+                </button>
+              ` : ""}
+
+              ${canComplete ? `
+                <button class="btn-confirm-boost" data-payment-id="${safeText(order.id)}" data-payment-action="complete">
+                  Mark Completed
+                </button>
+              ` : ""}
+
+              ${canCancel ? `
+                <button class="btn-reject-boost" data-payment-id="${safeText(order.id)}" data-payment-action="cancel">
+                  Cancel &amp; Refund
+                </button>
+              ` : ""}
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-payment-action]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await handlePaymentAction(button.dataset.paymentId, button.dataset.paymentAction);
+        });
+      });
+    }
+
+    async function handlePaymentAction(orderId, action) {
+      const order = allOrdersCache.find((item) => item.id === orderId);
+
+      if (!order) {
+        alert("The selected order could not be found.");
+        return;
+      }
+
+      try {
+        if (action === "markPaid") {
+          if (!confirm(`Mark "${order.productTitle || "this order"}" as paid? Only do this after confirming the payment arrived.`)) return;
+
+          await updateDoc(doc(db, "orders", orderId), {
+            paymentStatus: "paid",
+            status: "confirmed"
+          });
+
+          order.paymentStatus = "paid";
+          order.status = "confirmed";
+        }
+
+        if (action === "complete") {
+          if (!confirm(`Mark "${order.productTitle || "this order"}" as completed?`)) return;
+
+          await updateDoc(doc(db, "orders", orderId), {
+            status: "completed"
+          });
+
+          order.status = "completed";
+        }
+
+        if (action === "cancel") {
+          if (!confirm(`Cancel and refund "${order.productTitle || "this order"}"? This cannot be undone here — refund the buyer manually via Mobile Money.`)) return;
+
+          await updateDoc(doc(db, "orders", orderId), {
+            status: "cancelled"
+          });
+
+          order.status = "cancelled";
+        }
+
+        renderPayments();
+        updateStatistics(allProductsCache, allOrdersCache);
+        renderRecentActivity(allProductsCache, allOrdersCache);
+        renderBreakdowns(allProductsCache, allOrdersCache);
+      } catch (error) {
+        alert("The action failed: " + error.message);
+      }
+    }
+
+    paymentFilterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        currentPaymentFilter = button.dataset.paymentFilter;
+
+        paymentFilterButtons.forEach((filterButton) => {
+          filterButton.classList.toggle("active", filterButton === button);
+        });
+
+        renderPayments();
       });
     });
 
