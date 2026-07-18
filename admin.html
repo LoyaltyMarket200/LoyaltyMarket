@@ -861,6 +861,122 @@
     }
   </style>
 
+  <style>
+    /* ---------- CONTENT MANAGEMENT ---------- */
+    .content-page-picker {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .content-page-btn {
+      padding: 9px 15px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .content-page-btn:hover { background: #e2e8f0; }
+
+    .content-page-btn.active {
+      border-color: #0d6e6e;
+      background: #0d6e6e;
+      color: white;
+    }
+
+    .content-field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .content-field label {
+      color: #334155;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .content-field textarea {
+      width: 100%;
+      min-height: 260px;
+      padding: 13px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      outline: none;
+      font-size: 13.5px;
+      line-height: 1.6;
+      font-family: inherit;
+      color: #111827;
+      resize: vertical;
+    }
+
+    .content-field textarea:focus,
+    .content-field input:focus { border-color: #0d6e6e; }
+
+    .faq-item-card {
+      margin-bottom: 14px;
+      padding: 15px;
+      border: 1px solid #e2e8f0;
+      border-radius: 11px;
+      background: #f8fafc;
+    }
+
+    .faq-item-card label {
+      color: #334155;
+      font-size: 12px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .faq-item-card input,
+    .faq-item-card textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-family: inherit;
+      color: #111827;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .faq-item-card textarea { min-height: 70px; resize: vertical; }
+
+    .faq-remove-btn {
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 7px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .faq-add-btn {
+      border: 1px dashed #0d6e6e;
+      background: #fff;
+      color: #0d6e6e;
+      padding: 10px 15px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .faq-add-btn:hover { background: #e3f2f2; }
+  </style>
+
 </head>
 
 <body>
@@ -924,6 +1040,10 @@
         <span id="pendingBoostsBadge" class="report-count-badge" aria-label="Pending boost requests"></span>
       </button>
 
+      <button class="admin-section-tab-btn" data-section="content">
+        Content
+      </button>
+
       <button class="admin-section-tab-btn" data-section="settings">
         Marketplace Settings
       </button>
@@ -959,6 +1079,7 @@
         <button class="quick-action-btn" type="button" data-goto-section="pendingReview"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg> Pending Review</button>
         <button class="quick-action-btn" type="button" data-goto-section="boosts"><svg class="icon" viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3Z"/></svg> View Boost Requests</button>
         <a class="quick-action-btn" href="dashboard.html"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Manage Listings</a>
+        <button class="quick-action-btn" type="button" data-goto-section="content"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg> Edit Site Content</button>
         <button class="quick-action-btn" type="button" data-goto-section="settings"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg> Marketplace Settings</button>
       </div>
 
@@ -1028,6 +1149,36 @@
 
       <div id="boostsContainer">
         <p class="empty-state">Loading boost requests...</p>
+      </div>
+    </section>
+
+    <section id="contentSection" style="display:none;">
+      <p style="color:#64748b; margin-top:0;">
+        Edit the text shown on the FAQ and legal/policy pages without touching
+        any code. Changes save to Firestore under <strong>content/&lt;pageId&gt;</strong>
+        and appear on the live site the next time someone visits that page.
+      </p>
+
+      <div class="content-page-picker" id="contentPagePicker">
+        <button type="button" class="content-page-btn active" data-content-page="faq">FAQ</button>
+        <button type="button" class="content-page-btn" data-content-page="terms">Terms &amp; Conditions</button>
+        <button type="button" class="content-page-btn" data-content-page="privacy">Privacy Policy</button>
+        <button type="button" class="content-page-btn" data-content-page="safety">Safety Tips</button>
+        <button type="button" class="content-page-btn" data-content-page="communityRules">Community Rules</button>
+        <button type="button" class="content-page-btn" data-content-page="prohibitedItems">Prohibited Items</button>
+      </div>
+
+      <div class="settings-card">
+        <div id="contentEditorArea">
+          <p class="empty-state">Loading content...</p>
+        </div>
+
+        <div class="settings-actions">
+          <span id="contentLastUpdated" class="settings-help"></span>
+          <button id="saveContentBtn" class="save-settings-btn" type="button">
+            Save Content
+          </button>
+        </div>
       </div>
     </section>
 
@@ -1217,6 +1368,7 @@
     const reportsSection = document.getElementById("reportsSection");
     const pendingReviewSection = document.getElementById("pendingReviewSection");
     const boostsSection = document.getElementById("boostsSection");
+    const contentSection = document.getElementById("contentSection");
     const settingsSection = document.getElementById("settingsSection");
 
     const usersContainer = document.getElementById("usersContainer");
@@ -1349,6 +1501,7 @@
       reportsSection.style.display = sectionName === "reports" ? "block" : "none";
       pendingReviewSection.style.display = sectionName === "pendingReview" ? "block" : "none";
       boostsSection.style.display = sectionName === "boosts" ? "block" : "none";
+      contentSection.style.display = sectionName === "content" ? "block" : "none";
       settingsSection.style.display = sectionName === "settings" ? "block" : "none";
 
       sectionButtons.forEach((button) => {
@@ -1357,6 +1510,10 @@
 
       if (sectionName === "settings") {
         loadMarketplaceSettings();
+      }
+
+      if (sectionName === "content") {
+        loadContentPage(currentContentPageId);
       }
     }
 
@@ -2393,6 +2550,189 @@
         renderBoosts();
       });
     });
+
+    // ---------- CONTENT MANAGEMENT ----------
+    // Pages whose text an admin can edit without touching code. FAQ is a
+    // list of question/answer pairs; the rest are one big text block.
+    // Each page is stored as its own document: content/<pageId>.
+    const CONTENT_PAGES = {
+      faq: { type: "faq", label: "FAQ", defaultTitle: "Frequently Asked Questions" },
+      terms: { type: "text", label: "Terms & Conditions", defaultTitle: "Terms & Conditions" },
+      privacy: { type: "text", label: "Privacy Policy", defaultTitle: "Privacy Policy" },
+      safety: { type: "text", label: "Safety Tips", defaultTitle: "Safety Tips" },
+      communityRules: { type: "text", label: "Community Rules", defaultTitle: "Community Rules" },
+      prohibitedItems: { type: "text", label: "Prohibited Items", defaultTitle: "Prohibited Items" }
+    };
+
+    let currentContentPageId = "faq";
+    let currentContentData = null;
+
+    const contentPagePicker = document.getElementById("contentPagePicker");
+    const contentPageButtons = document.querySelectorAll("[data-content-page]");
+    const contentEditorArea = document.getElementById("contentEditorArea");
+    const contentLastUpdated = document.getElementById("contentLastUpdated");
+    const saveContentBtn = document.getElementById("saveContentBtn");
+
+    contentPageButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        currentContentPageId = button.dataset.contentPage;
+
+        contentPageButtons.forEach((pageButton) => {
+          pageButton.classList.toggle("active", pageButton === button);
+        });
+
+        loadContentPage(currentContentPageId);
+      });
+    });
+
+    function renderTextEditor(data) {
+      contentEditorArea.innerHTML = `
+        <div class="content-field">
+          <label for="contentTitleInput">Page Title</label>
+          <input class="settings-input" id="contentTitleInput" type="text" value="${safeText(data.title)}">
+        </div>
+        <div class="content-field">
+          <label for="contentBodyInput">Page Text</label>
+          <textarea id="contentBodyInput">${safeText(data.body)}</textarea>
+        </div>
+      `;
+    }
+
+    function renderFaqEditor(data) {
+      const items = Array.isArray(data.items) && data.items.length
+        ? data.items
+        : [{ question: "", answer: "" }];
+
+      contentEditorArea.innerHTML = `
+        <div id="faqItemsList"></div>
+        <button type="button" class="faq-add-btn" id="faqAddBtn">+ Add Another Question</button>
+      `;
+
+      const faqItemsList = document.getElementById("faqItemsList");
+
+      function renderItems() {
+        faqItemsList.innerHTML = items.map((item, index) => `
+          <div class="faq-item-card">
+            <label>Question ${index + 1}</label>
+            <input type="text" class="faq-question-input" data-faq-index="${index}" value="${safeText(item.question)}" placeholder="e.g. How do I post a listing?">
+            <label>Answer</label>
+            <textarea class="faq-answer-input" data-faq-index="${index}" placeholder="Write the answer here...">${safeText(item.answer)}</textarea>
+            ${items.length > 1 ? `<button type="button" class="faq-remove-btn" data-faq-remove="${index}">Remove This Question</button>` : ""}
+          </div>
+        `).join("");
+
+        faqItemsList.querySelectorAll(".faq-question-input").forEach((input) => {
+          input.addEventListener("input", () => {
+            items[Number(input.dataset.faqIndex)].question = input.value;
+          });
+        });
+
+        faqItemsList.querySelectorAll(".faq-answer-input").forEach((textarea) => {
+          textarea.addEventListener("input", () => {
+            items[Number(textarea.dataset.faqIndex)].answer = textarea.value;
+          });
+        });
+
+        faqItemsList.querySelectorAll("[data-faq-remove]").forEach((button) => {
+          button.addEventListener("click", () => {
+            items.splice(Number(button.dataset.faqRemove), 1);
+            renderItems();
+          });
+        });
+      }
+
+      renderItems();
+
+      document.getElementById("faqAddBtn").addEventListener("click", () => {
+        items.push({ question: "", answer: "" });
+        renderItems();
+      });
+
+      currentContentData = { items };
+    }
+
+    async function loadContentPage(pageId) {
+      const pageConfig = CONTENT_PAGES[pageId];
+      if (!pageConfig) return;
+
+      clearMessages();
+      contentEditorArea.innerHTML = '<p class="empty-state">Loading content...</p>';
+      contentLastUpdated.textContent = "";
+
+      try {
+        const snapshot = await getDoc(doc(db, "content", pageId));
+        const existing = snapshot.exists() ? snapshot.data() : {};
+
+        if (pageConfig.type === "faq") {
+          const data = { items: Array.isArray(existing.items) ? existing.items : [] };
+          renderFaqEditor(data);
+        } else {
+          const data = {
+            title: existing.title || pageConfig.defaultTitle,
+            body: existing.body || ""
+          };
+          currentContentData = data;
+          renderTextEditor(data);
+        }
+
+        contentLastUpdated.textContent = existing.updatedAt
+          ? "Last updated: " + formatDate(existing.updatedAt)
+          : "Not saved yet — this page will use default text until you save.";
+      } catch (error) {
+        showError("Content could not load: " + error.message);
+        contentEditorArea.innerHTML = '<p class="empty-state">Could not load this page.</p>';
+      }
+    }
+
+    async function saveContentPage() {
+      const pageConfig = CONTENT_PAGES[currentContentPageId];
+      if (!pageConfig) return;
+
+      clearMessages();
+      saveContentBtn.disabled = true;
+      saveContentBtn.textContent = "Saving...";
+
+      try {
+        let payload;
+
+        if (pageConfig.type === "faq") {
+          const cleanedItems = (currentContentData?.items || [])
+            .map((item) => ({
+              question: (item.question || "").trim(),
+              answer: (item.answer || "").trim()
+            }))
+            .filter((item) => item.question || item.answer);
+
+          payload = {
+            items: cleanedItems,
+            updatedAt: Timestamp.now(),
+            updatedBy: currentAdminUser?.email || "admin"
+          };
+        } else {
+          const titleInput = document.getElementById("contentTitleInput");
+          const bodyInput = document.getElementById("contentBodyInput");
+
+          payload = {
+            title: titleInput.value.trim() || pageConfig.defaultTitle,
+            body: bodyInput.value,
+            updatedAt: Timestamp.now(),
+            updatedBy: currentAdminUser?.email || "admin"
+          };
+        }
+
+        await setDoc(doc(db, "content", currentContentPageId), payload, { merge: true });
+
+        contentLastUpdated.textContent = "Last updated: " + new Date().toLocaleString();
+        showSuccess(pageConfig.label + " saved successfully.");
+      } catch (error) {
+        showError("The content could not be saved. Check your Firestore security rules. " + error.message);
+      } finally {
+        saveContentBtn.disabled = false;
+        saveContentBtn.textContent = "Save Content";
+      }
+    }
+
+    saveContentBtn.addEventListener("click", saveContentPage);
 
     async function loadMarketplaceSettings() {
       clearMessages();
