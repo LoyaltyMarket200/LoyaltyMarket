@@ -947,6 +947,8 @@
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24" style="fill:currentColor;stroke:none;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2Z"/></svg></span><div class="stat-card-label">Featured Listings</div><div class="stat-card-value" id="statFeaturedListings">—</div></div>
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h6"/></svg></span><div class="stat-card-label">Total Orders</div><div class="stat-card-value" id="statTotalOrders">—</div></div>
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><div class="stat-card-label">Completed Sales</div><div class="stat-card-value" id="statCompletedOrders">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><div class="stat-card-label">Total Revenue</div><div class="stat-card-value" id="statTotalRevenue">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><div class="stat-card-label">Commission Earned</div><div class="stat-card-value" id="statCommissionEarned">—</div></div>
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3Z"/></svg></span><div class="stat-card-label">Active Boosted Listings</div><div class="stat-card-value" id="statActiveBoosts">—</div></div>
       </div>
 
@@ -1273,6 +1275,7 @@
     let currentReportFilter = "all";
     let currentBoostFilter = "pending";
     let currentAdminUser = null;
+    let currentCommissionPercent = 0;
 
     function safeText(value) {
       return String(value ?? "")
@@ -1420,6 +1423,14 @@
       document.getElementById("statTotalOrders").textContent = orders.length;
       document.getElementById("statCompletedOrders").textContent = completedOrders.length;
       document.getElementById("statActiveBoosts").textContent = activeBoosts.length;
+
+      const getOrderAmount = (order) => Number(order.priceUsd ?? 0);
+
+      const totalRevenue = completedOrders.reduce((sum, order) => sum + getOrderAmount(order), 0);
+      const commissionEarned = totalRevenue * (currentCommissionPercent / 100);
+
+      document.getElementById("statTotalRevenue").textContent = "US$" + totalRevenue.toFixed(2);
+      document.getElementById("statCommissionEarned").textContent = "US$" + commissionEarned.toFixed(2);
     }
 
     function renderRecentActivity(products, orders) {
@@ -2412,6 +2423,9 @@
           ? { ...defaults, ...snapshot.data() }
           : defaults;
 
+        currentCommissionPercent = Number(settings.commissionPercent ?? 0);
+        updateStatistics(allProductsCache, allOrdersCache);
+
         settingsInputs.marketplaceName.value = settings.marketplaceName || "";
         settingsInputs.supportEmail.value = settings.supportEmail || "";
         settingsInputs.supportPhone.value = settings.supportPhone || "";
@@ -2488,6 +2502,9 @@
         };
 
         await setDoc(doc(db, "settings", "marketplace"), payload, { merge: true });
+
+        currentCommissionPercent = commission;
+        updateStatistics(allProductsCache, allOrdersCache);
 
         settingsLastUpdated.textContent = "Last updated: " + new Date().toLocaleString();
         showSuccess("Marketplace settings saved successfully.");

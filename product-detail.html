@@ -425,21 +425,11 @@
         <a href="login.html" id="loginBtn" class="mp-action-link">Sign In</a>
         <a href="register.html" id="registerBtn" class="mp-action-link">Register</a>
 
-        <a
-          href="dashboard.html"
-          id="dashboardBtn"
-          class="mp-action-link"
-          style="display:none;"
-        >
+        <a href="dashboard.html" id="dashboardBtn" class="mp-action-link" style="display:none;">
           Dashboard
         </a>
 
-        <a
-          href="messages.html"
-          id="messagesBtn"
-          class="mp-action-link mp-messages-link"
-          style="display:none;"
-        >
+        <a href="messages.html" id="messagesBtn" class="mp-action-link mp-messages-link" style="display:none;">
           Messages
           <span id="unreadBadge" class="unread-badge">0</span>
         </a>
@@ -852,6 +842,7 @@ import {
   doc, getDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, query, where, limit, getDocs, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
 const DEFAULT_SETTINGS = {
   marketplaceName: "Waterside",
@@ -1144,6 +1135,47 @@ const providerButtons = document.querySelectorAll(".provider-btn");
 let selectedPaymentOption = "instant";
 let selectedProvider = "mtn";
 
+// Cloud Functions wired to the deployed MTN MoMo backend
+// (functions/index.js: requestMomoPayment, checkMomoPaymentStatus).
+const cloudFunctions = getFunctions();
+const requestMomoPaymentFn = httpsCallable(cloudFunctions, "requestMomoPayment");
+const checkMomoPaymentStatusFn = httpsCallable(cloudFunctions, "checkMomoPaymentStatus");
+
+let pollIntervalId = null;
+
+function stopPollingPaymentStatus() {
+  if (pollIntervalId) {
+    clearInterval(pollIntervalId);
+    pollIntervalId = null;
+  }
+}
+
+// Polls the Cloud Function every 5 seconds to check whether the buyer
+// has approved the Request-to-Pay prompt on their phone yet. Stops
+// itself once MTN reports a final SUCCESSFUL/FAILED result.
+function startPollingPaymentStatus(orderId) {
+  stopPollingPaymentStatus();
+
+  pollIntervalId = setInterval(async () => {
+    try {
+      const result = await checkMomoPaymentStatusFn({ orderId });
+      const status = result.data.status;
+
+      if (status === "SUCCESSFUL") {
+        stopPollingPaymentStatus();
+        checkoutPendingText.textContent = "Payment confirmed! Your order is complete.";
+      } else if (status === "FAILED") {
+        stopPollingPaymentStatus();
+        checkoutPendingText.textContent =
+          "The payment was not approved. You can close this and try again from your Orders page.";
+      }
+      // Any other status (e.g. PENDING) — keep polling silently.
+    } catch (error) {
+      console.error("Could not check payment status:", error.message);
+    }
+  }, 5000);
+}
+
 function openCheckoutModal() {
   if (!currentUser) {
     alert("Please log in to buy a product.");
@@ -1207,13 +1239,6 @@ async function submitCheckout() {
   checkoutSubmitBtn.textContent = "Sending Request...";
 
   try {
-    // NOTE: this creates the order with a real "awaiting_payment" state,
-    // but does not yet trigger an actual MTN/Orange Request-to-Pay —
-    // that call has to happen from a Cloud Function (server-side),
-    // not from this page, since it needs a secret API key. Once that
-    // Cloud Function exists, this is the exact point where it gets
-    // called, and this order's paymentStatus gets updated by its
-    // webhook response instead of staying "awaiting_payment" forever.
     const orderRef = await addDoc(collection(db, "orders"), {
       productId: productId,
       productTitle: loadedProductTitle,
@@ -1248,8 +1273,35 @@ async function submitCheckout() {
 
     const providerName = selectedProvider === "mtn" ? "MTN Mobile Money" : "Orange Money";
 
-    checkoutPendingText.textContent =
-      `A payment request has been sent to ${phone} via ${providerName}. Approve it there to complete your order.`;
+    // Only MTN Mobile Money is wired up to the real, deployed
+    // Request-to-Pay Cloud Function right now. Orange Money still
+    // needs its own integration, so those orders stay noted as
+    // "awaiting_payment" and the buyer is told to arrange payment
+    // with the seller directly for the time being.
+    if (selectedProvider === "mtn") {
+      try {
+        await requestMomoPaymentFn({
+          orderId: orderRef.id,
+          phone: phone,
+          amountUsd: loadedPriceUsd
+        });
+
+        checkoutPendingText.textContent =
+          `A payment request has been sent to ${phone} via ${providerName}. Approve it there to complete your order.`;
+
+        startPollingPaymentStatus(orderRef.id);
+
+      } catch (momoError) {
+        alert("Could not send the payment request: " + momoError.message);
+        checkoutSubmitBtn.disabled = false;
+        checkoutSubmitBtn.textContent = "Confirm & Pay";
+        return;
+      }
+    } else {
+      checkoutPendingText.textContent =
+        "Orange Money isn't fully wired up yet — your order was saved, " +
+        "but please arrange payment with the seller directly for now.";
+    }
 
     checkoutFormScreen.style.display = "none";
     checkoutPendingScreen.classList.add("open");
@@ -1265,6 +1317,7 @@ async function submitCheckout() {
 checkoutSubmitBtn.addEventListener("click", submitCheckout);
 
 checkoutPendingDoneBtn.addEventListener("click", () => {
+  stopPollingPaymentStatus();
   closeCheckoutModal();
   window.location.href = "orders.html";
 });
