@@ -1,148 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Account Settings - Waterside</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <meta name="theme-color" content="#0d6e6e">
-  <style>
-    *{box-sizing:border-box} body{margin:0;background:#f5f7fb;color:#0f172a}
-    .settings-navbar{min-height:78px;height:auto;padding:12px max(24px,5vw);background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(15,23,42,.06);justify-content:space-between;position:sticky;top:0;z-index:40}
-    .settings-navbar .logo-link img{width:48px;height:48px;object-fit:contain}.settings-navbar .logo-text{color:#0d6e6e;font-size:21px}
-    .settings-nav-actions{display:flex;align-items:center;gap:10px}.settings-nav-link,.settings-post-link{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;border:1px solid transparent}
-    .settings-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}.settings-nav-link:hover{color:#0d6e6e;border-color:#b0e5e3;background:#e6f5f5}
-    .settings-post-link{color:#fff;background:#ff6b4a;box-shadow:0 8px 18px rgba(249,115,22,.2)}
-    .settings-page{width:min(1240px,94%);margin:32px auto 70px;display:grid;grid-template-columns:285px minmax(0,1fr);gap:24px;align-items:start}
-    .settings-sidebar{position:sticky;top:104px;padding:24px;border:1px solid #e2e8f0;border-radius:20px;background:#fff;box-shadow:0 12px 30px rgba(15,23,42,.07)}
-    .settings-profile{text-align:center;padding-bottom:20px;border-bottom:1px solid #e2e8f0}.settings-avatar{width:78px;height:78px;margin:0 auto 12px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#d3f0ef,#e6f5f5);color:#0d6e6e;font-size:34px;border:4px solid #fff;box-shadow:0 8px 22px rgba(30,58,138,.15)}
-    .settings-profile h3{margin:0 0 6px;font-size:16px;word-break:break-word}.settings-profile p{margin:4px 0;color:#64748b;font-size:13px}.settings-profile .verified{color:#166534;font-weight:800}
-    .settings-menu{display:grid;gap:8px;margin-top:18px}.settings-menu a{display:block;padding:12px 13px;border-radius:10px;color:#334155;text-decoration:none;font-size:14px;font-weight:700}.settings-menu a:hover{background:#f8fafc;color:#0d6e6e}.settings-menu a.active{color:#fff;background:linear-gradient(135deg,#0d6e6e,#14b8a6);box-shadow:0 8px 18px rgba(37,99,235,.2)}
-    .settings-main{min-width:0}.settings-hero{padding:30px 32px;margin-bottom:20px;border-radius:22px;color:#fff;background:radial-gradient(circle at top right,rgba(255,255,255,.15),transparent 32%),linear-gradient(135deg,#0d6e6e,#14b8a6);box-shadow:0 18px 42px rgba(30,58,138,.2)}
-    .settings-kicker{margin-bottom:8px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.16em}.settings-hero h1{margin:0 0 8px;font-size:clamp(30px,4vw,42px);line-height:1.1}.settings-hero p{margin:0;color:#d3f0ef;font-size:15px;line-height:1.6}
-    .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.settings-card{padding:24px;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(15,23,42,.06)}.settings-card.full-width{grid-column:1/-1}
-    .settings-card h3{margin:0 0 6px;font-size:20px}.settings-card-subtitle{margin:0 0 20px;color:#64748b;font-size:13px;line-height:1.5}.settings-card label{display:block;margin:15px 0 7px;color:#1f2937;font-size:14px;font-weight:800}
-    .settings-card input{width:100%;min-height:49px;padding:13px 14px;border:1px solid #cbd5e1;border-radius:11px;font-size:15px;background:#fff}.settings-card input:focus{outline:none;border-color:#14b8a6;box-shadow:0 0 0 4px rgba(37,99,235,.10)}.settings-card input:disabled{color:#64748b;background:#f8fafc;cursor:not-allowed}
-    .settings-hint{margin-top:8px;color:#94a3b8;font-size:12px;line-height:1.5}.settings-submit-btn{width:100%;min-height:50px;margin-top:20px;border:none;border-radius:11px;color:#fff;background:linear-gradient(135deg,#0d6e6e,#14b8a6);font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 8px 18px rgba(37,99,235,.18)}
-    .settings-submit-btn:disabled{opacity:.65;cursor:not-allowed}.settings-message{display:none;margin-top:14px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.5}.settings-message.error{display:block;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.settings-message.success{display:block;background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
-    .security-list{display:grid;gap:12px;margin-top:18px}.security-item{display:flex;gap:11px;padding:14px;border:1px solid #e2e8f0;border-radius:13px;background:#f8fafc}.security-item span{font-size:22px}.security-item strong{display:block;margin-bottom:3px;font-size:14px}.security-item p{margin:0;color:#64748b;font-size:12px;line-height:1.5}
-    .danger-zone{border-color:#fecaca;background:#fffafa}.danger-zone h3{color:#b91c1c}.logout-btn{min-height:46px;margin-top:14px;padding:11px 20px;border:1px solid #dc2626;border-radius:10px;color:#dc2626;background:#fff;font-size:14px;font-weight:900;cursor:pointer}.logout-btn:hover{color:#fff;background:#dc2626}
-    .settings-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:30px max(24px,6vw)}
-    @media(max-width:960px){.settings-page{grid-template-columns:1fr}.settings-sidebar{position:static}.settings-menu{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:760px){.settings-navbar{align-items:stretch}.settings-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.settings-grid{grid-template-columns:1fr}.settings-card.full-width{grid-column:auto}.settings-page{width:94%;margin-top:20px}.settings-hero,.settings-card,.settings-sidebar{padding:20px 16px;border-radius:18px}.settings-footer{flex-direction:column;text-align:center}}
-    @media(max-width:520px){.settings-nav-actions,.settings-menu{grid-template-columns:1fr}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Settings - Waterside</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="footer.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<meta name="theme-color" content="#0d6e6e">
+<style>
+:root{--navy:#0d6e6e;--navy-soft:#e3f2f2;--orange:#ff6b4a;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.simple-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.simple-navbar .logo-link{display:flex;align-items:center;gap:9px;text-decoration:none}
+.simple-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
+.simple-navbar .logo-text{color:var(--navy);font-size:14px;font-weight:700}
+.simple-nav-actions{display:flex;align-items:center;gap:8px}
+.simple-nav-link{min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:#fff;text-decoration:none;font-size:12px;font-weight:500}
+.simple-nav-link:hover{border-color:var(--navy);color:var(--navy)}
+.page-shell{width:min(560px,92%);margin:26px auto 60px}
+.page-title{margin:0 0 18px;font-size:19px;font-weight:600;color:var(--ink)}
+.settings-card{padding:20px;border:1px solid var(--line);border-radius:14px;background:#fff;margin-bottom:16px}
+.settings-card h2{margin:0 0 4px;font-size:15px;font-weight:600;color:var(--ink)}
+.settings-card p.card-sub{margin:0 0 14px;color:var(--muted);font-size:12px}
+.settings-card label{display:block;margin-top:12px;margin-bottom:6px;font-size:13px;font-weight:500;color:var(--ink)}
+.settings-card input,.settings-card select{width:100%;min-height:44px;padding:10px 13px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:13.5px;color:var(--ink);box-sizing:border-box}
+.settings-card input:focus,.settings-card select:focus{outline:none;border-color:var(--navy)}
+.settings-card input:disabled{background:#f1f5f9;color:var(--muted)}
+.save-btn{width:100%;min-height:46px;margin-top:16px;border:none;border-radius:10px;background:var(--orange);color:#fff;font-weight:700;font-size:13.5px;cursor:pointer}
+.save-btn:hover{background:#e5522f}
+.save-btn:disabled{opacity:.6;cursor:not-allowed}
+.reset-btn{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-weight:600;font-size:13px;cursor:pointer}
+.reset-btn:hover{border-color:var(--navy);color:var(--navy)}
+.success-msg{display:none;margin-top:10px;padding:10px 13px;border-radius:8px;background:var(--navy-soft);color:var(--navy);font-size:12.5px}
+.success-msg.show{display:block}
+@media (max-width:700px){.simple-navbar{flex-wrap:wrap;gap:10px}.simple-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.page-shell{margin-top:16px}}
+</style>
 </head>
 <body>
-<header class="navbar settings-navbar">
-  <div class="logo"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text"><span class="lr-tag">LR</span>Waterside</span></a></div>
-  <div class="settings-nav-actions"><a href="index.html" class="settings-nav-link">Home</a><a href="dashboard.html" class="settings-nav-link">Dashboard</a><a href="sell.html" class="settings-post-link">Post An Ad</a></div>
+<header class="navbar simple-navbar">
+  <a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text">Waterside</span></a>
+  <div class="simple-nav-actions">
+    <a href="index.html" class="simple-nav-link">Home</a>
+    <a href="dashboard.html" class="simple-nav-link">Dashboard</a>
+    <a href="messages.html" class="simple-nav-link">Messages</a>
+  </div>
 </header>
 
-<main class="settings-page">
-  <aside class="settings-sidebar">
-    <div class="settings-profile"><div class="settings-avatar">👤</div><h3 id="userEmail">Loading...</h3><p class="verified">⭐ Verified Seller</p><p>Member since 2026</p></div>
-    <nav class="settings-menu">
-      <a href="dashboard.html">📋 My Listings</a>
-      <a href="wishlist.html">❤️ My Wishlist</a>
-      <a href="sell.html">➕ Post New Listing</a>
-      <a href="my-sales.html">💰 My Sales</a>
-      <a href="account-setting.html" class="active">⚙️ Account Settings</a>
-    </nav>
-  </aside>
+<section class="page-shell">
+  <h1 class="page-title">Account Settings</h1>
 
-  <section class="settings-main">
-    <div class="settings-hero"><p class="settings-kicker">ACCOUNT CENTER</p><h1>Manage Your Account</h1><p>Review your account information, update your password, and control your current session.</p></div>
-    <div class="settings-grid">
-      <article class="settings-card">
-        <h3>Account Information</h3><p class="settings-card-subtitle">Your current Waterside sign-in details.</p>
-        <label for="currentEmail">Email Address</label><input type="email" id="currentEmail" disabled><p class="settings-hint">Your email cannot be changed at this time.</p>
-        <div class="security-list">
-          <div class="security-item"><span>🛡️</span><div><strong>Secure Account</strong><p>Use a strong password that you do not use on other websites.</p></div></div>
-          <div class="security-item"><span>🔒</span><div><strong>Private Information</strong><p>Never share your password or verification codes with anyone.</p></div></div>
-        </div>
-      </article>
+  <div class="settings-card">
+    <h2>Your Details</h2>
+    <p class="card-sub">These details show on your profile and listings.</p>
 
-      <article class="settings-card">
-        <h3>Change Password</h3><p class="settings-card-subtitle">Confirm your current password before creating a new one.</p>
-        <form id="passwordForm">
-          <label for="currentPassword">Current Password</label><input type="password" id="currentPassword" required autocomplete="current-password">
-          <label for="newPassword">New Password</label><input type="password" id="newPassword" required minlength="6" autocomplete="new-password">
-          <label for="confirmPassword">Confirm New Password</label><input type="password" id="confirmPassword" required minlength="6" autocomplete="new-password">
-          <button type="submit" class="settings-submit-btn" id="updatePasswordBtn">Update Password</button>
-          <div id="settingsMessage" class="settings-message" role="status"></div>
-        </form>
-      </article>
+    <form id="profileForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required>
 
-      <article class="settings-card danger-zone full-width">
-        <h3>Session Controls</h3><p class="settings-card-subtitle">Logging out will end your current Waterside session on this browser.</p>
-        <button id="logoutSettingsBtn" class="logout-btn">Log Out</button>
-      </article>
-    </div>
-  </section>
-</main>
+      <label for="email">Email</label>
+      <input type="email" id="email" disabled>
 
-<footer class="footer settings-footer"><div><h2>🇱🇷 Waterside</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 Waterside. All Rights Reserved.</p></footer>
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone">
+
+      <label for="city">City</label>
+      <input type="text" id="city" placeholder="Monrovia">
+
+      <label for="county">County</label>
+      <input type="text" id="county" placeholder="Montserrado">
+
+      <div id="businessFieldsSection" style="display:none;">
+        <label for="businessName">Business Name</label>
+        <input type="text" id="businessName">
+
+        <label for="businessCategory">Business Category</label>
+        <input type="text" id="businessCategory">
+
+        <label for="businessCity">Business City</label>
+        <input type="text" id="businessCity">
+
+        <label for="businessCounty">Business County</label>
+        <input type="text" id="businessCounty">
+
+        <label for="businessPhone">Business Phone</label>
+        <input type="tel" id="businessPhone">
+
+        <label for="businessRegistrationNumber">Business Registration Number</label>
+        <input type="text" id="businessRegistrationNumber">
+      </div>
+
+      <button type="submit" class="save-btn" id="saveBtn">Save Changes</button>
+      <div class="success-msg" id="successMsg">Your details have been saved.</div>
+    </form>
+  </div>
+
+  <div class="settings-card">
+    <h2>Password</h2>
+    <p class="card-sub">We'll email you a link to reset your password.</p>
+    <button type="button" class="reset-btn" id="resetBtn">Send Password Reset Email</button>
+  </div>
+</section>
+
+<footer class="lm-footer" id="marketplaceFooter">
+  <div class="lm-footer-simple site-shell">
+    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+    <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
+  </div>
+</footer>
 
 <script type="module">
-import { auth } from "./firebase.js";
-import { onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-const currentEmail=document.getElementById("currentEmail");
-const userEmail=document.getElementById("userEmail");
-const passwordForm=document.getElementById("passwordForm");
-const logoutSettingsBtn=document.getElementById("logoutSettingsBtn");
-const updatePasswordBtn=document.getElementById("updatePasswordBtn");
-const settingsMessage=document.getElementById("settingsMessage");
-let currentUser=null;
+const profileForm = document.getElementById("profileForm");
+const saveBtn = document.getElementById("saveBtn");
+const successMsg = document.getElementById("successMsg");
+const resetBtn = document.getElementById("resetBtn");
+const businessFieldsSection = document.getElementById("businessFieldsSection");
 
-function showMessage(message,type){settingsMessage.textContent=message;settingsMessage.className="settings-message "+type}
-function friendlyAuthError(code){
-  const messages={
-    "auth/wrong-password":"The current password is incorrect.",
-    "auth/invalid-credential":"The current password is incorrect.",
-    "auth/weak-password":"The new password must contain at least 6 characters.",
-    "auth/requires-recent-login":"Please log out, log in again, and retry this change.",
-    "auth/network-request-failed":"Check your internet connection and try again."
-  };
-  return messages[code]||"Could not update your password. Please try again.";
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const cityInput = document.getElementById("city");
+const countyInput = document.getElementById("county");
+const businessNameInput = document.getElementById("businessName");
+const businessCategoryInput = document.getElementById("businessCategory");
+const businessCityInput = document.getElementById("businessCity");
+const businessCountyInput = document.getElementById("businessCounty");
+const businessPhoneInput = document.getElementById("businessPhone");
+const businessRegistrationNumberInput = document.getElementById("businessRegistrationNumber");
+
+let currentUser = null;
+
+async function loadProfile(){
+  emailInput.value = currentUser.email || "";
+
+  try{
+    const userSnap = await getDoc(doc(db,"users",currentUser.uid));
+    if(!userSnap.exists()) return;
+
+    const data = userSnap.data();
+    nameInput.value = data.name || "";
+    phoneInput.value = data.phone || "";
+    cityInput.value = data.city || "";
+    countyInput.value = data.county || "";
+
+    if((data.accountType||"personal")==="business"){
+      businessFieldsSection.style.display = "block";
+      businessNameInput.value = data.businessName || "";
+      businessCategoryInput.value = data.businessCategory || "";
+      businessCityInput.value = data.businessCity || "";
+      businessCountyInput.value = data.businessCounty || "";
+      businessPhoneInput.value = data.businessPhone || "";
+      businessRegistrationNumberInput.value = data.businessRegistrationNumber || "";
+    }
+  }catch(error){
+    console.error("Could not load profile:", error.message);
+  }
 }
 
-onAuthStateChanged(auth,(user)=>{
-  if(user){currentUser=user;currentEmail.value=user.email||"";userEmail.textContent=user.email||"Waterside User"}
-  else{window.location.href="login.html"}
-});
-
-passwordForm.addEventListener("submit",async(event)=>{
+profileForm.addEventListener("submit", async (event)=>{
   event.preventDefault();
-  if(!currentUser)return;
-  const currentPassword=document.getElementById("currentPassword").value;
-  const newPassword=document.getElementById("newPassword").value;
-  const confirmPassword=document.getElementById("confirmPassword").value;
-  settingsMessage.className="settings-message";settingsMessage.textContent="";
-  if(newPassword!==confirmPassword){showMessage("The new passwords do not match.","error");return}
-  if(newPassword.length<6){showMessage("The new password must contain at least 6 characters.","error");return}
-  updatePasswordBtn.disabled=true;updatePasswordBtn.textContent="Updating Password...";
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Saving...";
+  successMsg.classList.remove("show");
+
   try{
-    const credential=EmailAuthProvider.credential(currentUser.email,currentPassword);
-    await reauthenticateWithCredential(currentUser,credential);
-    await updatePassword(currentUser,newPassword);
-    showMessage("Password updated successfully.","success");
-    passwordForm.reset();
-  }catch(error){showMessage(friendlyAuthError(error.code),"error")}
-  finally{updatePasswordBtn.disabled=false;updatePasswordBtn.textContent="Update Password"}
+    const changes = {
+      name: nameInput.value.trim(),
+      phone: phoneInput.value.trim(),
+      city: cityInput.value.trim(),
+      county: countyInput.value.trim()
+    };
+
+    if(businessFieldsSection.style.display !== "none"){
+      changes.businessName = businessNameInput.value.trim();
+      changes.businessCategory = businessCategoryInput.value.trim();
+      changes.businessCity = businessCityInput.value.trim();
+      changes.businessCounty = businessCountyInput.value.trim();
+      changes.businessPhone = businessPhoneInput.value.trim();
+      changes.businessRegistrationNumber = businessRegistrationNumberInput.value.trim();
+    }
+
+    await updateDoc(doc(db,"users",currentUser.uid), changes);
+
+    successMsg.classList.add("show");
+  }catch(error){
+    alert("Could not save your changes: " + error.message);
+  }finally{
+    saveBtn.disabled = false;
+    saveBtn.textContent = "Save Changes";
+  }
 });
 
-logoutSettingsBtn.addEventListener("click",async()=>{
-  try{await signOut(auth);window.location.href="login.html"}
-  catch(error){alert("Could not log out: "+error.message)}
+resetBtn.addEventListener("click", async ()=>{
+  if(!currentUser?.email) return;
+  if(!confirm(`Send a password-reset email to ${currentUser.email}?`)) return;
+
+  try{
+    await sendPasswordResetEmail(auth, currentUser.email);
+    alert("Password-reset email sent to " + currentUser.email);
+  }catch(error){
+    alert("Could not send reset email: " + error.message);
+  }
+});
+
+onAuthStateChanged(auth,(user)=>{
+  if(!user){ alert("Please log in to view your account settings."); window.location.href="login.html"; return; }
+  currentUser = user;
+  loadProfile();
 });
 </script>
-
-<script>
-if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch((error)=>console.log("Service worker registration failed:",error))}
-</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{});}</script>
 </body>
 </html>
