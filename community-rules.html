@@ -2,737 +2,255 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Community Rules - Waterside</title>
-
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
   <link rel="manifest" href="manifest.json">
-
-  <link
-    rel="icon"
-    type="image/png"
-    sizes="512x512"
-    href="icons/icon-512.png"
-  >
-
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#0d6e6e">
 
   <style>
-    * {
-      box-sizing: border-box;
+    :root {
+      --navy: #0d6e6e;
+      --navy-soft: #e3f2f2;
+      --orange: #ff6b4a;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --bg: #f7f8fa;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      background: #f3f6fb;
-      color: #16403f;
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.7;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
-    .rules-navbar {
+    .simple-navbar {
+      min-height: 50px;
+      height: auto;
+      padding: 7px max(20px, 4vw);
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 1000;
-      min-height: 68px;
-      padding: 12px 5%;
-      background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      display: flex;
+      z-index: 40;
+    }
+
+    .simple-navbar .logo-link { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+    .simple-navbar .logo-link img { width: 26px; height: 26px; object-fit: contain; }
+    .simple-navbar .logo-text { color: var(--navy); font-size: 14px; font-weight: 700; }
+
+    .simple-nav-actions { display: flex; align-items: center; gap: 8px; }
+
+    .simple-nav-link {
+      min-height: 31px;
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .rules-logo {
-      color: #0d6e6e;
-      font-size: 20px;
-      font-weight: 800;
+      justify-content: center;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      background: #fff;
       text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .rules-logo span {
-      color: #d97706;
-    }
-
-    .rules-nav-links {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .rules-nav-links a {
-      padding: 9px 14px;
-      border-radius: 7px;
-      color: #334155;
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .rules-nav-links a:hover {
-      background: #e6f5f5;
-      color: #14b8a6;
-    }
-
-    .rules-nav-links .post-ad-button {
-      background: #ff6b4a;
-      color: #ffffff;
-    }
-
-    .rules-nav-links .post-ad-button:hover {
-      background: #e5522f;
-      color: #ffffff;
-    }
-
-    .rules-hero {
-      max-width: 1100px;
-      margin: 35px auto 20px;
-      padding: 42px 40px;
-      border-radius: 0 0 18px 18px;
-      background: linear-gradient(135deg, #0d6e6e, #14b8a6);
-      color: #ffffff;
-      box-shadow: 0 10px 28px rgba(30, 58, 138, 0.18);
-    }
-
-    .rules-eyebrow {
-      margin: 0 0 3px;
       font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      opacity: 0.85;
+      font-weight: 500;
     }
 
-    .rules-hero h1 {
-      margin: 0 0 8px;
-      font-size: 42px;
-      line-height: 1.15;
+    .simple-nav-link:hover { border-color: var(--navy); color: var(--navy); }
+
+    .content-page {
+      width: min(760px, 92%);
+      margin: 26px auto 60px;
     }
 
-    .rules-hero p {
-      max-width: 780px;
-      margin: 4px 0;
-      font-size: 14px;
-      opacity: 0.95;
+    .content-page-title {
+      margin: 0 0 6px;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--ink);
     }
 
-    .rules-layout {
-      max-width: 1100px;
-      margin: 20px auto 55px;
-      padding: 0 15px;
-      display: grid;
-      grid-template-columns: 230px minmax(0, 1fr);
-      gap: 22px;
-      align-items: start;
+    .content-page-updated {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 12px;
     }
 
-    .rules-sidebar {
-      position: sticky;
-      top: 88px;
-      padding: 20px;
-      border: 1px solid #e2e8f0;
+    .content-body-card {
+      padding: 22px;
+      border: 1px solid var(--line);
       border-radius: 14px;
-      background: #ffffff;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
-    }
-
-    .rules-sidebar h3 {
-      margin: 0 0 12px;
-      color: #1e293b;
-      font-size: 15px;
-    }
-
-    .rules-sidebar a {
-      display: block;
-      padding: 6px 3px;
-      color: #475569;
-      font-size: 12px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .rules-sidebar a:hover {
-      color: #14b8a6;
-      transform: translateX(3px);
-    }
-
-    .rules-content {
-      padding: 12px 30px 30px;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      background: #ffffff;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
-    }
-
-    .rules-intro {
-      margin: 8px 0 20px;
-      padding: 18px;
-      border-left: 4px solid #14b8a6;
-      border-radius: 9px;
-      background: #e6f5f5;
-      color: #334155;
+      background: #fff;
+      color: var(--ink);
       font-size: 14px;
+      line-height: 1.75;
+      white-space: pre-line;
     }
 
-    .rules-section {
-      padding: 22px 0;
-      border-bottom: 1px solid #e2e8f0;
-      scroll-margin-top: 95px;
+    .content-empty {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      background: #fff;
     }
 
-    .rules-section:last-of-type {
-      border-bottom: none;
-    }
-
-    .rules-section h2 {
-      margin: 0 0 8px;
-      color: #1e293b;
-      font-size: 22px;
-    }
-
-    .rules-section h3 {
-      margin: 18px 0 5px;
-      color: #334155;
-      font-size: 16px;
-    }
-
-    .rules-section p,
-    .rules-section li {
-      color: #4a6363;
-      font-size: 14px;
-    }
-
-    .rules-section ul {
-      margin: 10px 0;
-      padding-left: 22px;
-    }
-
-    .rules-section li {
-      margin-bottom: 7px;
-    }
-
-    .good-box {
-      margin-top: 14px;
-      padding: 16px;
-      border: 1px solid #bbf7d0;
-      border-radius: 10px;
-      background: #f0fdf4;
-      color: #166534;
-      font-size: 14px;
-    }
-
-    .warning-box {
-      margin-top: 14px;
-      padding: 16px;
-      border: 1px solid #fde68a;
-      border-radius: 10px;
-      background: #fffbeb;
-      color: #854d0e;
-      font-size: 14px;
-    }
-
-    .danger-box {
-      margin-top: 14px;
-      padding: 16px;
-      border: 1px solid #fecaca;
-      border-radius: 10px;
-      background: #fef2f2;
-      color: #991b1b;
-      font-size: 14px;
-    }
-
-    .report-box {
-      margin-top: 14px;
-      padding: 16px;
-      border: 1px solid #b0e5e3;
-      border-radius: 10px;
-      background: #e6f5f5;
-    }
-
-    .report-box strong {
-      color: #0d6e6e;
-    }
-
-    .report-box a {
-      color: #14b8a6;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .rules-footer {
-      padding: 28px 5%;
-      background: #0a2626;
-      color: #cbd5e1;
-    }
-
-    .rules-footer-inner {
-      max-width: 1100px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 25px;
-    }
-
-    .rules-footer-brand {
-      margin: 0;
-      color: #4fd1c5;
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .rules-footer-tagline {
-      margin: 4px 0 0;
-      font-size: 13px;
-    }
-
-    .rules-footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
-    .rules-footer-links a {
-      color: #cbd5e1;
-      font-size: 13px;
-      text-decoration: none;
-    }
-
-    .rules-footer-links a:hover {
-      color: #ffffff;
-    }
-
-    .rules-copyright {
-      margin: 15px auto 0;
-      max-width: 1100px;
-      padding-top: 15px;
-      border-top: 1px solid #334155;
-      color: #94a3b8;
-      font-size: 12px;
-      text-align: right;
-    }
-
-    @media (max-width: 800px) {
-      .rules-navbar {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .rules-nav-links {
-        width: 100%;
-        flex-wrap: wrap;
-      }
-
-      .rules-hero {
-        margin-top: 20px;
-        padding: 30px 22px;
-      }
-
-      .rules-hero h1 {
-        font-size: 32px;
-      }
-
-      .rules-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .rules-sidebar {
-        position: static;
-      }
-
-      .rules-content {
-        padding: 10px 20px 25px;
-      }
-
-      .rules-footer-inner {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .rules-copyright {
-        text-align: left;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .rules-nav-links a {
-        padding: 8px 10px;
-        font-size: 12px;
-      }
-
-      .rules-hero h1 {
-        font-size: 28px;
-      }
-
-      .rules-section h2 {
-        font-size: 20px;
-      }
+    @media (max-width: 700px) {
+      .simple-navbar { flex-wrap: wrap; gap: 10px; }
+      .simple-nav-actions { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .content-page { margin-top: 16px; }
+      .content-body-card { padding: 16px; }
     }
   </style>
 </head>
 
 <body>
+<header class="navbar simple-navbar">
+  <a href="index.html" class="logo-link">
+    <img src="icons/icon-512.png" alt="Waterside">
+    <span class="logo-text">Waterside</span>
+  </a>
 
-  <header class="rules-navbar">
-    <a href="index.html" class="rules-logo">
-      <span>LR</span> Waterside
-    </a>
+  <div class="simple-nav-actions">
+    <a href="index.html" class="simple-nav-link">Home</a>
+    <a href="dashboard.html" class="simple-nav-link">Dashboard</a>
+    <a href="contact.html" class="simple-nav-link">Contact Us</a>
+  </div>
+</header>
 
-    <nav class="rules-nav-links">
-      <a href="index.html">Home</a>
-      <a href="help.html">Help</a>
-      <a href="sell.html" class="post-ad-button">Post An Ad</a>
-    </nav>
-  </header>
+<section class="content-page">
+  <h1 class="content-page-title" id="pageTitle">Community Rules</h1>
+  <p class="content-page-updated" id="pageUpdated"></p>
 
-  <section class="rules-hero">
-    <p class="rules-eyebrow">Waterside Community Standards</p>
+  <div id="pageBody">
+    <p class="content-empty">Loading...</p>
+  </div>
+</section>
 
-    <h1>Community Rules</h1>
-
-    <p>
-      These rules help keep Waterside respectful, trustworthy, useful,
-      and safe for buyers, sellers, businesses, and service providers.
-    </p>
-  </section>
-
-  <main class="rules-layout">
-
-    <aside class="rules-sidebar">
-      <h3>On This Page</h3>
-
-      <a href="#respect">1. Respect Other Users</a>
-      <a href="#honest-listings">2. Honest Listings</a>
-      <a href="#communication">3. Responsible Communication</a>
-      <a href="#spam">4. No Spam</a>
-      <a href="#fraud">5. No Fraud or Scams</a>
-      <a href="#identity">6. Identity and Impersonation</a>
-      <a href="#harassment">7. Harassment and Threats</a>
-      <a href="#illegal">8. Illegal Activity</a>
-      <a href="#content">9. Appropriate Content</a>
-      <a href="#reviews">10. Reviews and Feedback</a>
-      <a href="#enforcement">11. Enforcement</a>
-      <a href="#reporting">12. Reporting Violations</a>
-    </aside>
-
-    <article class="rules-content">
-
-      <div class="rules-intro">
-        Everyone using Waterside is expected to act honestly, respectfully,
-        and responsibly. These Community Rules apply to listings, profiles,
-        photographs, messages, reviews, reports, and all other activity on
-        Waterside.
-      </div>
-
-      <section id="respect" class="rules-section">
-        <h2>1. Respect Other Users</h2>
-
-        <p>
-          Treat buyers, sellers, service providers, businesses, and support
-          staff with respect.
-        </p>
-
-        <ul>
-          <li>Use respectful and professional language.</li>
-          <li>Allow others enough time to respond.</li>
-          <li>Do not insult, humiliate, intimidate, or provoke other users.</li>
-          <li>Respect another person's decision not to complete a transaction.</li>
-          <li>Do not discriminate against users unfairly.</li>
-          <li>Do not publish another person's private information.</li>
-        </ul>
-
-        <div class="good-box">
-          A respectful marketplace creates better opportunities and stronger
-          trust between buyers and sellers.
-        </div>
-      </section>
-
-      <section id="honest-listings" class="rules-section">
-        <h2>2. Create Honest and Accurate Listings</h2>
-
-        <p>
-          Advertisements must truthfully describe the product, service,
-          property, vehicle, job, or business being offered.
-        </p>
-
-        <ul>
-          <li>Use accurate titles, descriptions, prices, and locations.</li>
-          <li>Upload photographs of the actual item whenever possible.</li>
-          <li>Disclose defects, damage, missing parts, or important limitations.</li>
-          <li>Select the correct category and condition.</li>
-          <li>State whether the price is in USD or Liberian Dollars.</li>
-          <li>Do not advertise items that are unavailable.</li>
-          <li>Do not copy another user's listing without permission.</li>
-          <li>Remove or update listings after items are sold.</li>
-        </ul>
-
-        <div class="warning-box">
-          Misleading descriptions, fake prices, copied photographs, and hidden
-          defects may result in listing removal or account restrictions.
-        </div>
-      </section>
-
-      <section id="communication" class="rules-section">
-        <h2>3. Communicate Responsibly</h2>
-
-        <ul>
-          <li>Ask clear and relevant questions.</li>
-          <li>Do not pressure another user into making a payment.</li>
-          <li>Do not send abusive or inappropriate messages.</li>
-          <li>Do not repeatedly contact someone who asked you to stop.</li>
-          <li>Do not request passwords, PINs, or verification codes.</li>
-          <li>Do not send suspicious links or files.</li>
-          <li>Do not use messages to promote unrelated businesses.</li>
-        </ul>
-
-        <div class="good-box">
-          Keep important discussions about price, condition, meeting location,
-          and payment clear and easy to understand.
-        </div>
-      </section>
-
-      <section id="spam" class="rules-section">
-        <h2>4. No Spam or Manipulation</h2>
-
-        <p>
-          Waterside must not be used to flood users or the platform with
-          repetitive, misleading, or irrelevant content.
-        </p>
-
-        <ul>
-          <li>Do not post the same advertisement repeatedly.</li>
-          <li>Do not create duplicate accounts to increase visibility.</li>
-          <li>Do not use false keywords to appear in unrelated searches.</li>
-          <li>Do not send mass promotional messages.</li>
-          <li>Do not manipulate views, favorites, reviews, or reports.</li>
-          <li>Do not create fake activity to make a listing appear popular.</li>
-        </ul>
-      </section>
-
-      <section id="fraud" class="rules-section">
-        <h2>5. No Fraud, Scams, or Deceptive Conduct</h2>
-
-        <p>
-          Any attempt to steal money, property, accounts, personal information,
-          or access credentials is prohibited.
-        </p>
-
-        <ul>
-          <li>Do not send fake payment confirmations.</li>
-          <li>Do not claim payment was made when it was not.</li>
-          <li>Do not advertise items you do not own or control.</li>
-          <li>Do not request deposits using false information.</li>
-          <li>Do not use fake identities, receipts, documents, or addresses.</li>
-          <li>Do not create fake job opportunities.</li>
-          <li>Do not trick users into visiting fake websites.</li>
-          <li>Do not participate in refund, overpayment, or delivery scams.</li>
-        </ul>
-
-        <div class="danger-box">
-          Fraudulent activity may lead to immediate account suspension,
-          permanent removal, and reporting to the appropriate authorities.
-        </div>
-      </section>
-
-      <section id="identity" class="rules-section">
-        <h2>6. Identity, Accounts, and Impersonation</h2>
-
-        <ul>
-          <li>Provide accurate account information.</li>
-          <li>Do not impersonate another person, business, or organization.</li>
-          <li>Do not pretend to represent Waterside.</li>
-          <li>Do not use another person's photograph without permission.</li>
-          <li>Do not create accounts to avoid suspension.</li>
-          <li>Do not buy, sell, or transfer user accounts.</li>
-          <li>Protect your password and account access.</li>
-        </ul>
-
-        <div class="warning-box">
-          Verification badges must not be copied, edited, or falsely displayed.
-          Only Waterside may approve official verification.
-        </div>
-      </section>
-
-      <section id="harassment" class="rules-section">
-        <h2>7. Harassment, Threats, and Harmful Conduct</h2>
-
-        <p>
-          Waterside does not allow behavior that threatens, intimidates,
-          humiliates, targets, or endangers another person.
-        </p>
-
-        <ul>
-          <li>Do not threaten violence or property damage.</li>
-          <li>Do not sexually harass another user.</li>
-          <li>Do not send hateful or degrading messages.</li>
-          <li>Do not stalk or repeatedly contact another user.</li>
-          <li>Do not encourage violence or self-harm.</li>
-          <li>Do not publish private photographs or information without consent.</li>
-          <li>Do not use Waterside to organize harmful activity.</li>
-        </ul>
-
-        <div class="danger-box">
-          Serious threats or immediate danger should be reported to the
-          appropriate local authorities.
-        </div>
-      </section>
-
-      <section id="illegal" class="rules-section">
-        <h2>8. No Illegal or Dangerous Activity</h2>
-
-        <p>
-          Users must follow applicable laws and may not use Waterside to
-          support illegal or dangerous transactions.
-        </p>
-
-        <ul>
-          <li>Do not advertise stolen property.</li>
-          <li>Do not advertise counterfeit goods.</li>
-          <li>Do not sell illegal drugs or controlled substances.</li>
-          <li>Do not offer fraudulent or forged documents.</li>
-          <li>Do not advertise prohibited weapons or dangerous materials.</li>
-          <li>Do not promote human trafficking or exploitation.</li>
-          <li>Do not advertise services that involve illegal conduct.</li>
-          <li>Do not assist another user in breaking the law.</li>
-        </ul>
-      </section>
-
-      <section id="content" class="rules-section">
-        <h2>9. Appropriate Content</h2>
-
-        <p>
-          Content must be relevant to a legitimate marketplace purpose and
-          suitable for a general audience.
-        </p>
-
-        <ul>
-          <li>Do not upload pornography or sexually explicit content.</li>
-          <li>Do not upload graphic violence.</li>
-          <li>Do not post hateful or discriminatory content.</li>
-          <li>Do not publish personal identification documents publicly.</li>
-          <li>Do not use copyrighted images without permission.</li>
-          <li>Do not post unrelated political or religious arguments.</li>
-          <li>Do not upload malware, harmful code, or suspicious files.</li>
-        </ul>
-
-        <div class="warning-box">
-          Product images should clearly show the advertised item and must not
-          be used to deceive buyers.
-        </div>
-      </section>
-
-      <section id="reviews" class="rules-section">
-        <h2>10. Reviews, Ratings, and Feedback</h2>
-
-        <ul>
-          <li>Submit honest feedback based on real experiences.</li>
-          <li>Do not create fake positive or negative reviews.</li>
-          <li>Do not exchange money or gifts for dishonest reviews.</li>
-          <li>Do not review your own account or business.</li>
-          <li>Do not include threats or private information in reviews.</li>
-          <li>Do not pressure another user to remove truthful feedback.</li>
-        </ul>
-
-        <div class="good-box">
-          Fair reviews help users make more informed marketplace decisions.
-        </div>
-      </section>
-
-      <section id="enforcement" class="rules-section">
-        <h2>11. Enforcement of Community Rules</h2>
-
-        <p>
-          Waterside may review reports, listings, messages, accounts, and
-          other relevant information when investigating suspected violations.
-        </p>
-
-        <p>
-          Depending on the situation, Waterside may:
-        </p>
-
-        <ul>
-          <li>Request additional information.</li>
-          <li>Edit, limit, reject, or remove a listing.</li>
-          <li>Issue a warning.</li>
-          <li>Temporarily restrict account features.</li>
-          <li>Suspend an account.</li>
-          <li>Permanently remove an account.</li>
-          <li>Preserve relevant records.</li>
-          <li>Cooperate with lawful requests from authorities.</li>
-        </ul>
-
-        <div class="warning-box">
-          Enforcement decisions may consider the seriousness, frequency, risk,
-          evidence, and previous account history connected to a violation.
-        </div>
-      </section>
-
-      <section id="reporting" class="rules-section">
-        <h2>12. Report Community Rule Violations</h2>
-
-        <p>
-          Report suspicious listings, abusive messages, fraud, impersonation,
-          harassment, illegal content, fake accounts, or other violations.
-        </p>
-
-        <p>
-          Provide useful information such as usernames, listing titles,
-          screenshots, payment records, dates, and a clear explanation.
-        </p>
-
-        <div class="report-box">
-          <strong>Waterside Support</strong><br>
-
-          Email:
-          <a href="mailto:support@loyaltymarket.com">
-            support@loyaltymarket.com
-          </a>
-          <br>
-
-          Location: Liberia
-        </div>
-      </section>
-
-    </article>
-  </main>
-
-  <footer class="rules-footer">
-    <div class="rules-footer-inner">
-
-      <div>
-        <p class="rules-footer-brand">Waterside</p>
-
-        <p class="rules-footer-tagline">
-          We Get Market, We Get Buyer.
-        </p>
-      </div>
-
-      <div class="rules-footer-links">
-        <a href="index.html">Home</a>
-        <a href="terms.html">Terms of Use</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="safety.html">Safety Tips</a>
-        <a href="community-rules.html">Community Rules</a>
-        <a href="help.html">Help</a>
-      </div>
-
+<footer class="lm-footer" id="marketplaceFooter">
+  <div class="lm-footer-simple site-shell">
+    <div class="lm-footer-app-badges">
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="M16.7 12.4c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.9-.8-3.1-.8c-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.9.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.6-3.1Z"/><path d="M14.4 5.1c.6-.8 1.1-1.9 1-3-.9.1-2 .6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2-.5 2.7-1.3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>App Store</strong></span>
+      </span>
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="m4 3 16 9-16 9V3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>Google Play</strong></span>
+      </span>
     </div>
 
-    <p class="rules-copyright">
-      © 2026 Waterside. All Rights Reserved.
-    </p>
-  </footer>
+    <nav class="lm-footer-link-row">
+      <a href="#">About Waterside</a>
+      <a href="contact.html">We Are Hiring!</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="#">Billing Policy</a>
+      <a href="safety.html">Waterside Tips</a>
+    </nav>
 
+    <nav class="lm-footer-link-row">
+      <a href="#">Waterside on FB</a>
+      <a href="#">Our Instagram</a>
+      <a href="#">Our YouTube</a>
+      <a href="#">Our Twitter</a>
+    </nav>
+
+    <nav class="lm-footer-link-row">
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="prohibited-items.html">Prohibited Items</a>
+      <a href="community-rules.html">Community Rules</a>
+      <a href="report-problem.html">Report A Problem</a>
+    </nav>
+
+    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+    <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
+  </div>
+</footer>
+
+<script type="module">
+  import { db } from "./firebase.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  const CONTENT_ID = "communityRules";
+  const DEFAULT_TITLE = "Community Rules";
+  const DEFAULT_BODY = `To keep Waterside a trustworthy place to buy and sell, everyone is expected to follow these rules.
+
+1. Be honest. Describe your items accurately and use real photos of the actual item you are selling.
+
+2. Be respectful. Harassment, threats, or abusive language toward other users will not be tolerated.
+
+3. No fake or duplicate listings. Posting the same item repeatedly, or listing items you do not actually have, is not allowed.
+
+4. No spam. Do not use listings, messages, or your profile to advertise unrelated services or send unsolicited links.
+
+5. Keep transactions on Waterside where possible, and never send payment before agreeing on the details of a sale.
+
+6. Report anything suspicious. If you see a listing or message that looks like a scam, use the Report button so our team can review it.
+
+Accounts that repeatedly break these rules may be suspended or permanently removed from Waterside.
+
+This is a placeholder default. An administrator can update this text at any time from the admin dashboard.`;
+
+  const pageTitle = document.getElementById("pageTitle");
+  const pageUpdated = document.getElementById("pageUpdated");
+  const pageBody = document.getElementById("pageBody");
+
+  function safeText(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function formatDate(timestamp) {
+    if (!timestamp || !timestamp.seconds) return "";
+    return new Date(timestamp.seconds * 1000).toLocaleDateString(undefined, {
+      month: "short", day: "numeric", year: "numeric"
+    });
+  }
+
+  async function loadContent() {
+    try {
+      const snapshot = await getDoc(doc(db, "content", CONTENT_ID));
+      const data = snapshot.exists() ? snapshot.data() : {};
+
+      const title = data.title || DEFAULT_TITLE;
+      const body = data.body || DEFAULT_BODY;
+
+      pageTitle.textContent = title;
+      document.title = title + " - Waterside";
+      pageBody.innerHTML = `<div class="content-body-card">${safeText(body)}</div>`;
+
+      pageUpdated.textContent = data.updatedAt
+        ? "Last updated: " + formatDate(data.updatedAt)
+        : "";
+    } catch (error) {
+      pageBody.innerHTML = `<p class="content-empty">Could not load this page right now. Please try again later.</p>`;
+      console.error("Could not load content:", error.message);
+    }
+  }
+
+  loadContent();
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").catch(() => {});
+  }
+</script>
 </body>
 </html>

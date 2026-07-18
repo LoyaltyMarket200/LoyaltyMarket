@@ -3,72 +3,252 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terms of Use - Waterside</title>
+  <title>Terms &amp; Conditions - Waterside</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#0d6e6e">
+
   <style>
-    *{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#0f172a}
-    .legal-navbar{min-height:78px;height:auto;padding:12px max(24px,5vw);background:#fff;border-bottom:1px solid #e5e7eb;box-shadow:0 4px 20px rgba(15,23,42,.06);justify-content:space-between;position:sticky;top:0;z-index:40}
-    .legal-navbar .logo-link img{width:48px;height:48px;object-fit:contain}.legal-navbar .logo-text{color:#0d6e6e;font-size:21px}
-    .legal-nav-actions{display:flex;align-items:center;gap:10px}.legal-nav-link,.legal-post-link{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;border:1px solid transparent}
-    .legal-nav-link{color:#334155;background:#f8fafc;border-color:#e2e8f0}.legal-nav-link:hover{color:#0d6e6e;border-color:#b0e5e3;background:#e6f5f5}.legal-post-link{color:#fff;background:#ff6b4a}
-    .legal-page{width:min(1080px,94%);margin:32px auto 70px}.legal-hero{padding:34px;border-radius:24px;color:#fff;background:radial-gradient(circle at top right,rgba(255,255,255,.15),transparent 32%),linear-gradient(135deg,#0d6e6e,#14b8a6);box-shadow:0 18px 42px rgba(30,58,138,.2)}
-    .legal-kicker{margin:0 0 8px;color:#fbbf24;font-size:12px;font-weight:900;letter-spacing:.16em}.legal-hero h1{margin:0 0 10px;font-size:clamp(34px,5vw,50px);line-height:1.08}.legal-hero p{margin:0;color:#d3f0ef;line-height:1.65}.legal-updated{margin-top:12px!important;font-size:13px!important;color:#b0e5e3!important}
-    .legal-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;margin-top:24px;align-items:start}.legal-sidebar{position:sticky;top:104px;padding:20px;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(15,23,42,.06)}
-    .legal-sidebar h3{margin:0 0 12px;font-size:16px}.legal-sidebar a{display:block;padding:9px 10px;border-radius:9px;color:#475569;text-decoration:none;font-size:13px;font-weight:700}.legal-sidebar a:hover{background:#e6f5f5;color:#14b8a6}
-    .legal-content{padding:30px;border:1px solid #e2e8f0;border-radius:22px;background:#fff;box-shadow:0 14px 34px rgba(15,23,42,.07)}.legal-intro{padding:16px;border-left:4px solid #14b8a6;border-radius:10px;background:#e6f5f5;color:#334155;line-height:1.7}
-    .legal-section{scroll-margin-top:110px;padding-top:8px}.legal-section+.legal-section{margin-top:28px;padding-top:28px;border-top:1px solid #e2e8f0}.legal-section h2{margin:0 0 12px;font-size:24px;color:#0f172a}.legal-section p,.legal-section li{color:#475569;line-height:1.75;font-size:15px}.legal-section ul{padding-left:22px}.legal-section strong{color:#0f172a}
-    .legal-warning{margin-top:24px;padding:16px;border:1px solid #fde68a;border-radius:12px;background:#fffbeb;color:#92400e;line-height:1.65;font-size:14px}.contact-box{margin-top:14px;padding:16px;border:1px solid #b0e5e3;border-radius:12px;background:#e6f5f5;color:#0d6e6e}
-    .legal-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:30px max(24px,6vw)}
-    @media(max-width:820px){.legal-navbar{align-items:stretch}.legal-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.legal-layout{grid-template-columns:1fr}.legal-sidebar{position:static}.legal-footer{flex-direction:column;text-align:center}}
-    @media(max-width:560px){.legal-nav-actions{grid-template-columns:1fr}.legal-page{width:94%;margin-top:20px}.legal-hero,.legal-content{padding:20px 16px;border-radius:18px}}
+    :root {
+      --navy: #0d6e6e;
+      --navy-soft: #e3f2f2;
+      --orange: #ff6b4a;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --bg: #f7f8fa;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    .simple-navbar {
+      min-height: 50px;
+      height: auto;
+      padding: 7px max(20px, 4vw);
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .simple-navbar .logo-link { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+    .simple-navbar .logo-link img { width: 26px; height: 26px; object-fit: contain; }
+    .simple-navbar .logo-text { color: var(--navy); font-size: 14px; font-weight: 700; }
+
+    .simple-nav-actions { display: flex; align-items: center; gap: 8px; }
+
+    .simple-nav-link {
+      min-height: 31px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      background: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .simple-nav-link:hover { border-color: var(--navy); color: var(--navy); }
+
+    .content-page {
+      width: min(760px, 92%);
+      margin: 26px auto 60px;
+    }
+
+    .content-page-title {
+      margin: 0 0 6px;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .content-page-updated {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .content-body-card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.75;
+      white-space: pre-line;
+    }
+
+    .content-empty {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    @media (max-width: 700px) {
+      .simple-navbar { flex-wrap: wrap; gap: 10px; }
+      .simple-nav-actions { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .content-page { margin-top: 16px; }
+      .content-body-card { padding: 16px; }
+    }
   </style>
 </head>
+
 <body>
-<header class="navbar legal-navbar">
-  <div class="logo"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text"><span class="lr-tag">LR</span>Waterside</span></a></div>
-  <div class="legal-nav-actions"><a href="index.html" class="legal-nav-link">Home</a><a href="help.html" class="legal-nav-link">Help</a><a href="sell.html" class="legal-post-link">Post An Ad</a></div>
+<header class="navbar simple-navbar">
+  <a href="index.html" class="logo-link">
+    <img src="icons/icon-512.png" alt="Waterside">
+    <span class="logo-text">Waterside</span>
+  </a>
+
+  <div class="simple-nav-actions">
+    <a href="index.html" class="simple-nav-link">Home</a>
+    <a href="dashboard.html" class="simple-nav-link">Dashboard</a>
+    <a href="contact.html" class="simple-nav-link">Contact Us</a>
+  </div>
 </header>
 
-<main class="legal-page">
-  <section class="legal-hero">
-    <p class="legal-kicker">LOYALTYMARKET POLICIES</p>
-    <h1>Terms of Use</h1>
-    <p>These terms explain the rules for using Waterside to browse, post, buy, sell, message, and manage marketplace activity.</p>
-    <p class="legal-updated">Effective date: July 13, 2026</p>
-  </section>
+<section class="content-page">
+  <h1 class="content-page-title" id="pageTitle">Terms &amp; Conditions</h1>
+  <p class="content-page-updated" id="pageUpdated"></p>
 
-  <div class="legal-layout">
-    <aside class="legal-sidebar">
-      <h3>On This Page</h3>
-      <a href="#acceptance">1. Acceptance</a><a href="#eligibility">2. Eligibility</a><a href="#accounts">3. Accounts</a><a href="#marketplace-role">4. Marketplace Role</a><a href="#listings">5. Listings</a><a href="#transactions">6. Transactions</a><a href="#prohibited">7. Prohibited Conduct</a><a href="#verification">8. Verification</a><a href="#content">9. User Content</a><a href="#safety">10. Safety</a><a href="#suspension">11. Suspension</a><a href="#disclaimers">12. Disclaimers</a><a href="#liability">13. Liability</a><a href="#changes">14. Changes</a><a href="#contact">15. Contact</a>
-    </aside>
-
-    <article class="legal-content">
-      <div class="legal-intro">By using Waterside, you agree to these Terms of Use. Please read them carefully before creating an account, posting a listing, contacting another user, or completing a transaction.</div>
-      <section class="legal-section" id="acceptance"><h2>1. Acceptance of These Terms</h2><p>These Terms of Use form an agreement between you and Waterside. By accessing or using the website, mobile experience, or related services, you confirm that you understand and agree to follow these terms.</p><p>If you do not agree, you should not use Waterside.</p></section>
-      <section class="legal-section" id="eligibility"><h2>2. Eligibility</h2><p>You must be legally able to enter into an agreement in your country or have permission from a parent or legal guardian. You must provide accurate information and use Waterside only for lawful purposes.</p></section>
-      <section class="legal-section" id="accounts"><h2>3. Accounts and Security</h2><ul><li>You are responsible for the accuracy of your registration and profile information.</li><li>You are responsible for protecting your password and account access.</li><li>You must not share verification codes, passwords, or sensitive payment information with other users.</li><li>You must notify Waterside if you believe your account has been accessed without permission.</li><li>You may not create accounts to impersonate another person, business, or organization.</li></ul></section>
-      <section class="legal-section" id="marketplace-role"><h2>4. Waterside’s Role</h2><p>Waterside provides a platform that helps buyers, sellers, service providers, and businesses find and communicate with one another.</p><p>Unless Waterside clearly states otherwise for a specific service, Waterside is not the owner, seller, buyer, manufacturer, transporter, inspector, or guarantor of items listed by users. Users are responsible for evaluating listings, agreeing on payment, arranging delivery or collection, and completing their transactions safely.</p></section>
-      <section class="legal-section" id="listings"><h2>5. Listings and Seller Responsibilities</h2><p>Every seller or service provider must:</p><ul><li>Provide truthful titles, descriptions, prices, photos, locations, and condition information.</li><li>Only list items or services they have the right and ability to offer.</li><li>Clearly disclose defects, restrictions, relevant fees, or important conditions.</li><li>Remove or update listings that are sold, unavailable, inaccurate, or expired.</li><li>Respond honestly to questions from potential buyers.</li></ul><p>Waterside may review, hide, reject, remove, archive, or restrict any listing that appears misleading, unsafe, unlawful, prohibited, duplicated, fraudulent, or inconsistent with these terms.</p></section>
-      <section class="legal-section" id="transactions"><h2>6. Purchases, Orders, Payments, and Delivery</h2><p>Buyers and sellers are responsible for confirming the product, price, condition, payment method, meeting place, delivery method, and any other transaction details.</p><p>Unless a payment service is specifically provided and identified by Waterside, payments are arranged directly between users. Waterside does not guarantee that a buyer will pay, that a seller will deliver, or that a listing will meet a user’s expectations.</p><p>Users should inspect items before payment whenever possible, keep proof of payment, and use safe public meeting locations.</p></section>
-      <section class="legal-section" id="prohibited"><h2>7. Prohibited Items and Conduct</h2><p>You may not use Waterside to:</p><ul><li>Commit fraud, theft, deception, identity misuse, or money laundering.</li><li>Post stolen, counterfeit, illegal, unsafe, or prohibited goods.</li><li>Post weapons, illegal drugs, harmful substances, or other restricted items.</li><li>Send threats, harassment, hate speech, sexual exploitation content, or abusive messages.</li><li>Collect another user’s personal information without a legitimate reason.</li><li>Upload malware, attempt unauthorized access, interfere with the website, or misuse automated systems.</li><li>Manipulate reviews, verification, reports, prices, views, or marketplace rankings.</li><li>Use misleading photos, false business identities, fake documents, or false verification claims.</li></ul></section>
-      <section class="legal-section" id="verification"><h2>8. Verification and Badges</h2><p>Verification badges may indicate that certain information or documents were reviewed. A badge is not a guarantee that a user, business, listing, product, payment, or transaction is safe or trustworthy.</p><p>Users must still perform their own checks before making a deal.</p></section>
-      <section class="legal-section" id="content"><h2>9. User Content</h2><p>You retain ownership of content you submit, such as photos, descriptions, messages, reviews, and business information.</p><p>By posting content, you give Waterside permission to store, display, reproduce, format, and use that content as necessary to operate, promote, secure, and improve the marketplace.</p><p>You confirm that your content does not violate another person’s copyright, trademark, privacy, image, or other rights.</p></section>
-      <section class="legal-section" id="safety"><h2>10. Safety, Reports, and Reviews</h2><p>Users may report suspicious listings, accounts, messages, or conduct. Waterside may review reports and take action, but cannot guarantee that every report will be resolved immediately or that every harmful user will be detected.</p><p>Reviews must reflect genuine experiences. False, abusive, retaliatory, purchased, or manipulated reviews may be removed.</p></section>
-      <section class="legal-section" id="suspension"><h2>11. Account Suspension and Removal</h2><p>Waterside may warn, restrict, suspend, or remove accounts, listings, reviews, messages, or marketplace access when necessary to enforce these terms, protect users, respond to reports, prevent fraud, comply with legal obligations, or protect the platform.</p></section>
-      <section class="legal-section" id="disclaimers"><h2>12. Service Availability and Disclaimers</h2><p>Waterside is provided on an “as available” basis. Features may be updated, delayed, interrupted, restricted, or unavailable from time to time.</p><p>Waterside does not guarantee the accuracy of user content, the identity of users, the quality or legality of listings, successful delivery, payment, profit, or uninterrupted access.</p></section>
-      <section class="legal-section" id="liability"><h2>13. Limitation of Responsibility</h2><p>To the extent permitted by applicable law, users are responsible for their own decisions, communications, meetings, payments, deliveries, purchases, sales, and disputes.</p><p>Waterside is not responsible for losses caused by user fraud, misrepresentation, unsafe meetings, failed payments, defective items, delivery problems, third-party services, unauthorized account access, or conduct outside Waterside’s reasonable control.</p></section>
-      <section class="legal-section" id="changes"><h2>14. Changes to These Terms</h2><p>Waterside may update these terms as the marketplace develops, features change, or legal and safety requirements evolve. The effective date shown at the top will be updated when important changes are made.</p><p>Continued use after updated terms take effect means you accept the revised terms.</p></section>
-      <section class="legal-section" id="contact"><h2>15. Contact</h2><p>Questions, complaints, safety concerns, or legal notices may be sent through Waterside’s official support channel.</p><div class="contact-box"><strong>Waterside Support</strong><br>Email: support@loyaltymarket.com<br>Location: Liberia</div></section>
-      <div class="legal-warning"><strong>Important:</strong> This page is a practical draft for Waterside and should be reviewed by a qualified Liberian lawyer before the platform begins handling large-scale transactions, payments, disputes, or regulated categories.</div>
-    </article>
+  <div id="pageBody">
+    <p class="content-empty">Loading...</p>
   </div>
-</main>
+</section>
 
-<footer class="footer legal-footer"><div><h2>🇱🇷 Waterside</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 Waterside. All Rights Reserved.</p></footer>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(error=>console.error("Service worker registration failed:",error))}</script>
+<footer class="lm-footer" id="marketplaceFooter">
+  <div class="lm-footer-simple site-shell">
+    <div class="lm-footer-app-badges">
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="M16.7 12.4c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.9-.8-3.1-.8c-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.9.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.6-3.1Z"/><path d="M14.4 5.1c.6-.8 1.1-1.9 1-3-.9.1-2 .6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2-.5 2.7-1.3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>App Store</strong></span>
+      </span>
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="m4 3 16 9-16 9V3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>Google Play</strong></span>
+      </span>
+    </div>
+
+    <nav class="lm-footer-link-row">
+      <a href="#">About Waterside</a>
+      <a href="contact.html">We Are Hiring!</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="#">Billing Policy</a>
+      <a href="safety.html">Waterside Tips</a>
+    </nav>
+
+    <nav class="lm-footer-link-row">
+      <a href="#">Waterside on FB</a>
+      <a href="#">Our Instagram</a>
+      <a href="#">Our YouTube</a>
+      <a href="#">Our Twitter</a>
+    </nav>
+
+    <nav class="lm-footer-link-row">
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="prohibited-items.html">Prohibited Items</a>
+      <a href="community-rules.html">Community Rules</a>
+      <a href="report-problem.html">Report A Problem</a>
+    </nav>
+
+    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+    <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
+  </div>
+</footer>
+
+<script type="module">
+  import { db } from "./firebase.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  const CONTENT_ID = "terms";
+  const DEFAULT_TITLE = "Terms & Conditions";
+  const DEFAULT_BODY = `Welcome to Waterside. By using this marketplace to buy, sell, or browse listings, you agree to the following terms.
+
+1. Waterside is a platform that connects buyers and sellers across Liberia. We do not own, inspect, or guarantee any item listed by a seller.
+
+2. Sellers are responsible for the accuracy of their listings, including price, condition, and description. Misleading listings may be removed and the account suspended.
+
+3. Buyers are encouraged to inspect items in person before completing a purchase and to follow the Safety Tips shown on every listing.
+
+4. Waterside may charge a commission on completed sales, as shown in the marketplace settings at the time of purchase.
+
+5. Prohibited items, as listed on our Prohibited Items page, may not be posted for sale under any circumstances.
+
+6. Waterside reserves the right to suspend or remove any account or listing that violates these terms or our Community Rules.
+
+This is a placeholder default. An administrator can update this text at any time from the admin dashboard.`;
+
+  const pageTitle = document.getElementById("pageTitle");
+  const pageUpdated = document.getElementById("pageUpdated");
+  const pageBody = document.getElementById("pageBody");
+
+  function safeText(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function formatDate(timestamp) {
+    if (!timestamp || !timestamp.seconds) return "";
+    return new Date(timestamp.seconds * 1000).toLocaleDateString(undefined, {
+      month: "short", day: "numeric", year: "numeric"
+    });
+  }
+
+  async function loadContent() {
+    try {
+      const snapshot = await getDoc(doc(db, "content", CONTENT_ID));
+      const data = snapshot.exists() ? snapshot.data() : {};
+
+      const title = data.title || DEFAULT_TITLE;
+      const body = data.body || DEFAULT_BODY;
+
+      pageTitle.textContent = title;
+      document.title = title + " - Waterside";
+      pageBody.innerHTML = `<div class="content-body-card">${safeText(body)}</div>`;
+
+      pageUpdated.textContent = data.updatedAt
+        ? "Last updated: " + formatDate(data.updatedAt)
+        : "";
+    } catch (error) {
+      pageBody.innerHTML = `<p class="content-empty">Could not load this page right now. Please try again later.</p>`;
+      console.error("Could not load content:", error.message);
+    }
+  }
+
+  loadContent();
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").catch(() => {});
+  }
+</script>
 </body>
 </html>

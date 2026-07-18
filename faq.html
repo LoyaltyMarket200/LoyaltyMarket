@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Safety Tips - Waterside</title>
+  <title>FAQ - Waterside</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="footer.css">
   <link rel="manifest" href="manifest.json">
@@ -29,6 +29,8 @@
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     }
+
+    .icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
     .simple-navbar {
       min-height: 50px;
@@ -85,16 +87,45 @@
       font-size: 12px;
     }
 
-    .content-body-card {
-      padding: 22px;
+    .faq-item {
+      margin-bottom: 12px;
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 12px;
       background: #fff;
+      overflow: hidden;
+    }
+
+    .faq-question-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border: none;
+      background: transparent;
+      text-align: left;
+      font-size: 14.5px;
+      font-weight: 600;
       color: var(--ink);
-      font-size: 14px;
-      line-height: 1.75;
+      cursor: pointer;
+    }
+
+    .faq-question-btn:hover { color: var(--navy); }
+
+    .faq-chevron { flex-shrink: 0; color: var(--navy); transition: transform .2s ease; }
+    .faq-question-btn[aria-expanded="true"] .faq-chevron { transform: rotate(180deg); }
+
+    .faq-answer {
+      display: none;
+      padding: 0 18px 16px;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.65;
       white-space: pre-line;
     }
+
+    .faq-answer.open { display: block; }
 
     .content-empty {
       padding: 40px 20px;
@@ -109,7 +140,6 @@
       .simple-navbar { flex-wrap: wrap; gap: 10px; }
       .simple-nav-actions { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .content-page { margin-top: 16px; }
-      .content-body-card { padding: 16px; }
     }
   </style>
 </head>
@@ -129,11 +159,11 @@
 </header>
 
 <section class="content-page">
-  <h1 class="content-page-title" id="pageTitle">Safety Tips</h1>
+  <h1 class="content-page-title" id="pageTitle">Frequently Asked Questions</h1>
   <p class="content-page-updated" id="pageUpdated"></p>
 
-  <div id="pageBody">
-    <p class="content-empty">Loading...</p>
+  <div id="faqList">
+    <p class="content-empty">Loading questions...</p>
   </div>
 </section>
 
@@ -183,31 +213,9 @@
   import { db } from "./firebase.js";
   import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-  const CONTENT_ID = "safety";
-  const DEFAULT_TITLE = "Safety Tips";
-  const DEFAULT_BODY = `Follow these tips to buy and sell safely on Waterside.
-
-1. Meet in a safe, public place for exchanges, ideally during daylight hours.
-
-2. Avoid paying in advance for an item you have not seen, even to cover delivery.
-
-3. Inspect the item carefully and make sure it matches the listing description before paying.
-
-4. Make sure the item you receive is the exact one you inspected, especially for packaged goods.
-
-5. Only pay once you are fully satisfied with the item.
-
-6. For higher-value purchases, use Pay With Protection at checkout so Waterside holds the payment until you confirm you received the item.
-
-7. Never share your Mobile Money PIN with anyone, including a buyer or seller.
-
-8. If something feels wrong about a listing or a conversation, use the Report button on the listing.
-
-This is a placeholder default. An administrator can update this text at any time from the admin dashboard.`;
-
   const pageTitle = document.getElementById("pageTitle");
   const pageUpdated = document.getElementById("pageUpdated");
-  const pageBody = document.getElementById("pageBody");
+  const faqList = document.getElementById("faqList");
 
   function safeText(value) {
     return String(value ?? "")
@@ -225,28 +233,63 @@ This is a placeholder default. An administrator can update this text at any time
     });
   }
 
-  async function loadContent() {
+  // Default questions shown until an admin saves real ones in
+  // Admin Dashboard > Content > FAQ. Keeps the page useful on day one
+  // instead of showing an empty page.
+  const DEFAULT_ITEMS = [
+    {
+      question: "How do I post a listing on Waterside?",
+      answer: "Log in, tap \"Post An Ad\" in the header, choose Product or Service, fill in the details, and submit. New listings are reviewed automatically before going live."
+    },
+    {
+      question: "How do I pay for something I want to buy?",
+      answer: "On the listing page, tap \"Buy Now,\" choose Pay Now or Pay With Protection, then pay with MTN Mobile Money or Orange Money."
+    },
+    {
+      question: "Is it safe to buy and sell on Waterside?",
+      answer: "Follow the Safety Tips shown on every listing: meet in a public place, inspect the item before paying, and use Pay With Protection for extra security on larger purchases."
+    }
+  ];
+
+  async function loadFaq() {
     try {
-      const snapshot = await getDoc(doc(db, "content", CONTENT_ID));
+      const snapshot = await getDoc(doc(db, "content", "faq"));
       const data = snapshot.exists() ? snapshot.data() : {};
-
-      const title = data.title || DEFAULT_TITLE;
-      const body = data.body || DEFAULT_BODY;
-
-      pageTitle.textContent = title;
-      document.title = title + " - Waterside";
-      pageBody.innerHTML = `<div class="content-body-card">${safeText(body)}</div>`;
+      const items = Array.isArray(data.items) && data.items.length ? data.items : DEFAULT_ITEMS;
 
       pageUpdated.textContent = data.updatedAt
         ? "Last updated: " + formatDate(data.updatedAt)
         : "";
+
+      if (items.length === 0) {
+        faqList.innerHTML = '<p class="content-empty">No questions have been added yet.</p>';
+        return;
+      }
+
+      faqList.innerHTML = items.map((item, index) => `
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn" data-faq-toggle="${index}" aria-expanded="false">
+            <span>${safeText(item.question)}</span>
+            <svg class="icon faq-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer" id="faqAnswer${index}">${safeText(item.answer)}</div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-faq-toggle]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const answer = document.getElementById("faqAnswer" + button.dataset.faqToggle);
+          const isOpen = answer.classList.toggle("open");
+          button.setAttribute("aria-expanded", String(isOpen));
+        });
+      });
     } catch (error) {
-      pageBody.innerHTML = `<p class="content-empty">Could not load this page right now. Please try again later.</p>`;
-      console.error("Could not load content:", error.message);
+      faqList.innerHTML = `<p class="content-empty">Could not load the FAQ right now. Please try again later.</p>`;
+      console.error("Could not load FAQ content:", error.message);
     }
   }
 
-  loadContent();
+  loadFaq();
 </script>
 
 <script>
