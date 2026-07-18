@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sell Product - Waterside</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#0d6e6e">
@@ -403,27 +404,6 @@
     .post-btn:hover { background: #e5522f; }
     .post-btn:disabled { opacity: .6; cursor: not-allowed; }
 
-    /* ---------- FOOTER ---------- */
-
-    .sell-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      padding: 26px max(24px, 6vw);
-      background: var(--navy);
-      color: #d8f3f1;
-    }
-
-    .sell-footer h2 {
-      margin: 0 0 3px;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .sell-footer p { margin: 0; font-size: 12px; }
-
     @media (max-width: 980px) {
       .sell-page { grid-template-columns: 1fr; }
       .sell-hero-panel { position: static; }
@@ -435,7 +415,6 @@
       .sell-nav-link { padding: 9px 6px; font-size: 12px; }
       .sell-page { width: 92%; margin-top: 14px; }
       .image-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .sell-footer { flex-direction: column; text-align: center; }
     }
 
     @media (max-width: 520px) {
@@ -621,13 +600,47 @@
   </div>
 </section>
 
-<footer class="footer sell-footer">
+<footer class="lm-footer" id="marketplaceFooter">
+  <div class="lm-footer-simple site-shell">
+    <div class="lm-footer-app-badges">
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="M16.7 12.4c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.9-.8-3.1-.8c-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.9.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.6-3.1Z"/><path d="M14.4 5.1c.6-.8 1.1-1.9 1-3-.9.1-2 .6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2-.5 2.7-1.3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>App Store</strong></span>
+      </span>
 
-  <div>
-    <h2>Waterside</h2>
-    <p>You Get Market, We Get Buyer.</p>
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="m4 3 16 9-16 9V3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>Google Play</strong></span>
+      </span>
+    </div>
+
+    <nav class="lm-footer-link-row">
+      <a href="#">About Waterside</a>
+      <a href="contact.html">We Are Hiring!</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="#">Billing Policy</a>
+      <a href="safety.html">Waterside Tips</a>
+    </nav>
+
+    <nav class="lm-footer-link-row">
+      <a href="#">Waterside on FB</a>
+      <a href="#">Our Instagram</a>
+      <a href="#">Our YouTube</a>
+      <a href="#">Our Twitter</a>
+    </nav>
+
+    <nav class="lm-footer-link-row">
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="prohibited-items.html">Prohibited Items</a>
+      <a href="community-rules.html">Community Rules</a>
+      <a href="report.html">Report A Problem</a>
+    </nav>
+
+    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+    <p class="lm-footer-copyright">&copy; 2026 Waterside</p>
   </div>
-  <p>&copy; 2026 Waterside. All Rights Reserved.</p>
 </footer>
 
 <script type="module">
@@ -988,10 +1001,6 @@
     "Seeking Work - CVs": 0
   };
 
-  // Categories where an unusually NEW seller account posting a
-  // high-value item is a meaningful risk signal (common pattern:
-  // fresh account, expensive item, urgency language, wants a deposit
-  // before any inspection).
   const HIGH_VALUE_CATEGORIES = ["Vehicles", "Property", "Electronics", "Phones"];
   const NEW_ACCOUNT_HOURS = 24;
   const HIGH_VALUE_THRESHOLD_USD = 500;
@@ -1055,9 +1064,6 @@
     const price = Number(priceUsd);
     const wordCount = description.trim().split(/\s+/).filter(Boolean).length;
 
-    // A near-empty description on a higher-priced item is a real
-    // low-effort-scam signal — genuine sellers of valuable items
-    // usually write more than a couple of words.
     return price >= 100 && wordCount < 5;
   }
 
@@ -1079,11 +1085,6 @@
     }
   }
 
-  // Compares the listing's price against the median price of other
-  // ACTIVE listings in the same category, using real marketplace data
-  // instead of a single hardcoded number. Catches outliers a fixed
-  // floor would miss (e.g. a normally-expensive category where this
-  // specific price is still suspiciously below everyone else's).
   async function checkPriceOutlier(category, priceUsd) {
     const price = Number(priceUsd);
     if (!Number.isFinite(price) || price <= 0) return false;
@@ -1101,7 +1102,6 @@
         .filter((value) => Number.isFinite(value) && value > 0)
         .sort((a, b) => a - b);
 
-      // Need a reasonable sample size before trusting a median.
       if (prices.length < 5) return false;
 
       const median = prices[Math.floor(prices.length / 2)];
@@ -1112,10 +1112,6 @@
     }
   }
 
-  // A brand-new account posting a high-value item in a category
-  // that's commonly targeted by scammers (vehicles, electronics,
-  // property, phones) is a real, well-documented fraud pattern —
-  // worth a human admin glance even if nothing else looks wrong.
   async function checkNewAccountHighValue(sellerId, category, priceUsd) {
     const price = Number(priceUsd);
 
@@ -1140,9 +1136,6 @@
     }
   }
 
-  // Same title AND same price already posted by a DIFFERENT seller is
-  // a common copy-paste scam pattern (stolen listing photos/text
-  // reposted by a second account).
   async function checkDuplicateListing(title, priceUsd, sellerId) {
     const cleanTitle = title.trim().toLowerCase();
     if (!cleanTitle) return false;
