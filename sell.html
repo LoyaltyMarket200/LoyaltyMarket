@@ -1207,6 +1207,25 @@
     return reasons;
   }
 
+  async function runServiceScamChecks({ title, description, sellerId }) {
+    const reasons = [];
+
+    if (checkSuspiciousKeywords(title, description)) {
+      reasons.push("Listing text contains language commonly used in scams.");
+    }
+
+    const wordCount = description.trim().split(/\s+/).filter(Boolean).length;
+    if (wordCount < 5) {
+      reasons.push("Description is very short.");
+    }
+
+    if (await checkTooManyRecentListings(sellerId)) {
+      reasons.push("Seller has posted several listings within the last hour.");
+    }
+
+    return reasons;
+  }
+
   function resetProgress() {
     uploadProgressWrap.classList.remove("show");
     uploadProgressFill.style.width = "0%";
@@ -1256,10 +1275,38 @@
           createdAt: serverTimestamp()
         };
 
-        postBtn.textContent = "Saving service...";
-        await addDoc(collection(db, "products"), serviceListing);
+        const serviceFlagReasons = await runServiceScamChecks({
+          title: serviceListing.title,
+          description: serviceListing.description,
+          sellerId: currentUser.uid
+        });
 
-        alert("Service posted successfully!");
+        const isServiceFlagged = serviceFlagReasons.length > 0;
+        serviceListing.status = isServiceFlagged ? "pending_review" : "active";
+        serviceListing.flagged = isServiceFlagged;
+        serviceListing.flagReasons = serviceFlagReasons;
+
+        postBtn.textContent = "Saving service...";
+        const serviceDocRef = await addDoc(collection(db, "products"), serviceListing);
+
+        try {
+          await checkListingWithAI({
+            productId: serviceDocRef.id,
+            title: serviceListing.title,
+            description: serviceListing.description,
+            category: serviceListing.category,
+            priceUsd: serviceListing.priceUsd
+          });
+        } catch (aiError) {
+          console.warn("AI scam check skipped:", aiError.message);
+        }
+
+        if (isServiceFlagged) {
+          alert("Your service listing was submitted for admin review.");
+        } else {
+          alert("Service posted successfully!");
+        }
+
         window.location.href = "dashboard.html";
         return;
       }
