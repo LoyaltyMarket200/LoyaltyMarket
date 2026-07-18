@@ -669,6 +669,14 @@
     getDownloadURL
   } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
+  import {
+    getFunctions,
+    httpsCallable
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
+  const functions = getFunctions();
+  const checkListingWithAI = httpsCallable(functions, "checkListingWithAI");
+
   const MAX_IMAGES = 4;
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
   const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -1303,7 +1311,20 @@
       };
 
       postBtn.textContent = "Saving product...";
-      await addDoc(collection(db, "products"), product);
+      const productDocRef = await addDoc(collection(db, "products"), product);
+
+      try {
+        await checkListingWithAI({
+          productId: productDocRef.id,
+          title,
+          description,
+          category,
+          priceUsd
+        });
+      } catch (aiError) {
+        // Fail open — the rule-based checks above already ran and saved.
+        console.warn("AI scam check skipped:", aiError.message);
+      }
 
       if (isFlagged) {
         alert("Your listing was submitted for admin review.");
