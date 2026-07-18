@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Waterside</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#0d6e6e">
@@ -45,17 +46,22 @@
     .boost-pending-badge{background:var(--navy-soft);color:var(--navy)}
     .boost-expired-badge{background:#f1f5f9;color:var(--muted)}
 
-    /* Listing action buttons — all outline style, differentiated by label only */
-    .feature-btn,.sold-btn,.duplicate-btn,.archive-btn,.boost-btn{
+    /* Listing action buttons — all outline style, differentiated by label only.
+       Edit/Delete share the same base as the rest so they stop falling
+       back to raw browser-default styling; Delete gets the danger
+       palette (already defined in :root) since it's destructive. */
+    .edit-btn,.delete-btn,.feature-btn,.sold-btn,.duplicate-btn,.archive-btn,.boost-btn{
       background:#fff;border:1px solid var(--line);color:var(--ink);
       padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;
     }
-    .feature-btn:hover,.sold-btn:hover,.duplicate-btn:hover,.archive-btn:hover,.boost-btn:hover{border-color:var(--navy);color:var(--navy)}
+    .edit-btn:hover,.feature-btn:hover,.sold-btn:hover,.duplicate-btn:hover,.archive-btn:hover,.boost-btn:hover{border-color:var(--navy);color:var(--navy)}
+    .delete-btn{border-color:#f3d0d0;color:var(--danger)}
+    .delete-btn:hover{background:var(--danger-soft);border-color:var(--danger)}
     .feature-btn.is-featured{background:var(--orange);border-color:var(--orange);color:#fff}
     .sold-btn.is-sold{background:var(--navy-soft);border-color:var(--navy);color:var(--navy)}
     .archive-btn.is-archived{background:var(--navy-soft);border-color:var(--navy);color:var(--navy)}
     .boost-btn.is-pending{background:var(--orange-soft);border-color:var(--orange);color:#c23f24}
-    .feature-btn:disabled,.sold-btn:disabled,.duplicate-btn:disabled,.archive-btn:disabled,.boost-btn:disabled{opacity:.55;cursor:not-allowed}
+    .edit-btn:disabled,.delete-btn:disabled,.feature-btn:disabled,.sold-btn:disabled,.duplicate-btn:disabled,.archive-btn:disabled,.boost-btn:disabled{opacity:.55;cursor:not-allowed}
 
     .status-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;text-transform:capitalize}
     .status-badge.active{background:var(--orange-soft);color:#c23f24}
@@ -180,10 +186,6 @@
 
     .empty-hint{margin-top:20px;color:var(--muted);font-size:13px}
     .empty-hint a{color:var(--navy);font-weight:600;text-decoration:none}
-
-    .footer{background:var(--navy);color:#d8f3f1;text-align:center;padding:30px 20px}
-    .footer h2{color:#fff;margin-bottom:8px;font-size:16px;font-weight:600}
-    .footer p{margin-bottom:6px;font-size:12px}
 
     @media(max-width:1000px){.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-section{grid-template-columns:1fr}.dashboard-sidebar{position:static}.dashboard-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:760px){.dashboard-navbar{flex-wrap:wrap;gap:8px}.dashboard-nav-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.dashboard-welcome{flex-direction:column;align-items:flex-start;padding:22px}.dashboard-welcome-btn{width:100%;justify-content:center}.dashboard-shell{width:92%;margin-top:18px}.dashboard-main{padding:16px}}
@@ -437,10 +439,65 @@
   </div>
 </div>
 
-<footer class="footer">
-  <h2>Waterside</h2>
-  <p>Buy And Sell Products Across Liberia.</p>
-  <p>&copy; 2026 Waterside. All Rights Reserved.</p>
+<footer class="lm-footer" id="marketplaceFooter">
+  <div class="lm-footer-simple site-shell">
+    <div class="lm-footer-app-badges">
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="M16.7 12.4c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.9-.8-3.1-.8c-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.9.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.6-3.1Z"/><path d="M14.4 5.1c.6-.8 1.1-1.9 1-3-.9.1-2 .6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2-.5 2.7-1.3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>App Store</strong></span>
+      </span>
+
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="m4 3 16 9-16 9V3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>Google Play</strong></span>
+      </span>
+    </div>
+
+    <nav class="lm-footer-link-row">
+      <a href="#">About Waterside</a>
+      <a href="contact.html">We Are Hiring!</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="#">Billing Policy</a>
+      <a href="safety.html">Waterside Tips</a>
+    </nav>
+
+    <nav class="lm-footer-link-row">
+      <a href="#">Waterside on FB</a>
+      <a href="#">Our Instagram</a>
+      <a href="#">Our YouTube</a>
+      <a href="#">Our Twitter</a>
+    </nav>
+
+    <nav class="lm-footer-link-row">
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="prohibited-items.html">Prohibited Items</a>
+      <a href="community-rules.html">Community Rules</a>
+      <a href="report.html">Report A Problem</a>
+    </nav>
+
+    <nav class="lm-footer-link-row lm-footer-county-row">
+      <button type="button" data-footer-county="Bomi">Bomi</button>
+      <button type="button" data-footer-county="Bong">Bong</button>
+      <button type="button" data-footer-county="Gbarpolu">Gbarpolu</button>
+      <button type="button" data-footer-county="Grand Bassa">Grand Bassa</button>
+      <button type="button" data-footer-county="Grand Cape Mount">Grand Cape Mount</button>
+      <button type="button" data-footer-county="Grand Gedeh">Grand Gedeh</button>
+      <button type="button" data-footer-county="Grand Kru">Grand Kru</button>
+      <button type="button" data-footer-county="Lofa">Lofa</button>
+      <button type="button" data-footer-county="Margibi">Margibi</button>
+      <button type="button" data-footer-county="Maryland">Maryland</button>
+      <button type="button" data-footer-county="Montserrado">Montserrado</button>
+      <button type="button" data-footer-county="Nimba">Nimba</button>
+      <button type="button" data-footer-county="River Cess">River Cess</button>
+      <button type="button" data-footer-county="River Gee">River Gee</button>
+      <button type="button" data-footer-county="Sinoe">Sinoe</button>
+    </nav>
+
+    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+    <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
+  </div>
 </footer>
 
 <script type="module">

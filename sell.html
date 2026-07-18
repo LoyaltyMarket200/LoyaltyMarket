@@ -1242,6 +1242,7 @@
           sellerId: currentUser.uid,
           sellerEmail: currentUser.email || "",
           status: "active",
+          featured: false,
           flagged: false,
           flagReasons: [],
           createdAt: serverTimestamp()
@@ -1295,6 +1296,7 @@
         sellerId: currentUser.uid,
         sellerEmail: currentUser.email || "",
         status: isFlagged ? "pending_review" : "active",
+        featured: false,
         flagged: isFlagged,
         flagReasons,
         createdAt: serverTimestamp()
