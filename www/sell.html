@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell Product - Waterside</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <meta name="theme-color" content="#0d6e6e">
+
+  <style>
+    /* ==================================================
+       SELL PAGE — RESTRAINED 2-COLOR SYSTEM
+       Navy (#0d6e6e) is the only structural/brand color.
+       Orange (#ff6b4a) is the ONLY accent, reserved for
+       the single primary action (Post button) and small
+       selection states. No third color anywhere on this
+       page. Font weight is mostly 400/500 — bold (700+)
+       is reserved for the price-equivalent moments only
+       (none on this page) so nothing shouts.
+       ================================================== */
+
+    :root {
+      --navy: #0d6e6e;
+      --navy-soft: #e3f2f2;
+      --orange: #ff6b4a;
+      --orange-soft: #ffece7;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --bg: #f7f8fa;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    /* ---------- ICONS (inline SVG, replaces emoji) ---------- */
+
+    .icon {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.15em;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ---------- LISTING TYPE PICKER ---------- */
+
+    .listing-type-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 8px 0 22px;
+    }
+
+    .listing-type-option {
+      display: block;
+      padding: 16px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s ease, background .15s ease;
+    }
+
+    .listing-type-option:hover {
+      border-color: var(--navy);
+    }
+
+    .listing-type-option.selected {
+      border-color: var(--navy);
+      background: var(--navy-soft);
+    }
+
+    .listing-type-option input { display: none; }
+
+    .listing-type-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 8px;
+      border-radius: 9px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--navy);
+      font-size: 17px;
+    }
+
+    .listing-type-option.selected .listing-type-icon {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+
+    .listing-type-label {
+      display: block;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .listing-type-desc {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    #serviceFieldsSection,
+    #productFieldsSection { display: none; }
+
+    #serviceFieldsSection.open,
+    #productFieldsSection.open { display: block; }
+
+    /* ---------- NAVBAR ---------- */
+
+    .sell-navbar {
+      min-height: 50px;
+      height: auto;
+      padding: 7px max(20px, 4vw);
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .sell-navbar .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+    }
+
+    .sell-navbar .logo-link img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
+
+    .sell-navbar .logo-text {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .sell-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sell-nav-link {
+      min-height: 31px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      background: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .sell-nav-link:hover {
+      border-color: var(--navy);
+      color: var(--navy);
+    }
+
+    /* ---------- PAGE LAYOUT (Jiji-style: single column, no sidebar) ---------- */
+
+    .sell-page {
+      width: min(640px, 94%);
+      margin: 20px auto 60px;
+    }
+
+    .sell-page-title {
+      margin: 4px 0 18px;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .sell-terms-line {
+      margin: 14px 4px 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .sell-terms-line strong { font-weight: 600; color: var(--ink); }
+
+    /* ---------- FORM (plain, no card chrome — Jiji has no boxed card) ---------- */
+
+    .sell-card {
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .sell-card-heading {
+      margin-bottom: 14px;
+    }
+
+    #sellSubtitle {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 400;
+    }
+
+
+    .sell-form label {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .sell-form input,
+    .sell-form select,
+    .sell-form textarea {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      font: inherit;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .sell-form input:focus,
+    .sell-form select:focus,
+    .sell-form textarea:focus {
+      outline: none;
+      border-color: var(--navy);
+    }
+
+    .sell-form textarea { min-height: 120px; resize: vertical; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* ---------- PHOTO UPLOAD ---------- */
+
+    .image-upload-box {
+      margin-top: 8px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg);
+    }
+
+    .upload-trigger-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .upload-trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--navy);
+      border-radius: 9px;
+      background: #fff;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .upload-trigger-btn:hover {
+      background: var(--navy-soft);
+    }
+
+    .upload-file-status {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Hide the raw browser file input; trigger it via the styled button */
+    .image-upload-box input[type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .upload-help {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .image-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .image-preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .image-preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-number {
+      position: absolute;
+      left: 5px;
+      bottom: 5px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(15,45,103,.85);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    .upload-progress-wrap { display: none; margin-top: 14px; }
+    .upload-progress-wrap.show { display: block; }
+
+    .upload-progress-bar {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--line);
+    }
+
+    .upload-progress-fill {
+      width: 0;
+      height: 100%;
+      background: var(--navy);
+      transition: width .2s ease;
+    }
+
+    .upload-progress-text {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* ---------- SUBMIT ---------- */
+
+    .post-btn {
+      width: 100%;
+      min-height: 50px;
+      margin-top: 26px;
+      border: none;
+      border-radius: 11px;
+      color: #fff;
+      background: var(--orange);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .post-btn:hover { background: #e5522f; }
+    .post-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    @media (max-width: 980px) {
+      .sell-page { grid-template-columns: 1fr; }
+      .sell-hero-panel { position: static; }
+    }
+
+    @media (max-width: 700px) {
+      .sell-navbar { flex-wrap: wrap; gap: 10px; }
+      .sell-nav-actions { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .sell-nav-link { padding: 9px 6px; font-size: 12px; }
+      .sell-page { width: 92%; margin-top: 14px; }
+      .image-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 520px) {
+      .listing-type-row, .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+<header class="navbar sell-navbar">
+  <a href="index.html" class="logo-link">
+    <img src="icons/icon-512.png" alt="Waterside">
+    <span class="logo-text">Waterside</span>
+  </a>
+
+  <div class="sell-nav-actions">
+    <a href="index.html" class="sell-nav-link">Home</a>
+    <a href="dashboard.html" class="sell-nav-link">Dashboard</a>
+    <a href="messages.html" class="sell-nav-link">Messages</a>
+  </div>
+</header>
+
+<section class="sell-page">
+  <div class="sell-card">
+    <div class="sell-card-heading">
+      <h1 id="sellHeading" class="sell-page-title">List your product</h1>
+      <p id="sellSubtitle">Post your item for buyers across Liberia.</p>
+    </div>
+
+    <form class="sell-form" id="sellForm">
+      <label>What are you listing?</label>
+
+      <div class="listing-type-row">
+        <label class="listing-type-option selected" id="productOption">
+          <input type="radio" name="listingType" value="product" checked>
+          <span class="listing-type-icon">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></svg>
+          </span>
+          <span class="listing-type-label">Product</span>
+          <span class="listing-type-desc">Sell an item</span>
+        </label>
+
+        <label class="listing-type-option" id="serviceOption">
+          <input type="radio" name="listingType" value="service">
+          <span class="listing-type-icon">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 1 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4Z"/></svg>
+          </span>
+          <span class="listing-type-label">Service</span>
+          <span class="listing-type-desc">Offer your skills</span>
+        </label>
+      </div>
+
+      <div id="productFieldsSection" class="open">
+        <label for="title">Product Title</label>
+        <input type="text" id="title" placeholder="Example: iPhone 13 Pro">
+
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="">Select Category</option>
+          <option>Phones</option>
+          <option>Electronics</option>
+          <option>Vehicles</option>
+          <option>Property</option>
+          <option>Fashion</option>
+          <option>Jobs</option>
+        </select>
+
+        <div class="form-row">
+          <div>
+            <label for="priceUsd">Price USD</label>
+            <input type="number" id="priceUsd" min="0" step="0.01" placeholder="550">
+          </div>
+          <div>
+            <label for="priceLrd">Price L$</label>
+            <input type="number" id="priceLrd" min="0" step="1" placeholder="104500">
+          </div>
+        </div>
+
+        <label for="condition">Condition</label>
+        <select id="condition">
+          <option value="">Select Condition</option>
+          <option>Brand New</option>
+          <option>Used</option>
+          <option>Foreign Used</option>
+        </select>
+
+        <div class="form-row">
+          <div>
+            <label for="county">County</label>
+            <input type="text" id="county" placeholder="Montserrado">
+          </div>
+          <div>
+            <label for="city">City</label>
+            <input type="text" id="city" placeholder="Monrovia">
+          </div>
+        </div>
+
+        <label for="productImages">Product Images</label>
+        <div class="image-upload-box">
+          <div class="upload-trigger-row">
+            <button type="button" class="upload-trigger-btn" id="productUploadBtn">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              Add photos
+            </button>
+            <span class="upload-file-status" id="productFileStatus">No files chosen</span>
+          </div>
+          <input type="file" id="productImages" accept="image/jpeg,image/png,image/webp" multiple>
+          <p class="upload-help">Choose 1 to 4 JPG, PNG, or WebP images. Maximum 5 MB per image. The first image becomes the main photo.</p>
+          <div id="productPreview" class="image-preview-grid"></div>
+        </div>
+
+        <label for="description">Description</label>
+        <textarea id="description" placeholder="Describe your product..."></textarea>
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="0881471694">
+      </div>
+
+      <div id="serviceFieldsSection">
+        <label for="serviceTitle">Service Title</label>
+        <input type="text" id="serviceTitle" placeholder="Example: Home Electrical Repairs">
+
+        <label for="serviceCategory">Service Category</label>
+        <select id="serviceCategory">
+          <option value="">Select Service Category</option>
+          <option>Mechanics</option>
+          <option>Builders &amp; Repairs</option>
+          <option>Creative Services</option>
+          <option>Delivery &amp; Moving</option>
+          <option>Beauty &amp; Personal Care</option>
+          <option>Business Services</option>
+          <option>Other</option>
+        </select>
+
+        <label for="serviceStartingPriceUsd">Starting Price (US$)</label>
+        <input type="number" id="serviceStartingPriceUsd" min="0" step="0.01" placeholder="20">
+
+        <div class="form-row">
+          <div>
+            <label for="serviceCounty">County Served</label>
+            <input type="text" id="serviceCounty" placeholder="Montserrado">
+          </div>
+          <div>
+            <label for="serviceCity">City Served</label>
+            <input type="text" id="serviceCity" placeholder="Monrovia">
+          </div>
+        </div>
+
+        <label for="serviceImages">Work Photos</label>
+        <div class="image-upload-box">
+          <div class="upload-trigger-row">
+            <button type="button" class="upload-trigger-btn" id="serviceUploadBtn">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              Add photos
+            </button>
+            <span class="upload-file-status" id="serviceFileStatus">No files chosen</span>
+          </div>
+          <input type="file" id="serviceImages" accept="image/jpeg,image/png,image/webp" multiple>
+          <p class="upload-help">Choose up to 4 images. Service photos are optional.</p>
+          <div id="servicePreview" class="image-preview-grid"></div>
+        </div>
+
+        <label for="serviceDescription">Service Description</label>
+        <textarea id="serviceDescription" placeholder="Describe the service, your experience, and what is included..."></textarea>
+
+        <label for="servicePhone">Phone Number</label>
+        <input type="tel" id="servicePhone" placeholder="0881471694">
+      </div>
+
+      <div id="uploadProgressWrap" class="upload-progress-wrap">
+        <div class="upload-progress-bar">
+          <div id="uploadProgressFill" class="upload-progress-fill"></div>
+        </div>
+        <p id="uploadProgressText" class="upload-progress-text">Preparing upload...</p>
+      </div>
+
+      <button type="submit" class="post-btn" id="postBtn">Post Product</button>
+
+      <p class="sell-terms-line">
+        By clicking Post Product, you accept the <strong>Terms of Use</strong>, confirm you will follow the <strong>Safety Tips</strong>, and declare this listing has no prohibited items.
+      </p>
+    </form>
+  </div>
+</section>
+
+<footer class="lm-footer" id="marketplaceFooter">
+  <div class="lm-footer-simple site-shell">
+    <div class="lm-footer-app-badges">
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="M16.7 12.4c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.9-.8-3.1-.8c-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8s1.9.8 3.1.8c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.6-3.1Z"/><path d="M14.4 5.1c.6-.8 1.1-1.9 1-3-.9.1-2 .6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2-.5 2.7-1.3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>App Store</strong></span>
+      </span>
+
+      <span class="lm-app-badge-btn">
+        <svg viewBox="0 0 24 24"><path d="m4 3 16 9-16 9V3Z"/></svg>
+        <span class="lm-app-badge-text"><small>Coming Soon</small><strong>Google Play</strong></span>
+      </span>
+    </div>
+
+    <nav class="lm-footer-link-row">
+      <a href="#">About Waterside</a>
+      <a href="contact.html">We Are Hiring!</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="#">Billing Policy</a>
+      <a href="safety.html">Waterside Tips</a>
+    </nav>
+
+    <nav class="lm-footer-link-row">
+      <a href="#">Waterside on FB</a>
+      <a href="#">Our Instagram</a>
+      <a href="#">Our YouTube</a>
+      <a href="#">Our Twitter</a>
+    </nav>
+
+    <nav class="lm-footer-link-row">
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="prohibited-items.html">Prohibited Items</a>
+      <a href="community-rules.html">Community Rules</a>
+      <a href="report.html">Report A Problem</a>
+    </nav>
+
+    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+    <p class="lm-footer-copyright">&copy; 2026 Waterside</p>
+  </div>
+</footer>
+
+<script type="module">
+  import { auth, db, storage } from "./firebase.js";
+
+  import {
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+  import {
+    collection,
+    addDoc,
+    serverTimestamp,
+    query,
+    where,
+    getDocs,
+    getDoc,
+    doc,
+    Timestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  import {
+    ref,
+    uploadBytesResumable,
+    getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+  import {
+    getFunctions,
+    httpsCallable
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
+
+  const functions = getFunctions();
+  const checkListingWithAI = httpsCallable(functions, "checkListingWithAI");
+
+  const MAX_IMAGES = 4;
+  const MAX_FILE_SIZE = 5 * 1024 * 1024;
+  const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+  const ADMIN_EMAILS = ["princeteah200@gmail.com"];
+
+  let currentUser = null;
+  let listingAccessReady = false;
+  let listingAllowed = false;
+  let productFiles = [];
+  let serviceFiles = [];
+
+  const sellForm = document.getElementById("sellForm");
+  const postBtn = document.getElementById("postBtn");
+  const sellHeading = document.getElementById("sellHeading");
+  const sellSubtitle = document.getElementById("sellSubtitle");
+
+  const productOption = document.getElementById("productOption");
+  const serviceOption = document.getElementById("serviceOption");
+  const listingTypeInputs = document.querySelectorAll('input[name="listingType"]');
+  const productFieldsSection = document.getElementById("productFieldsSection");
+  const serviceFieldsSection = document.getElementById("serviceFieldsSection");
+
+  const productImagesInput = document.getElementById("productImages");
+  const serviceImagesInput = document.getElementById("serviceImages");
+  const productPreview = document.getElementById("productPreview");
+  const servicePreview = document.getElementById("servicePreview");
+  const productFileStatus = document.getElementById("productFileStatus");
+  const serviceFileStatus = document.getElementById("serviceFileStatus");
+  const productUploadBtn = document.getElementById("productUploadBtn");
+  const serviceUploadBtn = document.getElementById("serviceUploadBtn");
+
+  const uploadProgressWrap = document.getElementById("uploadProgressWrap");
+  const uploadProgressFill = document.getElementById("uploadProgressFill");
+  const uploadProgressText = document.getElementById("uploadProgressText");
+
+  const titleInput = document.getElementById("title");
+  const categoryInput = document.getElementById("category");
+  const priceUsdInput = document.getElementById("priceUsd");
+  const priceLrdInput = document.getElementById("priceLrd");
+  const conditionInput = document.getElementById("condition");
+  const countyInput = document.getElementById("county");
+  const cityInput = document.getElementById("city");
+  const descriptionInput = document.getElementById("description");
+  const phoneInput = document.getElementById("phone");
+
+  const serviceTitleInput = document.getElementById("serviceTitle");
+  const serviceCategoryInput = document.getElementById("serviceCategory");
+  const serviceStartingPriceUsdInput = document.getElementById("serviceStartingPriceUsd");
+  const serviceCountyInput = document.getElementById("serviceCounty");
+  const serviceCityInput = document.getElementById("serviceCity");
+  const serviceDescriptionInput = document.getElementById("serviceDescription");
+  const servicePhoneInput = document.getElementById("servicePhone");
+
+  // Clicking the styled button opens the real (hidden) file input.
+  productUploadBtn.addEventListener("click", () => productImagesInput.click());
+  serviceUploadBtn.addEventListener("click", () => serviceImagesInput.click());
+
+  postBtn.disabled = true;
+  postBtn.textContent = "Checking Account...";
+
+  async function verifyListingAccess(user) {
+    const email = String(user.email || "").toLowerCase();
+    const isAdmin = ADMIN_EMAILS.includes(email);
+
+    try {
+      const [userSnapshot, settingsSnapshot] = await Promise.all([
+        getDoc(doc(db, "users", user.uid)),
+        getDoc(doc(db, "settings", "marketplace"))
+      ]);
+
+      const userData = userSnapshot.exists() ? userSnapshot.data() : {};
+      const settings = settingsSnapshot.exists() ? settingsSnapshot.data() : {};
+
+      if (userData.suspended === true && !isAdmin) {
+        await signOut(auth);
+        alert("Your Waterside account has been suspended. You cannot post listings.");
+        window.location.href = "login.html";
+        return false;
+      }
+
+      if (settings.maintenanceMode === true && !isAdmin) {
+        alert("Waterside is under maintenance. New listings are temporarily unavailable.");
+        window.location.href = "dashboard.html";
+        return false;
+      }
+
+      if (settings.allowNewListings === false && !isAdmin) {
+        alert("New listings are temporarily paused by Waterside.");
+        window.location.href = "dashboard.html";
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Listing access check failed:", error);
+      alert("We could not verify your listing access. Please try again.");
+      window.location.href = "dashboard.html";
+      return false;
+    }
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      alert("Please login before posting a listing.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    currentUser = user;
+    listingAllowed = await verifyListingAccess(user);
+    listingAccessReady = true;
+
+    if (listingAllowed) {
+      postBtn.disabled = false;
+      postBtn.textContent = getSelectedListingType() === "service" ? "Post Service" : "Post Product";
+    }
+  });
+
+  function getSelectedListingType() {
+    return document.querySelector('input[name="listingType"]:checked')?.value || "product";
+  }
+
+  function updateListingTypeUI() {
+    const isService = getSelectedListingType() === "service";
+
+    productOption.classList.toggle("selected", !isService);
+    serviceOption.classList.toggle("selected", isService);
+    productFieldsSection.classList.toggle("open", !isService);
+    serviceFieldsSection.classList.toggle("open", isService);
+
+    sellHeading.textContent = isService ? "List your service" : "List your product";
+    sellSubtitle.textContent = isService
+      ? "Offer your skills and services to buyers across Liberia."
+      : "Post your item for buyers across Liberia.";
+
+    postBtn.textContent = isService ? "Post Service" : "Post Product";
+
+    titleInput.required = !isService;
+    categoryInput.required = !isService;
+    priceUsdInput.required = !isService;
+    priceLrdInput.required = !isService;
+    conditionInput.required = !isService;
+    countyInput.required = !isService;
+    cityInput.required = !isService;
+    descriptionInput.required = !isService;
+    phoneInput.required = !isService;
+    productImagesInput.required = !isService;
+
+    serviceTitleInput.required = isService;
+    serviceCategoryInput.required = isService;
+    serviceCountyInput.required = isService;
+    serviceCityInput.required = isService;
+    serviceDescriptionInput.required = isService;
+    servicePhoneInput.required = isService;
+  }
+
+  listingTypeInputs.forEach((input) => {
+    input.addEventListener("change", updateListingTypeUI);
+  });
+
+  updateListingTypeUI();
+
+  function validateFiles(fileList, required) {
+    const files = Array.from(fileList);
+
+    if (required && files.length === 0) {
+      throw new Error("Please select at least one product image.");
+    }
+
+    if (files.length > MAX_IMAGES) {
+      throw new Error("You can upload a maximum of 4 images.");
+    }
+
+    files.forEach((file) => {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        throw new Error(`${file.name} is not a supported image type.`);
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        throw new Error(`${file.name} is larger than 5 MB.`);
+      }
+    });
+
+    return files;
+  }
+
+  function renderPreview(files, container, statusEl) {
+    container.innerHTML = "";
+
+    statusEl.textContent = files.length
+      ? `${files.length} file${files.length === 1 ? "" : "s"} chosen`
+      : "No files chosen";
+
+    files.forEach((file, index) => {
+      const item = document.createElement("div");
+      item.className = "image-preview-item";
+
+      const image = document.createElement("img");
+      image.src = URL.createObjectURL(file);
+      image.alt = `Selected image ${index + 1}`;
+
+      const number = document.createElement("span");
+      number.className = "image-number";
+      number.textContent = index === 0 ? "Main photo" : `Photo ${index + 1}`;
+
+      item.append(image, number);
+      container.appendChild(item);
+    });
+  }
+
+  productImagesInput.addEventListener("change", () => {
+    try {
+      productFiles = validateFiles(productImagesInput.files, true);
+      renderPreview(productFiles, productPreview, productFileStatus);
+    } catch (error) {
+      alert(error.message);
+      productImagesInput.value = "";
+      productFiles = [];
+      productPreview.innerHTML = "";
+      productFileStatus.textContent = "No files chosen";
+    }
+  });
+
+  serviceImagesInput.addEventListener("change", () => {
+    try {
+      serviceFiles = validateFiles(serviceImagesInput.files, false);
+      renderPreview(serviceFiles, servicePreview, serviceFileStatus);
+    } catch (error) {
+      alert(error.message);
+      serviceImagesInput.value = "";
+      serviceFiles = [];
+      servicePreview.innerHTML = "";
+      serviceFileStatus.textContent = "No files chosen";
+    }
+  });
+
+  function sanitizeFileName(name) {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9._-]+/g, "-")
+      .replace(/-+/g, "-");
+  }
+
+  function uploadSingleFile(file, storagePath, progressCallback) {
+    return new Promise((resolve, reject) => {
+      const fileRef = ref(storage, storagePath);
+      const task = uploadBytesResumable(fileRef, file, {
+        contentType: file.type
+      });
+
+      task.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = snapshot.totalBytes
+            ? snapshot.bytesTransferred / snapshot.totalBytes
+            : 0;
+
+          progressCallback(progress);
+        },
+        reject,
+        async () => {
+          try {
+            resolve(await getDownloadURL(task.snapshot.ref));
+          } catch (error) {
+            reject(error);
+          }
+        }
+      );
+    });
+  }
+
+  async function uploadImages(files, listingType) {
+    if (files.length === 0) return [];
+
+    uploadProgressWrap.classList.add("show");
+    uploadProgressFill.style.width = "0%";
+
+    const urls = [];
+    const individualProgress = new Array(files.length).fill(0);
+    const folderId = `${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}`;
+
+    for (let index = 0; index < files.length; index += 1) {
+      const file = files[index];
+      const fileName = `${index + 1}-${sanitizeFileName(file.name)}`;
+      const storagePath =
+        `listing-images/${currentUser.uid}/${listingType}/${folderId}/${fileName}`;
+
+      uploadProgressText.textContent =
+        `Uploading image ${index + 1} of ${files.length}...`;
+
+      const url = await uploadSingleFile(file, storagePath, (progress) => {
+        individualProgress[index] = progress;
+
+        const totalProgress =
+          individualProgress.reduce((sum, value) => sum + value, 0) /
+          files.length;
+
+        uploadProgressFill.style.width = `${Math.round(totalProgress * 100)}%`;
+        uploadProgressText.textContent =
+          `Uploading ${Math.round(totalProgress * 100)}%`;
+      });
+
+      urls.push(url);
+      individualProgress[index] = 1;
+    }
+
+    uploadProgressFill.style.width = "100%";
+    uploadProgressText.textContent = "Images uploaded successfully.";
+
+    return urls;
+  }
+
+  const CATEGORY_PRICE_FLOORS = {
+    Vehicles: 300,
+    Property: 500,
+    Phones: 15,
+    Electronics: 10,
+    "Home & Appliances": 5,
+    Fashion: 1,
+    "Beauty & Personal Care": 1,
+    Services: 0,
+    "Repair & Construction": 0,
+    "Commercial Equipment & Tools": 10,
+    "Sports & Leisure": 1,
+    "Babies & Kids": 1,
+    "Agriculture & Farming": 1,
+    "Animals & Pets": 1,
+    Jobs: 0,
+    "Seeking Work - CVs": 0
+  };
+
+  const HIGH_VALUE_CATEGORIES = ["Vehicles", "Property", "Electronics", "Phones"];
+  const NEW_ACCOUNT_HOURS = 24;
+  const HIGH_VALUE_THRESHOLD_USD = 500;
+
+  const SUSPICIOUS_KEYWORDS = [
+    "wire transfer",
+    "western union",
+    "send deposit",
+    "send a deposit",
+    "pay deposit first",
+    "advance payment",
+    "pay in advance",
+    "urgent sale",
+    "no returns",
+    "no refunds",
+    "no inspection",
+    "cash only no meet",
+    "moneygram",
+    "gift card",
+    "reship",
+    "reshipping",
+    "shipping agent",
+    "customs fee",
+    "clearing fee",
+    "processing fee",
+    "delivery fee before pickup",
+    "whatsapp only",
+    "telegram only",
+    "double your money",
+    "investment opportunity",
+    "guaranteed returns",
+    "click this link",
+    "verify your account",
+    "you have won",
+    "claim your prize",
+    "lottery winner",
+    "inheritance fund",
+    "next of kin",
+    "outside the app",
+    "off the app"
+  ];
+
+  function checkPriceTooLow(category, priceUsd) {
+    const floor = CATEGORY_PRICE_FLOORS[category];
+    const price = Number(priceUsd);
+
+    return (
+      floor !== undefined &&
+      Number.isFinite(price) &&
+      price > 0 &&
+      price < floor
+    );
+  }
+
+  function checkSuspiciousKeywords(title, description) {
+    const text = `${title} ${description}`.toLowerCase();
+    return SUSPICIOUS_KEYWORDS.some((keyword) => text.includes(keyword));
+  }
+
+  function checkThinDescription(description, priceUsd) {
+    const price = Number(priceUsd);
+    const wordCount = description.trim().split(/\s+/).filter(Boolean).length;
+
+    return price >= 100 && wordCount < 5;
+  }
+
+  async function checkTooManyRecentListings(sellerId) {
+    try {
+      const oneHourAgo = Timestamp.fromMillis(Date.now() - 60 * 60 * 1000);
+
+      const recentQuery = query(
+        collection(db, "products"),
+        where("sellerId", "==", sellerId),
+        where("createdAt", ">=", oneHourAgo)
+      );
+
+      const snapshot = await getDocs(recentQuery);
+      return snapshot.size >= 3;
+    } catch (error) {
+      console.warn("Recent-listing check skipped:", error.message);
+      return false;
+    }
+  }
+
+  async function checkPriceOutlier(category, priceUsd) {
+    const price = Number(priceUsd);
+    if (!Number.isFinite(price) || price <= 0) return false;
+
+    try {
+      const categoryQuery = query(
+        collection(db, "products"),
+        where("category", "==", category),
+        where("status", "==", "active")
+      );
+
+      const snapshot = await getDocs(categoryQuery);
+      const prices = snapshot.docs
+        .map((docSnap) => Number(docSnap.data().priceUsd))
+        .filter((value) => Number.isFinite(value) && value > 0)
+        .sort((a, b) => a - b);
+
+      if (prices.length < 5) return false;
+
+      const median = prices[Math.floor(prices.length / 2)];
+      return price < median * 0.2;
+    } catch (error) {
+      console.warn("Price-outlier check skipped:", error.message);
+      return false;
+    }
+  }
+
+  async function checkNewAccountHighValue(sellerId, category, priceUsd) {
+    const price = Number(priceUsd);
+
+    if (!HIGH_VALUE_CATEGORIES.includes(category) || price < HIGH_VALUE_THRESHOLD_USD) {
+      return false;
+    }
+
+    try {
+      const userSnapshot = await getDoc(doc(db, "users", sellerId));
+      if (!userSnapshot.exists()) return false;
+
+      const userData = userSnapshot.data();
+      if (!userData.createdAt || !userData.createdAt.seconds) return false;
+
+      const accountAgeHours =
+        (Date.now() - userData.createdAt.seconds * 1000) / (1000 * 60 * 60);
+
+      return accountAgeHours < NEW_ACCOUNT_HOURS;
+    } catch (error) {
+      console.warn("New-account check skipped:", error.message);
+      return false;
+    }
+  }
+
+  async function checkDuplicateListing(title, priceUsd, sellerId) {
+    const cleanTitle = title.trim().toLowerCase();
+    if (!cleanTitle) return false;
+
+    try {
+      const titleQuery = query(
+        collection(db, "products"),
+        where("title", "==", title.trim())
+      );
+
+      const snapshot = await getDocs(titleQuery);
+
+      return snapshot.docs.some((docSnap) => {
+        const data = docSnap.data();
+        return (
+          data.sellerId !== sellerId &&
+          String(data.priceUsd) === String(priceUsd)
+        );
+      });
+    } catch (error) {
+      console.warn("Duplicate-listing check skipped:", error.message);
+      return false;
+    }
+  }
+
+  async function runScamChecks({ title, description, category, priceUsd, images, sellerId }) {
+    const reasons = [];
+
+    if (checkPriceTooLow(category, priceUsd)) {
+      reasons.push("Price is unusually low for this category.");
+    }
+
+    if (await checkPriceOutlier(category, priceUsd)) {
+      reasons.push("Price is far below the median price of similar active listings.");
+    }
+
+    if (checkSuspiciousKeywords(title, description)) {
+      reasons.push("Listing text contains language commonly used in scams.");
+    }
+
+    if (checkThinDescription(description, priceUsd)) {
+      reasons.push("Description is very short for the price listed.");
+    }
+
+    if (images.length === 0) {
+      reasons.push("No product image was provided.");
+    }
+
+    if (await checkTooManyRecentListings(sellerId)) {
+      reasons.push("Seller has posted several listings within the last hour.");
+    }
+
+    if (await checkNewAccountHighValue(sellerId, category, priceUsd)) {
+      reasons.push("A brand-new account is posting a high-value item in a commonly targeted category.");
+    }
+
+    if (await checkDuplicateListing(title, priceUsd, sellerId)) {
+      reasons.push("An identical title and price already exists from a different seller.");
+    }
+
+    return reasons;
+  }
+
+  async function runServiceScamChecks({ title, description, sellerId }) {
+    const reasons = [];
+
+    if (checkSuspiciousKeywords(title, description)) {
+      reasons.push("Listing text contains language commonly used in scams.");
+    }
+
+    const wordCount = description.trim().split(/\s+/).filter(Boolean).length;
+    if (wordCount < 5) {
+      reasons.push("Description is very short.");
+    }
+
+    if (await checkTooManyRecentListings(sellerId)) {
+      reasons.push("Seller has posted several listings within the last hour.");
+    }
+
+    return reasons;
+  }
+
+  function resetProgress() {
+    uploadProgressWrap.classList.remove("show");
+    uploadProgressFill.style.width = "0%";
+    uploadProgressText.textContent = "Preparing upload...";
+  }
+
+  sellForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!listingAccessReady || !currentUser) {
+      alert("Please wait while we verify your account.");
+      return;
+    }
+
+    listingAllowed = await verifyListingAccess(currentUser);
+    if (!listingAllowed) return;
+
+    const listingType = getSelectedListingType();
+    postBtn.disabled = true;
+
+    try {
+      if (listingType === "service") {
+        serviceFiles = validateFiles(serviceImagesInput.files, false);
+        postBtn.textContent = serviceFiles.length ? "Uploading photos..." : "Posting service...";
+
+        const uploadedImages = await uploadImages(serviceFiles, "service");
+
+        const serviceListing = {
+          listingType: "service",
+          title: serviceTitleInput.value.trim(),
+          category: serviceCategoryInput.value,
+          startingPriceUsd: serviceStartingPriceUsdInput.value.trim(),
+          priceUsd: serviceStartingPriceUsdInput.value.trim(),
+          priceLrd: "",
+          county: serviceCountyInput.value.trim(),
+          city: serviceCityInput.value.trim(),
+          imageUrl: uploadedImages[0] || "",
+          images: uploadedImages,
+          description: serviceDescriptionInput.value.trim(),
+          phone: servicePhoneInput.value.trim(),
+          sellerId: currentUser.uid,
+          sellerEmail: currentUser.email || "",
+          status: "active",
+          featured: false,
+          flagged: false,
+          flagReasons: [],
+          createdAt: serverTimestamp()
+        };
+
+        const serviceFlagReasons = await runServiceScamChecks({
+          title: serviceListing.title,
+          description: serviceListing.description,
+          sellerId: currentUser.uid
+        });
+
+        const isServiceFlagged = serviceFlagReasons.length > 0;
+        serviceListing.status = isServiceFlagged ? "pending_review" : "active";
+        serviceListing.flagged = isServiceFlagged;
+        serviceListing.flagReasons = serviceFlagReasons;
+
+        postBtn.textContent = "Saving service...";
+        const serviceDocRef = await addDoc(collection(db, "products"), serviceListing);
+
+        try {
+          await checkListingWithAI({
+            productId: serviceDocRef.id,
+            title: serviceListing.title,
+            description: serviceListing.description,
+            category: serviceListing.category,
+            priceUsd: serviceListing.priceUsd
+          });
+        } catch (aiError) {
+          console.warn("AI scam check skipped:", aiError.message);
+        }
+
+        if (isServiceFlagged) {
+          alert("Your service listing was submitted for admin review.");
+        } else {
+          alert("Service posted successfully!");
+        }
+
+        window.location.href = "dashboard.html";
+        return;
+      }
+
+      productFiles = validateFiles(productImagesInput.files, true);
+      postBtn.textContent = "Uploading images...";
+
+      const uploadedImages = await uploadImages(productFiles, "product");
+
+      const title = titleInput.value.trim();
+      const category = categoryInput.value;
+      const priceUsd = priceUsdInput.value.trim();
+      const priceLrd = priceLrdInput.value.trim();
+      const description = descriptionInput.value.trim();
+
+      postBtn.textContent = "Checking listing...";
+
+      const flagReasons = await runScamChecks({
+        title,
+        description,
+        category,
+        priceUsd,
+        images: uploadedImages,
+        sellerId: currentUser.uid
+      });
+
+      const isFlagged = flagReasons.length > 0;
+
+      const product = {
+        listingType: "product",
+        title,
+        category,
+        priceUsd,
+        priceLrd,
+        condition: conditionInput.value,
+        county: countyInput.value.trim(),
+        city: cityInput.value.trim(),
+        imageUrl: uploadedImages[0],
+        images: uploadedImages,
+        description,
+        phone: phoneInput.value.trim(),
+        sellerId: currentUser.uid,
+        sellerEmail: currentUser.email || "",
+        status: isFlagged ? "pending_review" : "active",
+        featured: false,
+        flagged: isFlagged,
+        flagReasons,
+        createdAt: serverTimestamp()
+      };
+
+      postBtn.textContent = "Saving product...";
+      const productDocRef = await addDoc(collection(db, "products"), product);
+
+      try {
+        await checkListingWithAI({
+          productId: productDocRef.id,
+          title,
+          description,
+          category,
+          priceUsd
+        });
+      } catch (aiError) {
+        // Fail open — the rule-based checks above already ran and saved.
+        console.warn("AI scam check skipped:", aiError.message);
+      }
+
+      if (isFlagged) {
+        alert("Your listing was submitted for admin review.");
+      } else {
+        alert("Product posted successfully!");
+      }
+
+      window.location.href = "dashboard.html";
+    } catch (error) {
+      console.error(error);
+      alert("Could not post listing: " + error.message);
+      resetProgress();
+    } finally {
+      postBtn.disabled = false;
+      postBtn.textContent =
+        getSelectedListingType() === "service"
+          ? "Post Service"
+          : "Post Product";
+    }
+  });
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("service-worker.js")
+      .catch((error) =>
+        console.log("Service worker registration failed:", error)
+      );
+  }
+</script>
+</body>
+</html>

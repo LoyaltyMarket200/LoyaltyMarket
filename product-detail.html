@@ -15,15 +15,6 @@
   <meta name="theme-color" content="#0d6e6e">
 
   <style>
-    /* ==================================================
-       PRODUCT DETAIL — RESTRAINED 2-COLOR SYSTEM
-       Navy (#0d6e6e) = structure/brand/primary action.
-       Orange (#ff6b4a) = the ONLY accent, reserved for
-       price and the Contact Seller button. Everything
-       else (badges, pills, buttons) is either navy,
-       neutral gray, or an outline — no stray blues or
-       greens. Bold reserved for the price and headings.
-       ================================================== */
     :root{
       --navy:#0d6e6e;
       --navy-soft:#e3f2f2;
@@ -128,7 +119,6 @@
     .heart-btn { background: #fff; border: 1px solid var(--line); color: var(--ink); }
     .heart-btn.is-saved { background: var(--navy-soft); color: var(--navy); border-color: var(--navy); }
 
-    /* Jiji-style: WhatsApp + Show Contact side by side, outline style */
     .whatsapp-btn, .show-contact-btn {
       background: #fff;
       border: 1px solid var(--navy);
@@ -137,7 +127,6 @@
     .whatsapp-btn:hover, .show-contact-btn:hover { background: var(--navy-soft); }
     .show-contact-btn.revealed { border-color: var(--orange); color: #c23f24; background: var(--orange-soft); }
 
-    /* Jiji-style quick-reply chat starter */
     .quick-chat-card {
       margin: 18px 0;
       padding: 16px;
@@ -183,7 +172,6 @@
     }
     .start-chat-btn:hover { background: #e5522f; }
 
-    /* Jiji-style collapsible location row */
     .location-toggle-row {
       display: flex;
       align-items: center;
@@ -267,7 +255,6 @@
       font-size: 10px; font-weight: 600;
     }
 
-    /* Jiji-style Safety Tips — bulleted list, not a single paragraph card */
     .safety-tips-card {
       margin: 20px 0;
       padding: 16px;
@@ -283,13 +270,6 @@
     .product-description h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
     .product-description p { color: var(--muted); line-height: 1.6; font-size: 13.5px; font-weight: 400; }
 
-    /* ---------- DISCOVER MORE (collapsible related-category links) ----------
-       Jiji shows a small collapsible chevron list of related browsing paths
-       under the ad ("Africans & Diaspora / Vehicles / Vehicle Dealers &
-       Retailers"). Waterside's categories are flat (no subcategories), so
-       this is the closest honest equivalent: this listing, this listing's
-       category, this category in the seller's county, and the other main
-       categories — same navigational intent, adapted to real data. */
     .discover-more-section {
       width: min(1280px, 94%);
       margin: 0 auto 26px;
@@ -334,8 +314,6 @@
     .unavailable-box p { color: var(--muted); line-height: 1.6; font-weight: 400; }
     .unavailable-box a { color: var(--navy); font-weight: 600; text-decoration: none; }
 
-    /* Report modal */
-    /* ---------- CHECKOUT MODAL (Mobile Money) ---------- */
     .checkout-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 1100; align-items: center; justify-content: center; padding: 16px; }
     .checkout-modal-overlay.modal-open { display: flex; }
     .checkout-modal { background: #fff; border-radius: 16px; padding: 22px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; }
@@ -372,7 +350,6 @@
     .checkout-note { display: flex; gap: 8px; margin-top: 14px; padding: 11px 12px; border-radius: 10px; background: var(--navy-soft); color: var(--navy); font-size: 11.5px; line-height: 1.5; }
     .checkout-note svg { flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px; }
 
-    /* Pending / confirmation screen shown after submitting */
     .checkout-pending-screen { display: none; text-align: center; padding: 10px 4px; }
     .checkout-pending-screen.open { display: block; }
     .checkout-pending-icon { width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%; background: var(--orange-soft); display: flex; align-items: center; justify-content: center; color: #c23f24; }
@@ -425,11 +402,21 @@
         <a href="login.html" id="loginBtn" class="mp-action-link">Sign In</a>
         <a href="register.html" id="registerBtn" class="mp-action-link">Register</a>
 
-        <a href="dashboard.html" id="dashboardBtn" class="mp-action-link" style="display:none;">
+        <a
+          href="dashboard.html"
+          id="dashboardBtn"
+          class="mp-action-link"
+          style="display:none;"
+        >
           Dashboard
         </a>
 
-        <a href="messages.html" id="messagesBtn" class="mp-action-link mp-messages-link" style="display:none;">
+        <a
+          href="messages.html"
+          id="messagesBtn"
+          class="mp-action-link mp-messages-link"
+          style="display:none;"
+        >
           Messages
           <span id="unreadBadge" class="unread-badge">0</span>
         </a>
@@ -719,7 +706,7 @@
         <div class="checkout-pending-icon">
           <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2Z"/></svg>
         </div>
-        <h4>Check Your Phone</h4>
+        <h4 id="checkoutPendingHeading">Check Your Phone</h4>
         <p id="checkoutPendingText">A payment request has been sent to your Mobile Money number. Approve it there to complete your order.</p>
         <button type="button" class="checkout-pending-done-btn" id="checkoutPendingDoneBtn">Done</button>
       </div>
@@ -844,6 +831,10 @@ import {
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
+const functions = getFunctions();
+const requestMomoPaymentFn = httpsCallable(functions, "requestMomoPayment");
+const checkMomoPaymentStatusFn = httpsCallable(functions, "checkMomoPaymentStatus");
+
 const DEFAULT_SETTINGS = {
   marketplaceName: "Waterside",
   supportEmail: "princeteah200@gmail.com",
@@ -909,15 +900,9 @@ const priceFilter = document.getElementById("priceFilter");
 const conditionFilter = document.getElementById("conditionFilter");
 const applyFiltersBtn = document.getElementById("applyFiltersBtn");
 
-// Listings with these statuses are hidden from public viewing.
-// A seller can still view their own pending/rejected listing (e.g.
-// to check on it), and an admin can always view any listing (needed
-// for the admin "View Listing" links on Pending Review / Reports).
 const HIDDEN_STATUSES = ["pending_review", "rejected", "archived"];
 const ADMIN_EMAILS = ["princeteah200@gmail.com"];
 
-// Categories that have their own dedicated page — everything else
-// routes to the homepage listings grid with the category pre-filtered.
 const CATEGORY_PAGE_MAP = {
   Vehicles: "category-vehicles.html",
   Property: "category-property.html",
@@ -940,15 +925,12 @@ let unsubscribeUnreadMessages = null;
 let contactRevealed = false;
 let locationRevealed = false;
 let discoverMoreOpen = false;
+let paymentPollIntervalId = null;
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop";
 
 const LOCATION_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.9em;height:.9em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
 
-// Works out the list of real image URLs for a product, no matter which
-// field name the listing was saved with (new listings use images[],
-// older listings may use imageUrl, imageURL, image, mainImage, photoUrl,
-// or photoURL). Falls back to a placeholder ONLY if none of these exist.
 function resolveProductImages(product) {
   const collected = [];
 
@@ -1006,9 +988,6 @@ function getRelativeTime(millis) {
   return "Posted " + new Date(millis).toLocaleDateString();
 }
 
-// Populates the "Discover More" collapsible links once we know the
-// listing's real category and county — routes to a dedicated category
-// page when one exists, otherwise to the homepage grid pre-filtered.
 function populateDiscoverMore(category, county) {
   if (category) {
     const categoryUrl = CATEGORY_PAGE_MAP[category] || "index.html#products";
@@ -1037,9 +1016,6 @@ discoverMoreToggle.addEventListener("click", () => {
 });
 
 async function loadMarketplaceSettings() {
-  // Kept for parity with other pages that read live settings — this
-  // page currently has no element that needs the value, but loading
-  // it here avoids a silent failure if one gets added later.
   try {
     await getDoc(doc(db, "settings", "marketplace"));
   } catch (error) {
@@ -1127,6 +1103,7 @@ const checkoutSummaryPrice = document.getElementById("checkoutSummaryPrice");
 const checkoutPhoneInput = document.getElementById("checkoutPhoneInput");
 const checkoutSubmitBtn = document.getElementById("checkoutSubmitBtn");
 const checkoutCancelBtn = document.getElementById("checkoutCancelBtn");
+const checkoutPendingHeading = document.getElementById("checkoutPendingHeading");
 const checkoutPendingText = document.getElementById("checkoutPendingText");
 const checkoutPendingDoneBtn = document.getElementById("checkoutPendingDoneBtn");
 const paymentOptionCards = document.querySelectorAll(".payment-option-card");
@@ -1134,47 +1111,6 @@ const providerButtons = document.querySelectorAll(".provider-btn");
 
 let selectedPaymentOption = "instant";
 let selectedProvider = "mtn";
-
-// Cloud Functions wired to the deployed MTN MoMo backend
-// (functions/index.js: requestMomoPayment, checkMomoPaymentStatus).
-const cloudFunctions = getFunctions();
-const requestMomoPaymentFn = httpsCallable(cloudFunctions, "requestMomoPayment");
-const checkMomoPaymentStatusFn = httpsCallable(cloudFunctions, "checkMomoPaymentStatus");
-
-let pollIntervalId = null;
-
-function stopPollingPaymentStatus() {
-  if (pollIntervalId) {
-    clearInterval(pollIntervalId);
-    pollIntervalId = null;
-  }
-}
-
-// Polls the Cloud Function every 5 seconds to check whether the buyer
-// has approved the Request-to-Pay prompt on their phone yet. Stops
-// itself once MTN reports a final SUCCESSFUL/FAILED result.
-function startPollingPaymentStatus(orderId) {
-  stopPollingPaymentStatus();
-
-  pollIntervalId = setInterval(async () => {
-    try {
-      const result = await checkMomoPaymentStatusFn({ orderId });
-      const status = result.data.status;
-
-      if (status === "SUCCESSFUL") {
-        stopPollingPaymentStatus();
-        checkoutPendingText.textContent = "Payment confirmed! Your order is complete.";
-      } else if (status === "FAILED") {
-        stopPollingPaymentStatus();
-        checkoutPendingText.textContent =
-          "The payment was not approved. You can close this and try again from your Orders page.";
-      }
-      // Any other status (e.g. PENDING) — keep polling silently.
-    } catch (error) {
-      console.error("Could not check payment status:", error.message);
-    }
-  }, 5000);
-}
 
 function openCheckoutModal() {
   if (!currentUser) {
@@ -1200,8 +1136,16 @@ function openCheckoutModal() {
   checkoutModalOverlay.classList.add("modal-open");
 }
 
+function stopPaymentPolling() {
+  if (paymentPollIntervalId) {
+    clearInterval(paymentPollIntervalId);
+    paymentPollIntervalId = null;
+  }
+}
+
 function closeCheckoutModal() {
   checkoutModalOverlay.classList.remove("modal-open");
+  stopPaymentPolling();
 }
 
 paymentOptionCards.forEach((card) => {
@@ -1226,6 +1170,38 @@ checkoutCancelBtn.addEventListener("click", closeCheckoutModal);
 checkoutModalOverlay.addEventListener("click", (event) => {
   if (event.target === checkoutModalOverlay) closeCheckoutModal();
 });
+
+// Polls checkMomoPaymentStatus every 5 seconds after a Request-to-Pay
+// has been sent, so the buyer sees the pending screen update the
+// moment they approve (or reject) the prompt on their phone, instead
+// of staying stuck on "Check Your Phone" forever with no feedback.
+function startPaymentPolling(orderId) {
+  stopPaymentPolling();
+
+  paymentPollIntervalId = setInterval(async () => {
+    try {
+      const result = await checkMomoPaymentStatusFn({ orderId });
+      const status = result?.data?.status;
+
+      if (status === "paid" || status === "confirmed") {
+        stopPaymentPolling();
+        checkoutPendingHeading.textContent = "Payment Confirmed";
+        checkoutPendingText.textContent = "Your payment was approved. Redirecting you to your orders...";
+        setTimeout(() => {
+          closeCheckoutModal();
+          window.location.href = "orders.html";
+        }, 1800);
+      } else if (status === "failed") {
+        stopPaymentPolling();
+        checkoutPendingHeading.textContent = "Payment Failed";
+        checkoutPendingText.textContent = "The payment was not approved or timed out. You can try again from your Orders page.";
+      }
+      // Any other status (e.g. "pending_confirmation") just keeps polling.
+    } catch (error) {
+      console.error("Payment status check failed:", error.message);
+    }
+  }, 5000);
+}
 
 async function submitCheckout() {
   const phone = checkoutPhoneInput.value.trim();
@@ -1267,18 +1243,17 @@ async function submitCheckout() {
         createdAt: serverTimestamp()
       });
     } catch (notifyError) {
-      // Notification is a nice-to-have; don't block the order
-      // from being placed if the notification write fails.
+      // Notification is a nice-to-have; don't block the order.
     }
 
     const providerName = selectedProvider === "mtn" ? "MTN Mobile Money" : "Orange Money";
 
-    // Only MTN Mobile Money is wired up to the real, deployed
-    // Request-to-Pay Cloud Function right now. Orange Money still
-    // needs its own integration, so those orders stay noted as
-    // "awaiting_payment" and the buyer is told to arrange payment
-    // with the seller directly for the time being.
     if (selectedProvider === "mtn") {
+      // Real Request-to-Pay: calls the requestMomoPayment Cloud
+      // Function (sandbox), which sends the actual prompt to the
+      // buyer's phone and updates this order's paymentStatus to
+      // "pending_confirmation" server-side. We then poll every 5
+      // seconds until it resolves to paid/confirmed or failed.
       try {
         await requestMomoPaymentFn({
           orderId: orderRef.id,
@@ -1286,21 +1261,25 @@ async function submitCheckout() {
           amountUsd: loadedPriceUsd
         });
 
+        checkoutPendingHeading.textContent = "Check Your Phone";
         checkoutPendingText.textContent =
           `A payment request has been sent to ${phone} via ${providerName}. Approve it there to complete your order.`;
 
-        startPollingPaymentStatus(orderRef.id);
+        startPaymentPolling(orderRef.id);
 
       } catch (momoError) {
-        alert("Could not send the payment request: " + momoError.message);
-        checkoutSubmitBtn.disabled = false;
-        checkoutSubmitBtn.textContent = "Confirm & Pay";
-        return;
+        checkoutPendingHeading.textContent = "Could Not Reach MTN";
+        checkoutPendingText.textContent =
+          "Your order was created, but we couldn't send the payment request right now (" + momoError.message + "). You can retry payment from your Orders page.";
       }
     } else {
+      // Orange Money production integration isn't built yet — the
+      // order is still created for tracking, but no real
+      // Request-to-Pay is sent. Being upfront about that here
+      // instead of implying a prompt is coming.
+      checkoutPendingHeading.textContent = "Order Placed";
       checkoutPendingText.textContent =
-        "Orange Money isn't fully wired up yet — your order was saved, " +
-        "but please arrange payment with the seller directly for now.";
+        "Orange Money automatic payment isn't available yet. Your order has been recorded — please contact the seller to arrange payment, or check your Orders page for updates.";
     }
 
     checkoutFormScreen.style.display = "none";
@@ -1317,7 +1296,6 @@ async function submitCheckout() {
 checkoutSubmitBtn.addEventListener("click", submitCheckout);
 
 checkoutPendingDoneBtn.addEventListener("click", () => {
-  stopPollingPaymentStatus();
   closeCheckoutModal();
   window.location.href = "orders.html";
 });
@@ -1329,8 +1307,6 @@ function buyNow() {
 function renderThumbnails(images, title) {
   thumbnailStrip.innerHTML = "";
 
-  // Don't show a thumbnail strip at all when there's only one real image
-  // (or we're only showing the fallback placeholder).
   if (!images || images.length < 2) return;
 
   images.forEach((imageUrl, index) => {
@@ -1529,8 +1505,6 @@ async function loadProduct() {
 
     loadedPhone = phone || "";
 
-    // Show a masked version until the buyer taps "Show Contact" — same
-    // pattern Jiji uses so the number isn't scraped/visible by default.
     sellerPhone.textContent = loadedPhone ? maskPhone(loadedPhone) : "Phone not listed";
 
     if (loadedPhone) {
@@ -1635,9 +1609,6 @@ async function submitReport() {
   }
 }
 
-// Masks a phone number the way Jiji does before the buyer taps
-// "Show Contact" — keeps the country code and last 2 digits visible,
-// hides the rest so it can't be scraped off the page by default.
 function maskPhone(phone) {
   const digits = phone.replace(/\s+/g, "");
   if (digits.length <= 4) return digits;
@@ -1711,9 +1682,6 @@ reportModalOverlay.addEventListener("click", (event) => {
   if (event.target === reportModalOverlay) closeReportModal();
 });
 
-// Header search bar: this page shows one product, so "Search" takes
-// the visitor back to the homepage listings grid to browse/filter
-// from there rather than trying to filter a single-product page.
 function goToHomepageSearch() {
   window.location.href = "index.html#products";
 }
@@ -1731,9 +1699,6 @@ document.querySelectorAll("[data-footer-county]").forEach((button) => {
   button.addEventListener("click", goToHomepageSearch);
 });
 
-// Wait for Firebase Auth to resolve (even if the visitor is logged
-// out) before loading the product, so the owner/admin visibility
-// check above has the correct currentUser to compare against.
 function touchLastActive(userId) {
   setDoc(doc(db, "users", userId), { lastActiveAt: serverTimestamp() }, { merge: true }).catch(() => {});
 }
@@ -1764,9 +1729,6 @@ onAuthStateChanged(auth, (user) => {
     authReady = true;
     loadProduct();
   } else {
-    // Auth state changed again after the initial load (e.g. the
-    // visitor logged in) — just refresh the saved/wishlist state,
-    // no need to reload the whole product.
     if (currentUser) checkIfSaved();
   }
 });

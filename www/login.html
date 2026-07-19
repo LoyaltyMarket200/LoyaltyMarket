@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login - Waterside</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+
+  <meta name="theme-color" content="#0d6e6e">
+
+  <style>
+    :root {
+      --navy: #0d6e6e;
+      --navy-soft: #e3f2f2;
+      --orange: #ff6b4a;
+      --orange-soft: #ffece7;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --bg: #f7f8fa;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    .navbar {
+      min-height: 50px;
+      padding: 7px max(20px, 4vw);
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .logo-link img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
+
+    .logo-text {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-actions a {
+      padding: 6px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .home-link {
+      background: var(--navy-soft);
+      color: var(--navy);
+      border: 1px solid var(--line);
+    }
+
+    .register-link {
+      background: var(--orange);
+      color: #ffffff;
+    }
+
+    /* Single centered card — no promotional side panel, matching Jiji's plain login */
+    .page {
+      min-height: calc(100vh - 50px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 16px;
+    }
+
+    .card {
+      width: min(400px, 100%);
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+
+    .card h2 {
+      margin: 0 0 5px;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .subtitle {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin: 10px 0 5px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      font: inherit;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--navy);
+    }
+
+    .show-password-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 9px;
+    }
+
+    .show-password-row input {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      accent-color: var(--navy);
+      cursor: pointer;
+    }
+
+    .show-password-row label {
+      margin: 0;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .remember input {
+      width: 16px;
+      height: 16px;
+      min-height: auto;
+      margin: 0;
+      accent-color: var(--navy);
+      cursor: pointer;
+    }
+
+    .forgot {
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .forgot:hover {
+      text-decoration: underline;
+    }
+
+    button {
+      min-height: 44px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--orange);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover { background: #e5522f; }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-top: 11px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+    }
+
+    .message.error {
+      display: block;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .message.success {
+      display: block;
+      background: var(--navy-soft);
+      color: var(--navy);
+      border: 1px solid var(--line);
+    }
+
+    .create-account-text {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .create-account-text a {
+      color: var(--navy);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px max(20px, 5vw);
+      background: var(--navy);
+      color: #b9e6e6;
+    }
+
+    .footer h2 {
+      font-size: 15px;
+      margin: 0 0 3px;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .footer p {
+      font-size: 12px;
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+
+      .nav-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-actions a {
+        text-align: center;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .options {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <a href="index.html" class="logo-link">
+      <img src="icons/icon-512.png" alt="Waterside">
+      <span class="logo-text">Waterside</span>
+    </a>
+
+    <div class="nav-actions">
+      <a class="home-link" href="index.html">Home</a>
+      <a class="register-link" href="register.html">Create Account</a>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="card">
+      <h2>Welcome Back</h2>
+
+      <p class="subtitle">
+        Login to your Waterside account.
+      </p>
+
+      <form id="loginForm">
+        <label for="email">Email Address</label>
+
+        <input
+          id="email"
+          type="email"
+          required
+          autocomplete="email"
+        >
+
+        <label for="password">Password</label>
+
+        <input
+          id="password"
+          type="password"
+          required
+          autocomplete="current-password"
+        >
+
+        <div class="show-password-row">
+          <input
+            id="showPassword"
+            type="checkbox"
+          >
+
+          <label for="showPassword">
+            Show Password
+          </label>
+        </div>
+
+        <div class="options">
+          <label class="remember">
+            <input id="rememberMe" type="checkbox">
+            Remember Me
+          </label>
+
+          <a href="#" class="forgot" id="forgotPasswordLink">
+            Forgot Password?
+          </a>
+        </div>
+
+        <button id="loginBtn" type="submit">
+          Login
+        </button>
+
+        <div id="loginMessage" class="message"></div>
+      </form>
+
+      <p class="create-account-text">
+        Don't Have An Account?
+        <a href="register.html">Create One</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <h2>Waterside</h2>
+      <p>You Get Market, We Get Buyer.</p>
+    </div>
+
+    <p>&copy; 2026 Waterside.</p>
+  </footer>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+
+    import {
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    import {
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const ADMIN_EMAILS = [
+      "princeteah200@gmail.com"
+    ];
+
+    const form = document.getElementById("loginForm");
+    const btn = document.getElementById("loginBtn");
+    const msg = document.getElementById("loginMessage");
+    const remember = document.getElementById("rememberMe");
+    const forgot = document.getElementById("forgotPasswordLink");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const showPassword = document.getElementById("showPassword");
+
+    function show(text, type) {
+      msg.textContent = text;
+      msg.className = "message " + type;
+    }
+
+    function friendly(code) {
+      return {
+        "auth/invalid-credential": "The email or password is incorrect.",
+        "auth/user-not-found": "No account was found with that email.",
+        "auth/wrong-password": "The email or password is incorrect.",
+        "auth/invalid-email": "Enter a valid email address.",
+        "auth/user-disabled": "This Firebase account has been disabled.",
+        "auth/too-many-requests": "Too many attempts. Please wait.",
+        "auth/network-request-failed": "Check your internet connection."
+      }[code] || "Could not log in. Please try again.";
+    }
+
+    async function settings() {
+      try {
+        const snapshot = await getDoc(
+          doc(db, "settings", "marketplace")
+        );
+
+        return snapshot.exists()
+          ? snapshot.data()
+          : {};
+      } catch {
+        return {};
+      }
+    }
+
+    showPassword.addEventListener("change", () => {
+      passwordInput.type = showPassword.checked
+        ? "text"
+        : "password";
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+
+      btn.disabled = true;
+      btn.textContent = "Logging In...";
+      msg.className = "message";
+
+      try {
+        await setPersistence(
+          auth,
+          remember.checked
+            ? browserLocalPersistence
+            : browserSessionPersistence
+        );
+
+        const credential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const user = credential.user;
+
+        const isAdmin = ADMIN_EMAILS.includes(
+          (user.email || "").toLowerCase()
+        );
+
+        const [market, userSnapshot] = await Promise.all([
+          settings(),
+          getDoc(doc(db, "users", user.uid))
+        ]);
+
+        if (market.maintenanceMode === true && !isAdmin) {
+          await signOut(auth);
+
+          show(
+            "Waterside is temporarily under maintenance. Please try again later.",
+            "error"
+          );
+
+          return;
+        }
+
+        let profile = userSnapshot.exists()
+          ? userSnapshot.data()
+          : null;
+
+        if (!profile) {
+          profile = {
+            accountType: "personal",
+            name: user.displayName || "",
+            email: user.email || email,
+            phone: "",
+            verified: false,
+            businessVerified: false,
+            suspended: false,
+            role: isAdmin ? "admin" : "user",
+            profileComplete: false,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          };
+
+          await setDoc(
+            doc(db, "users", user.uid),
+            profile,
+            { merge: true }
+          );
+        }
+
+        if (profile.suspended === true && !isAdmin) {
+          await signOut(auth);
+
+          show(
+            "Your account has been suspended. Contact support.",
+            "error"
+          );
+
+          return;
+        }
+
+        show(
+          "Login successful. Opening your account...",
+          "success"
+        );
+
+        setTimeout(() => {
+          window.location.href = isAdmin
+            ? "admin.html"
+            : "dashboard.html";
+        }, 500);
+
+      } catch (error) {
+        show(
+          friendly(error.code),
+          "error"
+        );
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Login";
+      }
+    });
+
+    forgot.addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        show(
+          "Enter your email first.",
+          "error"
+        );
+
+        return;
+      }
+
+      forgot.style.pointerEvents = "none";
+      forgot.textContent = "Sending...";
+
+      try {
+        await sendPasswordResetEmail(
+          auth,
+          email
+        );
+
+        show(
+          "Password reset email sent. Check your Inbox and Spam folder.",
+          "success"
+        );
+
+      } catch (error) {
+        show(
+          friendly(error.code),
+          "error"
+        );
+      } finally {
+        forgot.style.pointerEvents = "auto";
+        forgot.textContent = "Forgot Password?";
+      }
+    });
+  </script>
+</body>
+</html>

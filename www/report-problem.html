@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report A Problem - Waterside</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="footer.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<meta name="theme-color" content="#0d6e6e">
+<style>
+:root{--navy:#0d6e6e;--navy-soft:#e3f2f2;--orange:#ff6b4a;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.simple-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.simple-navbar .logo-link{display:flex;align-items:center;gap:9px;text-decoration:none}
+.simple-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
+.simple-navbar .logo-text{color:var(--navy);font-size:14px;font-weight:700}
+.simple-nav-actions{display:flex;align-items:center;gap:8px}
+.simple-nav-link{min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:#fff;text-decoration:none;font-size:12px;font-weight:500}
+.simple-nav-link:hover{border-color:var(--navy);color:var(--navy)}
+.page-shell{width:min(560px,92%);margin:26px auto 60px}
+.page-title{margin:0 0 4px;font-size:19px;font-weight:600;color:var(--ink)}
+.page-sub{margin:0 0 20px;color:var(--muted);font-size:12.5px}
+.report-form label{display:block;margin-top:14px;margin-bottom:6px;font-size:13px;font-weight:500;color:var(--ink)}
+.report-form input,.report-form select,.report-form textarea{width:100%;min-height:44px;padding:10px 13px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:13.5px;color:var(--ink);box-sizing:border-box}
+.report-form textarea{min-height:110px;resize:vertical}
+.report-form input:focus,.report-form select:focus,.report-form textarea:focus{outline:none;border-color:var(--navy)}
+.submit-btn{width:100%;min-height:48px;margin-top:22px;border:none;border-radius:11px;background:var(--orange);color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+.submit-btn:hover{background:#e5522f}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.success-box{display:none;margin-top:18px;padding:14px 16px;border-radius:10px;border:1px solid #e5e7eb;background:var(--navy-soft);color:var(--navy);font-size:13px;line-height:1.5}
+.success-box.show{display:block}
+@media (max-width:700px){.simple-navbar{flex-wrap:wrap;gap:10px}.simple-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.page-shell{margin-top:16px}}
+</style>
+</head>
+<body>
+<header class="navbar simple-navbar">
+  <a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text">Waterside</span></a>
+  <div class="simple-nav-actions">
+    <a href="index.html" class="simple-nav-link">Home</a>
+    <a href="dashboard.html" class="simple-nav-link">Dashboard</a>
+    <a href="contact.html" class="simple-nav-link">Contact Us</a>
+  </div>
+</header>
+
+<section class="page-shell">
+  <h1 class="page-title">Report A Problem</h1>
+  <p class="page-sub">Tell us what happened and our team will review it.</p>
+
+  <form class="report-form" id="reportForm">
+    <label for="fullName">Your Full Name</label>
+    <input type="text" id="fullName" required>
+
+    <label for="email">Your Email</label>
+    <input type="email" id="email" required>
+
+    <label for="phone">Your Phone Number (optional)</label>
+    <input type="tel" id="phone">
+
+    <label for="reportType">Problem Type</label>
+    <select id="reportType" required>
+      <option value="">Select a problem type</option>
+      <option>Scam or Fraud</option>
+      <option>Fake Listing</option>
+      <option>Harassment</option>
+      <option>Payment Issue</option>
+      <option>Account Problem</option>
+      <option>App Bug</option>
+      <option>Other</option>
+    </select>
+
+    <label for="listingLink">Listing Link or Username (optional)</label>
+    <input type="text" id="listingLink" placeholder="Paste a link or username, if related to one">
+
+    <label for="description">Describe The Problem</label>
+    <textarea id="description" required placeholder="Tell us what happened, with as much detail as possible..."></textarea>
+
+    <label for="evidence">Evidence (optional)</label>
+    <textarea id="evidence" placeholder="Any screenshots, order numbers, or other details that support your report"></textarea>
+
+    <button type="submit" class="submit-btn" id="submitBtn">Submit Report</button>
+  </form>
+
+  <div class="success-box" id="successBox">Thank you. Your report has been submitted and our team will review it shortly.</div>
+</section>
+
+<footer class="lm-footer" id="marketplaceFooter">
+  <div class="lm-footer-simple site-shell">
+    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+    <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
+  </div>
+</footer>
+
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const reportForm = document.getElementById("reportForm");
+const submitBtn = document.getElementById("submitBtn");
+const successBox = document.getElementById("successBox");
+
+const fullNameInput = document.getElementById("fullName");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const reportTypeInput = document.getElementById("reportType");
+const listingLinkInput = document.getElementById("listingLink");
+const descriptionInput = document.getElementById("description");
+const evidenceInput = document.getElementById("evidence");
+
+let currentUser = null;
+
+onAuthStateChanged(auth,(user)=>{
+  if(!user){ alert("Please log in to submit a report."); window.location.href="login.html"; return; }
+  currentUser = user;
+  emailInput.value = user.email || "";
+});
+
+reportForm.addEventListener("submit", async (event)=>{
+  event.preventDefault();
+
+  if(!currentUser){ alert("Please wait while we verify your account."); return; }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  try{
+    await addDoc(collection(db,"reports"), {
+      userId: currentUser.uid,
+      fullName: fullNameInput.value.trim(),
+      email: emailInput.value.trim(),
+      phone: phoneInput.value.trim(),
+      reportType: reportTypeInput.value,
+      listingLink: listingLinkInput.value.trim(),
+      description: descriptionInput.value.trim(),
+      evidence: evidenceInput.value.trim(),
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
+
+    reportForm.reset();
+    emailInput.value = currentUser.email || "";
+    successBox.classList.add("show");
+    successBox.scrollIntoView({behavior:"smooth"});
+  }catch(error){
+    alert("Could not submit your report: " + error.message);
+  }finally{
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Report";
+  }
+});
+</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{});}</script>
+</body>
+</html>

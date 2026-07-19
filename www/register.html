@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Register - Waterside</title>
+<link rel="stylesheet" href="style.css"><link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png"><meta name="theme-color" content="#0d6e6e">
+<style>
+:root{--navy:#0d6e6e;--navy-soft:#e3f2f2;--orange:#ff6b4a;--orange-soft:#ffece7;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.navbar{min-height:50px;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo-link{display:flex;align-items:center;gap:8px;text-decoration:none}.logo-link img{width:26px;height:26px}
+.logo-text{color:var(--navy);font-size:14px;font-weight:700}
+.nav-actions{display:flex;gap:8px}.nav-actions a{padding:6px 12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:12px}
+.home-link{background:var(--navy-soft);color:var(--navy);border:1px solid var(--line)}.login-link{background:var(--orange);color:#fff}
+/* Single centered card — no promotional side panel */
+.page{width:min(520px,94%);margin:24px auto 50px}
+.card{padding:24px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.card h2{font-size:19px;font-weight:600;margin:0 0 5px;color:var(--ink)}.subtitle{color:var(--muted);font-size:13px;font-weight:400;margin:0 0 8px}
+.account-row,.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.account-row{margin:16px 0}
+.account-option{padding:12px;border:1px solid var(--line);border-radius:10px;text-align:center;cursor:pointer}
+.account-option.selected{border-color:var(--navy);background:var(--navy-soft)}
+.account-option input{display:none}.account-option span{display:block}
+.account-icon{width:26px;height:26px;margin:0 auto;color:var(--navy)}
+.account-label{font-weight:600;margin-top:6px;font-size:13px;color:var(--ink)}
+.account-desc{font-size:11px;color:var(--muted);margin-top:3px;font-weight:400}
+form{display:flex;flex-direction:column}
+label{margin:10px 0 5px;font-size:12px;font-weight:500;color:var(--ink)}
+input,select,textarea{width:100%;min-height:42px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:14px;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy)}
+textarea{min-height:90px;resize:vertical}
+#businessFields{display:none;margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+#businessFields.open{display:block}
+.terms{display:flex;align-items:flex-start;gap:8px;margin:16px 0;font-size:13px;color:var(--ink)}
+.terms input{width:auto;min-height:auto;margin-top:3px;accent-color:var(--navy)}
+button{min-height:44px;border:0;border-radius:10px;background:var(--orange);color:#fff;font-size:14px;font-weight:700;cursor:pointer}
+button:hover{background:#e5522f}button:disabled{opacity:.65}
+.message,.closed-box{display:none;margin-top:11px;padding:10px 12px;border-radius:9px;font-size:13px}
+.message.error{display:block;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.message.success{display:block;background:var(--navy-soft);color:var(--navy);border:1px solid var(--line)}
+.closed-box{background:var(--orange-soft);color:#c23f24;border:1px solid #ffd4c4}
+.footer{display:flex;justify-content:space-between;align-items:center;padding:20px max(20px,5vw);background:var(--navy);color:#b9e6e6}
+.footer h2{font-size:15px;margin:0 0 3px;color:#fff;font-weight:600}.footer p{font-size:12px;margin:0}
+@media(max-width:600px){.navbar{flex-direction:column;align-items:stretch;gap:8px}.nav-actions{display:grid;grid-template-columns:1fr 1fr}.account-row,.row{grid-template-columns:1fr}.card{padding:18px}.footer{flex-direction:column;text-align:center;gap:4px}}
+</style>
+</head>
+<body>
+<header class="navbar"><a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text">Waterside</span></a><div class="nav-actions"><a class="home-link" href="index.html">Home</a><a class="login-link" href="login.html">Login</a></div></header>
+<main class="page">
+<section class="card"><h2>Join Waterside</h2><p class="subtitle">Choose your account type and enter accurate information.</p><div id="registrationClosedBox" class="closed-box"></div>
+<form id="registerForm">
+<label>Account Type</label><div class="account-row"><label class="account-option selected" id="personalOption"><input type="radio" name="accountType" value="personal" checked><span class="account-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></span><span class="account-label">Personal</span><span class="account-desc">Buy and sell as an individual</span></label><label class="account-option" id="businessOption"><input type="radio" name="accountType" value="business"><span class="account-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12M9 21v-6h6v6"/></svg></span><span class="account-label">Business</span><span class="account-desc">Sell as a business</span></label></div>
+<label for="name">Full Name</label><input id="name" type="text" required autocomplete="name">
+<label for="email">Email Address</label><input id="email" type="email" required autocomplete="email">
+<label for="phone">Phone Number</label><input id="phone" type="tel" required autocomplete="tel">
+<label for="password">Password</label><input id="password" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters">
+<label for="confirmPassword">Confirm Password</label><input id="confirmPassword" type="password" required minlength="8" autocomplete="new-password">
+<div id="businessFields"><h3>Business Details</h3><label for="businessName">Business Name</label><input id="businessName" type="text"><label for="businessCategory">Business Category</label><select id="businessCategory"><option value="">Select Category</option><option>Phones</option><option>Electronics</option><option>Vehicles</option><option>Property</option><option>Fashion</option><option>Jobs</option><option>Services</option><option>Other</option></select><label for="businessPhone">Business Phone</label><input id="businessPhone" type="tel"><div class="row"><div><label for="businessCounty">County</label><input id="businessCounty" type="text"></div><div><label for="businessCity">City</label><input id="businessCity" type="text"></div></div><label for="businessDescription">Business Description</label><textarea id="businessDescription"></textarea><label for="businessLogoUrl">Business Logo URL (optional)</label><input id="businessLogoUrl" type="url"><label for="businessRegistrationNumber">Business Registration Number (optional)</label><input id="businessRegistrationNumber" type="text"></div>
+<label class="terms"><input id="termsCheckbox" type="checkbox" required><span>I agree to the Waterside terms and confirm my information is accurate.</span></label>
+<button id="registerBtn" type="submit">Create Account</button><div id="registerMessage" class="message"></div>
+</form></section></main>
+<footer class="footer"><div><h2>Waterside</h2><p>You Get Market, We Get Buyer.</p></div><p>&copy; 2026 Waterside.</p></footer>
+<script type="module">
+import {auth,db} from './firebase.js';
+import {createUserWithEmailAndPassword,deleteUser,signOut} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
+import {doc,getDoc,setDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+const ADMIN_EMAILS=['princeteah200@gmail.com'];const form=document.getElementById('registerForm'),btn=document.getElementById('registerBtn'),msg=document.getElementById('registerMessage'),closed=document.getElementById('registrationClosedBox'),personal=document.getElementById('personalOption'),business=document.getElementById('businessOption'),businessFields=document.getElementById('businessFields');let registrationAllowed=true;
+function show(text,type){msg.textContent=text;msg.className='message '+type}function type(){return document.querySelector('input[name="accountType"]:checked')?.value||'personal'}function updateType(){const b=type()==='business';personal.classList.toggle('selected',!b);business.classList.toggle('selected',b);businessFields.classList.toggle('open',b);['businessName','businessCategory','businessPhone','businessCounty','businessCity','businessDescription'].forEach(id=>document.getElementById(id).required=b)}document.querySelectorAll('input[name="accountType"]').forEach(i=>i.addEventListener('change',updateType));updateType();
+async function loadSettings(){try{const s=await getDoc(doc(db,'settings','marketplace'));const x=s.exists()?s.data():{};registrationAllowed=x.allowNewRegistrations!==false;if(x.maintenanceMode===true){registrationAllowed=false;closed.innerHTML='<strong>Waterside is under maintenance.</strong><p>New registrations are temporarily unavailable.</p>'}else{closed.innerHTML='<strong>Registration is temporarily closed.</strong><p>Please check back later.</p>'}}catch{registrationAllowed=true}closed.style.display=registrationAllowed?'none':'block';form.style.display=registrationAllowed?'flex':'none'}loadSettings();
+function strong(p){return p.length>=8&&/[A-Za-z]/.test(p)&&/[0-9]/.test(p)}
+form.addEventListener('submit',async e=>{e.preventDefault();if(!registrationAllowed)return;const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim().toLowerCase(),phone=document.getElementById('phone').value.trim(),password=document.getElementById('password').value,confirmPassword=document.getElementById('confirmPassword').value,isBusiness=type()==='business';if(!strong(password)){show('Password must contain at least 8 characters, including a letter and a number.','error');return}if(password!==confirmPassword){show('Passwords do not match.','error');return}btn.disabled=true;btn.textContent='Creating Account...';let created=null;try{const c=await createUserWithEmailAndPassword(auth,email,password);created=c.user;const userDoc={accountType:isBusiness?'business':'personal',name,email,phone,verified:false,businessVerified:false,suspended:false,role:ADMIN_EMAILS.includes(email)?'admin':'user',profileComplete:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp()};if(isBusiness)Object.assign(userDoc,{businessName:document.getElementById('businessName').value.trim(),businessCategory:document.getElementById('businessCategory').value,businessPhone:document.getElementById('businessPhone').value.trim(),businessCounty:document.getElementById('businessCounty').value.trim(),businessCity:document.getElementById('businessCity').value.trim(),businessDescription:document.getElementById('businessDescription').value.trim(),businessLogoUrl:document.getElementById('businessLogoUrl').value.trim(),businessRegistrationNumber:document.getElementById('businessRegistrationNumber').value.trim()});await setDoc(doc(db,'users',created.uid),userDoc);await signOut(auth);show('Account created successfully. Opening login...','success');setTimeout(()=>location.href='login.html',700)}catch(error){if(created)try{await deleteUser(created)}catch{};const friendly={'auth/email-already-in-use':'An account already exists with this email.','auth/invalid-email':'Enter a valid email address.','auth/weak-password':'Choose a stronger password.','auth/network-request-failed':'Check your internet connection.','auth/too-many-requests':'Too many attempts. Please wait.'};show(friendly[error.code]||('Could not create account: '+error.message),'error')}finally{btn.disabled=false;btn.textContent='Create Account'}});
+</script></body></html>

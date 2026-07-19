@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results - Waterside</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="stylesheet" href="marketplace.css">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+
+  <meta name="theme-color" content="#0d6e6e">
+
+  <style>
+    body {
+      background: #f7f8fa;
+    }
+
+    .load-more-btn {
+      display: block;
+      margin: 24px auto 0;
+      background: #0d6e6e;
+      color: #fff;
+      border: none;
+      padding: 11px 26px;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+    }
+
+    .load-more-btn:hover {
+      background: #095454;
+    }
+
+    .load-more-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .recently-viewed-section {
+      max-width: 1280px;
+      margin: 0 auto 18px;
+      padding: 0 max(20px, 4vw);
+    }
+
+    .recently-viewed-section h3 {
+      margin-bottom: 9px;
+      font-size: 14px;
+      color: #1f2937;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .recently-viewed-section h3 .icon {
+      width: 15px;
+      height: 15px;
+      color: #0d6e6e;
+    }
+
+    .recently-viewed-strip {
+      display: flex;
+      gap: 11px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .recently-viewed-card {
+      flex: 0 0 auto;
+      width: 138px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 8px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .recently-viewed-card img {
+      width: 100%;
+      height: 88px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .recently-viewed-card h4 {
+      font-size: 11.5px;
+      font-weight: 500;
+      margin: 0 0 4px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recently-viewed-card p {
+      font-size: 11.5px;
+      color: #ff6b4a;
+      font-weight: 700;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body class="homepage">
+  <div class="top-strip">
+    <div class="site-shell top-strip-inner">
+      <p>Liberia's trusted online marketplace</p>
+
+      <div class="top-strip-links">
+        <a href="safety.html">Safety Tips</a>
+        <a href="business-profile.html">Verified Businesses</a>
+        <a href="contact.html">Help &amp; Support</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="mp-header">
+    <div class="mp-header-top">
+      <a href="index.html" class="mp-logo" aria-label="Waterside home">
+        <span class="mp-logo-word mp-logo-water">Water</span><span class="mp-logo-word mp-logo-side">side</span>
+        <span class="mp-logo-sub">Liberia's No.1 Marketplace</span>
+      </a>
+
+      <div class="mp-header-actions">
+        <a href="login.html" id="loginBtn" class="mp-action-link">Sign In</a>
+        <a href="register.html" id="registerBtn" class="mp-action-link">Register</a>
+
+        <a
+          href="dashboard.html"
+          id="dashboardBtn"
+          class="mp-action-link"
+          style="display:none;"
+        >
+          Dashboard
+        </a>
+
+        <a
+          href="messages.html"
+          id="messagesBtn"
+          class="mp-action-link mp-messages-link"
+          style="display:none;"
+        >
+          Messages
+          <span id="unreadBadge" class="unread-badge">0</span>
+        </a>
+
+        <a href="sell.html" id="navSellBtn" class="mp-post-ad">
+          Post An Ad
+        </a>
+      </div>
+    </div>
+
+    <div class="mp-header-search">
+      <div class="mp-search-row">
+        <div class="mp-search-field mp-search-location">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+
+          <select id="countyFilter" aria-label="Select county">
+            <option value="">All Liberia</option>
+            <option value="Montserrado">Montserrado</option>
+            <option value="Margibi">Margibi</option>
+            <option value="Grand Bassa">Grand Bassa</option>
+            <option value="Nimba">Nimba</option>
+            <option value="Bong">Bong</option>
+            <option value="Lofa">Lofa</option>
+            <option value="Grand Cape Mount">Grand Cape Mount</option>
+            <option value="Bomi">Bomi</option>
+            <option value="Gbarpolu">Gbarpolu</option>
+            <option value="Grand Gedeh">Grand Gedeh</option>
+            <option value="Grand Kru">Grand Kru</option>
+            <option value="Maryland">Maryland</option>
+            <option value="River Cess">River Cess</option>
+            <option value="River Gee">River Gee</option>
+            <option value="Sinoe">Sinoe</option>
+          </select>
+        </div>
+
+        <div class="mp-search-field mp-search-keyword">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search Products, Cars, Phones..."
+            autocomplete="off"
+          >
+        </div>
+
+        <div class="mp-search-field mp-search-category">
+          <select id="categoryFilter" aria-label="Select category">
+            <option value="">All Categories</option>
+            <option value="Vehicles">Vehicles</option>
+            <option value="Property">Property</option>
+            <option value="Phones">Phones &amp; Tablets</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Home & Appliances">Home &amp; Appliances</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Beauty & Personal Care">Beauty &amp; Personal Care</option>
+            <option value="Services">Services</option>
+            <option value="Repair & Construction">Repair &amp; Construction</option>
+            <option value="Commercial Equipment & Tools">Commercial Equipment &amp; Tools</option>
+            <option value="Sports & Leisure">Sports &amp; Leisure</option>
+            <option value="Babies & Kids">Babies &amp; Kids</option>
+            <option value="Agriculture & Farming">Agriculture &amp; Farming</option>
+            <option value="Animals & Pets">Animals &amp; Pets</option>
+            <option value="Jobs">Jobs</option>
+            <option value="Seeking Work - CVs">Seeking Work - CVs</option>
+          </select>
+        </div>
+
+        <button class="mp-search-btn" id="applyFiltersBtn" type="button">
+          Search
+        </button>
+      </div>
+
+      <div class="mp-search-advanced">
+        <select id="priceFilter" aria-label="Select price range">
+          <option value="">Any Price</option>
+          <option value="100">Under US$100</option>
+          <option value="500">Under US$500</option>
+          <option value="1000">Under US$1,000</option>
+          <option value="over1000">Over US$1,000</option>
+        </select>
+
+        <select id="conditionFilter" aria-label="Select condition">
+          <option value="">Any Condition</option>
+          <option value="Brand New">Brand New</option>
+          <option value="Used">Used</option>
+          <option value="Foreign Used">Foreign Used</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <nav class="mp-nav-strip" aria-label="Category navigation">
+    <div class="mp-nav-inner">
+      <a href="index.html#products" class="mp-nav-all"><svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;"><path d="M4 6h16M4 12h16M4 18h16"/></svg> All Categories</a>
+      <a href="category-vehicles.html" class="mp-nav-link">Vehicles</a>
+      <a href="category-property.html" class="mp-nav-link">Property</a>
+      <a href="category-phones.html" class="mp-nav-link">Phones &amp; Tablets</a>
+      <a href="category-electronics.html" class="mp-nav-link">Electronics</a>
+      <a href="category-fashion.html" class="mp-nav-link">Fashion</a>
+      <a href="category-jobs.html" class="mp-nav-link">Jobs</a>
+      <a href="index.html#products" class="mp-nav-link">Services</a>
+      <a href="index.html#products" class="mp-nav-link mp-nav-more">More</a>
+    </div>
+  </nav>
+
+  <p class="cat-breadcrumb">
+    <a href="index.html">Home</a> &rsaquo; <span>Search Results</span>
+  </p>
+
+  <div class="recently-viewed-section" id="recentlyViewedSection" style="display:none;">
+    <h3><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Recently Viewed</h3>
+    <div class="recently-viewed-strip" id="recentlyViewedStrip"></div>
+  </div>
+
+  <section class="cat-layout" id="products">
+    <aside class="cat-filters">
+      <h3>Filter Results</h3>
+
+      <div class="cat-filter-group">
+        <label for="sidebarCategoryFilter">Category</label>
+        <select id="sidebarCategoryFilter">
+          <option value="">All Categories</option>
+          <option value="Vehicles">Vehicles</option>
+          <option value="Property">Property</option>
+          <option value="Phones">Phones &amp; Tablets</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Home & Appliances">Home &amp; Appliances</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Beauty & Personal Care">Beauty &amp; Personal Care</option>
+          <option value="Services">Services</option>
+          <option value="Repair & Construction">Repair &amp; Construction</option>
+          <option value="Commercial Equipment & Tools">Commercial Equipment &amp; Tools</option>
+          <option value="Sports & Leisure">Sports &amp; Leisure</option>
+          <option value="Babies & Kids">Babies &amp; Kids</option>
+          <option value="Agriculture & Farming">Agriculture &amp; Farming</option>
+          <option value="Animals & Pets">Animals &amp; Pets</option>
+          <option value="Jobs">Jobs</option>
+          <option value="Seeking Work - CVs">Seeking Work - CVs</option>
+        </select>
+      </div>
+
+      <div class="cat-filter-group">
+        <label for="sidebarCountyFilter">County</label>
+        <select id="sidebarCountyFilter">
+          <option value="">All Counties</option>
+          <option value="Montserrado">Montserrado</option>
+          <option value="Margibi">Margibi</option>
+          <option value="Grand Bassa">Grand Bassa</option>
+          <option value="Nimba">Nimba</option>
+          <option value="Bong">Bong</option>
+          <option value="Lofa">Lofa</option>
+          <option value="Grand Cape Mount">Grand Cape Mount</option>
+          <option value="Bomi">Bomi</option>
+          <option value="Gbarpolu">Gbarpolu</option>
+          <option value="Grand Gedeh">Grand Gedeh</option>
+          <option value="Grand Kru">Grand Kru</option>
+          <option value="Maryland">Maryland</option>
+          <option value="River Cess">River Cess</option>
+          <option value="River Gee">River Gee</option>
+          <option value="Sinoe">Sinoe</option>
+        </select>
+      </div>
+
+      <div class="cat-filter-group">
+        <label for="sidebarPriceFilter">Price Range</label>
+        <select id="sidebarPriceFilter">
+          <option value="">Any Price</option>
+          <option value="100">Under US$100</option>
+          <option value="500">Under US$500</option>
+          <option value="1000">Under US$1,000</option>
+          <option value="over1000">Over US$1,000</option>
+        </select>
+      </div>
+
+      <div class="cat-filter-group">
+        <label for="sidebarConditionFilter">Condition</label>
+        <select id="sidebarConditionFilter">
+          <option value="">Any Condition</option>
+          <option value="Brand New">Brand New</option>
+          <option value="Used">Used</option>
+          <option value="Foreign Used">Foreign Used</option>
+        </select>
+      </div>
+
+      <button class="cat-filter-apply" id="applyFiltersBtn2" type="button">
+        Apply Filters
+      </button>
+
+      <button class="cat-filter-clear" id="clearFiltersBtn" type="button">
+        Clear Filters
+      </button>
+    </aside>
+
+    <main>
+      <div class="cat-toolbar">
+        <p class="cat-toolbar-count" id="resultsCount">Loading products...</p>
+
+        <div class="cat-sort">
+          <label for="sortSelect">Sort by</label>
+
+          <select id="sortSelect">
+            <option value="newest">Newest</option>
+            <option value="lowest">Price: Low to High</option>
+            <option value="highest">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="product-grid" id="searchGrid">
+        <p>Loading products...</p>
+      </div>
+
+      <button class="load-more-btn" id="loadMoreBtn" style="display:none;">
+        Load More
+      </button>
+    </main>
+  </section>
+
+  <!-- PROFESSIONAL LOYALTYMARKET FOOTER -->
+  <footer class="lm-footer" id="marketplaceFooter">
+    <button
+      type="button"
+      id="mobileFooterToggle"
+      class="lm-footer-toggle"
+      aria-expanded="false"
+      aria-controls="mobileFooterContent"
+    >
+      <span class="lm-footer-toggle-brand">
+        <img src="icons/icon-512.png" alt="Waterside logo">
+
+        <span>
+          <span class="lm-footer-toggle-lr">LR</span>
+          <span data-marketplace-name>Waterside</span>
+        </span>
+      </span>
+
+      <span class="lm-footer-toggle-label">Explore Waterside</span>
+      <span class="lm-footer-arrow" aria-hidden="true">⌄</span>
+    </button>
+
+    <div id="mobileFooterContent" class="lm-footer-content">
+      <div class="lm-skyline-wrap" aria-label="Liberia-inspired skyline">
+        <div class="lm-skyline site-shell">
+          <div class="lm-building lm-building-one"></div>
+          <div class="lm-building lm-building-two"></div>
+          <div class="lm-capitol">
+            <span class="lm-capitol-dome"></span>
+            <span class="lm-capitol-roof"></span>
+            <span class="lm-capitol-body">
+              <i></i><i></i><i></i><i></i><i></i>
+            </span>
+          </div>
+          <div class="lm-building lm-building-three"></div>
+          <div class="lm-building lm-building-four"></div>
+          <div class="lm-building lm-building-five"></div>
+        </div>
+      </div>
+
+      <div class="lm-footer-main">
+        <div class="site-shell lm-footer-grid">
+          <section class="lm-footer-brand">
+            <p class="lm-footer-description">
+              Liberia's trusted marketplace for products, vehicles,
+              property, jobs and professional services.
+            </p>
+
+            <div class="lm-footer-support">
+              <p id="footerSupport"></p>
+
+              <a href="contact.html" class="lm-footer-help-button">
+                Contact Support
+              </a>
+            </div>
+
+            <div class="lm-footer-app">
+              <strong>Waterside Mobile App</strong>
+              <span>Android and iPhone apps coming soon.</span>
+            </div>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Marketplace</h3>
+            <a href="index.html#products">Browse Listings</a>
+            <a href="sell.html">Post An Ad</a>
+            <a href="business-profile.html">Business Accounts</a>
+            <a href="category-jobs.html">Jobs</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Support</h3>
+            <a href="safety.html">Safety Tips</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="faq.html">Help Center</a>
+            <a href="report.html">Report A Problem</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Legal</h3>
+            <a href="terms.html">Terms &amp; Conditions</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="prohibited-items.html">Prohibited Items</a>
+            <a href="community-rules.html">Community Rules</a>
+          </section>
+
+          <section class="lm-footer-column">
+            <h3>Follow Us</h3>
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">YouTube</a>
+            <a href="#">TikTok</a>
+          </section>
+        </div>
+
+        <div class="site-shell lm-county-section">
+          <div class="lm-county-heading">
+            <div>
+              <span>
+                <strong>Browse Across Liberia</strong>
+                <small>Serving buyers and sellers in all 15 counties</small>
+              </span>
+            </div>
+          </div>
+
+          <div class="lm-county-list">
+            <button type="button" data-footer-county="Bomi">Bomi</button>
+            <button type="button" data-footer-county="Bong">Bong</button>
+            <button type="button" data-footer-county="Gbarpolu">Gbarpolu</button>
+            <button type="button" data-footer-county="Grand Bassa">Grand Bassa</button>
+            <button type="button" data-footer-county="Grand Cape Mount">Grand Cape Mount</button>
+            <button type="button" data-footer-county="Grand Gedeh">Grand Gedeh</button>
+            <button type="button" data-footer-county="Grand Kru">Grand Kru</button>
+            <button type="button" data-footer-county="Lofa">Lofa</button>
+            <button type="button" data-footer-county="Margibi">Margibi</button>
+            <button type="button" data-footer-county="Maryland">Maryland</button>
+            <button type="button" data-footer-county="Montserrado">Montserrado</button>
+            <button type="button" data-footer-county="Nimba">Nimba</button>
+            <button type="button" data-footer-county="River Cess">River Cess</button>
+            <button type="button" data-footer-county="River Gee">River Gee</button>
+            <button type="button" data-footer-county="Sinoe">Sinoe</button>
+          </div>
+        </div>
+
+        <div class="lm-footer-bottom">
+          <div class="site-shell lm-footer-bottom-inner">
+            <p>
+              &copy; 2026
+              <span data-marketplace-name>Waterside</span>.
+              All Rights Reserved.
+            </p>
+
+            <p>Made For Liberia</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">⌂</span>
+      <span>Home</span>
+    </a>
+
+    <a href="wishlist.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">♡</span>
+      <span>Saved</span>
+    </a>
+
+    <a href="sell.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">⊞</span>
+      <span>Sell</span>
+    </a>
+
+    <a href="messages.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">▤</span>
+      <span>Messages</span>
+    </a>
+
+    <a href="dashboard.html" class="mobile-bottom-link">
+      <span class="mobile-bottom-icon">♙</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+<script type="module">
+import { db, auth } from "./firebase.js";
+
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+  query,
+  where,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const DEFAULT_SETTINGS = {
+  marketplaceName: "Waterside",
+  supportEmail: "princeteah200@gmail.com",
+  supportPhone: "+231 88 147 1694"
+};
+
+const LOCATION_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+
+const searchGrid = document.getElementById("searchGrid");
+const resultsCount = document.getElementById("resultsCount");
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const countyFilter = document.getElementById("countyFilter");
+const priceFilter = document.getElementById("priceFilter");
+const conditionFilter = document.getElementById("conditionFilter");
+const applyFiltersBtn = document.getElementById("applyFiltersBtn");
+const applyFiltersBtn2 = document.getElementById("applyFiltersBtn2");
+const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+const sortSelect = document.getElementById("sortSelect");
+const loadMoreBtn = document.getElementById("loadMoreBtn");
+const recentlyViewedSection = document.getElementById("recentlyViewedSection");
+const recentlyViewedStrip = document.getElementById("recentlyViewedStrip");
+const footerSupport = document.getElementById("footerSupport");
+
+const sidebarCategoryFilter = document.getElementById("sidebarCategoryFilter");
+const sidebarCountyFilter = document.getElementById("sidebarCountyFilter");
+const sidebarPriceFilter = document.getElementById("sidebarPriceFilter");
+const sidebarConditionFilter = document.getElementById("sidebarConditionFilter");
+
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const dashboardBtn = document.getElementById("dashboardBtn");
+const messagesBtn = document.getElementById("messagesBtn");
+const unreadBadge = document.getElementById("unreadBadge");
+
+const PAGE_SIZE = 9;
+
+let allProducts = [];
+let currentFilteredProducts = [];
+let itemsShown = PAGE_SIZE;
+let unsubscribeUnreadMessages = null;
+
+const BOOST_TIER_RANK = {
+  diamond: 6, vipgold: 5, vip: 4, premium: 3, business: 2, basic: 1
+};
+
+function getBoostRank(product) {
+  if (product.boostStatus === "active" && product.boostPlan) {
+    return BOOST_TIER_RANK[product.boostPlan] || 1;
+  }
+  return product.featured === true ? 1 : 0;
+}
+
+function safeText(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function renderProductCard(product) {
+  const image =
+    product.imageUrl ||
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=350&fit=crop";
+
+  const isFeatured = product.featured === true;
+
+  const productLink = document.createElement("a");
+
+  productLink.href =
+    "product-detail.html?id=" + encodeURIComponent(product.id);
+
+  productLink.style.textDecoration = "none";
+  productLink.style.color = "inherit";
+
+  productLink.innerHTML = `
+    <div class="product-card">
+      <span class="badge ${isFeatured ? "badge-featured" : ""}">${isFeatured ? "Featured" : "New"}</span>
+
+      <button
+        class="heart"
+        type="button"
+        aria-label="Save product"
+        onclick="event.preventDefault(); event.stopPropagation();"
+      >
+        ♡
+      </button>
+
+      <div class="product-image">
+        <img
+          src="${safeText(image)}"
+          alt="${safeText(product.title || "Product")}"
+        >
+      </div>
+
+      <h3>${safeText(product.title || "Untitled Product")}</h3>
+
+      <p class="price">
+        US$${safeText(product.priceUsd || "0")}
+        |
+        L$${safeText(product.priceLrd || "0")}
+      </p>
+
+      <p class="location">
+        ${LOCATION_SVG} ${safeText(product.city || "")},
+        ${safeText(product.county || "Liberia")}
+      </p>
+
+      <p class="condition">
+        ${safeText(product.condition || "Not listed")}
+      </p>
+    </div>
+  `;
+
+  return productLink;
+}
+
+function displayProducts(products) {
+  currentFilteredProducts = products;
+  itemsShown = PAGE_SIZE;
+  renderCurrentPage();
+}
+
+function renderCurrentPage() {
+  searchGrid.innerHTML = "";
+
+  const numberOfProducts = currentFilteredProducts.length;
+
+  resultsCount.innerHTML =
+    numberOfProducts === 1
+      ? "Showing <strong>1</strong> result"
+      : `Showing <strong>${numberOfProducts}</strong> results`;
+
+  if (numberOfProducts === 0) {
+    searchGrid.innerHTML = `
+      <div class="cat-empty">
+        <h3>No Results Found</h3>
+        <p>Try changing your search term or filters.</p>
+        <a href="sell.html" class="cat-band-post" style="text-decoration:none;">Sell Something</a>
+      </div>
+    `;
+    loadMoreBtn.style.display = "none";
+    return;
+  }
+
+  const visibleProducts = currentFilteredProducts.slice(0, itemsShown);
+
+  visibleProducts.forEach((product) => {
+    searchGrid.appendChild(renderProductCard(product));
+  });
+
+  if (itemsShown < numberOfProducts) {
+    loadMoreBtn.style.display = "block";
+    loadMoreBtn.textContent = "Load More";
+    loadMoreBtn.disabled = false;
+  } else {
+    loadMoreBtn.style.display = "none";
+  }
+}
+
+function sortProducts(products) {
+  const sortValue = sortSelect.value;
+  const sorted = [...products];
+
+  if (sortValue === "lowest") {
+    sorted.sort((a, b) => Number(a.priceUsd || 0) - Number(b.priceUsd || 0));
+  } else if (sortValue === "highest") {
+    sorted.sort((a, b) => Number(b.priceUsd || 0) - Number(a.priceUsd || 0));
+  } else {
+    sorted.sort((a, b) => {
+      const aTime = a.createdAt?.seconds || 0;
+      const bTime = b.createdAt?.seconds || 0;
+      return bTime - aTime;
+    });
+    sorted.sort((a, b) => getBoostRank(b) - getBoostRank(a));
+  }
+
+  return sorted;
+}
+
+function getActiveFilterValues() {
+  return {
+    searchTerm: searchInput.value.trim().toLowerCase(),
+    category: categoryFilter.value || sidebarCategoryFilter.value || "",
+    county: countyFilter.value || sidebarCountyFilter.value || "",
+    price: priceFilter.value || sidebarPriceFilter.value || "",
+    condition: conditionFilter.value || sidebarConditionFilter.value || ""
+  };
+}
+
+function applyFilters() {
+  const { searchTerm, category, county, price, condition } = getActiveFilterValues();
+
+  const filteredProducts = allProducts.filter((product) => {
+    if (product.status === "archived") return false;
+
+    const title = String(product.title || "").toLowerCase();
+    const description = String(product.description || "").toLowerCase();
+    const productCategory = String(product.category || "");
+    const productCounty = String(product.county || "");
+    const productCondition = String(product.condition || "");
+    const productPrice = Number(product.priceUsd || 0);
+
+    const matchesSearch =
+      !searchTerm ||
+      title.includes(searchTerm) ||
+      description.includes(searchTerm);
+
+    const matchesCategory =
+      !category || productCategory === category;
+
+    const matchesCounty =
+      !county || productCounty === county;
+
+    const matchesCondition =
+      !condition || productCondition === condition;
+
+    let matchesPrice = true;
+
+    if (price === "100") {
+      matchesPrice = productPrice < 100;
+    }
+
+    if (price === "500") {
+      matchesPrice = productPrice < 500;
+    }
+
+    if (price === "1000") {
+      matchesPrice = productPrice < 1000;
+    }
+
+    if (price === "over1000") {
+      matchesPrice = productPrice >= 1000;
+    }
+
+    return (
+      matchesSearch &&
+      matchesCategory &&
+      matchesCounty &&
+      matchesCondition &&
+      matchesPrice
+    );
+  });
+
+  displayProducts(sortProducts(filteredProducts));
+}
+
+function loadRecentlyViewed() {
+  try {
+    const stored = localStorage.getItem("loyaltymarket_recently_viewed");
+    if (!stored) return;
+
+    const viewedIds = JSON.parse(stored);
+    if (!Array.isArray(viewedIds) || viewedIds.length === 0) return;
+
+    const viewedProducts = viewedIds
+      .map((id) => allProducts.find((product) => product.id === id))
+      .filter((product) => product !== undefined && product.status !== "archived")
+      .slice(0, 10);
+
+    if (viewedProducts.length === 0) return;
+
+    recentlyViewedStrip.innerHTML = "";
+
+    viewedProducts.forEach((product) => {
+      const image =
+        product.imageUrl ||
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=150&fit=crop";
+
+      const card = document.createElement("a");
+      card.className = "recently-viewed-card";
+      card.href = "product-detail.html?id=" + encodeURIComponent(product.id);
+      card.innerHTML = `
+        <img src="${safeText(image)}" alt="${safeText(product.title || "Product")}">
+        <h4>${safeText(product.title || "Untitled Product")}</h4>
+        <p>US$${safeText(product.priceUsd || "0")}</p>
+      `;
+      recentlyViewedStrip.appendChild(card);
+    });
+
+    recentlyViewedSection.style.display = "block";
+  } catch (error) {
+    // Recently viewed is a nice-to-have; fail silently.
+  }
+}
+
+async function loadMarketplaceSettings() {
+  let settings = { ...DEFAULT_SETTINGS };
+
+  try {
+    const snapshot = await getDoc(doc(db, "settings", "marketplace"));
+    if (snapshot.exists()) {
+      settings = { ...settings, ...snapshot.data() };
+    }
+  } catch (error) {
+    console.error("Could not load marketplace settings:", error);
+  }
+
+  const support = [settings.supportEmail, settings.supportPhone].filter(Boolean);
+
+  if (footerSupport) {
+    footerSupport.textContent = support.length ? `Support: ${support.join(" | ")}` : "";
+  }
+}
+
+async function loadAllProducts() {
+  searchGrid.innerHTML = "<p>Loading products...</p>";
+
+  try {
+    const snapshot = await getDocs(collection(db, "products"));
+
+    allProducts = [];
+
+    snapshot.forEach((productDocument) => {
+      allProducts.push({
+        id: productDocument.id,
+        ...productDocument.data()
+      });
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const urlSearchTerm = params.get("q");
+
+    if (urlSearchTerm) {
+      searchInput.value = urlSearchTerm;
+    }
+
+    applyFilters();
+    loadRecentlyViewed();
+
+  } catch (error) {
+    console.error(error);
+
+    resultsCount.textContent = "Unable to load products";
+
+    searchGrid.innerHTML = `
+      <div class="cat-empty">
+        <h3>Could Not Load Products</h3>
+        <p>${safeText(error.message)}</p>
+      </div>
+    `;
+  }
+}
+
+applyFiltersBtn.addEventListener("click", applyFilters);
+applyFiltersBtn2.addEventListener("click", applyFilters);
+
+searchInput.addEventListener("input", applyFilters);
+
+sortSelect.addEventListener("change", applyFilters);
+
+clearFiltersBtn.addEventListener("click", function() {
+  searchInput.value = "";
+  categoryFilter.value = "";
+  countyFilter.value = "";
+  priceFilter.value = "";
+  conditionFilter.value = "";
+  sidebarCategoryFilter.value = "";
+  sidebarCountyFilter.value = "";
+  sidebarPriceFilter.value = "";
+  sidebarConditionFilter.value = "";
+  sortSelect.value = "newest";
+
+  displayProducts(sortProducts(allProducts.filter((product) => product.status !== "archived")));
+});
+
+loadMoreBtn.addEventListener("click", function() {
+  itemsShown += PAGE_SIZE;
+  renderCurrentPage();
+});
+
+document.querySelectorAll("[data-footer-county]").forEach((button) => {
+  button.addEventListener("click", () => {
+    countyFilter.value = button.dataset.footerCounty || "";
+    sidebarCountyFilter.value = button.dataset.footerCounty || "";
+    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+    applyFilters();
+  });
+});
+
+function listenForUnreadMessages(userId) {
+  unsubscribeUnreadMessages?.();
+
+  const unreadQuery = query(collection(db, "messages"), where("receiverId", "==", userId), where("read", "==", false));
+
+  unsubscribeUnreadMessages = onSnapshot(unreadQuery, (snapshot) => {
+    const count = snapshot.size;
+    if (count > 0) {
+      unreadBadge.textContent = count > 9 ? "9+" : String(count);
+      unreadBadge.classList.add("has-unread");
+    } else {
+      unreadBadge.classList.remove("has-unread");
+    }
+  });
+}
+
+function touchLastActive(userId) {
+  setDoc(doc(db, "users", userId), { lastActiveAt: serverTimestamp() }, { merge: true }).catch(() => {});
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loginBtn.style.display = "none";
+    registerBtn.style.display = "none";
+    dashboardBtn.style.display = "inline-block";
+    messagesBtn.style.display = "inline-block";
+
+    listenForUnreadMessages(user.uid);
+    touchLastActive(user.uid);
+  } else {
+    loginBtn.style.display = "inline-block";
+    registerBtn.style.display = "inline-block";
+    dashboardBtn.style.display = "none";
+    messagesBtn.style.display = "none";
+
+    unreadBadge.classList.remove("has-unread");
+    unsubscribeUnreadMessages?.();
+    unsubscribeUnreadMessages = null;
+  }
+});
+
+loadAllProducts();
+loadMarketplaceSettings();
+</script>
+
+<script>
+  const mobileFooterToggle = document.getElementById("mobileFooterToggle");
+  const mobileFooterContent = document.getElementById("mobileFooterContent");
+
+  if (mobileFooterToggle && mobileFooterContent) {
+    mobileFooterToggle.addEventListener("click", () => {
+      const isOpen = mobileFooterContent.classList.toggle("footer-open");
+      mobileFooterToggle.classList.toggle("footer-toggle-open", isOpen);
+      mobileFooterToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+  }
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
+</script>
+
+</body>
+</html>

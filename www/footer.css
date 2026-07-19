@@ -1,0 +1,174 @@
+/* ============================================
+   WATERSIDE — FOOTER.CSS
+   Flat, simple Jiji-style footer: App Store/Google
+   Play badges, then plain centered link rows, then
+   county browse row, tagline, copyright. No skyline
+   graphic, no gold pill buttons, no collapsible
+   mobile toggle.
+   ============================================ */
+
+.lm-footer {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.lm-footer-simple {
+  padding: 32px max(20px, 4vw) 24px;
+  text-align: center;
+}
+
+.lm-footer-app-badges {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.lm-app-badge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.lm-app-badge-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.lm-app-badge-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.lm-app-badge-text small {
+  font-size: 9px;
+  opacity: 0.8;
+}
+
+.lm-app-badge-text strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.lm-footer-link-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-bottom: 14px;
+}
+
+.lm-footer .lm-footer-link-row a,
+.lm-footer .lm-footer-link-row button {
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none !important;
+  outline: none;
+  font-size: 12.5px !important;
+  color: #64748b !important;
+  text-decoration: none !important;
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 2px 0 !important;
+  margin: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.lm-footer .lm-footer-link-row a:hover,
+.lm-footer .lm-footer-link-row button:hover {
+  color: #0d6e6e !important;
+  text-decoration: underline !important;
+}
+
+.lm-footer .lm-footer-link-row a:visited {
+  color: #64748b !important;
+}
+
+.lm-footer-county-row {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lm-footer-tagline {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 18px;
+}
+
+.lm-footer-copyright {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* ============================================
+   MOBILE BOTTOM NAV — kept from the earlier fix
+   session. index.html still includes the
+   <nav class="mobile-bottom-nav"> markup, and this
+   footer.css is its only styling source, so this
+   must stay here even though the footer above it
+   was rebuilt — dropping it would silently bring
+   back the "unstyled blue text links" bug that was
+   already fixed once before.
+   ============================================ */
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 500;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-bottom-link {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 4px 2px;
+    text-decoration: none;
+    color: #6b7280;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .mobile-bottom-link.active {
+    color: #0d6e6e;
+  }
+
+  .mobile-bottom-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  /* Leave room at the bottom of the page so this fixed bar never
+     covers content/footer on small screens. */
+  body {
+    padding-bottom: 58px;
+  }
+}

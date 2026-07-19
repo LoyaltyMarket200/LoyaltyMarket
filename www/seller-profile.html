@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Profile - Waterside</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <meta name="theme-color" content="#0d6e6e">
+
+  <style>
+    /* ==================================================
+       SELLER PROFILE — RESTRAINED 2-COLOR SYSTEM
+       Navy (#0d6e6e) = structure/brand/hero. Orange
+       (#ff6b4a) = the ONLY accent, reserved for the
+       Message Seller button (the one primary conversion
+       action). Everything else is navy, neutral, or
+       outline-on-navy. Bold reserved for name/stats/price.
+       ================================================== */
+    :root{
+      --navy:#0d6e6e;
+      --navy-soft:#e3f2f2;
+      --orange:#ff6b4a;
+      --orange-soft:#ffece7;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --bg:#f7f8fa;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+
+    .icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    .seller-navbar{
+      min-height:50px;height:auto;padding:7px max(16px,3vw);
+      background:#fff;border-bottom:1px solid var(--line);
+      justify-content:space-between;position:sticky;top:0;z-index:40;
+      display:flex;align-items:center;
+    }
+    .seller-navbar .logo-link{display:flex;align-items:center;gap:8px;text-decoration:none}
+    .seller-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
+    .seller-navbar .logo-text{color:var(--navy);font-size:13.5px;font-weight:700}
+
+    .seller-nav-actions{display:flex;align-items:center;gap:8px}
+    .seller-nav-link,.seller-post-link{
+      min-height:30px;display:inline-flex;align-items:center;justify-content:center;
+      padding:6px 11px;border-radius:8px;text-decoration:none;
+      font-size:12px;font-weight:500;border:1px solid var(--line)
+    }
+    .seller-nav-link{color:var(--ink);background:#fff}
+    .seller-nav-link:hover{color:var(--navy);border-color:var(--navy)}
+    .seller-post-link{color:#fff;background:var(--orange);border-color:var(--orange)}
+    .seller-post-link:hover{background:#e5522f}
+
+    .seller-page{width:min(1180px,94%);margin:22px auto 50px}
+
+    .redirect-notice{
+      display:none;margin-bottom:16px;padding:13px 16px;border:1px solid var(--line);
+      border-radius:12px;background:var(--navy-soft);color:var(--navy);font-size:13.5px
+    }
+    .redirect-notice a{color:var(--navy);font-weight:600;text-decoration:none}
+
+    .seller-hero{
+      display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;
+      padding:16px 20px;border-radius:14px;color:var(--ink);
+      background:#fff;border:1px solid var(--line);
+    }
+
+    .seller-profile-main{display:flex;gap:15px;align-items:center}
+    .seller-avatar{
+      width:46px;height:46px;display:grid;place-items:center;border-radius:50%;
+      background:var(--navy-soft);color:var(--navy);flex-shrink:0
+    }
+    .seller-hero h1{margin:0 0 5px;font-size:clamp(16px,2.2vw,20px);font-weight:700;line-height:1.2;color:var(--ink)}
+    .seller-badge-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+    .seller-badge{
+      display:inline-flex;padding:4px 10px;border-radius:999px;
+      background:var(--orange-soft);color:#c23f24;font-size:11px;font-weight:600
+    }
+    .seller-years-badge{
+      display:inline-flex;padding:4px 10px;border-radius:999px;
+      background:var(--navy-soft);border:1px solid var(--line);
+      color:var(--navy);font-size:11px;font-weight:500
+    }
+    .seller-member{margin:6px 0 0;color:var(--muted);font-size:12px;font-weight:400}
+    .seller-last-active{margin:4px 0 0;color:var(--muted);font-size:12px;display:flex;align-items:center;gap:6px;font-weight:400}
+    .seller-last-active .online-dot{width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block;flex-shrink:0}
+    .seller-location-line{margin:4px 0 0;color:var(--muted);font-size:12px;display:none;align-items:center;gap:5px;font-weight:400}
+
+    .seller-action-buttons{display:flex;flex-direction:column;gap:8px;min-width:170px}
+
+    .call-seller-btn,.message-seller-btn,.follow-seller-btn,.invite-seller-btn{
+      min-height:32px;display:none;align-items:center;justify-content:center;gap:6px;
+      padding:7px 13px;border-radius:8px;font-weight:600;font-size:12px;white-space:nowrap
+    }
+
+    .call-seller-btn{color:var(--navy);background:#fff;border:1px solid var(--navy);text-decoration:none}
+    .message-seller-btn{color:#fff;background:var(--orange);border:none;text-decoration:none}
+    .message-seller-btn:hover{background:#e5522f}
+
+    .follow-seller-btn,.invite-seller-btn{
+      width:100%;border:1px solid var(--navy);cursor:pointer;font:inherit;font-weight:600
+    }
+    .follow-seller-btn{color:var(--navy);background:#fff}
+    .invite-seller-btn{display:flex;color:var(--navy);background:#fff}
+    .follow-seller-btn:hover,.call-seller-btn:hover,.invite-seller-btn:hover{background:var(--navy-soft)}
+    .follow-seller-btn.following{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .follow-seller-btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .seller-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+    .seller-stat{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:center}
+    .seller-stat-value{font-size:19px;font-weight:700;color:var(--navy)}
+    .seller-stat-label{margin-top:4px;color:var(--muted);font-size:11px;font-weight:500}
+
+    .seller-tabs{display:flex;gap:5px;margin-top:20px;padding:5px;border-radius:11px;background:#eef2f6;width:fit-content;max-width:100%;overflow-x:auto}
+    .seller-tab{flex-shrink:0;border:0;background:transparent;padding:9px 15px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+    .seller-tab.active{background:#fff;color:var(--navy)}
+    .seller-tab-panel{display:none}
+    .seller-tab-panel.active{display:block}
+
+    .seller-section{margin-top:14px;padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff}
+    .seller-section-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;padding-bottom:13px;border-bottom:1px solid var(--line)}
+    .seller-section-header h2{margin:0 0 4px;font-size:17px;font-weight:600}
+    .seller-section-header p{margin:0;color:var(--muted);font-size:12px;font-weight:400}
+
+    .category-breakdown-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px}
+    .category-tile{flex-shrink:0;min-width:92px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer;text-align:left;font:inherit}
+    .category-tile.active{border-color:var(--navy);background:var(--navy-soft)}
+    .category-tile-count{display:block;font-size:12.5px;font-weight:700;color:var(--navy)}
+    .category-tile-label{display:block;font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3;font-weight:400}
+
+    .seller-listings-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px}
+    .seller-product-link{color:inherit;text-decoration:none}
+    .seller-product-card{overflow:hidden;border:1px solid var(--line);border-radius:12px;background:#fff}
+    .seller-product-card:hover{border-color:var(--navy)}
+    .seller-product-image{height:145px;background:#f1f5f9}
+    .seller-product-image img{width:100%;height:100%;object-fit:cover;display:block}
+    .seller-product-body{padding:10px}
+    .seller-product-body h3{margin:0 0 6px;font-size:12.5px;font-weight:500;line-height:1.35}
+    .seller-price{margin:0 0 5px;color:var(--orange);font-size:13px;font-weight:700}
+    .seller-location{margin:0;color:var(--muted);font-size:11px;display:flex;align-items:center;gap:4px;font-weight:400}
+    .listing-featured-badge{display:inline-flex;margin-left:5px;padding:2px 6px;border-radius:999px;background:var(--orange-soft);color:#c23f24;font-size:9px;font-weight:600}
+
+    .review-grid{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px}
+    .review-form-card{display:none;padding:17px;border:1px solid var(--line);border-radius:13px;background:var(--bg)}
+    .review-form-card h3{margin:0 0 12px;font-size:15px;font-weight:600}
+    .review-form-card label{display:block;margin:11px 0 6px;font-size:12px;font-weight:500}
+    .review-form-card select,.review-form-card textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;font:inherit;font-size:13px}
+    .review-form-card select:focus,.review-form-card textarea:focus{outline:none;border-color:var(--navy)}
+    .review-submit{width:100%;min-height:42px;margin-top:13px;border:none;border-radius:9px;color:#fff;background:var(--navy);font-weight:600;cursor:pointer;font-size:13px}
+
+    .review-message{display:none;padding:13px;border-radius:11px;background:var(--bg);color:var(--muted);border:1px solid var(--line);font-size:13px;font-weight:400}
+    .review-message a{color:var(--navy);font-weight:600}
+
+    .reviews-list{display:grid;gap:10px}
+    .review-card{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+    .review-header{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .review-header strong{font-size:13px;font-weight:600}
+    .review-stars{color:var(--orange);display:flex;gap:1px}
+    .review-comment{margin:9px 0 6px;color:var(--ink);line-height:1.55;font-size:13px;font-weight:400}
+    .review-date{margin:0;color:#9ca3af;font-size:11px}
+
+    .about-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+    .about-row{padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--bg)}
+    .about-row-label{display:block;font-size:10.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+    .about-row-value{display:block;font-size:13.5px;color:var(--ink);font-weight:600}
+
+    .seller-empty{grid-column:1/-1;padding:36px 20px;text-align:center;border:1px dashed var(--line);border-radius:13px;background:var(--bg);color:var(--muted);font-size:13px}
+
+    .seller-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:22px max(20px,5vw);background:var(--navy);color:#b9e6e6}
+    .seller-footer h2{margin:0 0 3px;color:#fff;font-size:15px;font-weight:600}
+    .seller-footer p{margin:0;font-size:12px}
+
+    @media(max-width:1000px){
+      .seller-listings-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .review-grid{grid-template-columns:1fr}
+      .seller-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .about-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:760px){
+      .seller-navbar{flex-wrap:wrap;gap:8px}
+      .seller-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+      .seller-hero{grid-template-columns:1fr}
+      .seller-action-buttons{width:100%;min-width:0}
+      .seller-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .seller-listings-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .seller-footer{flex-direction:column;text-align:center}
+    }
+    @media(max-width:560px){
+      .seller-nav-actions{grid-template-columns:1fr}
+      .seller-page{width:94%;margin-top:14px}
+      .seller-hero,.seller-section{padding:16px 14px;border-radius:14px}
+      .seller-profile-main{align-items:flex-start;flex-direction:column}
+      .seller-section-header{align-items:flex-start;flex-direction:column}
+      .seller-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+      .seller-listings-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+      .seller-product-image{height:115px}
+      .seller-product-body{padding:8px}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar seller-navbar">
+    <div class="logo">
+      <a href="index.html" class="logo-link">
+        <img src="icons/icon-512.png" alt="Waterside">
+        <span class="logo-text">Waterside</span>
+      </a>
+    </div>
+
+    <div class="seller-nav-actions">
+      <a href="index.html" class="seller-nav-link">Home</a>
+      <a href="messages.html" class="seller-nav-link">Messages</a>
+      <a href="sell.html" class="seller-post-link">Post An Ad</a>
+    </div>
+  </header>
+
+  <main class="seller-page">
+    <div id="businessRedirectNotice" class="redirect-notice">
+      This seller has a business storefront.
+      <a id="businessRedirectLink" href="#">View business profile →</a>
+    </div>
+
+    <section class="seller-hero">
+      <div class="seller-profile-main">
+        <div class="seller-avatar">
+          <svg class="icon" viewBox="0 0 24 24" style="width:28px;height:28px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </div>
+        <div>
+          <h1 id="sellerName">Loading...</h1>
+          <div class="seller-badge-row">
+            <span id="sellerVerified" class="seller-badge"></span>
+            <span id="sellerYearsBadge" class="seller-years-badge" style="display:none;"></span>
+          </div>
+          <p id="sellerMemberSince" class="seller-member"></p>
+          <p id="sellerLastActive" class="seller-last-active" style="display:none;"></p>
+          <p id="sellerLocationLine" class="seller-location-line"></p>
+        </div>
+      </div>
+
+      <div class="seller-action-buttons">
+        <a href="#" id="callSellerBtn" class="call-seller-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2Z"/></svg>
+          Call Seller
+        </a>
+        <a href="#" id="messageSellerBtn" class="message-seller-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.4a8.4 8.4 0 1 1 16.1-4.1Z"/></svg>
+          Message Seller
+        </a>
+        <button type="button" id="followSellerBtn" class="follow-seller-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Follow Seller
+        </button>
+        <button type="button" id="inviteSellerBtn" class="invite-seller-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>
+          Invite Friends
+        </button>
+      </div>
+    </section>
+
+    <section class="seller-stats">
+      <article class="seller-stat">
+        <div id="statListingCount" class="seller-stat-value">-</div>
+        <div class="seller-stat-label">Active Listings</div>
+      </article>
+
+      <article class="seller-stat">
+        <div id="statFollowerCount" class="seller-stat-value">0</div>
+        <div class="seller-stat-label">Followers</div>
+      </article>
+
+      <article class="seller-stat">
+        <div id="statAverageRating" class="seller-stat-value">-</div>
+        <div class="seller-stat-label">Average Rating</div>
+      </article>
+
+      <article class="seller-stat">
+        <div id="statReviewCount" class="seller-stat-value">-</div>
+        <div class="seller-stat-label">Reviews</div>
+      </article>
+    </section>
+
+    <div class="seller-tabs">
+      <button type="button" class="seller-tab active" data-tab="adverts">
+        Adverts <span id="tabAdvertsCount"></span>
+      </button>
+      <button type="button" class="seller-tab" data-tab="feedbacks">
+        Feedbacks <span id="tabFeedbacksCount"></span>
+      </button>
+      <button type="button" class="seller-tab" data-tab="about">About Seller</button>
+    </div>
+
+    <section id="advertsPanel" class="seller-tab-panel active">
+      <div class="seller-section">
+        <div class="seller-section-header">
+          <div>
+            <h2>Seller Listings</h2>
+            <p>Browse active products currently available from this seller.</p>
+          </div>
+        </div>
+
+        <div id="categoryBreakdownRow" class="category-breakdown-row"></div>
+
+        <div id="sellerListingsGrid" class="seller-listings-grid">
+          <div class="seller-empty">Loading listings...</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="feedbacksPanel" class="seller-tab-panel">
+      <div class="seller-section">
+        <div class="seller-section-header">
+          <div>
+            <h2>Reviews <span id="averageRating"></span></h2>
+            <p>Read buyer experiences or leave feedback after dealing with this seller.</p>
+          </div>
+        </div>
+
+        <div class="review-grid">
+          <div>
+            <div id="reviewFormCard" class="review-form-card">
+              <h3>Leave a Review</h3>
+
+              <form id="reviewForm">
+                <label for="reviewRating">Rating</label>
+                <select id="reviewRating" required>
+                  <option value="">Select rating</option>
+                  <option value="5">5 — Excellent</option>
+                  <option value="4">4 — Good</option>
+                  <option value="3">3 — Average</option>
+                  <option value="2">2 — Poor</option>
+                  <option value="1">1 — Terrible</option>
+                </select>
+
+                <label for="reviewComment">Comment</label>
+                <textarea id="reviewComment" rows="4" placeholder="Share your experience with this seller..." required></textarea>
+
+                <button type="submit" class="review-submit">Submit Review</button>
+              </form>
+            </div>
+
+            <p id="loginToReviewMsg" class="review-message">
+              <a href="login.html">Login</a> to leave a review.
+            </p>
+
+            <p id="ownProfileMsg" class="review-message">
+              This is your own profile — you cannot review yourself.
+            </p>
+          </div>
+
+          <div id="reviewsList" class="reviews-list">
+            <div class="seller-empty">Loading reviews...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="aboutPanel" class="seller-tab-panel">
+      <div class="seller-section">
+        <div class="seller-section-header">
+          <div>
+            <h2>About This Seller</h2>
+            <p>Basic details shared by the seller.</p>
+          </div>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-row">
+            <span class="about-row-label">Name</span>
+            <span id="aboutName" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Status</span>
+            <span id="aboutStatus" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Member Since</span>
+            <span id="aboutMemberSince" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Last Active</span>
+            <span id="aboutLastActive" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Location</span>
+            <span id="aboutLocation" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Phone</span>
+            <span id="aboutPhone" class="about-row-value">—</span>
+          </div>
+
+          <div class="about-row">
+            <span class="about-row-label">Total Active Listings</span>
+            <span id="aboutListingCount" class="about-row-value">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer seller-footer">
+    <div>
+      <h2>Waterside</h2>
+      <p>You Get Market, We Get Buyer.</p>
+    </div>
+    <p>&copy; 2026 Waterside. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    import {
+      doc,
+      getDoc,
+      setDoc,
+      deleteDoc,
+      collection,
+      query,
+      where,
+      getDocs,
+      addDoc,
+      serverTimestamp,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const sellerId = params.get("id");
+
+    const businessRedirectNotice = document.getElementById("businessRedirectNotice");
+    const businessRedirectLink = document.getElementById("businessRedirectLink");
+    const sellerName = document.getElementById("sellerName");
+    const sellerVerified = document.getElementById("sellerVerified");
+    const sellerYearsBadge = document.getElementById("sellerYearsBadge");
+    const sellerMemberSince = document.getElementById("sellerMemberSince");
+    const sellerLastActive = document.getElementById("sellerLastActive");
+    const sellerLocationLine = document.getElementById("sellerLocationLine");
+    const sellerListingsGrid = document.getElementById("sellerListingsGrid");
+    const categoryBreakdownRow = document.getElementById("categoryBreakdownRow");
+    const averageRating = document.getElementById("averageRating");
+    const reviewFormCard = document.getElementById("reviewFormCard");
+    const reviewForm = document.getElementById("reviewForm");
+    const loginToReviewMsg = document.getElementById("loginToReviewMsg");
+    const ownProfileMsg = document.getElementById("ownProfileMsg");
+    const reviewsList = document.getElementById("reviewsList");
+    const callSellerBtn = document.getElementById("callSellerBtn");
+    const messageSellerBtn = document.getElementById("messageSellerBtn");
+    const followSellerBtn = document.getElementById("followSellerBtn");
+    const inviteSellerBtn = document.getElementById("inviteSellerBtn");
+    const statListingCount = document.getElementById("statListingCount");
+    const statFollowerCount = document.getElementById("statFollowerCount");
+    const statAverageRating = document.getElementById("statAverageRating");
+    const statReviewCount = document.getElementById("statReviewCount");
+    const tabAdvertsCount = document.getElementById("tabAdvertsCount");
+    const tabFeedbacksCount = document.getElementById("tabFeedbacksCount");
+
+    const aboutName = document.getElementById("aboutName");
+    const aboutStatus = document.getElementById("aboutStatus");
+    const aboutMemberSince = document.getElementById("aboutMemberSince");
+    const aboutLastActive = document.getElementById("aboutLastActive");
+    const aboutLocation = document.getElementById("aboutLocation");
+    const aboutPhone = document.getElementById("aboutPhone");
+    const aboutListingCount = document.getElementById("aboutListingCount");
+
+    let currentUser = null;
+    let currentUserName = "";
+    let isOwnProfile = false;
+    let alreadyFollowing = false;
+    let sellerListingsCache = [];
+    let activeCategoryFilter = null;
+
+    const LOCATION_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.9em;height:.9em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+    const CHECK_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M20 6 9 17l-5-5"/></svg>';
+    const PLUS_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M12 5v14M5 12h14"/></svg>';
+
+    function safeText(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function starsFor(rating) {
+      const filled = '<svg class="icon" viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:.85em;height:.85em;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2Z"/></svg>';
+      return filled.repeat(rating);
+    }
+
+    function getFollowDocumentId(followerId) {
+      return `${sellerId}_${followerId}`;
+    }
+
+    // Writes the CURRENT VIEWER's own last-active timestamp — this is
+    // what makes "Active X ago" accurate for a seller: it gets updated
+    // every time that seller (or anyone else) visits any page across
+    // the site that calls this, not just when they view their own
+    // profile.
+    function touchLastActive(userId) {
+      setDoc(
+        doc(db, "users", userId),
+        { lastActiveAt: serverTimestamp() },
+        { merge: true }
+      ).catch(() => {});
+    }
+
+    // Turns a lastActiveAt Firestore timestamp into a Jiji-style
+    // "Active X ago" string. Treats anything within the last 5
+    // minutes as "Active now" with a green dot, matching how most
+    // marketplace apps show presence.
+    function formatLastActive(seconds) {
+      if (!seconds) return null;
+
+      const millis = seconds * 1000;
+      const diffMs = Date.now() - millis;
+      const minutes = Math.floor(diffMs / 60000);
+      const hours = Math.floor(diffMs / 3600000);
+      const days = Math.floor(diffMs / 86400000);
+
+      if (minutes < 5) {
+        return { text: "Active now", online: true };
+      }
+
+      if (minutes < 60) {
+        return { text: `Active ${minutes} minute${minutes === 1 ? "" : "s"} ago`, online: false };
+      }
+
+      if (hours < 24) {
+        return { text: `Active ${hours} hour${hours === 1 ? "" : "s"} ago`, online: false };
+      }
+
+      if (days < 30) {
+        return { text: `Active ${days} day${days === 1 ? "" : "s"} ago`, online: false };
+      }
+
+      return { text: "Active " + new Date(millis).toLocaleDateString(), online: false };
+    }
+
+    // TABS
+    document.querySelectorAll(".seller-tab").forEach((tabButton) => {
+      tabButton.addEventListener("click", () => {
+        document.querySelectorAll(".seller-tab").forEach((btn) =>
+          btn.classList.remove("active")
+        );
+        document.querySelectorAll(".seller-tab-panel").forEach((panel) =>
+          panel.classList.remove("active")
+        );
+
+        tabButton.classList.add("active");
+
+        const target = tabButton.dataset.tab;
+        document.getElementById(target + "Panel").classList.add("active");
+      });
+    });
+
+    function updateFollowButton() {
+      if (!sellerId) {
+        followSellerBtn.style.display = "none";
+        return;
+      }
+
+      if (!currentUser) {
+        followSellerBtn.style.display = "flex";
+        followSellerBtn.classList.remove("following");
+        followSellerBtn.innerHTML = "Login To Follow";
+        return;
+      }
+
+      if (currentUser.uid === sellerId) {
+        followSellerBtn.style.display = "none";
+        return;
+      }
+
+      followSellerBtn.style.display = "flex";
+
+      if (alreadyFollowing) {
+        followSellerBtn.classList.add("following");
+        followSellerBtn.innerHTML = CHECK_SVG + " Following";
+      } else {
+        followSellerBtn.classList.remove("following");
+        followSellerBtn.innerHTML = PLUS_SVG + " Follow Seller";
+      }
+    }
+
+    async function loadFollowerCount() {
+      if (!sellerId) return;
+
+      try {
+        const followersQuery = query(
+          collection(db, "followers"),
+          where("sellerId", "==", sellerId)
+        );
+
+        const snapshot = await getDocs(followersQuery);
+        statFollowerCount.textContent = snapshot.size;
+      } catch (error) {
+        console.error("Could not load follower count:", error);
+        statFollowerCount.textContent = "—";
+      }
+    }
+
+    async function checkFollowingStatus() {
+      if (!sellerId) return;
+
+      if (!currentUser || currentUser.uid === sellerId) {
+        alreadyFollowing = false;
+        updateFollowButton();
+        return;
+      }
+
+      try {
+        const followId = getFollowDocumentId(currentUser.uid);
+        const followSnapshot = await getDoc(doc(db, "followers", followId));
+        alreadyFollowing = followSnapshot.exists();
+      } catch (error) {
+        console.error("Could not check follow status:", error);
+        alreadyFollowing = false;
+      }
+
+      updateFollowButton();
+    }
+
+    async function loadSellerProfile() {
+      if (!sellerId) {
+        sellerName.textContent = "Seller not found";
+        sellerVerified.textContent = "Unavailable";
+        sellerMemberSince.textContent = "";
+        sellerListingsGrid.innerHTML =
+          '<div class="seller-empty">No seller ID was provided.</div>';
+        followSellerBtn.style.display = "none";
+        return;
+      }
+
+      try {
+        const userDoc = await getDoc(doc(db, "users", sellerId));
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const accountType = userData.accountType || "personal";
+
+          if (accountType === "business") {
+            businessRedirectLink.href =
+              "business-profile.html?id=" + encodeURIComponent(sellerId);
+            businessRedirectNotice.style.display = "block";
+          }
+
+          const displayName = userData.name || "Waterside Seller";
+          sellerName.textContent = displayName;
+          aboutName.textContent = displayName;
+
+          const isVerified = userData.verified === true;
+
+          if (isVerified) {
+            sellerVerified.textContent = "Verified Seller";
+            aboutStatus.textContent = "Verified Seller";
+          } else {
+            sellerVerified.textContent = "Unverified Seller";
+            sellerVerified.style.background = "#f1f5f9";
+            sellerVerified.style.color = "#475569";
+            aboutStatus.textContent = "Unverified Seller";
+          }
+
+          if (userData.createdAt && userData.createdAt.seconds) {
+            const joinDate = new Date(userData.createdAt.seconds * 1000);
+            const joinYear = joinDate.getFullYear();
+            const yearsOn = new Date().getFullYear() - joinYear;
+
+            sellerMemberSince.textContent = "Member since " + joinYear;
+            aboutMemberSince.textContent = joinDate.toLocaleDateString();
+
+            if (yearsOn >= 1) {
+              sellerYearsBadge.textContent =
+                yearsOn + (yearsOn === 1 ? "+ year on Waterside" : "+ years on Waterside");
+              sellerYearsBadge.style.display = "inline-flex";
+            } else {
+              sellerYearsBadge.textContent = "New on Waterside";
+              sellerYearsBadge.style.display = "inline-flex";
+            }
+          } else {
+            sellerMemberSince.textContent = "Waterside member";
+            aboutMemberSince.textContent = "—";
+          }
+
+          const lastActive = userData.lastActiveAt && userData.lastActiveAt.seconds
+            ? formatLastActive(userData.lastActiveAt.seconds)
+            : null;
+
+          if (lastActive) {
+            sellerLastActive.innerHTML = lastActive.online
+              ? '<span class="online-dot"></span> Active now'
+              : safeText(lastActive.text);
+
+            sellerLastActive.style.display = "flex";
+            aboutLastActive.textContent = lastActive.text;
+          } else {
+            sellerLastActive.style.display = "none";
+            aboutLastActive.textContent = "Not available";
+          }
+
+          const locationText = [
+            userData.businessCity,
+            userData.businessCounty
+          ].filter(Boolean).join(", ");
+
+          if (locationText) {
+            sellerLocationLine.innerHTML = LOCATION_SVG + " " + safeText(locationText);
+            sellerLocationLine.style.display = "flex";
+            aboutLocation.textContent = locationText;
+          } else {
+            aboutLocation.textContent = "Not provided";
+          }
+
+          if (userData.phone) {
+            aboutPhone.textContent = userData.phone;
+
+            if (!isOwnProfile) {
+              callSellerBtn.href = "tel:" + userData.phone.replace(/\s+/g, "");
+              callSellerBtn.style.display = "inline-flex";
+            }
+          } else {
+            aboutPhone.textContent = "Not provided";
+          }
+
+        } else {
+          sellerName.textContent = "Waterside Seller";
+          aboutName.textContent = "Waterside Seller";
+          sellerVerified.textContent = "Unverified Seller";
+          sellerMemberSince.textContent = "Waterside member";
+          sellerLastActive.style.display = "none";
+          aboutLastActive.textContent = "Not available";
+        }
+
+        await Promise.all([
+          loadSellerListings(),
+          loadReviews(),
+          loadFollowerCount()
+        ]);
+
+      } catch (error) {
+        sellerName.textContent = "Could not load seller";
+        sellerListingsGrid.innerHTML =
+          `<div class="seller-empty">${safeText(error.message)}</div>`;
+      }
+    }
+
+    function renderCategoryBreakdown() {
+      const counts = {};
+
+      sellerListingsCache.forEach(({ data }) => {
+        const category = data.category || "Other";
+        counts[category] = (counts[category] || 0) + 1;
+      });
+
+      const categories = Object.keys(counts);
+
+      if (categories.length <= 1) {
+        categoryBreakdownRow.innerHTML = "";
+        return;
+      }
+
+      let html = `
+        <button type="button" class="category-tile ${activeCategoryFilter === null ? "active" : ""}" data-category="">
+          <span class="category-tile-count">${sellerListingsCache.length} ads</span>
+          <span class="category-tile-label">All categories</span>
+        </button>
+      `;
+
+      categories.forEach((category) => {
+        html += `
+          <button type="button" class="category-tile ${activeCategoryFilter === category ? "active" : ""}" data-category="${safeText(category)}">
+            <span class="category-tile-count">${counts[category]} ad${counts[category] === 1 ? "" : "s"}</span>
+            <span class="category-tile-label">${safeText(category)}</span>
+          </button>
+        `;
+      });
+
+      categoryBreakdownRow.innerHTML = html;
+
+      categoryBreakdownRow.querySelectorAll(".category-tile").forEach((tile) => {
+        tile.addEventListener("click", () => {
+          activeCategoryFilter = tile.dataset.category || null;
+          renderCategoryBreakdown();
+          renderListingsGrid();
+        });
+      });
+    }
+
+    function renderListingsGrid() {
+      const filtered = activeCategoryFilter
+        ? sellerListingsCache.filter(({ data }) => data.category === activeCategoryFilter)
+        : sellerListingsCache;
+
+      if (!filtered.length) {
+        sellerListingsGrid.innerHTML =
+          '<div class="seller-empty">No listings in this category.</div>';
+        return;
+      }
+
+      sellerListingsGrid.innerHTML = "";
+
+      filtered.forEach(({ id, data: product }) => {
+        const isFeatured = product.featured === true;
+
+        const image =
+          product.imageUrl ||
+          (Array.isArray(product.images) && product.images[0]) ||
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop";
+
+        const card = document.createElement("a");
+        card.href = "product-detail.html?id=" + encodeURIComponent(id);
+        card.className = "seller-product-link";
+
+        card.innerHTML = `
+          <article class="seller-product-card">
+            <div class="seller-product-image">
+              <img
+                src="${safeText(image)}"
+                alt="${safeText(product.title || "Product")}"
+              >
+            </div>
+
+            <div class="seller-product-body">
+              <h3>
+                ${safeText(product.title || "Untitled Product")}
+                ${isFeatured
+                  ? '<span class="listing-featured-badge">Featured</span>'
+                  : ""}
+              </h3>
+
+              <p class="seller-price">
+                US$${safeText(product.priceUsd || "0")}
+                |
+                L$${safeText(product.priceLrd || "0")}
+              </p>
+
+              <p class="seller-location">
+                ${LOCATION_SVG} ${safeText(product.city || "")},
+                ${safeText(product.county || "Liberia")}
+              </p>
+            </div>
+          </article>
+        `;
+
+        sellerListingsGrid.appendChild(card);
+      });
+    }
+
+    async function loadSellerListings() {
+      try {
+        const listingsQuery = query(
+          collection(db, "products"),
+          where("sellerId", "==", sellerId),
+          where("status", "==", "active")
+        );
+
+        const snapshot = await getDocs(listingsQuery);
+
+        sellerListingsCache = snapshot.docs.map((productDoc) => ({
+          id: productDoc.id,
+          data: productDoc.data()
+        }));
+
+        statListingCount.textContent = snapshot.size;
+        aboutListingCount.textContent = snapshot.size;
+        tabAdvertsCount.textContent = snapshot.size ? `(${snapshot.size})` : "";
+
+        if (!snapshot.empty && !isOwnProfile) {
+          const firstListingId = snapshot.docs[0].id;
+
+          messageSellerBtn.href =
+            "chat.html?product=" + encodeURIComponent(firstListingId) +
+            "&seller=" + encodeURIComponent(sellerId);
+
+          messageSellerBtn.style.display = "inline-flex";
+        } else {
+          messageSellerBtn.style.display = "none";
+        }
+
+        if (snapshot.empty) {
+          sellerListingsGrid.innerHTML =
+            '<div class="seller-empty">This seller has no active listings right now.</div>';
+          categoryBreakdownRow.innerHTML = "";
+          return;
+        }
+
+        renderCategoryBreakdown();
+        renderListingsGrid();
+
+      } catch (error) {
+        sellerListingsGrid.innerHTML =
+          `<div class="seller-empty">Could not load listings: ${safeText(error.message)}</div>`;
+      }
+    }
+
+    async function loadReviews() {
+      try {
+        const reviewsQuery = query(
+          collection(db, "reviews"),
+          where("sellerId", "==", sellerId),
+          orderBy("createdAt", "desc")
+        );
+
+        const snapshot = await getDocs(reviewsQuery);
+
+        tabFeedbacksCount.textContent = snapshot.size ? `(${snapshot.size})` : "";
+
+        if (snapshot.empty) {
+          averageRating.textContent = "";
+          statAverageRating.textContent = "—";
+          statReviewCount.textContent = "0";
+          reviewsList.innerHTML =
+            '<div class="seller-empty">No reviews yet. Be the first to review this seller.</div>';
+          return;
+        }
+
+        let totalStars = 0;
+        let reviewCount = 0;
+        reviewsList.innerHTML = "";
+
+        snapshot.forEach((reviewDoc) => {
+          const review = reviewDoc.data();
+          const rating = Number(review.rating) || 0;
+
+          totalStars += rating;
+          reviewCount++;
+
+          const reviewCard = document.createElement("article");
+          reviewCard.className = "review-card";
+
+          let dateText = "";
+          if (review.createdAt && review.createdAt.seconds) {
+            const date = new Date(review.createdAt.seconds * 1000);
+            dateText = date.toLocaleDateString();
+          }
+
+          reviewCard.innerHTML = `
+            <div class="review-header">
+              <strong>${safeText(review.reviewerName || "Anonymous Buyer")}</strong>
+              <span class="review-stars">${starsFor(rating)}</span>
+            </div>
+
+            <p class="review-comment">
+              ${safeText(review.comment || "")}
+            </p>
+
+            <p class="review-date">${safeText(dateText)}</p>
+          `;
+
+          reviewsList.appendChild(reviewCard);
+        });
+
+        const avg = (totalStars / reviewCount).toFixed(1);
+
+        averageRating.textContent =
+          `(${avg} avg from ${reviewCount} review${reviewCount === 1 ? "" : "s"})`;
+
+        statAverageRating.textContent = avg;
+        statReviewCount.textContent = reviewCount;
+
+      } catch (error) {
+        reviewsList.innerHTML =
+          `<div class="seller-empty">Could not load reviews: ${safeText(error.message)}</div>`;
+      }
+    }
+
+
+    inviteSellerBtn.addEventListener("click", async () => {
+      if (!sellerId) {
+        alert("Seller information could not be found.");
+        return;
+      }
+
+      const sellerDisplayName =
+        sellerName.textContent && sellerName.textContent !== "Loading..."
+          ? sellerName.textContent
+          : "this seller";
+
+      const profileUrl = new URL(window.location.href);
+      profileUrl.searchParams.set("id", sellerId);
+
+      const shareData = {
+        title: `${sellerDisplayName} on Waterside`,
+        text: `Check out ${sellerDisplayName} on Waterside and follow their latest listings.`,
+        url: profileUrl.toString()
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          return;
+        }
+
+        await navigator.clipboard.writeText(
+          `${shareData.text}\n${shareData.url}`
+        );
+
+        alert("Seller profile link copied. You can paste it into WhatsApp.");
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          prompt(
+            "Copy this seller profile link and share it:",
+            profileUrl.toString()
+          );
+        }
+      }
+    });
+
+    followSellerBtn.addEventListener("click", async () => {
+      if (!sellerId) {
+        alert("Seller information could not be found.");
+        return;
+      }
+
+      if (!currentUser) {
+        window.location.href =
+          "login.html?redirect=" +
+          encodeURIComponent(window.location.href);
+        return;
+      }
+
+      if (currentUser.uid === sellerId) {
+        alert("You cannot follow your own account.");
+        return;
+      }
+
+      followSellerBtn.disabled = true;
+      followSellerBtn.textContent = "Please Wait...";
+
+      const followId = getFollowDocumentId(currentUser.uid);
+      const followRef = doc(db, "followers", followId);
+
+      try {
+        if (alreadyFollowing) {
+          await deleteDoc(followRef);
+          alreadyFollowing = false;
+        } else {
+          await setDoc(followRef, {
+            sellerId,
+            followerId: currentUser.uid,
+            createdAt: serverTimestamp()
+          });
+
+          alreadyFollowing = true;
+        }
+
+        updateFollowButton();
+        await loadFollowerCount();
+
+      } catch (error) {
+        console.error(error);
+        alert("Could not update follow status: " + error.message);
+        updateFollowButton();
+      } finally {
+        followSellerBtn.disabled = false;
+      }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        touchLastActive(user.uid);
+
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+
+          currentUserName = userDoc.exists()
+            ? (userDoc.data().name || user.email)
+            : user.email;
+
+        } catch (error) {
+          currentUserName = user.email;
+        }
+
+        if (user.uid === sellerId) {
+          isOwnProfile = true;
+          ownProfileMsg.style.display = "block";
+          reviewFormCard.style.display = "none";
+          loginToReviewMsg.style.display = "none";
+          callSellerBtn.style.display = "none";
+        } else {
+          isOwnProfile = false;
+          reviewFormCard.style.display = "block";
+          loginToReviewMsg.style.display = "none";
+          ownProfileMsg.style.display = "none";
+        }
+      } else {
+        currentUser = null;
+        isOwnProfile = false;
+        reviewFormCard.style.display = "none";
+        loginToReviewMsg.style.display = "block";
+        ownProfileMsg.style.display = "none";
+      }
+
+      updateFollowButton();
+      await checkFollowingStatus();
+
+      if (sellerId) {
+        await loadSellerListings();
+      }
+    });
+
+    reviewForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!currentUser) {
+        alert("You must be logged in to leave a review.");
+        return;
+      }
+
+      const rating = document.getElementById("reviewRating").value;
+      const comment =
+        document.getElementById("reviewComment").value.trim();
+
+      if (!rating || !comment) {
+        alert("Please select a rating and write a comment.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "reviews"), {
+          sellerId,
+          reviewerId: currentUser.uid,
+          reviewerName: currentUserName,
+          rating: Number(rating),
+          comment,
+          createdAt: serverTimestamp()
+        });
+
+        alert("Review submitted successfully!");
+        reviewForm.reset();
+        await loadReviews();
+
+      } catch (error) {
+        alert("Could not submit review: " + error.message);
+      }
+    });
+
+    loadSellerProfile();
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch((error) =>
+          console.log("Service worker registration failed:", error)
+        );
+    }
+  </script>
+</body>
+</html>

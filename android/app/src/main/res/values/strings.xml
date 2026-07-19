@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Waterside</string>
+    <string name="title_activity_main">Waterside</string>
+    <string name="package_name">com.waterside.app</string>
+    <string name="custom_url_scheme">com.waterside.app</string>
+</resources>

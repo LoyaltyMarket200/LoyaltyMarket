@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders - Waterside</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <meta name="theme-color" content="#0d6e6e">
+
+  <style>
+    :root{
+      --navy:#0d6e6e;
+      --navy-soft:#e3f2f2;
+      --orange:#ff6b4a;
+      --orange-soft:#ffece7;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --bg:#f7f8fa;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+    .icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    .orders-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);justify-content:space-between;position:sticky;top:0;z-index:40;display:flex;align-items:center}
+    .orders-navbar .logo-link{display:flex;align-items:center;gap:8px;text-decoration:none}
+    .orders-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
+    .orders-navbar .logo-text{color:var(--navy);font-size:14px;font-weight:700}
+    .orders-nav-actions{display:flex;align-items:center;gap:8px}
+    .orders-nav-link,.orders-post-link{min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:500;border:1px solid var(--line)}
+    .orders-nav-link{color:var(--ink);background:#fff}
+    .orders-nav-link:hover{color:var(--navy);border-color:var(--navy)}
+    .orders-post-link{color:#fff;background:var(--orange);border-color:var(--orange)}
+
+    .orders-shell{width:min(880px,94%);margin:22px auto 60px}
+    .orders-plain-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+    .orders-plain-header h1{margin:0;font-size:19px;font-weight:600;color:var(--ink)}
+    .orders-plain-header p{margin:3px 0 0;color:var(--muted);font-size:12.5px;font-weight:400}
+
+    .orders-filter-row{display:flex;gap:5px;margin-bottom:16px;padding:5px;border-radius:999px;background:#eef2f6;width:fit-content;max-width:100%;overflow-x:auto}
+    .orders-filter-btn{flex-shrink:0;border:0;background:transparent;padding:8px 14px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+    .orders-filter-btn.active{background:#fff;color:var(--navy)}
+
+    .order-card{display:grid;grid-template-columns:64px minmax(0,1fr);gap:13px;padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff;margin-bottom:12px}
+    .order-card img{width:64px;height:64px;border-radius:10px;object-fit:cover;background:#f1f5f9}
+    .order-card-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+    .order-card-price{font-size:13.5px;font-weight:700;color:var(--orange);margin-bottom:6px}
+    .order-badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+    .order-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;font-size:10.5px;font-weight:600}
+    .order-badge.status-pending,.order-badge.payment-awaiting_payment{background:var(--orange-soft);color:#c23f24}
+    .order-badge.payment-paid,.order-badge.status-completed{background:var(--navy-soft);color:var(--navy)}
+    .order-badge.status-cancelled{background:#fee2e2;color:#b91c1c}
+    .order-badge.protection{background:var(--navy-soft);color:var(--navy)}
+    .order-card-meta{color:var(--muted);font-size:11.5px;margin-bottom:10px}
+    .order-card-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .order-action-btn{min-height:34px;padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center}
+    .order-action-btn:hover{border-color:var(--navy)}
+    .order-action-btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .order-action-btn.primary:hover{background:#095454}
+    .order-action-btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .orders-empty{padding:44px 20px;text-align:center;border:1px dashed var(--line);border-radius:14px;background:#fff;color:var(--muted);font-size:13px}
+    .orders-empty a{color:var(--navy);font-weight:600;text-decoration:none}
+
+    .footer{background:var(--navy);color:#d8f3f1;text-align:center;padding:26px 20px}
+    .footer h2{color:#fff;margin-bottom:6px;font-size:15px;font-weight:600}
+    .footer p{margin-bottom:5px;font-size:12px}
+
+    @media(max-width:600px){
+      .orders-navbar{flex-wrap:wrap;gap:8px}
+      .orders-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+      .orders-shell{margin-top:16px}
+      .order-card{grid-template-columns:52px minmax(0,1fr)}
+      .order-card img{width:52px;height:52px}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar orders-navbar">
+    <a href="index.html" class="logo-link">
+      <img src="icons/icon-512.png" alt="Waterside">
+      <span class="logo-text">Waterside</span>
+    </a>
+    <div class="orders-nav-actions">
+      <a href="index.html" class="orders-nav-link">Home</a>
+      <a href="dashboard.html" class="orders-nav-link">Dashboard</a>
+      <a href="sell.html" class="orders-post-link">Post An Ad</a>
+    </div>
+  </header>
+
+  <section class="orders-shell">
+    <div class="orders-plain-header">
+      <div>
+        <h1>My Orders</h1>
+        <p>Track payment status and confirm receipt for protected orders.</p>
+      </div>
+    </div>
+
+    <div class="orders-filter-row">
+      <button class="orders-filter-btn active" data-filter="all">All</button>
+      <button class="orders-filter-btn" data-filter="awaiting_payment">Awaiting Payment</button>
+      <button class="orders-filter-btn" data-filter="paid">Paid</button>
+      <button class="orders-filter-btn" data-filter="completed">Completed</button>
+    </div>
+
+    <div id="ordersList">
+      <p class="orders-empty">Loading your orders...</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <h2>Waterside</h2>
+    <p>Buy And Sell Products Across Liberia.</p>
+    <p>&copy; 2026 Waterside. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import {
+      collection, query, where, getDocs, doc, updateDoc, addDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const ordersList = document.getElementById("ordersList");
+    const filterButtons = document.querySelectorAll(".orders-filter-btn");
+
+    const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
+
+    let currentUser = null;
+    let allOrders = [];
+    let currentFilter = "all";
+
+    function safeText(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp || !timestamp.seconds) return "";
+      return new Date(timestamp.seconds * 1000).toLocaleDateString(undefined, {
+        month: "short", day: "numeric", year: "numeric"
+      });
+    }
+
+    function paymentStatusLabel(order) {
+      const map = {
+        awaiting_payment: "Awaiting Payment",
+        paid: "Paid",
+        failed: "Payment Failed"
+      };
+      return map[order.paymentStatus] || "Awaiting Payment";
+    }
+
+    function renderOrders() {
+      const filtered = currentFilter === "all"
+        ? allOrders
+        : allOrders.filter((order) => {
+            if (currentFilter === "completed") return order.status === "completed";
+            return (order.paymentStatus || "awaiting_payment") === currentFilter;
+          });
+
+      if (filtered.length === 0) {
+        ordersList.innerHTML = `
+          <div class="orders-empty">
+            No orders in this view yet. <a href="index.html">Browse listings</a> to get started.
+          </div>
+        `;
+        return;
+      }
+
+      ordersList.innerHTML = filtered.map((order) => {
+        const image = order.productImage || FALLBACK_IMAGE;
+        const paymentStatus = order.paymentStatus || "awaiting_payment";
+        const isProtected = order.protectionEnabled === true;
+        const isCompleted = order.status === "completed";
+
+        const canConfirmReceipt =
+          isProtected && paymentStatus === "paid" && !isCompleted;
+
+        return `
+          <article class="order-card">
+            <img src="${safeText(image)}" alt="${safeText(order.productTitle || "Product")}">
+
+            <div>
+              <div class="order-card-title">${safeText(order.productTitle || "Untitled Order")}</div>
+              <div class="order-card-price">US$${safeText(order.priceUsd || "0")} | L$${safeText(order.priceLrd || "0")}</div>
+
+              <div class="order-badge-row">
+                <span class="order-badge payment-${safeText(paymentStatus)}">${paymentStatusLabel(order)}</span>
+                ${isProtected ? '<span class="order-badge protection">Buyer Protection</span>' : ""}
+                ${isCompleted ? '<span class="order-badge status-completed">Completed</span>' : ""}
+              </div>
+
+              <div class="order-card-meta">
+                Paid via ${safeText(order.paymentMethod === "orange" ? "Orange Money" : "MTN Mobile Money")}
+                • ${formatDate(order.createdAt)}
+              </div>
+
+              <div class="order-card-actions">
+                <a class="order-action-btn" href="product-detail.html?id=${encodeURIComponent(order.productId || "")}">
+                  View Listing
+                </a>
+
+                ${canConfirmReceipt ? `
+                  <button class="order-action-btn primary" data-confirm-order="${safeText(order.id)}">
+                    Confirm Receipt
+                  </button>
+                ` : ""}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-confirm-order]").forEach((button) => {
+        button.addEventListener("click", () => confirmReceipt(button.dataset.confirmOrder, button));
+      });
+    }
+
+    async function confirmReceipt(orderId, button) {
+      const order = allOrders.find((item) => item.id === orderId);
+      if (!order) return;
+
+      if (!confirm(`Confirm you received "${order.productTitle}"? This releases payment to the seller.`)) {
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Confirming...";
+
+      try {
+        // NOTE: this marks the order completed on the buyer's side.
+        // Once the Cloud Function backend exists, this is the exact
+        // point where it should trigger the real MTN/Orange Disbursement
+        // to the seller (price minus commission) instead of just
+        // updating this Firestore field.
+        await updateDoc(doc(db, "orders", orderId), {
+          status: "completed",
+          receiptConfirmedAt: serverTimestamp()
+        });
+
+        order.status = "completed";
+
+        try {
+          await addDoc(collection(db, "notifications"), {
+            userId: order.sellerId,
+            type: "order",
+            title: "Buyer confirmed receipt for " + order.productTitle,
+            body: "The buyer has confirmed they received the item.",
+            link: "my-sales.html",
+            read: false,
+            createdAt: serverTimestamp()
+          });
+        } catch (notifyError) {
+          // Non-critical.
+        }
+
+        renderOrders();
+      } catch (error) {
+        alert("Could not confirm receipt: " + error.message);
+        button.disabled = false;
+        button.textContent = "Confirm Receipt";
+      }
+    }
+
+    async function loadOrders() {
+      ordersList.innerHTML = '<p class="orders-empty">Loading your orders...</p>';
+
+      try {
+        const ordersQuery = query(collection(db, "orders"), where("buyerId", "==", currentUser.uid));
+        const snapshot = await getDocs(ordersQuery);
+
+        allOrders = snapshot.docs
+          .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+          .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+        renderOrders();
+      } catch (error) {
+        ordersList.innerHTML = `<p class="orders-empty">Could not load orders: ${safeText(error.message)}</p>`;
+      }
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        filterButtons.forEach((b) => b.classList.remove("active"));
+        button.classList.add("active");
+        currentFilter = button.dataset.filter;
+        renderOrders();
+      });
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        alert("Please log in to view your orders.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      currentUser = user;
+      loadOrders();
+    });
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

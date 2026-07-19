@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - Waterside</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+
+  <meta name="theme-color" content="#0d6e6e">
+  <meta
+    name="description"
+    content="Buy, sell, and discover trusted products and services across Liberia."
+  >
+
+  <style>
+    :root {
+      --navy: #0d6e6e;
+      --navy-soft: #e3f2f2;
+      --orange: #ff6b4a;
+      --orange-soft: #ffece7;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --surface: #ffffff;
+      --bg: #f7f8fa;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .icon {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.15em;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .welcome-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(400px, 0.92fr);
+      gap: 16px;
+      padding: 16px;
+      align-items: stretch;
+    }
+
+    .brand-panel {
+      position: relative;
+      overflow: hidden;
+      min-height: 0;
+      padding: 24px clamp(22px, 4vw, 44px);
+      display: flex;
+      flex-direction: column;
+      color: #ffffff;
+      border-radius: 16px;
+      background: var(--navy);
+    }
+
+    .brand-header,
+    .brand-main,
+    .brand-footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      padding: 4px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: #ffffff;
+    }
+
+    .brand-name {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .brand-main {
+      width: min(560px, 100%);
+      margin: auto 0;
+      padding: 24px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      color: #fdc179;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-main h1 {
+      max-width: 500px;
+      font-size: clamp(23px, 2.8vw, 34px);
+      line-height: 1.15;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .brand-main > p {
+      max-width: 440px;
+      color: #b9e6e6;
+      font-size: 13.5px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .trust-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .trust-card {
+      min-height: 88px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .trust-card .icon {
+      display: block;
+      margin-bottom: 7px;
+      width: 18px;
+      height: 18px;
+      color: #fdc179;
+    }
+
+    .trust-card strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .trust-card p {
+      color: #b9e6e6;
+      font-size: 11px;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .brand-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      color: #b9e6e6;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+
+    .action-panel {
+      position: relative;
+      min-height: 0;
+      padding: 22px clamp(16px, 3vw, 36px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+
+    .skip-button {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .skip-button:hover {
+      color: var(--navy);
+    }
+
+    .action-card {
+      width: min(440px, 100%);
+      padding: 4px;
+    }
+
+    .mobile-brand {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .mobile-brand img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .mobile-brand strong {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .small-label {
+      margin-bottom: 7px;
+      color: var(--navy);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .action-card h2 {
+      max-width: 400px;
+      margin-bottom: 7px;
+      font-size: clamp(19px, 2.6vw, 26px);
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .intro {
+      max-width: 400px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .choice-button {
+      width: 100%;
+      min-height: 62px;
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #ffffff;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .choice-button:hover {
+      border-color: var(--navy);
+    }
+
+    .choice-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--navy-soft);
+      color: var(--navy);
+    }
+
+    .choice-icon .icon { width: 17px; height: 17px; }
+
+    .choice-copy strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    .choice-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .choice-arrow {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--bg);
+      color: #94a3b8;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .account-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .account-link {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .account-link.sign-in {
+      border: 1px solid var(--line);
+      color: var(--navy);
+      background: #ffffff;
+    }
+
+    .account-link.register {
+      color: #ffffff;
+      background: var(--orange);
+    }
+
+    .account-link.register:hover { background: #e5522f; }
+
+    .legal {
+      margin-top: 14px;
+      color: #9ca3af;
+      font-size: 10.5px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .legal a {
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .legal a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 980px) {
+      .welcome-shell {
+        grid-template-columns: 1fr;
+        padding: 14px;
+      }
+
+      .brand-panel {
+        display: none;
+      }
+
+      .mobile-brand {
+        display: flex;
+      }
+
+      .action-panel {
+        min-height: calc(100vh - 28px);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .action-panel {
+        align-items: flex-start;
+        padding: 54px 12px 20px;
+      }
+
+      .skip-button {
+        top: 14px;
+        right: 12px;
+      }
+
+      .action-card {
+        padding: 16px 12px;
+        border-radius: 14px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .account-links {
+        grid-template-columns: 1fr;
+      }
+
+      .choice-button {
+        grid-template-columns: 34px minmax(0, 1fr);
+      }
+
+      .choice-arrow {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="welcome-shell">
+    <section class="brand-panel" aria-label="Waterside introduction">
+      <div class="brand-header">
+        <img
+          src="icons/icon-512.png"
+          alt="Waterside logo"
+          class="brand-logo"
+        >
+        <div class="brand-name">Waterside</div>
+      </div>
+
+      <div class="brand-main">
+        <div class="eyebrow">Built For Liberia</div>
+
+        <h1>You Get Market. We Get Buyer.</h1>
+
+        <p>
+          Discover products, reach serious buyers, promote your services,
+          and connect with trusted people and businesses across Liberia.
+        </p>
+
+        <div class="trust-row">
+          <article class="trust-card">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M6 2h12l1 6H5l1-6Z"/><path d="M5 8h14v13H5z"/><path d="M9 12h6"/></svg>
+            <strong>Buy With Choice</strong>
+            <p>Explore products, property, vehicles, jobs, and services.</p>
+          </article>
+
+          <article class="trust-card">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3Z"/></svg>
+            <strong>Reach More Buyers</strong>
+            <p>Post your listing and grow your customer base.</p>
+          </article>
+
+          <article class="trust-card">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm6 3a4 4 0 1 0-2.5-7.14"/></svg>
+            <strong>Connect Directly</strong>
+            <p>Message sellers and service providers with confidence.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="brand-footer">
+        <span>Liberia's Online Marketplace</span>
+        <span>Safe • Simple • Local</span>
+      </div>
+    </section>
+
+    <section class="action-panel">
+      <button type="button" class="skip-button" id="skipBtn">
+        Skip For Now
+      </button>
+
+      <div class="action-card">
+        <div class="mobile-brand">
+          <img src="icons/icon-512.png" alt="Waterside logo">
+          <strong>Waterside</strong>
+        </div>
+
+        <p class="small-label">Welcome To Waterside</p>
+
+        <h2>What Would You Like To Do?</h2>
+
+        <p class="intro">
+          Choose an option below and we will take you directly to the right place.
+        </p>
+
+        <div class="choice-list">
+          <button type="button" class="choice-button buy" id="buyBtn">
+            <span class="choice-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M6 2h12l1 6H5l1-6Z"/><path d="M5 8h14v13H5z"/><path d="M9 12h6"/></svg></span>
+
+            <span class="choice-copy">
+              <strong>I Want To Buy</strong>
+              <span>Browse products, vehicles, property, jobs, and services.</span>
+            </span>
+
+            <span class="choice-arrow">›</span>
+          </button>
+
+          <button type="button" class="choice-button sell" id="sellBtn">
+            <span class="choice-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+
+            <span class="choice-copy">
+              <strong>I Want To Sell</strong>
+              <span>Post an item and connect with buyers across Liberia.</span>
+            </span>
+
+            <span class="choice-arrow">›</span>
+          </button>
+
+          <button type="button" class="choice-button service" id="serviceBtn">
+            <span class="choice-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 1 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4Z"/></svg></span>
+
+            <span class="choice-copy">
+              <strong>I Want To Offer A Service</strong>
+              <span>Promote your skills, profession, or local business.</span>
+            </span>
+
+            <span class="choice-arrow">›</span>
+          </button>
+        </div>
+
+        <div class="account-links">
+          <a href="login.html" class="account-link sign-in">Sign In</a>
+          <a href="register.html" class="account-link register">Create Account</a>
+        </div>
+
+        <p class="legal">
+          By continuing, you agree to the
+          <a href="terms.html">Terms and Conditions</a>
+          and
+          <a href="privacy.html">Privacy Policy</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const WELCOME_KEY = "loyaltyMarketWelcomeCompleted";
+
+    function completeWelcome(destination, choice) {
+      localStorage.setItem(WELCOME_KEY, "true");
+      localStorage.setItem("loyaltyMarketVisitorChoice", choice);
+      window.location.href = destination;
+    }
+
+    document.getElementById("buyBtn").addEventListener("click", () => {
+      completeWelcome("index.html", "buy");
+    });
+
+    document.getElementById("sellBtn").addEventListener("click", () => {
+      completeWelcome("sell.html?type=product", "sell");
+    });
+
+    document.getElementById("serviceBtn").addEventListener("click", () => {
+      completeWelcome("sell.html?type=service", "service");
+    });
+
+    document.getElementById("skipBtn").addEventListener("click", () => {
+      completeWelcome("index.html", "skip");
+    });
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch((error) => {
+          console.log("Service worker registration failed:", error);
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saved Items - Waterside</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="footer.css">
+<link rel="stylesheet" href="marketplace.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<meta name="theme-color" content="#0d6e6e">
+<style>
+:root{--navy:#0d6e6e;--navy-soft:#e3f2f2;--orange:#ff6b4a;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.simple-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.simple-navbar .logo-link{display:flex;align-items:center;gap:9px;text-decoration:none}
+.simple-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
+.simple-navbar .logo-text{color:var(--navy);font-size:14px;font-weight:700}
+.simple-nav-actions{display:flex;align-items:center;gap:8px}
+.simple-nav-link{min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:#fff;text-decoration:none;font-size:12px;font-weight:500}
+.simple-nav-link:hover{border-color:var(--navy);color:var(--navy)}
+.page-shell{width:min(1180px,94%);margin:26px auto 60px}
+.page-title{margin:0 0 18px;font-size:19px;font-weight:600;color:var(--ink)}
+.wishlist-remove-btn{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:none;background:#fff;color:#b91c1c;box-shadow:0 2px 6px rgba(0,0,0,.15);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.wishlist-card-wrap{position:relative}
+.empty-state{padding:44px 20px;text-align:center;border:1px dashed var(--line);border-radius:12px;background:#fff;color:var(--muted);font-size:13px}
+.empty-state a{color:var(--navy);font-weight:600;text-decoration:none}
+@media (max-width:700px){.simple-navbar{flex-wrap:wrap;gap:10px}.simple-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.page-shell{margin-top:16px}}
+</style>
+</head>
+<body>
+<header class="navbar simple-navbar">
+  <a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text">Waterside</span></a>
+  <div class="simple-nav-actions">
+    <a href="index.html" class="simple-nav-link">Home</a>
+    <a href="dashboard.html" class="simple-nav-link">Dashboard</a>
+    <a href="sell.html" class="simple-nav-link">Post An Ad</a>
+  </div>
+</header>
+
+<section class="page-shell">
+  <h1 class="page-title">Saved Items</h1>
+  <div class="product-grid" id="wishlistGrid"><p class="empty-state">Loading your saved items...</p></div>
+</section>
+
+<footer class="lm-footer" id="marketplaceFooter">
+  <div class="lm-footer-simple site-shell">
+    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+    <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
+  </div>
+</footer>
+
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { collection, getDocs, doc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const wishlistGrid = document.getElementById("wishlistGrid");
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop";
+let currentUser = null;
+
+function safeText(v){return String(v||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
+
+async function loadWishlist(){
+  try{
+    const itemsSnapshot = await getDocs(collection(db,"wishlists",currentUser.uid,"items"));
+
+    if(itemsSnapshot.empty){
+      wishlistGrid.innerHTML = '<p class="empty-state">You have not saved anything yet. <a href="index.html">Browse listings</a> to get started.</p>';
+      return;
+    }
+
+    const cards = [];
+    for(const itemDoc of itemsSnapshot.docs){
+      const wishlistItem = itemDoc.data();
+      let product = null;
+      try{
+        const productSnap = await getDoc(doc(db,"products",wishlistItem.productId||itemDoc.id));
+        if(productSnap.exists()) product = productSnap.data();
+      }catch(e){}
+
+      const title = product?.title || wishlistItem.title || "Untitled Product";
+      const image = (Array.isArray(product?.images)&&product.images[0]) || product?.imageUrl || FALLBACK_IMAGE;
+      const priceUsd = product?.priceUsd || "0";
+      const priceLrd = product?.priceLrd || "0";
+      const productId = wishlistItem.productId || itemDoc.id;
+
+      cards.push(`
+        <div class="wishlist-card-wrap">
+          <button type="button" class="wishlist-remove-btn" data-remove-id="${safeText(itemDoc.id)}" aria-label="Remove from saved">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+          <a href="product-detail.html?id=${encodeURIComponent(productId)}" style="text-decoration:none;color:inherit;">
+            <div class="product-card">
+              <div class="product-image"><img src="${safeText(image)}" alt="${safeText(title)}" loading="lazy"></div>
+              <h3>${safeText(title)}</h3>
+              <p class="price">US$${safeText(priceUsd)} | L$${safeText(priceLrd)}</p>
+            </div>
+          </a>
+        </div>
+      `);
+    }
+
+    wishlistGrid.innerHTML = cards.join("");
+
+    document.querySelectorAll("[data-remove-id]").forEach(btn=>{
+      btn.addEventListener("click", async (event)=>{
+        event.preventDefault();
+        try{
+          await deleteDoc(doc(db,"wishlists",currentUser.uid,"items",btn.dataset.removeId));
+          loadWishlist();
+        }catch(error){
+          alert("Could not remove item: " + error.message);
+        }
+      });
+    });
+  }catch(error){
+    wishlistGrid.innerHTML = '<p class="empty-state">Could not load your saved items right now.</p>';
+    console.error(error.message);
+  }
+}
+
+onAuthStateChanged(auth,(user)=>{
+  if(!user){ alert("Please log in to view your saved items."); window.location.href="login.html"; return; }
+  currentUser = user;
+  loadWishlist();
+});
+</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{});}</script>
+</body>
+</html>
