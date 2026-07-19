@@ -17,10 +17,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,Bl
 .chat-navbar{min-height:52px;padding:8px max(16px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:40}
 .chat-back-link{color:var(--ink);text-decoration:none;display:flex;align-items:center}
 .chat-navbar-title{font-size:14.5px;font-weight:600;color:var(--ink)}
-.chat-navbar-status{margin-top:1px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
-.chat-navbar-status .status-dot{width:7px;height:7px;border-radius:50%;background:#94a3b8;flex-shrink:0}
-.chat-navbar-status.online .status-dot{background:#22c55e}
-.chat-navbar-status.online{color:#16a34a}
 .chat-navbar-sub{font-size:11.5px;color:var(--muted)}
 .chat-shell{flex:1;width:min(700px,94%);margin:0 auto;padding:14px 0 90px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
 .chat-bubble-row{display:flex}
@@ -42,10 +38,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,Bl
   <a href="messages.html" class="chat-back-link"><svg class="icon" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></a>
   <div>
     <div class="chat-navbar-title" id="chatTitle">Chat</div>
-    <div class="chat-navbar-status" id="chatStatus" style="display:none;">
-      <span class="status-dot"></span>
-      <span id="chatStatusText"></span>
-    </div>
+    <div class="chat-navbar-sub" id="chatLastSeen"></div>
     <div class="chat-navbar-sub" id="chatSub"></div>
   </div>
 </header>
@@ -68,91 +61,63 @@ import {
   collection, query, where, orderBy, onSnapshot, addDoc, doc, getDoc, updateDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+const ACTIVE_THRESHOLD_MINUTES = 5;
+
 const params = new URLSearchParams(window.location.search);
 const otherUserId = params.get("with") || params.get("seller");
 const productId = params.get("product") || "";
 const initialMessage = params.get("message") || "";
 
 const chatTitle = document.getElementById("chatTitle");
+const chatLastSeen = document.getElementById("chatLastSeen");
 const chatSub = document.getElementById("chatSub");
-const chatStatus = document.getElementById("chatStatus");
-const chatStatusText = document.getElementById("chatStatusText");
 const chatShell = document.getElementById("chatShell");
 const chatInput = document.getElementById("chatInput");
 const chatSendBtn = document.getElementById("chatSendBtn");
 
 let currentUser = null;
 let unsubscribe = null;
-let unsubscribeStatus = null;
-let otherUserLastActive = null;
-let statusRefreshTimer = null;
 
 function safeText(v){return String(v||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
 function formatTime(ts){if(!ts||!ts.seconds)return "";return new Date(ts.seconds*1000).toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});}
 
-function formatLastActive(ts){
-  if(!ts || !ts.seconds) return null;
+function formatLastSeen(lastActiveAt){
+  if(!lastActiveAt || !lastActiveAt.seconds) return "";
 
-  const activeMs = ts.seconds * 1000;
-  const nowMs = Date.now();
-  const diffMs = nowMs - activeMs;
-  const diffMinutes = Math.floor(diffMs / 60000);
+  const lastActiveMs = lastActiveAt.seconds * 1000;
+  const minutesAgo = Math.floor((Date.now() - lastActiveMs) / 60000);
 
-  if(diffMinutes < 2) return { text: "Active now", online: true };
-  if(diffMinutes < 60) return { text: `Active ${diffMinutes} minute${diffMinutes===1?"":"s"} ago`, online: false };
+  if(minutesAgo < ACTIVE_THRESHOLD_MINUTES) return "Active now";
+  if(minutesAgo < 60) return `Active ${minutesAgo} minute${minutesAgo===1?"":"s"} ago`;
 
-  const diffHours = Math.floor(diffMinutes / 60);
-  const activeDate = new Date(activeMs);
-  const now = new Date();
-  const isToday = activeDate.toDateString() === now.toDateString();
+  const hoursAgo = Math.floor(minutesAgo / 60);
+  if(hoursAgo < 24) return `Active ${hoursAgo} hour${hoursAgo===1?"":"s"} ago`;
 
-  if(isToday){
-    const timeLabel = activeDate.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
-    return { text: `Active today at ${timeLabel}`, online: false };
-  }
+  const lastActiveDate = new Date(lastActiveMs);
+  const daysAgo = Math.floor(hoursAgo / 24);
+  if(daysAgo < 7) return "Last seen " + lastActiveDate.toLocaleDateString(undefined,{weekday:"long"});
 
-  if(diffHours < 48){
-    const timeLabel = activeDate.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
-    return { text: `Last seen yesterday at ${timeLabel}`, online: false };
-  }
-
-  const dateLabel = activeDate.toLocaleDateString(undefined,{month:"short",day:"numeric"});
-  return { text: `Last seen ${dateLabel}`, online: false };
+  return "Last seen " + lastActiveDate.toLocaleDateString();
 }
 
-function renderStatus(){
-  const result = formatLastActive(otherUserLastActive);
-
-  if(!result){
-    chatStatus.style.display = "none";
-    return;
-  }
-
-  chatStatusText.textContent = result.text;
-  chatStatus.classList.toggle("online", result.online);
-  chatStatus.style.display = "flex";
-}
-
-function listenForOtherUserStatus(){
-  unsubscribeStatus = onSnapshot(doc(db,"users",otherUserId), (snap)=>{
-    if(snap.exists()){
-      otherUserLastActive = snap.data().lastActiveAt || null;
-      renderStatus();
-    }
-  }, ()=>{});
-
-  if(statusRefreshTimer) clearInterval(statusRefreshTimer);
-  statusRefreshTimer = setInterval(renderStatus, 30000);
-}
+let unsubscribeOtherUser = null;
+let lastKnownActiveAt = null;
 
 async function loadOtherUserInfo(){
-  try{
-    const userSnap = await getDoc(doc(db,"users",otherUserId));
+  unsubscribeOtherUser = onSnapshot(doc(db,"users",otherUserId), (userSnap) => {
     if(userSnap.exists()){
       const data = userSnap.data();
       chatTitle.textContent = data.name || data.businessName || "Waterside User";
+      lastKnownActiveAt = data.lastActiveAt;
+      chatLastSeen.textContent = formatLastSeen(lastKnownActiveAt);
     }
-  }catch(e){}
+  }, () => {
+    chatLastSeen.textContent = "";
+  });
+
+  setInterval(() => {
+    if(lastKnownActiveAt) chatLastSeen.textContent = formatLastSeen(lastKnownActiveAt);
+  }, 60000);
 
   if(productId){
     try{
@@ -257,7 +222,6 @@ onAuthStateChanged(auth,(user)=>{
 
   currentUser = user;
   loadOtherUserInfo();
-  listenForOtherUserStatus();
   listenForMessages();
 
   if(initialMessage) chatInput.value = initialMessage;
