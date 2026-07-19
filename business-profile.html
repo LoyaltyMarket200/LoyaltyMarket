@@ -102,13 +102,6 @@
     .listing-featured-badge{display:inline-flex;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--orange-soft);color:#c23f24;font-size:10px;font-weight:600}
 
     .review-grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px}
-    .review-form-card{display:none;padding:19px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
-    .review-form-card h3{margin:0 0 14px;font-size:15.5px;font-weight:600}
-    .review-form-card label{display:block;margin:13px 0 7px;font-size:12.5px;font-weight:500}
-    .review-form-card select,.review-form-card textarea{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit}
-    .review-form-card select:focus,.review-form-card textarea:focus{outline:none;border-color:var(--navy)}
-    .review-submit{width:100%;min-height:44px;margin-top:14px;border:none;border-radius:10px;color:#fff;background:var(--navy);font-weight:600;cursor:pointer}
-
     .review-message{display:none;padding:14px;border-radius:12px;background:var(--bg);color:var(--muted);border:1px solid var(--line);font-size:13.5px;font-weight:400}
     .review-message a{color:var(--navy);font-weight:600}
 
@@ -119,6 +112,7 @@
     .review-stars{color:var(--orange);display:flex;gap:1px}
     .review-comment{margin:10px 0 7px;color:var(--ink);line-height:1.6;font-size:13.5px;font-weight:400}
     .review-date{margin:0;color:#9ca3af;font-size:11.5px}
+    .review-photo{margin-top:8px;max-width:180px;border-radius:8px;display:block}
 
     .business-empty{grid-column:1/-1;padding:44px 20px;text-align:center;border:1px dashed var(--line);border-radius:15px;background:var(--bg);color:var(--muted);font-size:13px}
 
@@ -280,39 +274,15 @@
         <div class="business-section-header">
           <div>
             <h2>Reviews <span id="averageRating"></span></h2>
-            <p>Read buyer experiences or leave feedback for this business.</p>
+            <p>Read buyer experiences from verified completed purchases.</p>
           </div>
         </div>
 
         <div class="review-grid">
           <div>
-            <div id="reviewFormCard" class="review-form-card">
-              <h3>Leave a Review</h3>
-
-              <form id="reviewForm">
-                <label for="reviewRating">Rating</label>
-                <select id="reviewRating" required>
-                  <option value="">Select rating</option>
-                  <option value="5">5 — Excellent</option>
-                  <option value="4">4 — Good</option>
-                  <option value="3">3 — Average</option>
-                  <option value="2">2 — Poor</option>
-                  <option value="1">1 — Terrible</option>
-                </select>
-
-                <label for="reviewComment">Comment</label>
-                <textarea id="reviewComment" rows="4" placeholder="Share your experience with this business..." required></textarea>
-
-                <button type="submit" class="review-submit">Submit Review</button>
-              </form>
-            </div>
-
-            <p id="loginToReviewMsg" class="review-message">
-              <a href="login.html">Login</a> to leave a review.
-            </p>
-
-            <p id="ownProfileMsg" class="review-message">
-              This is your own business profile — you cannot review yourself.
+            <p class="review-message" id="howToReviewMsg" style="display:block;">
+              Reviews can only be left by buyers after a completed purchase, to keep them genuine.
+              <a href="orders.html">Leave a review from your Orders page</a> if you've bought from this business.
             </p>
           </div>
 
@@ -504,9 +474,8 @@
       query,
       where,
       getDocs,
-      addDoc,
-      serverTimestamp,
       orderBy,
+      serverTimestamp,
       onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
@@ -534,10 +503,6 @@
     const businessPhoneLine = document.getElementById("businessPhoneLine");
     const sellerListingsGrid = document.getElementById("sellerListingsGrid");
     const averageRating = document.getElementById("averageRating");
-    const reviewFormCard = document.getElementById("reviewFormCard");
-    const reviewForm = document.getElementById("reviewForm");
-    const loginToReviewMsg = document.getElementById("loginToReviewMsg");
-    const ownProfileMsg = document.getElementById("ownProfileMsg");
     const reviewsList = document.getElementById("reviewsList");
     const messageSellerBtn = document.getElementById("messageSellerBtn");
 
@@ -553,7 +518,6 @@
     const unreadBadge = document.getElementById("unreadBadge");
 
     let currentUser = null;
-    let currentUserName = "";
     let isOwnProfile = false;
     let unsubscribeUnreadMessages = null;
 
@@ -712,28 +676,11 @@
 
         await loadBusinessListings();
         await loadReviews();
-        updateReviewControls();
 
       } catch (error) {
         businessNameEl.textContent = "Could not load business";
         sellerListingsGrid.innerHTML =
           `<div class="business-empty">${safeText(error.message)}</div>`;
-      }
-    }
-
-    function updateReviewControls() {
-      if (isOwnProfile) {
-        ownProfileMsg.style.display = "block";
-        reviewFormCard.style.display = "none";
-        loginToReviewMsg.style.display = "none";
-      } else if (currentUser) {
-        reviewFormCard.style.display = "block";
-        loginToReviewMsg.style.display = "none";
-        ownProfileMsg.style.display = "none";
-      } else {
-        reviewFormCard.style.display = "none";
-        loginToReviewMsg.style.display = "block";
-        ownProfileMsg.style.display = "none";
       }
     }
 
@@ -837,7 +784,7 @@
           statAverageRating.textContent = "—";
           statReviewCount.textContent = "0";
           reviewsList.innerHTML =
-            '<div class="business-empty">No reviews yet. Be the first to review this business.</div>';
+            '<div class="business-empty">No reviews yet.</div>';
           return;
         }
 
@@ -871,6 +818,8 @@
             <p class="review-comment">
               ${safeText(review.comment || "")}
             </p>
+
+            ${review.photoUrl ? `<img class="review-photo" src="${safeText(review.photoUrl)}" alt="Review photo">` : ""}
 
             <p class="review-date">${safeText(dateText)}</p>
           `;
@@ -907,17 +856,6 @@
 
         listenForUnreadMessages(user.uid);
         touchLastActive(user.uid);
-
-        try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
-
-          currentUserName = userDoc.exists()
-            ? (userDoc.data().name || user.email)
-            : user.email;
-
-        } catch (error) {
-          currentUserName = user.email;
-        }
       } else {
         loginBtn.style.display = "inline-block";
         registerBtn.style.display = "inline-block";
@@ -930,42 +868,6 @@
       }
 
       await loadBusinessProfile();
-    });
-
-    reviewForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      if (!currentUser) {
-        alert("You must be logged in to leave a review.");
-        return;
-      }
-
-      const rating = document.getElementById("reviewRating").value;
-      const comment =
-        document.getElementById("reviewComment").value.trim();
-
-      if (!rating || !comment) {
-        alert("Please select a rating and write a comment.");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "reviews"), {
-          sellerId: businessOwnerId,
-          reviewerId: currentUser.uid,
-          reviewerName: currentUserName,
-          rating: Number(rating),
-          comment,
-          createdAt: serverTimestamp()
-        });
-
-        alert("Review submitted successfully!");
-        reviewForm.reset();
-        await loadReviews();
-
-      } catch (error) {
-        alert("Could not submit review: " + error.message);
-      }
     });
 
     loadMarketplaceSettings();

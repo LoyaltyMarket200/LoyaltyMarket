@@ -161,6 +161,7 @@
     .review-stars{color:var(--orange);display:flex;gap:1px}
     .review-comment{margin:9px 0 6px;color:var(--ink);line-height:1.55;font-size:13px;font-weight:400}
     .review-date{margin:0;color:#9ca3af;font-size:11px}
+    .review-photo{margin-top:8px;max-width:160px;border-radius:8px;display:block}
 
     .about-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
     .about-row{padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--bg)}
@@ -315,39 +316,15 @@
         <div class="seller-section-header">
           <div>
             <h2>Reviews <span id="averageRating"></span></h2>
-            <p>Read buyer experiences or leave feedback after dealing with this seller.</p>
+            <p>Read buyer experiences from verified completed purchases.</p>
           </div>
         </div>
 
         <div class="review-grid">
           <div>
-            <div id="reviewFormCard" class="review-form-card">
-              <h3>Leave a Review</h3>
-
-              <form id="reviewForm">
-                <label for="reviewRating">Rating</label>
-                <select id="reviewRating" required>
-                  <option value="">Select rating</option>
-                  <option value="5">5 — Excellent</option>
-                  <option value="4">4 — Good</option>
-                  <option value="3">3 — Average</option>
-                  <option value="2">2 — Poor</option>
-                  <option value="1">1 — Terrible</option>
-                </select>
-
-                <label for="reviewComment">Comment</label>
-                <textarea id="reviewComment" rows="4" placeholder="Share your experience with this seller..." required></textarea>
-
-                <button type="submit" class="review-submit">Submit Review</button>
-              </form>
-            </div>
-
-            <p id="loginToReviewMsg" class="review-message">
-              <a href="login.html">Login</a> to leave a review.
-            </p>
-
-            <p id="ownProfileMsg" class="review-message">
-              This is your own profile — you cannot review yourself.
+            <p class="review-message" id="howToReviewMsg" style="display:block;">
+              Reviews can only be left by buyers after a completed purchase, to keep them genuine.
+              <a href="orders.html">Leave a review from your Orders page</a> if you've bought from this seller.
             </p>
           </div>
 
@@ -431,7 +408,6 @@
       query,
       where,
       getDocs,
-      addDoc,
       serverTimestamp,
       orderBy
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
@@ -450,10 +426,6 @@
     const sellerListingsGrid = document.getElementById("sellerListingsGrid");
     const categoryBreakdownRow = document.getElementById("categoryBreakdownRow");
     const averageRating = document.getElementById("averageRating");
-    const reviewFormCard = document.getElementById("reviewFormCard");
-    const reviewForm = document.getElementById("reviewForm");
-    const loginToReviewMsg = document.getElementById("loginToReviewMsg");
-    const ownProfileMsg = document.getElementById("ownProfileMsg");
     const reviewsList = document.getElementById("reviewsList");
     const callSellerBtn = document.getElementById("callSellerBtn");
     const messageSellerBtn = document.getElementById("messageSellerBtn");
@@ -475,7 +447,6 @@
     const aboutListingCount = document.getElementById("aboutListingCount");
 
     let currentUser = null;
-    let currentUserName = "";
     let isOwnProfile = false;
     let alreadyFollowing = false;
     let sellerListingsCache = [];
@@ -503,11 +474,6 @@
       return `${sellerId}_${followerId}`;
     }
 
-    // Writes the CURRENT VIEWER's own last-active timestamp — this is
-    // what makes "Active X ago" accurate for a seller: it gets updated
-    // every time that seller (or anyone else) visits any page across
-    // the site that calls this, not just when they view their own
-    // profile.
     function touchLastActive(userId) {
       setDoc(
         doc(db, "users", userId),
@@ -516,10 +482,6 @@
       ).catch(() => {});
     }
 
-    // Turns a lastActiveAt Firestore timestamp into a Jiji-style
-    // "Active X ago" string. Treats anything within the last 5
-    // minutes as "Active now" with a green dot, matching how most
-    // marketplace apps show presence.
     function formatLastActive(seconds) {
       if (!seconds) return null;
 
@@ -921,7 +883,7 @@
           statAverageRating.textContent = "—";
           statReviewCount.textContent = "0";
           reviewsList.innerHTML =
-            '<div class="seller-empty">No reviews yet. Be the first to review this seller.</div>';
+            '<div class="seller-empty">No reviews yet.</div>';
           return;
         }
 
@@ -954,6 +916,8 @@
             <p class="review-comment">
               ${safeText(review.comment || "")}
             </p>
+
+            ${review.photoUrl ? `<img class="review-photo" src="${safeText(review.photoUrl)}" alt="Review photo">` : ""}
 
             <p class="review-date">${safeText(dateText)}</p>
           `;
@@ -1072,35 +1036,15 @@
         currentUser = user;
         touchLastActive(user.uid);
 
-        try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
-
-          currentUserName = userDoc.exists()
-            ? (userDoc.data().name || user.email)
-            : user.email;
-
-        } catch (error) {
-          currentUserName = user.email;
-        }
-
         if (user.uid === sellerId) {
           isOwnProfile = true;
-          ownProfileMsg.style.display = "block";
-          reviewFormCard.style.display = "none";
-          loginToReviewMsg.style.display = "none";
           callSellerBtn.style.display = "none";
         } else {
           isOwnProfile = false;
-          reviewFormCard.style.display = "block";
-          loginToReviewMsg.style.display = "none";
-          ownProfileMsg.style.display = "none";
         }
       } else {
         currentUser = null;
         isOwnProfile = false;
-        reviewFormCard.style.display = "none";
-        loginToReviewMsg.style.display = "block";
-        ownProfileMsg.style.display = "none";
       }
 
       updateFollowButton();
@@ -1108,42 +1052,6 @@
 
       if (sellerId) {
         await loadSellerListings();
-      }
-    });
-
-    reviewForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      if (!currentUser) {
-        alert("You must be logged in to leave a review.");
-        return;
-      }
-
-      const rating = document.getElementById("reviewRating").value;
-      const comment =
-        document.getElementById("reviewComment").value.trim();
-
-      if (!rating || !comment) {
-        alert("Please select a rating and write a comment.");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "reviews"), {
-          sellerId,
-          reviewerId: currentUser.uid,
-          reviewerName: currentUserName,
-          rating: Number(rating),
-          comment,
-          createdAt: serverTimestamp()
-        });
-
-        alert("Review submitted successfully!");
-        reviewForm.reset();
-        await loadReviews();
-
-      } catch (error) {
-        alert("Could not submit review: " + error.message);
       }
     });
 

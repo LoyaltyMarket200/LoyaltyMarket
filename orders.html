@@ -14,7 +14,7 @@
       --navy:#0d6e6e;
       --navy-soft:#e3f2f2;
       --orange:#ff6b4a;
-      --orange-soft:#ffece7;
+      --orange-soft:#ffece7; 
       --ink:#1f2937;
       --muted:#6b7280;
       --line:#e5e7eb;
@@ -53,12 +53,15 @@
     .order-badge.payment-paid,.order-badge.status-completed{background:var(--navy-soft);color:var(--navy)}
     .order-badge.status-cancelled{background:#fee2e2;color:#b91c1c}
     .order-badge.protection{background:var(--navy-soft);color:var(--navy)}
+    .order-badge.status-reviewed{background:var(--navy-soft);color:var(--navy)}
     .order-card-meta{color:var(--muted);font-size:11.5px;margin-bottom:10px}
     .order-card-actions{display:flex;gap:8px;flex-wrap:wrap}
     .order-action-btn{min-height:34px;padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center}
     .order-action-btn:hover{border-color:var(--navy)}
     .order-action-btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
     .order-action-btn.primary:hover{background:#095454}
+    .order-action-btn.review{background:var(--orange);color:#fff;border-color:var(--orange)}
+    .order-action-btn.review:hover{background:#e85a3d}
     .order-action-btn:disabled{opacity:.6;cursor:not-allowed}
 
     .orders-empty{padding:44px 20px;text-align:center;border:1px dashed var(--line);border-radius:14px;background:#fff;color:var(--muted);font-size:13px}
@@ -67,6 +70,23 @@
     .footer{background:var(--navy);color:#d8f3f1;text-align:center;padding:26px 20px}
     .footer h2{color:#fff;margin-bottom:6px;font-size:15px;font-weight:600}
     .footer p{margin-bottom:5px;font-size:12px}
+
+    /* Review modal */
+    .review-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:20px}
+    .review-modal-overlay.open{display:flex}
+    .review-modal{background:#fff;border-radius:14px;padding:20px;width:min(400px,100%);max-height:90vh;overflow-y:auto}
+    .review-modal h3{margin:0 0 4px;font-size:16px;color:var(--ink)}
+    .review-modal p{margin:0 0 14px;font-size:12px;color:var(--muted)}
+    .review-stars{display:flex;gap:6px;margin-bottom:14px;font-size:28px}
+    .review-star{cursor:pointer;color:#d1d5db;user-select:none}
+    .review-star.filled{color:#f59e0b}
+    .review-textarea{width:100%;min-height:80px;padding:10px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;margin-bottom:10px}
+    .review-photo-input{margin-bottom:14px;font-size:12px;width:100%}
+    .review-modal-actions{display:flex;gap:8px;justify-content:flex-end}
+    .review-modal-actions button{min-height:36px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:#fff}
+    .review-modal-actions .submit-review{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .review-modal-actions .submit-review:disabled{opacity:.6;cursor:not-allowed}
+    .review-error{color:#b91c1c;font-size:12px;margin:-6px 0 10px;display:none}
 
     @media(max-width:600px){
       .orders-navbar{flex-wrap:wrap;gap:8px}
@@ -111,6 +131,27 @@
     </div>
   </section>
 
+  <div class="review-modal-overlay" id="reviewModalOverlay">
+    <div class="review-modal">
+      <h3 id="reviewModalTitle">Leave a Review</h3>
+      <p>Share your experience with this seller.</p>
+      <div class="review-stars" id="reviewStars">
+        <span class="review-star" data-star="1">★</span>
+        <span class="review-star" data-star="2">★</span>
+        <span class="review-star" data-star="3">★</span>
+        <span class="review-star" data-star="4">★</span>
+        <span class="review-star" data-star="5">★</span>
+      </div>
+      <textarea class="review-textarea" id="reviewText" placeholder="How was the item / seller?"></textarea>
+      <input type="file" accept="image/*" class="review-photo-input" id="reviewPhoto">
+      <p class="review-error" id="reviewError"></p>
+      <div class="review-modal-actions">
+        <button id="reviewCancelBtn">Cancel</button>
+        <button class="submit-review" id="reviewSubmitBtn">Submit Review</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer">
     <h2>Waterside</h2>
     <p>Buy And Sell Products Across Liberia.</p>
@@ -118,20 +159,34 @@
   </footer>
 
   <script type="module">
-    import { auth, db } from "./firebase.js";
+    import { auth, db, storage } from "./firebase.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import {
-      collection, query, where, getDocs, doc, updateDoc, addDoc, serverTimestamp
+      collection, query, where, getDocs, doc, getDoc, updateDoc, addDoc, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import {
+      ref, uploadBytes, getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
     const ordersList = document.getElementById("ordersList");
     const filterButtons = document.querySelectorAll(".orders-filter-btn");
+
+    const reviewModalOverlay = document.getElementById("reviewModalOverlay");
+    const reviewStarsEl = document.getElementById("reviewStars");
+    const reviewTextEl = document.getElementById("reviewText");
+    const reviewPhotoEl = document.getElementById("reviewPhoto");
+    const reviewErrorEl = document.getElementById("reviewError");
+    const reviewCancelBtn = document.getElementById("reviewCancelBtn");
+    const reviewSubmitBtn = document.getElementById("reviewSubmitBtn");
 
     const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
 
     let currentUser = null;
     let allOrders = [];
     let currentFilter = "all";
+    let reviewedOrderIds = new Set();
+    let activeReviewOrder = null;
+    let selectedStars = 0;
 
     function safeText(value) {
       return String(value || "")
@@ -180,9 +235,12 @@
         const paymentStatus = order.paymentStatus || "awaiting_payment";
         const isProtected = order.protectionEnabled === true;
         const isCompleted = order.status === "completed";
+        const alreadyReviewed = reviewedOrderIds.has(order.id);
 
         const canConfirmReceipt =
           isProtected && paymentStatus === "paid" && !isCompleted;
+
+        const canLeaveReview = isCompleted && !alreadyReviewed;
 
         return `
           <article class="order-card">
@@ -196,6 +254,7 @@
                 <span class="order-badge payment-${safeText(paymentStatus)}">${paymentStatusLabel(order)}</span>
                 ${isProtected ? '<span class="order-badge protection">Buyer Protection</span>' : ""}
                 ${isCompleted ? '<span class="order-badge status-completed">Completed</span>' : ""}
+                ${alreadyReviewed ? '<span class="order-badge status-reviewed">Reviewed</span>' : ""}
               </div>
 
               <div class="order-card-meta">
@@ -213,6 +272,12 @@
                     Confirm Receipt
                   </button>
                 ` : ""}
+
+                ${canLeaveReview ? `
+                  <button class="order-action-btn review" data-review-order="${safeText(order.id)}">
+                    Leave a Review
+                  </button>
+                ` : ""}
               </div>
             </div>
           </article>
@@ -221,6 +286,10 @@
 
       document.querySelectorAll("[data-confirm-order]").forEach((button) => {
         button.addEventListener("click", () => confirmReceipt(button.dataset.confirmOrder, button));
+      });
+
+      document.querySelectorAll("[data-review-order]").forEach((button) => {
+        button.addEventListener("click", () => openReviewModal(button.dataset.reviewOrder));
       });
     }
 
@@ -270,6 +339,152 @@
       }
     }
 
+    // ---------- Review modal ----------
+
+    function openReviewModal(orderId) {
+      const order = allOrders.find((item) => item.id === orderId);
+      if (!order) return;
+
+      activeReviewOrder = order;
+      selectedStars = 0;
+      reviewTextEl.value = "";
+      reviewPhotoEl.value = "";
+      reviewErrorEl.style.display = "none";
+      reviewErrorEl.textContent = "";
+      updateStarDisplay();
+
+      document.getElementById("reviewModalTitle").textContent =
+        "Review " + (order.productTitle || "this order");
+
+      reviewModalOverlay.classList.add("open");
+    }
+
+    function closeReviewModal() {
+      reviewModalOverlay.classList.remove("open");
+      activeReviewOrder = null;
+    }
+
+    function updateStarDisplay() {
+      document.querySelectorAll(".review-star").forEach((star) => {
+        const value = parseInt(star.dataset.star, 10);
+        star.classList.toggle("filled", value <= selectedStars);
+      });
+    }
+
+    reviewStarsEl.addEventListener("click", (event) => {
+      const star = event.target.closest(".review-star");
+      if (!star) return;
+      selectedStars = parseInt(star.dataset.star, 10);
+      updateStarDisplay();
+    });
+
+    reviewCancelBtn.addEventListener("click", closeReviewModal);
+
+    reviewModalOverlay.addEventListener("click", (event) => {
+      if (event.target === reviewModalOverlay) closeReviewModal();
+    });
+
+    reviewSubmitBtn.addEventListener("click", submitReview);
+
+    async function submitReview() {
+      if (!activeReviewOrder) return;
+
+      if (selectedStars < 1) {
+        reviewErrorEl.textContent = "Please select a star rating.";
+        reviewErrorEl.style.display = "block";
+        return;
+      }
+
+      const order = activeReviewOrder;
+      const text = reviewTextEl.value.trim();
+      const photoFile = reviewPhotoEl.files[0] || null;
+
+      reviewSubmitBtn.disabled = true;
+      reviewSubmitBtn.textContent = "Submitting...";
+      reviewErrorEl.style.display = "none";
+
+      try {
+        let photoUrl = null;
+
+        if (photoFile) {
+          const photoRef = ref(
+            storage,
+            `reviews/${order.id}_${Date.now()}_${photoFile.name}`
+          );
+          await uploadBytes(photoRef, photoFile);
+          photoUrl = await getDownloadURL(photoRef);
+        }
+
+        // Get the buyer's display name (same lookup pattern used on
+        // seller-profile.html / business-profile.html) so it shows
+        // up correctly in the existing reviews list rendering.
+        let reviewerName = currentUser.email;
+        try {
+          const buyerDoc = await getDoc(doc(db, "users", currentUser.uid));
+          if (buyerDoc.exists()) {
+            reviewerName = buyerDoc.data().name || currentUser.email;
+          }
+        } catch (nameError) {
+          // Fall back to email, non-critical.
+        }
+
+        // Write the review document. Field names match the existing
+        // review system on seller-profile.html / business-profile.html
+        // (reviewerId/reviewerName/comment) so it renders there with
+        // no changes needed on that end. orderId + photoUrl are new
+        // additions on top of that existing schema.
+        await addDoc(collection(db, "reviews"), {
+          sellerId: order.sellerId,
+          reviewerId: currentUser.uid,
+          reviewerName: reviewerName,
+          orderId: order.id,
+          productId: order.productId || null,
+          productTitle: order.productTitle || null,
+          rating: selectedStars,
+          comment: text,
+          photoUrl: photoUrl,
+          createdAt: serverTimestamp()
+        });
+
+        // Notify the seller.
+        try {
+          await addDoc(collection(db, "notifications"), {
+            userId: order.sellerId,
+            type: "review",
+            title: "New review on " + (order.productTitle || "your listing"),
+            body: selectedStars + " star review received.",
+            link: "seller/business-profile.html",
+            read: false,
+            createdAt: serverTimestamp()
+          });
+        } catch (notifyError) {
+          // Non-critical.
+        }
+
+        reviewedOrderIds.add(order.id);
+        closeReviewModal();
+        renderOrders();
+      } catch (error) {
+        reviewErrorEl.textContent = "Could not submit review: " + error.message;
+        reviewErrorEl.style.display = "block";
+      } finally {
+        reviewSubmitBtn.disabled = false;
+        reviewSubmitBtn.textContent = "Submit Review";
+      }
+    }
+
+    // ---------- Load orders + existing reviews ----------
+
+    async function loadReviewedOrderIds() {
+      try {
+        const reviewsQuery = query(collection(db, "reviews"), where("reviewerId", "==", currentUser.uid));
+        const snapshot = await getDocs(reviewsQuery);
+        reviewedOrderIds = new Set(snapshot.docs.map((docSnap) => docSnap.data().orderId));
+      } catch (error) {
+        reviewedOrderIds = new Set();
+      }
+    }
+
     async function loadOrders() {
       ordersList.innerHTML = '<p class="orders-empty">Loading your orders...</p>';
 
@@ -281,6 +496,7 @@
           .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
           .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
+        await loadReviewedOrderIds();
         renderOrders();
       } catch (error) {
         ordersList.innerHTML = `<p class="orders-empty">Could not load orders: ${safeText(error.message)}</p>`;
