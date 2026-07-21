@@ -46,6 +46,29 @@
     .direct-payment-note{margin-bottom:16px;padding:13px 15px;border:1px solid #b9dddd;border-radius:12px;background:var(--navy-soft);color:var(--navy);font-size:12.5px;line-height:1.5}
     .direct-payment-note strong{display:block;margin-bottom:2px}
 
+    /* Revenue analytics card — navy hero style, distinct from the
+       neutral order-count stats below it so sellers' eyes land on
+       earnings first. */
+    .revenue-card{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:0;
+      margin-bottom:16px;
+      border-radius:14px;
+      overflow:hidden;
+      background:var(--navy);
+      color:#fff;
+    }
+    .revenue-item{
+      padding:16px 14px;
+      text-align:center;
+      border-right:1px solid rgba(255,255,255,.14);
+    }
+    .revenue-item:last-child{border-right:none}
+    .revenue-value{font-size:19px;font-weight:700;line-height:1.2}
+    .revenue-value small{display:block;font-size:10.5px;font-weight:600;opacity:.75;margin-top:2px}
+    .revenue-label{margin-top:6px;color:#b9e6e6;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+
     .sales-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
     .sales-stat{padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:center}
     .sales-stat-value{font-size:19px;font-weight:700;color:var(--navy)}
@@ -94,6 +117,9 @@
       .sale-card{grid-template-columns:58px minmax(0,1fr)}
       .sale-card img{width:58px;height:58px}
       .sale-action-btn{flex:1 1 calc(50% - 8px)}
+      .revenue-card{grid-template-columns:1fr}
+      .revenue-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.14)}
+      .revenue-item:last-child{border-bottom:none}
     }
   </style>
 </head>
@@ -123,6 +149,21 @@
       WaterSide does not collect or hold money. Agree on delivery or a safe meeting place, allow the buyer to inspect the item, and receive payment directly.
     </div>
 
+    <section class="revenue-card">
+      <div class="revenue-item">
+        <div class="revenue-value" id="revenueTotal">US$0</div>
+        <div class="revenue-label">Total Earned</div>
+      </div>
+      <div class="revenue-item">
+        <div class="revenue-value" id="revenueThisMonth">US$0</div>
+        <div class="revenue-label">This Month</div>
+      </div>
+      <div class="revenue-item">
+        <div class="revenue-value" id="revenueAverage">US$0</div>
+        <div class="revenue-label">Average Deal</div>
+      </div>
+    </section>
+
     <section class="sales-stats">
       <div class="sales-stat"><div class="sales-stat-value" id="statTotalSales">0</div><div class="sales-stat-label">All Requests</div></div>
       <div class="sales-stat"><div class="sales-stat-value" id="statNewRequests">0</div><div class="sales-stat-label">New Requests</div></div>
@@ -133,7 +174,8 @@
     <div class="sales-filter-row">
       <button class="sales-filter-btn active" data-filter="all">All</button>
       <button class="sales-filter-btn" data-filter="pending">New Requests</button>
-      <button class="sales-filter-btn" data-filter="confirmed">Active Deals</button>
+      <button class="sales-filter-btn" data-filter="negotiating">Negotiating</button>
+      <button class="sales-filter-btn" data-filter="meeting">Meeting Arranged</button>
       <button class="sales-filter-btn" data-filter="completed">Completed</button>
       <button class="sales-filter-btn" data-filter="cancelled">Cancelled</button>
     </div>
@@ -170,6 +212,10 @@
     const statActiveDeals = document.getElementById("statActiveDeals");
     const statCompletedSales = document.getElementById("statCompletedSales");
 
+    const revenueTotal = document.getElementById("revenueTotal");
+    const revenueThisMonth = document.getElementById("revenueThisMonth");
+    const revenueAverage = document.getElementById("revenueAverage");
+
     const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
 
     let currentUser = null;
@@ -194,25 +240,91 @@
       });
     }
 
+    function formatMoney(value) {
+      const number = Number(value) || 0;
+      return "US$" + number.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    }
+
     function statusLabel(status) {
       const labels = {
-        pending: "New Purchase Request",
-        confirmed: "Active Deal",
-        completed: "Completed",
+        pending: "New Request",
+        negotiating: "Negotiating",
+        meeting: "Meeting Arranged",
+        completed: "Sold",
         cancelled: "Cancelled"
       };
-      return labels[status] || "New Purchase Request";
+      return labels[status] || "New Request";
     }
 
     function normalizedStatus(order) {
-      return order.status || "pending";
+      const status = String(order.status || "pending").toLowerCase();
+
+      // Keep older records compatible with the new Jiji-style workflow.
+      if (status === "accepted" || status === "active" || status === "confirmed") {
+        return "negotiating";
+      }
+
+      if (status === "meeting_arranged" || status === "arranged") {
+        return "meeting";
+      }
+
+      if (status === "complete" || status === "sold") {
+        return "completed";
+      }
+
+      return status;
+    }
+
+    // Revenue is calculated only from orders whose status is
+    // "completed" — pending/confirmed deals haven't actually closed
+    // yet, and cancelled ones obviously didn't. This is computed
+    // entirely from data already loaded for the sales list, so it
+    // needs no extra Firestore reads or writes.
+    function updateRevenue() {
+      const completedOrders = allSales.filter(
+        (order) => normalizedStatus(order) === "completed"
+      );
+
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      let total = 0;
+      let thisMonthTotal = 0;
+
+      completedOrders.forEach((order) => {
+        const amount = Number(order.priceUsd) || 0;
+        total += amount;
+
+        const completedSeconds =
+          order.completedAt?.seconds || order.createdAt?.seconds;
+
+        if (completedSeconds) {
+          const completedDate = new Date(completedSeconds * 1000);
+          if (
+            completedDate.getMonth() === currentMonth &&
+            completedDate.getFullYear() === currentYear
+          ) {
+            thisMonthTotal += amount;
+          }
+        }
+      });
+
+      const average = completedOrders.length
+        ? total / completedOrders.length
+        : 0;
+
+      revenueTotal.textContent = formatMoney(total);
+      revenueThisMonth.textContent = formatMoney(thisMonthTotal);
+      revenueAverage.textContent = formatMoney(average);
     }
 
     function updateStats() {
       statTotalSales.textContent = allSales.length;
       statNewRequests.textContent = allSales.filter((order) => normalizedStatus(order) === "pending").length;
-      statActiveDeals.textContent = allSales.filter((order) => normalizedStatus(order) === "confirmed").length;
+      statActiveDeals.textContent = allSales.filter((order) => ["negotiating", "meeting"].includes(normalizedStatus(order))).length;
       statCompletedSales.textContent = allSales.filter((order) => normalizedStatus(order) === "completed").length;
+      updateRevenue();
     }
 
     function buyerContactLink(order) {
@@ -240,9 +352,10 @@
         const status = normalizedStatus(order);
         const image = order.productImage || FALLBACK_IMAGE;
         const buyerName = order.buyerName || order.buyerEmail || "Buyer";
-        const canAccept = status === "pending";
-        const canComplete = status === "confirmed";
-        const canCancel = status === "pending" || status === "confirmed";
+        const canNegotiate = status === "pending";
+        const canArrangeMeeting = status === "negotiating";
+        const canComplete = status === "meeting" || status === "negotiating";
+        const canCancel = ["pending", "negotiating", "meeting"].includes(status);
 
         return `
           <article class="sale-card">
@@ -271,8 +384,9 @@
                 <a class="sale-action-btn" href="${safeText(buyerContactLink(order))}">Contact Buyer</a>
                 <a class="sale-action-btn" href="messages.html">Open Chat</a>
 
-                ${canAccept ? `<button class="sale-action-btn primary" data-action="accept" data-order-id="${safeText(order.id)}">Accept Deal</button>` : ""}
-                ${canComplete ? `<button class="sale-action-btn complete" data-action="complete" data-order-id="${safeText(order.id)}">Mark Completed</button>` : ""}
+                ${canNegotiate ? `<button class="sale-action-btn primary" data-action="negotiate" data-order-id="${safeText(order.id)}">Start Negotiating</button>` : ""}
+                ${canArrangeMeeting ? `<button class="sale-action-btn primary" data-action="meeting" data-order-id="${safeText(order.id)}">Meeting Arranged</button>` : ""}
+                ${canComplete ? `<button class="sale-action-btn complete" data-action="complete" data-order-id="${safeText(order.id)}">Mark Sold</button>` : ""}
                 ${canCancel ? `<button class="sale-action-btn danger" data-action="cancel" data-order-id="${safeText(order.id)}">Cancel Deal</button>` : ""}
               </div>
             </div>
@@ -309,19 +423,26 @@
       if (!order) return;
 
       const actionConfig = {
-        accept: {
-          nextStatus: "confirmed",
-          confirmText: `Accept the purchase request for "${order.productTitle || "this listing"}"?`,
-          workingText: "Accepting...",
-          notificationTitle: "Seller accepted your request",
-          notificationBody: `The seller accepted your purchase request for ${order.productTitle || "the listing"}. Contact the seller to arrange payment and delivery.`
+        negotiate: {
+          nextStatus: "negotiating",
+          confirmText: `Start negotiating with the buyer for "${order.productTitle || "this listing"}"?`,
+          workingText: "Updating...",
+          notificationTitle: "Seller is ready to negotiate",
+          notificationBody: `The seller is ready to discuss the price and arrangement for ${order.productTitle || "the listing"}.`
+        },
+        meeting: {
+          nextStatus: "meeting",
+          confirmText: `Confirm that a meeting or delivery arrangement has been made for "${order.productTitle || "this listing"}"?`,
+          workingText: "Updating...",
+          notificationTitle: "Meeting arranged",
+          notificationBody: `A meeting or delivery arrangement has been recorded for ${order.productTitle || "the listing"}.`
         },
         complete: {
           nextStatus: "completed",
-          confirmText: `Mark the deal for "${order.productTitle || "this listing"}" as completed?`,
-          workingText: "Completing...",
-          notificationTitle: "Deal marked completed",
-          notificationBody: `The seller marked your deal for ${order.productTitle || "the listing"} as completed.`
+          confirmText: `Mark "${order.productTitle || "this listing"}" as sold? This will also mark the listing as sold.`,
+          workingText: "Marking sold...",
+          notificationTitle: "Item marked sold",
+          notificationBody: `The seller marked ${order.productTitle || "the listing"} as sold. You can now leave a review.`
         },
         cancel: {
           nextStatus: "cancelled",
@@ -345,13 +466,32 @@
           updatedAt: serverTimestamp()
         };
 
-        if (action === "accept") updateData.confirmedAt = serverTimestamp();
+        if (action === "negotiate") updateData.negotiatingAt = serverTimestamp();
+        if (action === "meeting") updateData.meetingArrangedAt = serverTimestamp();
         if (action === "complete") updateData.completedAt = serverTimestamp();
         if (action === "cancel") updateData.cancelledAt = serverTimestamp();
 
         await updateDoc(doc(db, "orders", orderId), updateData);
 
+        // Jiji-style marketplace: WaterSide does not process money.
+        // Marking sold only updates the deal and the seller's listing.
+        if (action === "complete" && order.productId) {
+          try {
+            await updateDoc(doc(db, "products", order.productId), {
+              status: "sold",
+              sold: true,
+              soldAt: serverTimestamp(),
+              soldToBuyerId: order.buyerId || "",
+              updatedAt: serverTimestamp()
+            });
+          } catch (productError) {
+            console.warn("Deal was completed, but listing status could not be updated:", productError);
+          }
+        }
+
         order.status = config.nextStatus;
+        if (action === "complete") order.completedAt = { seconds: Math.floor(Date.now() / 1000) };
+
         await notifyBuyer(order, config.notificationTitle, config.notificationBody);
 
         updateStats();

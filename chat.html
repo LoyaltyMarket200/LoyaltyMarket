@@ -1,232 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat - Waterside</title>
-<link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-<meta name="theme-color" content="#0d6e6e">
-<style>
-:root{--navy:#0d6e6e;--navy-soft:#e3f2f2;--orange:#ff6b4a;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;display:flex;flex-direction:column}
-.icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.chat-navbar{min-height:52px;padding:8px max(16px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:40}
-.chat-back-link{color:var(--ink);text-decoration:none;display:flex;align-items:center}
-.chat-navbar-title{font-size:14.5px;font-weight:600;color:var(--ink)}
-.chat-navbar-sub{font-size:11.5px;color:var(--muted)}
-.chat-shell{flex:1;width:min(700px,94%);margin:0 auto;padding:14px 0 90px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
-.chat-bubble-row{display:flex}
-.chat-bubble-row.own{justify-content:flex-end}
-.chat-bubble{max-width:78%;padding:10px 14px;border-radius:14px;font-size:13.5px;line-height:1.5}
-.chat-bubble-row.own .chat-bubble{background:var(--navy);color:#fff;border-bottom-right-radius:4px}
-.chat-bubble-row:not(.own) .chat-bubble{background:#fff;border:1px solid var(--line);color:var(--ink);border-bottom-left-radius:4px}
-.chat-bubble-time{display:block;margin-top:4px;font-size:10px;opacity:.7}
-.chat-input-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:10px max(16px,4vw);display:flex;gap:9px;align-items:center}
-.chat-input{flex:1;min-height:42px;padding:9px 13px;border:1px solid var(--line);border-radius:999px;font:inherit;font-size:13.5px;color:var(--ink)}
-.chat-input:focus{outline:none;border-color:var(--navy)}
-.chat-send-btn{width:42px;height:42px;border-radius:50%;border:none;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-.chat-send-btn:disabled{opacity:.6;cursor:not-allowed}
-.empty-state{padding:44px 20px;text-align:center;color:var(--muted);font-size:13px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat - WaterSide</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <meta name="theme-color" content="#0d6e6e">
+  <style>
+    :root{--brand:#0d6e6e;--brand-dark:#095959;--brand-soft:#e7f5f5;--orange:#ff6b4a;--ink:#172033;--muted:#667085;--line:#e5e7eb;--bg:#f4f6f8;--white:#fff;--danger:#b91c1c;--shadow:0 12px 34px rgba(15,23,42,.09)}
+    *{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}button,input,textarea{font:inherit}.hidden{display:none!important}
+    .site-header{height:58px;padding:8px max(16px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20}.brand{display:flex;align-items:center;gap:9px;color:var(--brand);font-weight:800;text-decoration:none}.brand img{width:31px;height:31px;object-fit:contain;border-radius:8px}.header-actions{display:flex;align-items:center;gap:8px}.header-link{padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);text-decoration:none;font-size:12.5px;font-weight:700}.header-link.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+    .page-shell{width:min(1060px,96%);height:calc(100vh - 86px);margin:14px auto}.chat-card{height:100%;min-height:560px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-rows:auto auto 1fr auto}
+    .chat-header{min-height:72px;padding:12px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:14px}.chat-person{min-width:0;display:flex;align-items:center;gap:11px}.avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--brand-soft);flex:0 0 auto}.person-copy{min-width:0}.person-name{margin:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.person-status{margin:4px 0 0;color:var(--muted);font-size:11.5px}.chat-header-actions{display:flex;gap:7px;flex-wrap:wrap}.small-action{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;min-height:34px;padding:7px 10px;text-decoration:none;font-size:12px;font-weight:700;cursor:pointer}
+    .product-strip{padding:10px 14px;border-bottom:1px solid var(--line);background:#fbfcfd;display:flex;align-items:center;gap:11px}.product-strip img{width:58px;height:48px;border-radius:9px;object-fit:cover;background:#eef2f6}.product-info{min-width:0;flex:1}.product-title{margin:0;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.product-price{margin:4px 0 0;color:var(--brand);font-size:12px;font-weight:800}.product-view{flex:0 0 auto;padding:7px 10px;border:1px solid var(--brand);border-radius:8px;color:var(--brand);text-decoration:none;font-size:11.5px;font-weight:800}
+    .messages{min-height:0;padding:18px;overflow-y:auto;background:linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,.9)),radial-gradient(circle at top left,#e7f5f5 0,transparent 42%),radial-gradient(circle at bottom right,#fff0eb 0,transparent 38%)}.loading,.empty,.error{max-width:520px;margin:30px auto;padding:15px 16px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--muted);text-align:center;font-size:13px}.error{color:var(--danger)}.day-label{width:max-content;margin:10px auto 16px;padding:5px 9px;border-radius:999px;background:#eef2f6;color:var(--muted);font-size:10.5px;font-weight:800}.message-row{margin:7px 0;display:flex}.message-row.mine{justify-content:flex-end}.message-row.theirs{justify-content:flex-start}.bubble{max-width:min(74%,560px);padding:10px 12px 7px;border-radius:15px;line-height:1.45;font-size:13.5px;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:0 2px 7px rgba(15,23,42,.05)}.mine .bubble{background:var(--brand);color:#fff;border-bottom-right-radius:5px}.theirs .bubble{background:#fff;border:1px solid var(--line);color:var(--ink);border-bottom-left-radius:5px}.message-meta{margin-top:5px;display:flex;justify-content:flex-end;gap:5px;font-size:9.5px;opacity:.78}
+    .composer{padding:11px 13px;border-top:1px solid var(--line);background:#fff;display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:9px}.attach-btn,.send-btn{width:42px;height:42px;border:none;border-radius:11px;display:grid;place-items:center;font-size:18px;font-weight:900;cursor:pointer}.attach-btn{background:#f1f5f9;color:var(--muted)}.attach-btn:disabled{opacity:.5;cursor:not-allowed}.send-btn{background:var(--orange);color:#fff}.send-btn:disabled{opacity:.55;cursor:not-allowed}.message-input{width:100%;min-height:42px;max-height:120px;resize:none;padding:10px 12px;border:1px solid var(--line);border-radius:12px;outline:none;line-height:1.4;overflow-y:auto}.message-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(13,110,110,.08)}.login-note{grid-column:1/-1;padding:10px;border-radius:10px;background:#fff7ed;color:#9a3412;font-size:12px;text-align:center}
+    @media(max-width:680px){.site-header{height:auto;flex-wrap:wrap}.header-actions{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.header-link{text-align:center}.page-shell{width:100%;height:calc(100vh - 105px);margin:0}.chat-card{border-radius:0;border-left:none;border-right:none;min-height:0}.chat-header{padding:10px 12px}.chat-header-actions .small-action:nth-child(n+2){display:none}.messages{padding:13px 10px}.bubble{max-width:86%}.product-strip{padding:8px 10px}.product-strip img{width:50px;height:43px}.composer{padding:9px}}
+  </style>
 </head>
 <body>
-<header class="chat-navbar">
-  <a href="messages.html" class="chat-back-link"><svg class="icon" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></a>
-  <div>
-    <div class="chat-navbar-title" id="chatTitle">Chat</div>
-    <div class="chat-navbar-sub" id="chatLastSeen"></div>
-    <div class="chat-navbar-sub" id="chatSub"></div>
-  </div>
+<header class="site-header">
+  <a class="brand" href="index.html"><img src="icons/icon-512.png" alt="WaterSide"><span>WaterSide</span></a>
+  <div class="header-actions"><a class="header-link" href="index.html">Home</a><a class="header-link" href="messages.html">Messages</a><a class="header-link primary" href="sell.html">Post an Ad</a></div>
 </header>
-
-<main class="chat-shell" id="chatShell">
-  <p class="empty-state">Loading conversation...</p>
+<main class="page-shell">
+  <section class="chat-card">
+    <div class="chat-header">
+      <div class="chat-person"><img id="otherAvatar" class="avatar" src="icons/icon-512.png" alt="User"><div class="person-copy"><h1 id="otherName" class="person-name">Loading conversation...</h1><p id="otherStatus" class="person-status">WaterSide member</p></div></div>
+      <div class="chat-header-actions"><a id="viewProfileBtn" class="small-action hidden" href="#">View Profile</a><a id="callBtn" class="small-action hidden" href="#">Call</a><button id="reportBtn" class="small-action" type="button">Report</button></div>
+    </div>
+    <div id="productStrip" class="product-strip hidden"><img id="productImage" src="icons/icon-512.png" alt="Product"><div class="product-info"><p id="productTitle" class="product-title">Product</p><p id="productPrice" class="product-price"></p></div><a id="productViewBtn" class="product-view" href="#">View Ad</a></div>
+    <div id="messagesBox" class="messages"><div id="loadingState" class="loading">Loading conversation...</div><div id="emptyState" class="empty hidden">No messages yet. Start the conversation below.</div><div id="errorState" class="error hidden"></div><div id="messageList"></div></div>
+    <form id="composer" class="composer"><button class="attach-btn" type="button" title="Image sharing will be added next" disabled>＋</button><textarea id="messageInput" class="message-input" rows="1" maxlength="1500" placeholder="Write a message..."></textarea><button id="sendBtn" class="send-btn" type="submit" aria-label="Send message">➤</button><div id="loginNote" class="login-note hidden">Please log in to send messages.</div></form>
+  </section>
 </main>
-
-<div class="chat-input-bar">
-  <input type="text" id="chatInput" class="chat-input" placeholder="Type a message">
-  <button type="button" id="chatSendBtn" class="chat-send-btn" aria-label="Send">
-    <svg class="icon" viewBox="0 0 24 24"><path d="m3 3 18 9-18 9 4-9-4-9Z"/></svg>
-  </button>
-</div>
-
 <script type="module">
-import { auth, db } from "./firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import {
-  collection, query, where, orderBy, onSnapshot, addDoc, doc, getDoc, updateDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import { auth, db } from "./firebase.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import { addDoc, collection, doc, getDoc, limit, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-const ACTIVE_THRESHOLD_MINUTES = 5;
+  const params = new URLSearchParams(window.location.search);
+  const requestedChatId = params.get("chat") || "";
+  const requestedOtherId = params.get("with") || params.get("seller") || params.get("user") || "";
+  const requestedProductId = params.get("product") || params.get("productId") || "";
 
-const params = new URLSearchParams(window.location.search);
-const otherUserId = params.get("with") || params.get("seller");
-const productId = params.get("product") || "";
-const initialMessage = params.get("message") || "";
+  const otherAvatar = document.getElementById("otherAvatar");
+  const otherName = document.getElementById("otherName");
+  const otherStatus = document.getElementById("otherStatus");
+  const viewProfileBtn = document.getElementById("viewProfileBtn");
+  const callBtn = document.getElementById("callBtn");
+  const reportBtn = document.getElementById("reportBtn");
+  const productStrip = document.getElementById("productStrip");
+  const productImage = document.getElementById("productImage");
+  const productTitle = document.getElementById("productTitle");
+  const productPrice = document.getElementById("productPrice");
+  const productViewBtn = document.getElementById("productViewBtn");
+  const messagesBox = document.getElementById("messagesBox");
+  const messageList = document.getElementById("messageList");
+  const loadingState = document.getElementById("loadingState");
+  const emptyState = document.getElementById("emptyState");
+  const errorState = document.getElementById("errorState");
+  const composer = document.getElementById("composer");
+  const messageInput = document.getElementById("messageInput");
+  const sendBtn = document.getElementById("sendBtn");
+  const loginNote = document.getElementById("loginNote");
 
-const chatTitle = document.getElementById("chatTitle");
-const chatLastSeen = document.getElementById("chatLastSeen");
-const chatSub = document.getElementById("chatSub");
-const chatShell = document.getElementById("chatShell");
-const chatInput = document.getElementById("chatInput");
-const chatSendBtn = document.getElementById("chatSendBtn");
+  let currentUser = null;
+  let otherUserId = requestedOtherId;
+  let productId = requestedProductId;
+  let chatId = requestedChatId;
+  let unsubscribeMessages = null;
+  let firstSnapshotRendered = false;
 
-let currentUser = null;
-let unsubscribe = null;
+  function safeString(value, fallback = "") { return value === null || value === undefined ? fallback : String(value); }
+  function normalizePhone(value) { return safeString(value).replace(/[^\d+]/g, ""); }
+  function timestampDate(value) { if (!value) return null; if (typeof value.toDate === "function") return value.toDate(); if (typeof value.seconds === "number") return new Date(value.seconds * 1000); const parsed = new Date(value); return Number.isNaN(parsed.getTime()) ? null : parsed; }
+  function formatTime(value) { const date = timestampDate(value); return date ? date.toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" }) : "Sending..."; }
+  function formatDay(value) { const date = timestampDate(value); if (!date) return ""; const today = new Date(); const yesterday = new Date(); yesterday.setDate(today.getDate() - 1); if (date.toDateString() === today.toDateString()) return "Today"; if (date.toDateString() === yesterday.toDateString()) return "Yesterday"; return date.toLocaleDateString([], { month:"short", day:"numeric", year:date.getFullYear() !== today.getFullYear() ? "numeric" : undefined }); }
+  function priceText(product) { const parts=[]; const usd=Number(product?.priceUsd ?? product?.priceUSD ?? 0); const lrd=Number(product?.priceLrd ?? product?.priceLRD ?? product?.priceLd ?? 0); if (usd>0) parts.push(`US$${usd.toLocaleString()}`); if (lrd>0) parts.push(`L$${lrd.toLocaleString()}`); return parts.join(" | ") || "Contact seller"; }
+  function productPhoto(product) { return Array.isArray(product?.images) && product.images.length ? product.images[0] : (product?.imageUrl || product?.imageURL || product?.image || "icons/icon-512.png"); }
+  function deterministicChatId(userA,userB,itemId="") { const participants=[userA,userB].sort(); return `${participants[0]}_${participants[1]}_${itemId || "general"}`; }
+  function showError(message) { loadingState.classList.add("hidden"); emptyState.classList.add("hidden"); errorState.textContent=message; errorState.classList.remove("hidden"); }
+  function autoGrowInput() { messageInput.style.height="auto"; messageInput.style.height=Math.min(messageInput.scrollHeight,120)+"px"; }
+  function scrollToBottom(force=false) { const nearBottom=messagesBox.scrollHeight-messagesBox.scrollTop-messagesBox.clientHeight<120; if (force || nearBottom) requestAnimationFrame(()=>{ messagesBox.scrollTop=messagesBox.scrollHeight; }); }
 
-function safeText(v){return String(v||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
-function formatTime(ts){if(!ts||!ts.seconds)return "";return new Date(ts.seconds*1000).toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});}
-
-function formatLastSeen(lastActiveAt){
-  if(!lastActiveAt || !lastActiveAt.seconds) return "";
-
-  const lastActiveMs = lastActiveAt.seconds * 1000;
-  const minutesAgo = Math.floor((Date.now() - lastActiveMs) / 60000);
-
-  if(minutesAgo < ACTIVE_THRESHOLD_MINUTES) return "Active now";
-  if(minutesAgo < 60) return `Active ${minutesAgo} minute${minutesAgo===1?"":"s"} ago`;
-
-  const hoursAgo = Math.floor(minutesAgo / 60);
-  if(hoursAgo < 24) return `Active ${hoursAgo} hour${hoursAgo===1?"":"s"} ago`;
-
-  const lastActiveDate = new Date(lastActiveMs);
-  const daysAgo = Math.floor(hoursAgo / 24);
-  if(daysAgo < 7) return "Last seen " + lastActiveDate.toLocaleDateString(undefined,{weekday:"long"});
-
-  return "Last seen " + lastActiveDate.toLocaleDateString();
-}
-
-let unsubscribeOtherUser = null;
-let lastKnownActiveAt = null;
-
-async function loadOtherUserInfo(){
-  unsubscribeOtherUser = onSnapshot(doc(db,"users",otherUserId), (userSnap) => {
-    if(userSnap.exists()){
-      const data = userSnap.data();
-      chatTitle.textContent = data.name || data.businessName || "Waterside User";
-      lastKnownActiveAt = data.lastActiveAt;
-      chatLastSeen.textContent = formatLastSeen(lastKnownActiveAt);
-    }
-  }, () => {
-    chatLastSeen.textContent = "";
-  });
-
-  setInterval(() => {
-    if(lastKnownActiveAt) chatLastSeen.textContent = formatLastSeen(lastKnownActiveAt);
-  }, 60000);
-
-  if(productId){
-    try{
-      const productSnap = await getDoc(doc(db,"products",productId));
-      if(productSnap.exists()) chatSub.textContent = "About: " + (productSnap.data().title || "");
-    }catch(e){}
-  }
-}
-
-function renderMessages(messages){
-  if(messages.length===0){
-    chatShell.innerHTML = '<p class="empty-state">No messages yet. Say hello!</p>';
-    return;
+  async function loadChatFromId() {
+    if (!chatId) return;
+    const chatSnap=await getDoc(doc(db,"chats",chatId));
+    if (!chatSnap.exists()) throw new Error("This conversation could not be found.");
+    const chatData=chatSnap.data();
+    const participants=Array.isArray(chatData.participants)?chatData.participants:[];
+    if (!participants.includes(currentUser.uid)) throw new Error("You do not have permission to open this conversation.");
+    otherUserId=participants.find(id=>id!==currentUser.uid)||"";
+    productId=chatData.productId||"";
   }
 
-  chatShell.innerHTML = messages.map(msg=>{
-    const isOwn = msg.senderId===currentUser.uid;
-    return `
-      <div class="chat-bubble-row ${isOwn?"own":""}">
-        <div class="chat-bubble">
-          ${safeText(msg.text||msg.message||"")}
-          <span class="chat-bubble-time">${formatTime(msg.createdAt)}</span>
-        </div>
-      </div>
-    `;
-  }).join("");
+  async function loadOtherUser() {
+    if (!otherUserId) throw new Error("No other user was selected for this conversation.");
+    const userSnap=await getDoc(doc(db,"users",otherUserId));
+    if (!userSnap.exists()) throw new Error("The other user's profile could not be found.");
+    const data=userSnap.data();
+    otherName.textContent=data.resellerName||data.businessName||data.name||data.email||"WaterSide User";
+    otherStatus.textContent=data.resellerApproved===true?"Authorized WaterSide Reseller":data.businessVerified===true?"Verified WaterSide Business":data.verified===true?"Verified WaterSide Seller":"WaterSide member";
+    otherAvatar.src=data.resellerPhotoUrl||data.profilePhotoUrl||data.photoURL||data.avatarUrl||"icons/icon-512.png";
+    otherAvatar.onerror=()=>{ otherAvatar.src="icons/icon-512.png"; };
+    const phone=data.resellerPhone||data.businessPhone||data.phone||"";
+    if (phone) { callBtn.href=`tel:${normalizePhone(phone)}`; callBtn.classList.remove("hidden"); }
+    if (data.accountType==="reseller"||data.resellerApproved===true||data.isReseller===true) { viewProfileBtn.href=`reseller-profile.html?id=${encodeURIComponent(otherUserId)}`; viewProfileBtn.classList.remove("hidden"); }
+    else if (data.accountType==="business") { viewProfileBtn.href=`business-profile.html?id=${encodeURIComponent(otherUserId)}`; viewProfileBtn.classList.remove("hidden"); }
+  }
 
-  chatShell.scrollTop = chatShell.scrollHeight;
+  async function loadProduct() {
+    if (!productId) { productStrip.classList.add("hidden"); return; }
+    const productSnap=await getDoc(doc(db,"products",productId));
+    if (!productSnap.exists()) { productStrip.classList.add("hidden"); return; }
+    const product=productSnap.data();
+    productTitle.textContent=product.title||"Marketplace listing";
+    productPrice.textContent=priceText(product);
+    productImage.src=productPhoto(product);
+    productImage.onerror=()=>{ productImage.src="icons/icon-512.png"; };
+    productViewBtn.href=`product-detail.html?id=${encodeURIComponent(productId)}`;
+    productStrip.classList.remove("hidden");
+  }
 
-  messages
-    .filter(msg=>msg.receiverId===currentUser.uid && msg.read===false)
-    .forEach(msg=>{
-      updateDoc(doc(db,"messages",msg.id), {read:true, readAt: serverTimestamp()}).catch(()=>{});
+  async function ensureChatDocument() {
+    if (!chatId) chatId=deterministicChatId(currentUser.uid,otherUserId,productId);
+    const chatRef=doc(db,"chats",chatId);
+    const chatSnap=await getDoc(chatRef);
+    if (!chatSnap.exists()) await setDoc(chatRef,{participants:[currentUser.uid,otherUserId],productId:productId||"",lastMessage:"",lastMessageTime:serverTimestamp(),lastSenderId:"",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    const url=new URL(window.location.href); url.searchParams.set("chat",chatId); url.searchParams.delete("with"); url.searchParams.delete("seller"); url.searchParams.delete("user"); if (productId) url.searchParams.set("product",productId); window.history.replaceState({},"",url);
+  }
+
+  async function markIncomingMessagesSeen(messages) {
+    const unread=messages.filter(message=>message.receiverId===currentUser.uid&&message.seen!==true);
+    if (!unread.length) return;
+    const batch=writeBatch(db);
+    unread.forEach(message=>batch.update(doc(db,"messages",message.id),{seen:true,seenAt:serverTimestamp()}));
+    await batch.commit();
+  }
+
+  function renderMessages(messages) {
+    loadingState.classList.add("hidden"); errorState.classList.add("hidden"); emptyState.classList.toggle("hidden",messages.length>0); messageList.innerHTML="";
+    let currentDay="";
+    messages.forEach(message=>{
+      const day=formatDay(message.createdAt);
+      if (day&&day!==currentDay) { currentDay=day; const label=document.createElement("div"); label.className="day-label"; label.textContent=day; messageList.appendChild(label); }
+      const mine=message.senderId===currentUser.uid;
+      const row=document.createElement("div"); row.className=`message-row ${mine?"mine":"theirs"}`;
+      const bubble=document.createElement("div"); bubble.className="bubble";
+      const body=document.createElement("div"); body.textContent=message.text||"";
+      const meta=document.createElement("div"); meta.className="message-meta";
+      const time=document.createElement("span"); time.textContent=formatTime(message.createdAt); meta.appendChild(time);
+      if (mine) { const status=document.createElement("span"); status.textContent=message.seen===true?"✓✓ Seen":"✓ Sent"; meta.appendChild(status); }
+      bubble.append(body,meta); row.appendChild(bubble); messageList.appendChild(row);
     });
-}
+    scrollToBottom(!firstSnapshotRendered); firstSnapshotRendered=true;
+    markIncomingMessagesSeen(messages).catch(error=>console.warn("Could not mark messages as seen:",error));
+  }
 
-function listenForMessages(){
-  const q = query(
-    collection(db,"messages"),
-    where("participants","array-contains",currentUser.uid),
-    orderBy("createdAt","asc")
-  );
+  function listenForMessages() {
+    if (unsubscribeMessages) unsubscribeMessages();
+    const messagesQuery=query(collection(db,"messages"),where("chatId","==",chatId),limit(500));
+    unsubscribeMessages=onSnapshot(messagesQuery,snapshot=>{
+      const messages=snapshot.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(timestampDate(a.createdAt)?.getTime()||0)-(timestampDate(b.createdAt)?.getTime()||0));
+      renderMessages(messages);
+    },error=>{ console.error("Could not load messages:",error); showError("Could not load this conversation. Check your Firestore rules."); });
+  }
 
-  unsubscribe = onSnapshot(q, (snapshot)=>{
-    const messages = snapshot.docs
-      .map(d=>({id:d.id,...d.data()}))
-      .filter(msg=>(msg.participants||[]).includes(otherUserId));
-
-    renderMessages(messages);
-  }, (error)=>{
-    chatShell.innerHTML = '<p class="empty-state">Could not load this conversation.</p>';
-    console.error(error.message);
-  });
-}
-
-async function sendMessage(){
-  const text = chatInput.value.trim();
-  if(!text || !otherUserId) return;
-
-  chatSendBtn.disabled = true;
-
-  try{
-    await addDoc(collection(db,"messages"), {
-      senderId: currentUser.uid,
-      receiverId: otherUserId,
-      participants: [currentUser.uid, otherUserId],
-      text,
-      productId: productId || null,
-      read: false,
-      createdAt: serverTimestamp()
-    });
-
-    try{
-      await addDoc(collection(db,"notifications"), {
-        userId: otherUserId,
-        type: "message",
-        title: "New message",
-        body: text.slice(0,80),
-        link: "chat.html?with=" + encodeURIComponent(currentUser.uid) + (productId?`&product=${encodeURIComponent(productId)}`:""),
-        read: false,
-        createdAt: serverTimestamp()
+  async function sendMessage() {
+    const text=messageInput.value.trim();
+    if (!text||!currentUser||!chatId||!otherUserId) return;
+    sendBtn.disabled=true;
+    try {
+      await addDoc(collection(db,"messages"),{
+        chatId,
+        productId:productId||"",
+        senderId:currentUser.uid,
+        receiverId:otherUserId,
+        text,
+        type:"text",
+        seen:false,
+        createdAt:serverTimestamp()
       });
-    }catch(e){}
 
-    chatInput.value = "";
-  }catch(error){
-    alert("Could not send message: " + error.message);
-  }finally{
-    chatSendBtn.disabled = false;
+      await updateDoc(doc(db,"chats",chatId),{
+        lastMessage:text,
+        lastMessageTime:serverTimestamp(),
+        lastSenderId:currentUser.uid,
+        updatedAt:serverTimestamp()
+      });
+
+      // Create a WaterSide notification for the receiver.
+      // A failed notification must never stop the message itself.
+      try {
+        const senderSnap = await getDoc(doc(db,"users",currentUser.uid));
+        const senderData = senderSnap.exists() ? senderSnap.data() : {};
+        const senderName =
+          senderData.resellerName
+          || senderData.businessName
+          || senderData.name
+          || currentUser.displayName
+          || currentUser.email
+          || "A WaterSide user";
+
+        await addDoc(collection(db,"notifications"),{
+          userId:otherUserId,
+          type:"message",
+          title:`New message from ${senderName}`,
+          body:text.length > 90 ? `${text.slice(0,87)}...` : text,
+          link:`chat.html?chat=${encodeURIComponent(chatId)}`,
+          chatId,
+          productId:productId||"",
+          senderId:currentUser.uid,
+          read:false,
+          createdAt:serverTimestamp()
+        });
+      } catch(notificationError) {
+        console.warn("Message sent, but notification could not be created:",notificationError);
+      }
+
+      messageInput.value="";
+      autoGrowInput();
+      scrollToBottom(true);
+    } catch(error) { console.error("Could not send message:",error); alert("Could not send your message. Check your internet connection and Firestore permissions."); }
+    finally { sendBtn.disabled=false; messageInput.focus(); }
   }
-}
 
-chatSendBtn.addEventListener("click", sendMessage);
-chatInput.addEventListener("keydown", (event)=>{
-  if(event.key==="Enter"){ event.preventDefault(); sendMessage(); }
-});
+  async function startChat() {
+    loadingState.classList.remove("hidden");
+    try {
+      if (requestedChatId) await loadChatFromId();
+      if (!otherUserId) throw new Error("No user was selected. Open chat.html?with=USER_ID&product=PRODUCT_ID.");
+      if (otherUserId===currentUser.uid) throw new Error("You cannot start a conversation with yourself.");
+      await Promise.all([loadOtherUser(),loadProduct()]);
+      await ensureChatDocument();
+      listenForMessages();
+    } catch(error) { console.error("Could not start chat:",error); showError(error.message); }
+  }
 
-onAuthStateChanged(auth,(user)=>{
-  if(!user){ alert("Please log in to chat."); window.location.href="login.html"; return; }
-  if(!otherUserId){ chatShell.innerHTML = '<p class="empty-state">No conversation was specified.</p>'; return; }
-  if(user.uid===otherUserId){ chatShell.innerHTML = '<p class="empty-state">You can\'t message yourself.</p>'; return; }
-
-  currentUser = user;
-  loadOtherUserInfo();
-  listenForMessages();
-
-  if(initialMessage) chatInput.value = initialMessage;
-});
+  composer.addEventListener("submit",async event=>{ event.preventDefault(); await sendMessage(); });
+  messageInput.addEventListener("input",autoGrowInput);
+  messageInput.addEventListener("keydown",async event=>{ if (event.key==="Enter"&&!event.shiftKey) { event.preventDefault(); await sendMessage(); } });
+  reportBtn.addEventListener("click",()=>{ if (!otherUserId) return; window.location.href=`report.html?user=${encodeURIComponent(otherUserId)}${productId?`&product=${encodeURIComponent(productId)}`:""}`; });
+  onAuthStateChanged(auth,async user=>{ currentUser=user; if (!user) { loadingState.classList.add("hidden"); loginNote.classList.remove("hidden"); messageInput.disabled=true; sendBtn.disabled=true; otherName.textContent="Please log in"; otherStatus.textContent="Log in to open this conversation"; return; } loginNote.classList.add("hidden"); messageInput.disabled=false; sendBtn.disabled=false; await startChat(); });
+  window.addEventListener("beforeunload",()=>{ if (unsubscribeMessages) unsubscribeMessages(); });
 </script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{});}</script>
 </body>
 </html>

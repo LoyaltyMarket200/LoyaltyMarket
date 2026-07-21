@@ -114,6 +114,12 @@
     .review-date{margin:0;color:#9ca3af;font-size:11.5px}
     .review-photo{margin-top:8px;max-width:180px;border-radius:8px;display:block}
 
+    .rating-breakdown{margin-top:16px;display:grid;gap:7px}
+    .rating-breakdown-row{display:grid;grid-template-columns:34px minmax(0,1fr) 28px;gap:8px;align-items:center;font-size:11.5px;color:var(--muted)}
+    .rating-breakdown-track{height:8px;border-radius:999px;background:#eef2f6;overflow:hidden}
+    .rating-breakdown-fill{height:100%;border-radius:999px;background:#f59e0b}
+
+
     .business-empty{grid-column:1/-1;padding:44px 20px;text-align:center;border:1px dashed var(--line);border-radius:15px;background:var(--bg);color:var(--muted);font-size:13px}
 
     @media(max-width:1000px){
@@ -284,6 +290,7 @@
               Reviews can only be left by buyers after a completed purchase, to keep them genuine.
               <a href="orders.html">Leave a review from your Orders page</a> if you've bought from this business.
             </p>
+            <div id="businessRatingBreakdown" class="rating-breakdown"></div>
           </div>
 
           <div id="reviewsList" class="reviews-list">
@@ -504,6 +511,7 @@
     const sellerListingsGrid = document.getElementById("sellerListingsGrid");
     const averageRating = document.getElementById("averageRating");
     const reviewsList = document.getElementById("reviewsList");
+    const businessRatingBreakdown = document.getElementById("businessRatingBreakdown");
     const messageSellerBtn = document.getElementById("messageSellerBtn");
 
     const statListingCount = document.getElementById("statListingCount");
@@ -783,6 +791,7 @@
           averageRating.textContent = "";
           statAverageRating.textContent = "—";
           statReviewCount.textContent = "0";
+          businessRatingBreakdown.innerHTML = "";
           reviewsList.innerHTML =
             '<div class="business-empty">No reviews yet.</div>';
           return;
@@ -790,6 +799,7 @@
 
         let totalStars = 0;
         let reviewCount = 0;
+        const ratingCounts = {1:0,2:0,3:0,4:0,5:0};
         reviewsList.innerHTML = "";
 
         snapshot.forEach((reviewDoc) => {
@@ -798,6 +808,7 @@
 
           totalStars += rating;
           reviewCount++;
+          ratingCounts[Math.max(1, Math.min(5, Math.round(rating || 1)))]++;
 
           const reviewCard = document.createElement("article");
           reviewCard.className = "review-card";
@@ -834,6 +845,22 @@
 
         statAverageRating.textContent = avg;
         statReviewCount.textContent = reviewCount;
+
+        businessRatingBreakdown.innerHTML = [5,4,3,2,1].map((star) => {
+          const percentage = reviewCount
+            ? Math.round((ratingCounts[star] / reviewCount) * 100)
+            : 0;
+
+          return `
+            <div class="rating-breakdown-row">
+              <span>${star}★</span>
+              <div class="rating-breakdown-track">
+                <div class="rating-breakdown-fill" style="width:${percentage}%"></div>
+              </div>
+              <span>${ratingCounts[star]}</span>
+            </div>
+          `;
+        }).join("");
 
       } catch (error) {
         reviewsList.innerHTML =

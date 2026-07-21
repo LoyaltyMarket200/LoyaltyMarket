@@ -1301,13 +1301,9 @@ arrangeChatBtn.addEventListener("click", async () => {
 
     closeCheckoutModal();
 
-    const message =
-      "I am interested in this item. Is it still available?";
-
-    window.location.href =
-      "chat.html?product=" + encodeURIComponent(productId) +
-      "&seller=" + encodeURIComponent(loadedSellerId) +
-      "&message=" + encodeURIComponent(message);
+    await openWaterSideChat(
+      "I am interested in this item. Is it still available?"
+    );
   } catch (error) {
     console.error("Could not create purchase request:", error);
     alert("Could not create the purchase request: " + error.message);
@@ -1480,6 +1476,17 @@ function renderMaterialDetails(product) {
 
 async function loadProduct() {
   if (!productId) {
+    // ===== TEMPORARY DEBUG POPUP — shows exactly which page linked =====
+    // ===== here without an ID, so we can fix that page directly =====
+    // ===== instead of auditing every file one by one. Remove once =====
+    // ===== the source is found and fixed. =====
+    alert(
+      "DEBUG — no product ID in URL.\n\n" +
+      "Full URL: " + window.location.href + "\n" +
+      "Came from (referrer): " + (document.referrer || "(no referrer — typed directly or opened fresh)")
+    );
+    // ===== END TEMPORARY DEBUG POPUP =====
+
     showUnavailable("No product ID was provided.");
     return;
   }
@@ -1680,18 +1687,24 @@ showContactBtn.addEventListener("click", () => {
   }
 });
 
-quickReplyChips.forEach((chip) => {
-  chip.addEventListener("click", () => {
-    quickReplyChips.forEach((c) => c.classList.remove("active"));
-    chip.classList.add("active");
-    quickChatInput.value = chip.dataset.message || "";
-  });
-});
 
-startChatBtn.addEventListener("click", () => {
+function buildChatId(userA, userB, itemId) {
+  const participants = [userA, userB].sort();
+  return `${participants[0]}_${participants[1]}_${itemId || "general"}`;
+}
+
+async function openWaterSideChat(initialMessage = "") {
   if (!currentUser) {
     alert("Please log in to message the seller.");
-    window.location.href = "login.html";
+    const returnUrl =
+      window.location.pathname + window.location.search;
+    window.location.href =
+      "login.html?redirect=" + encodeURIComponent(returnUrl);
+    return;
+  }
+
+  if (!loadedSellerId) {
+    alert("The seller information is still loading. Please try again.");
     return;
   }
 
@@ -1700,14 +1713,72 @@ startChatBtn.addEventListener("click", () => {
     return;
   }
 
-  const message = quickChatInput.value.trim();
+  const chatId = buildChatId(
+    currentUser.uid,
+    loadedSellerId,
+    productId
+  );
 
-  const chatUrl =
-    "chat.html?product=" + encodeURIComponent(productId) +
-    "&seller=" + encodeURIComponent(loadedSellerId) +
-    (message ? "&message=" + encodeURIComponent(message) : "");
+  const chatRef = doc(db, "chats", chatId);
+  const cleanMessage = String(initialMessage || "").trim();
 
-  window.location.href = chatUrl;
+  await setDoc(
+    chatRef,
+    {
+      participants: [currentUser.uid, loadedSellerId],
+      productId: productId || "",
+      lastMessage: cleanMessage,
+      lastMessageTime: serverTimestamp(),
+      lastSenderId: cleanMessage ? currentUser.uid : "",
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    },
+    { merge: true }
+  );
+
+  if (cleanMessage) {
+    await addDoc(collection(db, "messages"), {
+      chatId,
+      productId: productId || "",
+      senderId: currentUser.uid,
+      receiverId: loadedSellerId,
+      text: cleanMessage,
+      type: "text",
+      seen: false,
+      createdAt: serverTimestamp()
+    });
+  }
+
+  window.location.href =
+    "chat.html?chat=" + encodeURIComponent(chatId);
+}
+
+quickReplyChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    quickReplyChips.forEach((c) => c.classList.remove("active"));
+    chip.classList.add("active");
+    quickChatInput.value = chip.dataset.message || "";
+  });
+});
+
+startChatBtn.addEventListener("click", async () => {
+  const originalText = startChatBtn.textContent;
+  startChatBtn.disabled = true;
+  startChatBtn.textContent = "Opening Chat...";
+
+  try {
+    const message =
+      quickChatInput.value.trim()
+      || "Is this still available?";
+
+    await openWaterSideChat(message);
+  } catch (error) {
+    console.error("Could not start chat:", error);
+    alert("Could not start the chat: " + error.message);
+  } finally {
+    startChatBtn.disabled = false;
+    startChatBtn.textContent = originalText;
+  }
 });
 
 locationToggleRow.addEventListener("click", () => {

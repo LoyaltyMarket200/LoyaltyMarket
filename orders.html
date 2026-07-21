@@ -254,6 +254,113 @@
     .review-modal-actions .submit-review{background:var(--navy);color:#fff;border-color:var(--navy)}
     .review-error{display:none;color:var(--red);font-size:12px;margin:-6px 0 10px}
 
+    /* ===== RECEIPT MODAL ===== */
+    .receipt-modal-overlay{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.5);
+      z-index:100;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .receipt-modal-overlay.open{display:flex}
+    .receipt-modal{
+      background:#fff;
+      border-radius:14px;
+      padding:0;
+      width:min(420px,100%);
+      max-height:90vh;
+      overflow-y:auto;
+    }
+    .receipt-paper{
+      padding:26px 24px;
+    }
+    .receipt-brand{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:4px;
+    }
+    .receipt-brand img{width:24px;height:24px;object-fit:contain}
+    .receipt-brand span{color:var(--navy);font-weight:700;font-size:14px}
+    .receipt-subtitle{color:var(--muted);font-size:11px;margin:0 0 18px}
+    .receipt-status-line{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:5px 11px;
+      border-radius:999px;
+      background:var(--green-soft);
+      color:var(--green);
+      font-size:11px;
+      font-weight:700;
+      margin-bottom:18px;
+    }
+    .receipt-row{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      padding:9px 0;
+      border-bottom:1px solid #f1f5f9;
+      font-size:12.5px;
+    }
+    .receipt-row:last-of-type{border-bottom:none}
+    .receipt-row-label{color:var(--muted)}
+    .receipt-row-value{color:var(--ink);font-weight:600;text-align:right}
+    .receipt-total-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:14px;
+      padding-top:14px;
+      border-top:2px solid var(--ink);
+    }
+    .receipt-total-label{font-size:12.5px;font-weight:700;color:var(--ink)}
+    .receipt-total-value{font-size:19px;font-weight:700;color:var(--orange)}
+    .receipt-footnote{
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px dashed var(--line);
+      color:var(--muted);
+      font-size:10.5px;
+      line-height:1.6;
+      text-align:center;
+    }
+    .receipt-modal-actions{
+      display:flex;
+      gap:8px;
+      padding:14px 24px 22px;
+    }
+    .receipt-modal-actions button{
+      flex:1;
+      min-height:40px;
+      border-radius:9px;
+      font-size:12.5px;
+      font-weight:700;
+      cursor:pointer;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--ink);
+    }
+    .receipt-modal-actions .receipt-print-btn{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .receipt-modal-actions .receipt-share-btn{background:var(--orange);color:#fff;border-color:var(--orange)}
+
+    /* Only the receipt paper prints — everything else in the app is
+       hidden during print so buyers get a clean, receipt-only page
+       when they use the browser's Print / Save as PDF option. */
+    @media print{
+      body *{visibility:hidden}
+      .receipt-paper,.receipt-paper *{visibility:visible}
+      .receipt-paper{
+        position:fixed;
+        inset:0;
+        padding:30px;
+      }
+      .receipt-modal-actions,.receipt-modal-overlay{display:none!important}
+    }
+
     .footer{background:var(--navy);color:#d8f3f1;text-align:center;padding:26px 20px}
     .footer h2{color:#fff;margin:0 0 6px;font-size:15px}
     .footer p{margin:0 0 5px;font-size:12px}
@@ -269,6 +376,7 @@
       .order-card{grid-template-columns:58px minmax(0,1fr);padding:12px}
       .order-card img{width:58px;height:58px}
       .orders-nav-actions{grid-template-columns:1fr}
+      .receipt-modal-actions{flex-direction:column}
     }
   </style>
 </head>
@@ -320,7 +428,8 @@
     <div class="orders-filter-row">
       <button class="orders-filter-btn active" data-filter="all">All</button>
       <button class="orders-filter-btn" data-filter="pending">New Requests</button>
-      <button class="orders-filter-btn" data-filter="confirmed">Active Deals</button>
+      <button class="orders-filter-btn" data-filter="negotiating">Negotiating</button>
+      <button class="orders-filter-btn" data-filter="meeting">Meeting Arranged</button>
       <button class="orders-filter-btn" data-filter="completed">Completed</button>
       <button class="orders-filter-btn" data-filter="cancelled">Cancelled</button>
     </div>
@@ -354,6 +463,57 @@
     </div>
   </div>
 
+  <div class="receipt-modal-overlay" id="receiptModalOverlay">
+    <div class="receipt-modal">
+      <div class="receipt-paper" id="receiptPaper">
+        <div class="receipt-brand">
+          <img src="icons/icon-512.png" alt="Waterside">
+          <span>Waterside</span>
+        </div>
+        <p class="receipt-subtitle">Purchase Receipt</p>
+
+        <span class="receipt-status-line">✓ Deal Completed</span>
+
+        <div class="receipt-row">
+          <span class="receipt-row-label">Item</span>
+          <span class="receipt-row-value" id="receiptItem">—</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Seller</span>
+          <span class="receipt-row-value" id="receiptSeller">—</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Requested</span>
+          <span class="receipt-row-value" id="receiptRequested">—</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Completed</span>
+          <span class="receipt-row-value" id="receiptCompleted">—</span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-row-label">Order Reference</span>
+          <span class="receipt-row-value" id="receiptOrderId">—</span>
+        </div>
+
+        <div class="receipt-total-row">
+          <span class="receipt-total-label">Amount</span>
+          <span class="receipt-total-value" id="receiptAmount">US$0</span>
+        </div>
+
+        <p class="receipt-footnote">
+          This receipt confirms the deal was marked completed on Waterside.
+          Payment was made directly between buyer and seller — Waterside does not process or hold funds.
+        </p>
+      </div>
+
+      <div class="receipt-modal-actions">
+        <button type="button" id="receiptCloseBtn">Close</button>
+        <button type="button" class="receipt-share-btn" id="receiptShareBtn">Share</button>
+        <button type="button" class="receipt-print-btn" id="receiptPrintBtn">Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer">
     <h2>Waterside</h2>
     <p>Buy And Sell Products Across Liberia.</p>
@@ -372,6 +532,7 @@
       getDoc,
       updateDoc,
       addDoc,
+      setDoc,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
     import {
@@ -396,6 +557,17 @@
     const reviewCancelBtn = document.getElementById("reviewCancelBtn");
     const reviewSubmitBtn = document.getElementById("reviewSubmitBtn");
 
+    const receiptModalOverlay = document.getElementById("receiptModalOverlay");
+    const receiptItem = document.getElementById("receiptItem");
+    const receiptSeller = document.getElementById("receiptSeller");
+    const receiptRequested = document.getElementById("receiptRequested");
+    const receiptCompleted = document.getElementById("receiptCompleted");
+    const receiptOrderId = document.getElementById("receiptOrderId");
+    const receiptAmount = document.getElementById("receiptAmount");
+    const receiptCloseBtn = document.getElementById("receiptCloseBtn");
+    const receiptShareBtn = document.getElementById("receiptShareBtn");
+    const receiptPrintBtn = document.getElementById("receiptPrintBtn");
+
     const FALLBACK_IMAGE =
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
 
@@ -405,6 +577,7 @@
     let reviewedOrderIds = new Set();
     let activeReviewOrder = null;
     let selectedStars = 0;
+    let activeReceiptOrder = null;
 
     function safeText(value) {
       return String(value ?? "")
@@ -427,9 +600,18 @@
     function normalizeStatus(order) {
       const status = String(order.status || "pending").toLowerCase();
 
-      if (status === "accepted") return "confirmed";
-      if (status === "active") return "confirmed";
-      if (status === "complete") return "completed";
+      // Keep older order records compatible.
+      if (status === "accepted" || status === "active" || status === "confirmed") {
+        return "negotiating";
+      }
+
+      if (status === "meeting_arranged" || status === "arranged") {
+        return "meeting";
+      }
+
+      if (status === "complete" || status === "sold") {
+        return "completed";
+      }
 
       return status;
     }
@@ -437,8 +619,9 @@
     function statusLabel(status) {
       const labels = {
         pending: "Request Sent",
-        confirmed: "Active Deal",
-        completed: "Completed",
+        negotiating: "Negotiating",
+        meeting: "Meeting Arranged",
+        completed: "Sold",
         cancelled: "Cancelled"
       };
 
@@ -448,7 +631,7 @@
     function updateStats() {
       statTotal.textContent = allOrders.length;
       statPending.textContent = allOrders.filter((order) => normalizeStatus(order) === "pending").length;
-      statActive.textContent = allOrders.filter((order) => normalizeStatus(order) === "confirmed").length;
+      statActive.textContent = allOrders.filter((order) => ["negotiating", "meeting"].includes(normalizeStatus(order))).length;
       statCompleted.textContent = allOrders.filter((order) => normalizeStatus(order) === "completed").length;
     }
 
@@ -493,8 +676,9 @@
           order.location ||
           "Not provided";
 
-        const canCancel = status === "pending";
+        const canCancel = ["pending", "negotiating", "meeting"].includes(status);
         const canReview = status === "completed" && !reviewed;
+        const canGetReceipt = status === "completed";
 
         return `
           <article class="order-card">
@@ -544,6 +728,12 @@
                     Leave a Review
                   </button>
                 ` : ""}
+
+                ${canGetReceipt ? `
+                  <button class="order-btn primary" data-receipt-order="${safeText(order.id)}">
+                    Get Receipt
+                  </button>
+                ` : ""}
               </div>
             </div>
           </article>
@@ -559,6 +749,12 @@
       document.querySelectorAll("[data-review-order]").forEach((button) => {
         button.addEventListener("click", () =>
           openReviewModal(button.dataset.reviewOrder)
+        );
+      });
+
+      document.querySelectorAll("[data-receipt-order]").forEach((button) => {
+        button.addEventListener("click", () =>
+          openReceiptModal(button.dataset.receiptOrder)
         );
       });
     }
@@ -697,7 +893,9 @@
           console.warn("Buyer profile lookup failed:", profileError);
         }
 
-        await addDoc(collection(db, "reviews"), {
+        const reviewId = `${order.id}_${currentUser.uid}`;
+
+        await setDoc(doc(db, "reviews", reviewId), {
           sellerId: order.sellerId,
           reviewerId: currentUser.uid,
           reviewerName,
@@ -707,8 +905,9 @@
           rating: selectedStars,
           comment,
           photoUrl,
-          createdAt: serverTimestamp()
-        });
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        }, { merge: true });
 
         try {
           await addDoc(collection(db, "notifications"), {
@@ -716,7 +915,9 @@
             type: "review",
             title: "New review received",
             body: `${selectedStars}-star review on ${order.productTitle || "your listing"}.`,
-            link: `seller-profile.html?id=${encodeURIComponent(order.sellerId || "")}`,
+            link: order.sellerAccountType === "business"
+              ? `business-profile.html?id=${encodeURIComponent(order.sellerId || "")}`
+              : `reseller-profile.html?id=${encodeURIComponent(order.sellerId || "")}`,
             read: false,
             createdAt: serverTimestamp()
           });
@@ -735,6 +936,79 @@
         reviewSubmitBtn.textContent = "Submit Review";
       }
     }
+
+    // ===== RECEIPT MODAL LOGIC =====
+
+    function openReceiptModal(orderId) {
+      const order = allOrders.find((item) => item.id === orderId);
+      if (!order) return;
+
+      activeReceiptOrder = order;
+
+      receiptItem.textContent = order.productTitle || "Untitled Order";
+      receiptSeller.textContent = sellerDisplay(order);
+      receiptRequested.textContent = formatDate(order.createdAt);
+      receiptCompleted.textContent =
+        order.completedAt?.seconds
+          ? formatDate(order.completedAt)
+          : "Today";
+      receiptOrderId.textContent = order.id;
+
+      const usd = Number(order.priceUsd) || 0;
+      const lrd = Number(order.priceLrd) || 0;
+      receiptAmount.textContent =
+        `US$${usd.toLocaleString()}` +
+        (lrd ? ` | L$${lrd.toLocaleString()}` : "");
+
+      receiptModalOverlay.classList.add("open");
+    }
+
+    function closeReceiptModal() {
+      receiptModalOverlay.classList.remove("open");
+      activeReceiptOrder = null;
+    }
+
+    receiptCloseBtn.addEventListener("click", closeReceiptModal);
+
+    receiptModalOverlay.addEventListener("click", (event) => {
+      if (event.target === receiptModalOverlay) closeReceiptModal();
+    });
+
+    receiptPrintBtn.addEventListener("click", () => {
+      window.print();
+    });
+
+    receiptShareBtn.addEventListener("click", async () => {
+      if (!activeReceiptOrder) return;
+
+      const order = activeReceiptOrder;
+      const usd = Number(order.priceUsd) || 0;
+
+      const shareText =
+        `Waterside Receipt\n` +
+        `Item: ${order.productTitle || "Untitled Order"}\n` +
+        `Seller: ${sellerDisplay(order)}\n` +
+        `Amount: US$${usd.toLocaleString()}\n` +
+        `Completed: ${order.completedAt?.seconds ? formatDate(order.completedAt) : "Today"}\n` +
+        `Order Reference: ${order.id}`;
+
+      try {
+        if (navigator.share) {
+          await navigator.share({
+            title: "Waterside Purchase Receipt",
+            text: shareText
+          });
+          return;
+        }
+
+        await navigator.clipboard.writeText(shareText);
+        alert("Receipt details copied. You can paste them into WhatsApp or a message.");
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          prompt("Copy your receipt details:", shareText);
+        }
+      }
+    });
 
     async function loadReviewedOrderIds() {
       try {

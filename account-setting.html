@@ -214,6 +214,50 @@
       color: var(--teal);
     }
 
+    .profile-photo-row {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .profile-photo-preview {
+      width: 96px;
+      height: 96px;
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--teal-soft);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+
+    .profile-photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-photo-preview img.is-fallback {
+      width: 58%;
+      height: 58%;
+      object-fit: contain;
+    }
+
+    .profile-photo-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      min-width: 220px;
+    }
+
+    .profile-photo-actions .button-row {
+      margin-top: 0;
+    }
+
     .form-grid {
       margin-top: 18px;
       display: grid;
@@ -674,6 +718,11 @@
         padding: 18px;
       }
 
+      .profile-photo-actions {
+        min-width: 0;
+        width: 100%;
+      }
+
       .modal-backdrop {
         padding: 0;
         align-items: stretch;
@@ -734,6 +783,63 @@
 
         <div class="account-badges" id="accountBadges"></div>
       </div>
+    </section>
+
+    <section class="settings-card">
+      <h2>Profile Picture</h2>
+      <p class="card-sub">
+        Your picture appears on your profile, listings, messages,
+        orders, and reviews across WaterSide.
+      </p>
+
+      <div class="profile-photo-row">
+        <div class="profile-photo-preview">
+          <img
+            id="profilePhotoPreview"
+            class="is-fallback"
+            src="icons/icon-512.png"
+            alt="Profile picture"
+          >
+        </div>
+
+        <div class="profile-photo-actions">
+          <input
+            id="profilePhotoInput"
+            type="file"
+            accept="image/*"
+            style="display:none;"
+          >
+
+          <div class="button-row">
+            <button
+              id="choosePhotoBtn"
+              class="secondary-btn"
+              type="button"
+            >
+              Choose Picture
+            </button>
+
+            <button
+              id="uploadPhotoBtn"
+              class="primary-btn"
+              type="button"
+              style="display:none;"
+            >
+              Save Picture
+            </button>
+          </div>
+
+          <p class="helper">
+            JPG or PNG, up to 5 MB. A square photo looks best.
+          </p>
+        </div>
+      </div>
+
+      <div class="message success" id="photoSuccess">
+        Your profile picture has been saved.
+      </div>
+
+      <div class="message error" id="photoError"></div>
     </section>
 
     <section class="settings-card">
@@ -1463,18 +1569,26 @@
   </div>
 
 <script type="module">
-import { auth, db } from "./firebase.js";
+import { auth, db, storage } from "./firebase.js";
 import { onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { doc, getDoc, updateDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
 const $ = (id) => document.getElementById(id);
 let currentUser = null;
 let currentProfile = null;
+let selectedPhotoFile = null;
 
 function setMessage(id, text, type="success") { const el=$(id); el.textContent=text; el.className=`message ${type} show`; }
 function clearMessage(id){ const el=$(id); el.textContent=""; el.className="message"; }
 function showStatus(id,status,label){ const el=$(id); el.className="status"; if(!status)return; const css=status==="approved"||status==="verified"?"approved":status==="rejected"?"rejected":"pending"; el.classList.add("show",css); el.textContent=label; }
 function statusLabel(type,status){ if(status==="pending")return `${type} application is awaiting administrator approval.`; if(status==="rejected")return `${type} application was not approved. Update it and submit again.`; if(status==="approved"||status==="verified")return `${type} account is approved.`; return ""; }
+
+function showProfilePhoto(url){
+  const img=$("profilePhotoPreview");
+  if(url){ img.src=url; img.classList.remove("is-fallback"); }
+  else { img.src="icons/icon-512.png"; img.classList.add("is-fallback"); }
+}
 
 function renderAccountSummary(data){
   const type=data.accountType||"personal";
@@ -1490,6 +1604,7 @@ async function loadProfile(){
   const snap=await getDoc(doc(db,"users",currentUser.uid));
   if(!snap.exists())throw new Error("Your WaterSide profile was not found.");
   const d=snap.data(); currentProfile=d;
+  showProfilePhoto(d.profileImageUrl||null);
   $("name").value=d.name||""; $("email").value=currentUser.email||""; $("phone").value=d.phone||""; $("city").value=d.city||""; $("county").value=d.county||"";
   $("resellerName").value=d.resellerName||""; $("resellerCategory").value=d.resellerCategory||""; $("resellerPhone").value=d.resellerPhone||d.phone||""; $("resellerCounty").value=d.resellerCounty||d.county||""; $("resellerCity").value=d.resellerCity||d.city||""; $("resellerExperience").value=d.resellerExperience||""; $("resellerDescription").value=d.resellerDescription||""; $("resellerReason").value=d.resellerReason||""; $("resellerOwnerPlan").value=d.resellerOwnerPlan||""; $("resellerCommissionPlan").value=d.resellerCommissionPlan||"";
   $("businessName").value=d.businessName||""; $("businessCategory").value=d.businessCategory||""; $("businessPhone").value=d.businessPhone||d.phone||""; $("businessRegistrationNumber").value=d.businessRegistrationNumber||""; $("businessCity").value=d.businessCity||d.city||""; $("businessCounty").value=d.businessCounty||d.county||""; $("businessDescription").value=d.businessDescription||"";
@@ -1503,6 +1618,48 @@ async function loadProfile(){
   if(businessApproved) $("toggleBusinessBtn").style.display="none"; else if(d.businessApplicationStatus==="pending") $("toggleBusinessBtn").textContent="Update Business Application";
   if(d.verified===true||d.sellerVerificationStatus==="pending") $("requestSellerVerificationBtn").style.display="none";
 }
+
+// ---------- Profile picture upload ----------
+
+$("choosePhotoBtn").addEventListener("click",()=>{ $("profilePhotoInput").click(); });
+
+$("profilePhotoInput").addEventListener("change",()=>{
+  clearMessage("photoSuccess"); clearMessage("photoError");
+  const file=$("profilePhotoInput").files[0];
+  if(!file){ selectedPhotoFile=null; $("uploadPhotoBtn").style.display="none"; return; }
+  if(!file.type.startsWith("image/")){ setMessage("photoError","Please choose an image file (JPG or PNG).","error"); selectedPhotoFile=null; $("uploadPhotoBtn").style.display="none"; return; }
+  if(file.size>5*1024*1024){ setMessage("photoError","That image is larger than 5 MB. Please choose a smaller one.","error"); selectedPhotoFile=null; $("uploadPhotoBtn").style.display="none"; return; }
+  selectedPhotoFile=file;
+  const reader=new FileReader();
+  reader.onload=()=>{ const img=$("profilePhotoPreview"); img.src=reader.result; img.classList.remove("is-fallback"); };
+  reader.readAsDataURL(file);
+  $("uploadPhotoBtn").style.display="inline-flex";
+});
+
+$("uploadPhotoBtn").addEventListener("click",async()=>{
+  if(!selectedPhotoFile||!currentUser)return;
+  clearMessage("photoSuccess"); clearMessage("photoError");
+  $("uploadPhotoBtn").disabled=true; $("choosePhotoBtn").disabled=true;
+  $("uploadPhotoBtn").textContent="Saving...";
+  try{
+    // Fixed filename so a new upload replaces the old picture
+    // instead of leaving unused files behind.
+    const photoRef=ref(storage,`profile-images/${currentUser.uid}/profile.jpg`);
+    await uploadBytes(photoRef,selectedPhotoFile,{contentType:selectedPhotoFile.type});
+    const url=await getDownloadURL(photoRef);
+    await updateDoc(doc(db,"users",currentUser.uid),{profileImageUrl:url,updatedAt:serverTimestamp()});
+    showProfilePhoto(url);
+    selectedPhotoFile=null;
+    $("profilePhotoInput").value="";
+    $("uploadPhotoBtn").style.display="none";
+    $("photoSuccess").classList.add("show");
+  }catch(err){
+    setMessage("photoError","Could not save your picture: "+err.message,"error");
+  }finally{
+    $("uploadPhotoBtn").disabled=false; $("choosePhotoBtn").disabled=false;
+    $("uploadPhotoBtn").textContent="Save Picture";
+  }
+});
 
 $("profileForm").addEventListener("submit",async(e)=>{e.preventDefault();clearMessage("profileError");$("saveBtn").disabled=true;try{await updateDoc(doc(db,"users",currentUser.uid),{name:$("name").value.trim(),phone:$("phone").value.trim(),city:$("city").value.trim(),county:$("county").value.trim(),updatedAt:serverTimestamp()});$("profileSuccess").classList.add("show");}catch(err){setMessage("profileError","Could not save your changes: "+err.message,"error");}finally{$("saveBtn").disabled=false;}});
 

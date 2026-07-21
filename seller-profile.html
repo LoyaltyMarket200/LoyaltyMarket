@@ -174,6 +174,35 @@
     .seller-footer h2{margin:0 0 3px;color:#fff;font-size:15px;font-weight:600}
     .seller-footer p{margin:0;font-size:12px}
 
+
+    .report-overlay{
+      display:none;position:fixed;inset:0;z-index:1000;
+      background:rgba(15,23,42,.58);padding:18px;
+      align-items:center;justify-content:center
+    }
+    .report-overlay.open{display:flex}
+    .report-dialog{
+      width:min(430px,100%);background:#fff;border-radius:15px;
+      padding:21px;box-shadow:0 20px 60px rgba(15,23,42,.25)
+    }
+    .report-dialog h3{margin:0 0 5px;font-size:18px}
+    .report-dialog p{margin:0 0 14px;color:var(--muted);font-size:12.5px;line-height:1.55}
+    .report-dialog label{display:block;margin:11px 0 6px;font-size:12px;font-weight:600}
+    .report-dialog select,.report-dialog textarea{
+      width:100%;padding:10px 11px;border:1px solid var(--line);
+      border-radius:9px;background:#fff;font:inherit;font-size:13px
+    }
+    .report-dialog textarea{min-height:90px;resize:vertical}
+    .report-dialog-actions{display:flex;gap:9px;margin-top:15px}
+    .report-dialog-actions button{
+      flex:1;min-height:40px;border-radius:9px;border:1px solid var(--line);
+      background:#fff;font-weight:600;cursor:pointer
+    }
+    .report-dialog-actions .report-submit{background:#dc2626;color:#fff;border-color:#dc2626}
+    .report-feedback{display:none;margin-top:10px;padding:9px 10px;border-radius:8px;font-size:12px}
+    .report-feedback.error{display:block;background:#fef2f2;color:#b91c1c}
+    .report-feedback.success{display:block;background:#ecfdf3;color:#047857}
+
     @media(max-width:1000px){
       .seller-listings-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
       .review-grid{grid-template-columns:1fr}
@@ -258,6 +287,11 @@
         <button type="button" id="inviteSellerBtn" class="invite-seller-btn">
           <svg class="icon" viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>
           Invite Friends
+        </button>
+
+        <button type="button" id="reportSellerBtn" class="invite-seller-btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M5 21V4M5 5h11l-2 4 2 4H5"/></svg>
+          Report Seller
         </button>
       </div>
     </section>
@@ -384,6 +418,35 @@
     </section>
   </main>
 
+
+  <div id="reportSellerModal" class="report-overlay" aria-hidden="true">
+    <div class="report-dialog" role="dialog" aria-modal="true" aria-labelledby="reportTitle">
+      <h3 id="reportTitle">Report Seller</h3>
+      <p>Tell Waterside about suspicious, abusive, misleading, or unsafe activity.</p>
+
+      <label for="reportReason">Reason</label>
+      <select id="reportReason">
+        <option value="">Choose a reason</option>
+        <option value="suspected_scam">Suspected scam or fraud</option>
+        <option value="fake_profile">Fake or misleading profile</option>
+        <option value="abusive_behavior">Abusive or threatening behavior</option>
+        <option value="prohibited_items">Selling prohibited items</option>
+        <option value="impersonation">Impersonation</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="reportDetails">Details</label>
+      <textarea id="reportDetails" maxlength="1000" placeholder="Explain what happened..."></textarea>
+
+      <div id="reportFeedback" class="report-feedback"></div>
+
+      <div class="report-dialog-actions">
+        <button id="cancelReportBtn" type="button">Cancel</button>
+        <button id="submitReportBtn" class="report-submit" type="button">Submit Report</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer seller-footer">
     <div>
       <h2>Waterside</h2>
@@ -400,6 +463,7 @@
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
     import {
+      addDoc,
       doc,
       getDoc,
       setDoc,
@@ -431,6 +495,13 @@
     const messageSellerBtn = document.getElementById("messageSellerBtn");
     const followSellerBtn = document.getElementById("followSellerBtn");
     const inviteSellerBtn = document.getElementById("inviteSellerBtn");
+    const reportSellerBtn = document.getElementById("reportSellerBtn");
+    const reportSellerModal = document.getElementById("reportSellerModal");
+    const reportReason = document.getElementById("reportReason");
+    const reportDetails = document.getElementById("reportDetails");
+    const reportFeedback = document.getElementById("reportFeedback");
+    const cancelReportBtn = document.getElementById("cancelReportBtn");
+    const submitReportBtn = document.getElementById("submitReportBtn");
     const statListingCount = document.getElementById("statListingCount");
     const statFollowerCount = document.getElementById("statFollowerCount");
     const statAverageRating = document.getElementById("statAverageRating");
@@ -939,6 +1010,90 @@
       }
     }
 
+
+
+    function openReportModal() {
+      if (!currentUser) {
+        window.location.href =
+          "login.html?redirect=" + encodeURIComponent(window.location.href);
+        return;
+      }
+
+      if (currentUser.uid === sellerId) {
+        alert("You cannot report your own profile.");
+        return;
+      }
+
+      reportReason.value = "";
+      reportDetails.value = "";
+      reportFeedback.className = "report-feedback";
+      reportFeedback.textContent = "";
+      reportSellerModal.classList.add("open");
+      reportSellerModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeReportModal() {
+      reportSellerModal.classList.remove("open");
+      reportSellerModal.setAttribute("aria-hidden", "true");
+    }
+
+    async function submitSellerReport() {
+      const reason = reportReason.value;
+      const details = reportDetails.value.trim();
+
+      if (!reason) {
+        reportFeedback.className = "report-feedback error";
+        reportFeedback.textContent = "Please choose a reason.";
+        return;
+      }
+
+      if (details.length < 10) {
+        reportFeedback.className = "report-feedback error";
+        reportFeedback.textContent = "Please provide at least 10 characters.";
+        return;
+      }
+
+      submitReportBtn.disabled = true;
+      submitReportBtn.textContent = "Submitting...";
+
+      try {
+        await addDoc(collection(db, "reports"), {
+          type: "seller",
+          targetType: "seller_profile",
+          sellerId,
+          targetUserId: sellerId,
+          reporterId: currentUser.uid,
+          reportedBy: currentUser.uid,
+          reporterEmail: currentUser.email || "",
+          reason,
+          details,
+          status: "pending",
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+
+        reportFeedback.className = "report-feedback success";
+        reportFeedback.textContent = "Report submitted. Waterside will review it.";
+        setTimeout(closeReportModal, 1200);
+      } catch (error) {
+        console.error("Could not submit seller report:", error);
+        reportFeedback.className = "report-feedback error";
+        reportFeedback.textContent = `Could not submit report: ${error.message}`;
+      } finally {
+        submitReportBtn.disabled = false;
+        submitReportBtn.textContent = "Submit Report";
+      }
+    }
+
+    reportSellerBtn.addEventListener("click", openReportModal);
+    cancelReportBtn.addEventListener("click", closeReportModal);
+    submitReportBtn.addEventListener("click", submitSellerReport);
+
+    reportSellerModal.addEventListener("click", (event) => {
+      if (event.target === reportSellerModal) {
+        closeReportModal();
+      }
+    });
 
     inviteSellerBtn.addEventListener("click", async () => {
       if (!sellerId) {

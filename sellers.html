@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Sellers - Waterside</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="stylesheet" href="marketplace.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <meta name="theme-color" content="#0d6e6e">
+
+  <style>
+    :root{
+      --brand:#0d6e6e;
+      --brand-dark:#095959;
+      --brand-soft:#e3f2f2;
+      --orange:#ff6b4a;
+      --orange-soft:#ffece7;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --bg:#f7f8fa;
+      --white:#fff;
+    }
+
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink)}
+    .icon{display:inline-block;width:1em;height:1em;vertical-align:-.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    .seller-search-shell{width:min(1180px,94%);margin:26px auto 65px}
+    .seller-search-head{margin-bottom:18px}
+    .seller-search-head h1{margin:0;font-size:clamp(24px,4vw,34px);color:var(--ink)}
+    .seller-search-head p{margin:7px 0 0;color:var(--muted);font-size:13.5px;line-height:1.6}
+
+    .seller-search-panel{
+      display:grid;
+      grid-template-columns:minmax(220px,1.5fr) repeat(3,minmax(145px,.7fr)) auto;
+      gap:10px;
+      padding:15px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+    }
+
+    .seller-search-panel input,
+    .seller-search-panel select{
+      width:100%;
+      min-height:43px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:#fff;
+      color:var(--ink);
+      font:inherit;
+      font-size:13px;
+      outline:none;
+    }
+
+    .seller-search-panel input:focus,
+    .seller-search-panel select:focus{
+      border-color:var(--brand);
+      box-shadow:0 0 0 3px rgba(13,110,110,.08);
+    }
+
+    .seller-search-btn{
+      min-height:43px;
+      padding:10px 20px;
+      border:0;
+      border-radius:10px;
+      background:var(--orange);
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .seller-search-btn:hover{background:#e5522f}
+
+    .seller-toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin:20px 0 13px;
+    }
+
+    .seller-result-count{margin:0;color:var(--muted);font-size:13px}
+    .seller-clear-btn{
+      border:0;
+      background:transparent;
+      color:var(--brand);
+      font-weight:700;
+      cursor:pointer;
+      font-size:12.5px;
+    }
+
+    .seller-results{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:15px;
+    }
+
+    .seller-result-card{
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:15px;
+      background:#fff;
+      transition:transform .18s ease,box-shadow .18s ease;
+    }
+
+    .seller-result-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 28px rgba(15,23,42,.08);
+    }
+
+    .seller-result-cover{
+      min-height:92px;
+      padding:14px;
+      background:linear-gradient(135deg,#0d6e6e,#134e72);
+      color:#fff;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .seller-result-avatar{
+      width:54px;
+      height:54px;
+      border-radius:14px;
+      border:3px solid rgba(255,255,255,.9);
+      background:#fff;
+      object-fit:cover;
+    }
+
+    .seller-result-avatar-fallback{
+      width:54px;
+      height:54px;
+      border-radius:14px;
+      border:3px solid rgba(255,255,255,.9);
+      background:var(--brand-soft);
+      color:var(--brand);
+      display:grid;
+      place-items:center;
+      font-size:20px;
+      font-weight:900;
+    }
+
+    .seller-type-badge{
+      padding:5px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.28);
+      font-size:10px;
+      font-weight:800;
+    }
+
+    .seller-result-body{padding:15px}
+    .seller-result-name{margin:0;font-size:16px;line-height:1.3}
+    .seller-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+    .seller-badge{
+      display:inline-flex;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:700;
+      background:var(--brand-soft);
+      color:var(--brand);
+    }
+    .seller-badge.verified{background:var(--orange-soft);color:#c23f24}
+
+    .seller-meta{
+      display:grid;
+      gap:6px;
+      margin-top:12px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .seller-meta-row{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      min-height:18px;
+    }
+
+    .seller-card-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .seller-card-btn{
+      min-height:38px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 10px;
+      border-radius:9px;
+      text-decoration:none;
+      font-size:12px;
+      font-weight:700;
+      border:1px solid var(--brand);
+      color:var(--brand);
+      background:#fff;
+    }
+
+    .seller-card-btn.primary{background:var(--brand);color:#fff}
+    .seller-card-btn:hover{background:var(--brand-soft)}
+    .seller-card-btn.primary:hover{background:var(--brand-dark)}
+
+    .seller-empty{
+      grid-column:1/-1;
+      padding:50px 20px;
+      border:1px dashed #cbd5e1;
+      border-radius:15px;
+      background:#fff;
+      color:var(--muted);
+      text-align:center;
+      font-size:13px;
+    }
+
+    .seller-loading{
+      grid-column:1/-1;
+      padding:40px;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    @media(max-width:960px){
+      .seller-search-panel{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .seller-search-panel .seller-keyword{grid-column:1/-1}
+      .seller-search-btn{width:100%}
+      .seller-results{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media(max-width:620px){
+      .seller-search-shell{margin-top:18px}
+      .seller-search-panel{grid-template-columns:1fr}
+      .seller-search-panel .seller-keyword{grid-column:auto}
+      .seller-results{grid-template-columns:1fr}
+      .seller-toolbar{align-items:flex-start;flex-direction:column}
+    }
+  </style>
+</head>
+
+<body class="homepage">
+  <header class="mp-header">
+    <div class="mp-header-top">
+      <a href="index.html" class="mp-logo" aria-label="Waterside home">
+        <span class="mp-logo-word mp-logo-water">Water</span><span class="mp-logo-word mp-logo-side">side</span>
+        <span class="mp-logo-sub">Liberia's No.1 Marketplace</span>
+      </a>
+
+      <div class="mp-header-actions">
+        <a href="index.html" class="mp-action-link">Home</a>
+        <a href="search.html" class="mp-action-link">Listings</a>
+        <a href="login.html" id="loginBtn" class="mp-action-link">Sign In</a>
+        <a href="dashboard.html" id="dashboardBtn" class="mp-action-link" style="display:none;">Dashboard</a>
+        <a href="sell.html" class="mp-post-ad">Post An Ad</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="mp-nav-strip" aria-label="Marketplace navigation">
+    <div class="mp-nav-inner">
+      <a href="index.html#products" class="mp-nav-all">All Categories</a>
+      <a href="search.html" class="mp-nav-link">Products</a>
+      <a href="sellers.html" class="mp-nav-link">Sellers</a>
+      <a href="category-vehicles.html" class="mp-nav-link">Vehicles</a>
+      <a href="category-property.html" class="mp-nav-link">Property</a>
+      <a href="category-phones.html" class="mp-nav-link">Phones</a>
+      <a href="category-electronics.html" class="mp-nav-link">Electronics</a>
+      <a href="category-fashion.html" class="mp-nav-link">Fashion</a>
+      <a href="category-jobs.html" class="mp-nav-link">Jobs</a>
+    </div>
+  </nav>
+
+  <main class="seller-search-shell">
+    <section class="seller-search-head">
+      <h1>Find Sellers</h1>
+      <p>Search trusted sellers, authorized resellers and verified businesses across Liberia.</p>
+    </section>
+
+    <section class="seller-search-panel">
+      <input id="sellerKeyword" class="seller-keyword" type="search" placeholder="Search seller or business name..." autocomplete="off">
+
+      <select id="sellerCounty">
+        <option value="">All Counties</option>
+        <option value="Montserrado">Montserrado</option>
+        <option value="Margibi">Margibi</option>
+        <option value="Grand Bassa">Grand Bassa</option>
+        <option value="Nimba">Nimba</option>
+        <option value="Bong">Bong</option>
+        <option value="Lofa">Lofa</option>
+        <option value="Grand Cape Mount">Grand Cape Mount</option>
+        <option value="Bomi">Bomi</option>
+        <option value="Gbarpolu">Gbarpolu</option>
+        <option value="Grand Gedeh">Grand Gedeh</option>
+        <option value="Grand Kru">Grand Kru</option>
+        <option value="Maryland">Maryland</option>
+        <option value="River Cess">River Cess</option>
+        <option value="River Gee">River Gee</option>
+        <option value="Sinoe">Sinoe</option>
+      </select>
+
+      <select id="sellerCategory">
+        <option value="">All Categories</option>
+        <option value="Vehicles">Vehicles</option>
+        <option value="Property">Property</option>
+        <option value="Phones">Phones &amp; Tablets</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Home & Appliances">Home &amp; Appliances</option>
+        <option value="Fashion">Fashion</option>
+        <option value="Beauty & Personal Care">Beauty &amp; Personal Care</option>
+        <option value="Services">Services</option>
+        <option value="Repair & Construction">Repair &amp; Construction</option>
+        <option value="Commercial Equipment & Tools">Equipment &amp; Tools</option>
+        <option value="Agriculture & Farming">Agriculture &amp; Farming</option>
+        <option value="Jobs">Jobs</option>
+      </select>
+
+      <select id="sellerType">
+        <option value="">All Seller Types</option>
+        <option value="verified">Verified Sellers</option>
+        <option value="reseller">Authorized Resellers</option>
+        <option value="business">Verified Businesses</option>
+      </select>
+
+      <button id="searchSellersBtn" class="seller-search-btn" type="button">Search</button>
+    </section>
+
+    <div class="seller-toolbar">
+      <p id="sellerResultCount" class="seller-result-count">Loading sellers...</p>
+      <button id="clearSellerFilters" class="seller-clear-btn" type="button">Clear Filters</button>
+    </div>
+
+    <section id="sellerResults" class="seller-results">
+      <div class="seller-loading">Loading sellers...</div>
+    </section>
+  </main>
+
+  <footer class="lm-footer" id="marketplaceFooter">
+    <div class="lm-footer-simple site-shell">
+      <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+      <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    import {
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const loginBtn = document.getElementById("loginBtn");
+    const dashboardBtn = document.getElementById("dashboardBtn");
+
+    const sellerKeyword = document.getElementById("sellerKeyword");
+    const sellerCounty = document.getElementById("sellerCounty");
+    const sellerCategory = document.getElementById("sellerCategory");
+    const sellerType = document.getElementById("sellerType");
+    const searchSellersBtn = document.getElementById("searchSellersBtn");
+    const clearSellerFilters = document.getElementById("clearSellerFilters");
+    const sellerResultCount = document.getElementById("sellerResultCount");
+    const sellerResults = document.getElementById("sellerResults");
+
+    let allSellers = [];
+    let productsBySeller = new Map();
+
+    function safeText(value, fallback = "") {
+      if (value === null || value === undefined) return fallback;
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function truthy(value) {
+      return value === true || String(value || "").toLowerCase() === "true";
+    }
+
+    function firstValue(...values) {
+      return values.find((value) =>
+        value !== null &&
+        value !== undefined &&
+        String(value).trim() !== ""
+      );
+    }
+
+    function normalizedSeller(user) {
+      const accountType = String(user.accountType || "personal").toLowerCase();
+
+      const isBusiness =
+        accountType === "business" ||
+        truthy(user.businessApproved) ||
+        truthy(user.businessVerified) ||
+        truthy(user.businessAccountApproved);
+
+      const isReseller =
+        accountType === "reseller" ||
+        truthy(user.resellerApproved) ||
+        truthy(user.resellerBadge) ||
+        truthy(user.isReseller) ||
+        truthy(user.isResellerVerified) ||
+        truthy(user.resellerVerified) ||
+        String(user.resellerApplicationStatus || "").toLowerCase() === "approved";
+
+      const verified =
+        truthy(user.verified) ||
+        truthy(user.businessVerified) ||
+        truthy(user.resellerVerified) ||
+        truthy(user.isResellerVerified);
+
+      const name = firstValue(
+        user.businessName,
+        user.resellerName,
+        user.name,
+        user.displayName,
+        user.email,
+        "Waterside Seller"
+      );
+
+      const county = firstValue(
+        user.businessCounty,
+        user.resellerCounty,
+        user.county,
+        ""
+      );
+
+      const city = firstValue(
+        user.businessCity,
+        user.resellerCity,
+        user.city,
+        ""
+      );
+
+      const category = firstValue(
+        user.businessCategory,
+        user.resellerCategory,
+        user.category,
+        ""
+      );
+
+      const photo = firstValue(
+        user.businessLogoUrl,
+        user.profileImageUrl,
+        user.photoURL,
+        user.avatarUrl,
+        ""
+      );
+
+      const activeListings = productsBySeller.get(user.id) || 0;
+
+      return {
+        ...user,
+        name,
+        county,
+        city,
+        category,
+        photo,
+        isBusiness,
+        isReseller,
+        verified,
+        activeListings,
+        profileType:isBusiness ? "business" : isReseller ? "reseller" : "seller"
+      };
+    }
+
+    function profileUrl(seller) {
+      if (seller.profileType === "business") {
+        return `business-profile.html?id=${encodeURIComponent(seller.id)}`;
+      }
+
+      if (seller.profileType === "reseller") {
+        return `reseller-profile.html?id=${encodeURIComponent(seller.id)}`;
+      }
+
+      return `seller-profile.html?id=${encodeURIComponent(seller.id)}`;
+    }
+
+    function sellerTypeLabel(seller) {
+      if (seller.isBusiness) return "Business";
+      if (seller.isReseller) return "Authorized Reseller";
+      return "Seller";
+    }
+
+    function shouldAppear(user) {
+      const status = String(user.status || "").toLowerCase();
+
+      if (status === "suspended" || truthy(user.suspended)) {
+        return false;
+      }
+
+      const accountType = String(user.accountType || "personal").toLowerCase();
+
+      return (
+        accountType === "business" ||
+        accountType === "reseller" ||
+        truthy(user.verified) ||
+        truthy(user.businessApproved) ||
+        truthy(user.businessVerified) ||
+        truthy(user.resellerApproved) ||
+        truthy(user.resellerBadge) ||
+        truthy(user.isReseller) ||
+        truthy(user.isResellerVerified) ||
+        truthy(user.resellerVerified) ||
+        (productsBySeller.get(user.id) || 0) > 0
+      );
+    }
+
+    function renderSellers() {
+      const keyword = sellerKeyword.value.trim().toLowerCase();
+      const county = sellerCounty.value.toLowerCase();
+      const category = sellerCategory.value.toLowerCase();
+      const type = sellerType.value;
+
+      const filtered = allSellers
+        .map(normalizedSeller)
+        .filter((seller) => {
+          const searchable = [
+            seller.name,
+            seller.email,
+            seller.county,
+            seller.city,
+            seller.category,
+            seller.businessDescription,
+            seller.resellerDescription
+          ].join(" ").toLowerCase();
+
+          const keywordMatch = !keyword || searchable.includes(keyword);
+          const countyMatch = !county || seller.county.toLowerCase() === county;
+          const categoryMatch =
+            !category ||
+            seller.category.toLowerCase().includes(category) ||
+            String(seller.resellerCategory || "").toLowerCase().includes(category) ||
+            String(seller.businessCategory || "").toLowerCase().includes(category);
+
+          let typeMatch = true;
+
+          if (type === "verified") typeMatch = seller.verified;
+          if (type === "reseller") typeMatch = seller.isReseller;
+          if (type === "business") typeMatch = seller.isBusiness;
+
+          return keywordMatch && countyMatch && categoryMatch && typeMatch;
+        })
+        .sort((a, b) => {
+          if (b.verified !== a.verified) return Number(b.verified) - Number(a.verified);
+          if (b.isBusiness !== a.isBusiness) return Number(b.isBusiness) - Number(a.isBusiness);
+          if (b.isReseller !== a.isReseller) return Number(b.isReseller) - Number(a.isReseller);
+          return b.activeListings - a.activeListings;
+        });
+
+      sellerResultCount.textContent =
+        `${filtered.length} seller${filtered.length === 1 ? "" : "s"} found`;
+
+      if (!filtered.length) {
+        sellerResults.innerHTML =
+          '<div class="seller-empty">No sellers match your search. Try another name, county, category or seller type.</div>';
+        return;
+      }
+
+      sellerResults.innerHTML = filtered.map((seller) => {
+        const location = [seller.city, seller.county].filter(Boolean).join(", ") || "Liberia";
+        const initial = safeText(String(seller.name || "W").charAt(0).toUpperCase());
+
+        const avatar = seller.photo
+          ? `<img class="seller-result-avatar" src="${safeText(seller.photo)}" alt="${safeText(seller.name)}" loading="lazy" onerror="this.outerHTML='<div class=&quot;seller-result-avatar-fallback&quot;>${initial}</div>'">`
+          : `<div class="seller-result-avatar-fallback">${initial}</div>`;
+
+        return `
+          <article class="seller-result-card">
+            <div class="seller-result-cover">
+              ${avatar}
+              <span class="seller-type-badge">${safeText(sellerTypeLabel(seller))}</span>
+            </div>
+
+            <div class="seller-result-body">
+              <h2 class="seller-result-name">${safeText(seller.name)}</h2>
+
+              <div class="seller-badges">
+                ${seller.verified
+                  ? '<span class="seller-badge verified">Verified</span>'
+                  : ""}
+                ${seller.isReseller
+                  ? '<span class="seller-badge">Authorized Reseller</span>'
+                  : ""}
+                ${seller.isBusiness
+                  ? '<span class="seller-badge">Business Store</span>'
+                  : ""}
+              </div>
+
+              <div class="seller-meta">
+                <div class="seller-meta-row">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                  <span>${safeText(location)}</span>
+                </div>
+
+                <div class="seller-meta-row">
+                  <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>
+                  <span>${safeText(seller.category || "Multiple categories")}</span>
+                </div>
+
+                <div class="seller-meta-row">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M4 19h16M6 16V8M12 16V5M18 16v-4"/></svg>
+                  <span>${seller.activeListings} active listing${seller.activeListings === 1 ? "" : "s"}</span>
+                </div>
+              </div>
+
+              <div class="seller-card-actions">
+                <a class="seller-card-btn primary" href="${profileUrl(seller)}">View Profile</a>
+                <a class="seller-card-btn" href="${seller.activeListings
+                  ? `seller-profile.html?id=${encodeURIComponent(seller.id)}`
+                  : profileUrl(seller)}">View Listings</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function loadSellers() {
+      sellerResultCount.textContent = "Loading sellers...";
+      sellerResults.innerHTML = '<div class="seller-loading">Loading sellers...</div>';
+
+      try {
+        const [usersSnapshot, productsSnapshot] = await Promise.all([
+          getDocs(collection(db, "users")),
+          getDocs(collection(db, "products"))
+        ]);
+
+        productsBySeller = new Map();
+
+        productsSnapshot.forEach((productDoc) => {
+          const product = productDoc.data();
+          const status = String(product.status || "active").toLowerCase();
+          const sellerId = product.sellerId || product.userId || product.ownerId;
+
+          if (!sellerId || status !== "active") return;
+
+          productsBySeller.set(
+            sellerId,
+            (productsBySeller.get(sellerId) || 0) + 1
+          );
+        });
+
+        allSellers = usersSnapshot.docs
+          .map((userDoc) => ({ id:userDoc.id, ...userDoc.data() }))
+          .filter(shouldAppear);
+
+        renderSellers();
+      } catch (error) {
+        console.error("Could not load sellers:", error);
+        sellerResultCount.textContent = "Could not load sellers";
+        sellerResults.innerHTML =
+          `<div class="seller-empty">Could not load sellers: ${safeText(error.message)}<br><br>Check your Firestore users read rules.</div>`;
+      }
+    }
+
+    function clearFilters() {
+      sellerKeyword.value = "";
+      sellerCounty.value = "";
+      sellerCategory.value = "";
+      sellerType.value = "";
+      renderSellers();
+    }
+
+    searchSellersBtn.addEventListener("click", renderSellers);
+    clearSellerFilters.addEventListener("click", clearFilters);
+    sellerKeyword.addEventListener("input", renderSellers);
+    sellerCounty.addEventListener("change", renderSellers);
+    sellerCategory.addEventListener("change", renderSellers);
+    sellerType.addEventListener("change", renderSellers);
+
+    sellerKeyword.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") renderSellers();
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      loginBtn.style.display = user ? "none" : "inline-flex";
+      dashboardBtn.style.display = user ? "inline-flex" : "none";
+    });
+
+    loadSellers();
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js").catch(() => {});
+    }
+  </script>
+</body>
+</html>

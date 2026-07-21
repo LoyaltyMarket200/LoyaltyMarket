@@ -1,143 +1,763 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Messages - Waterside</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="footer.css">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-<meta name="theme-color" content="#0d6e6e">
-<style>
-:root{--navy:#0d6e6e;--navy-soft:#e3f2f2;--orange:#ff6b4a;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-.icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.simple-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
-.simple-navbar .logo-link{display:flex;align-items:center;gap:9px;text-decoration:none}
-.simple-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
-.simple-navbar .logo-text{color:var(--navy);font-size:14px;font-weight:700}
-.simple-nav-actions{display:flex;align-items:center;gap:8px}
-.simple-nav-link{min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:#fff;text-decoration:none;font-size:12px;font-weight:500}
-.simple-nav-link:hover{border-color:var(--navy);color:var(--navy)}
-.page-shell{width:min(700px,92%);margin:26px auto 60px}
-.page-title{margin:0 0 18px;font-size:19px;font-weight:600;color:var(--ink)}
-.convo-item{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:9px;text-decoration:none;color:inherit}
-.convo-item.unread{border-color:var(--navy);background:var(--navy-soft)}
-.convo-avatar{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--navy-soft);color:var(--navy);display:flex;align-items:center;justify-content:center}
-.convo-body{flex:1;min-width:0}
-.convo-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.convo-preview{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.convo-time{flex-shrink:0;font-size:11px;color:#94a3b8}
-.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0}
-.empty-state{padding:44px 20px;text-align:center;border:1px dashed var(--line);border-radius:12px;background:#fff;color:var(--muted);font-size:13px}
-@media (max-width:700px){.simple-navbar{flex-wrap:wrap;gap:10px}.simple-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.page-shell{margin-top:16px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages - WaterSide</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <meta name="theme-color" content="#0d6e6e">
+
+  <style>
+    :root{
+      --brand:#0d6e6e;
+      --brand-dark:#095959;
+      --brand-soft:#e7f5f5;
+      --orange:#ff6b4a;
+      --ink:#172033;
+      --muted:#667085;
+      --line:#e5e7eb;
+      --bg:#f4f6f8;
+      --white:#fff;
+      --danger:#b91c1c;
+      --shadow:0 12px 34px rgba(15,23,42,.08);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    }
+
+    button,input{font:inherit}
+    .hidden{display:none!important}
+
+    .site-header{
+      min-height:58px;
+      padding:8px max(16px,4vw);
+      background:#fff;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      position:sticky;
+      top:0;
+      z-index:20;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      color:var(--brand);
+      text-decoration:none;
+      font-weight:800;
+    }
+
+    .brand img{width:31px;height:31px;border-radius:8px;object-fit:contain}
+    .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .header-link{
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:9px;
+      text-decoration:none;
+      background:#fff;
+      color:var(--ink);
+      font-size:12.5px;
+      font-weight:700;
+    }
+
+    .header-link.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+
+    .page-shell{
+      width:min(1040px,94%);
+      margin:26px auto 70px;
+    }
+
+    .page-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .page-head h1{margin:0;font-size:24px}
+    .page-head p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    .messages-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .toolbar{
+      padding:14px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .search{
+      flex:1 1 260px;
+      min-height:42px;
+      padding:10px 13px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      outline:none;
+    }
+
+    .search:focus{
+      border-color:var(--brand);
+      box-shadow:0 0 0 3px rgba(13,110,110,.08);
+    }
+
+    .filter-btn{
+      min-height:38px;
+      padding:8px 13px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      color:var(--ink);
+      font-size:12px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .filter-btn.active{
+      background:var(--brand);
+      border-color:var(--brand);
+      color:#fff;
+    }
+
+    .status{
+      margin:18px;
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      color:var(--muted);
+      text-align:center;
+      background:#fbfcfd;
+      font-size:13px;
+    }
+
+    .status.error{color:var(--danger)}
+
+    .conversation-list{display:flex;flex-direction:column}
+
+    .conversation{
+      position:relative;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;
+      align-items:center;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      text-decoration:none;
+      color:inherit;
+      background:#fff;
+      transition:background .15s ease;
+    }
+
+    .conversation:last-child{border-bottom:none}
+    .conversation:hover{background:#fafcfc}
+    .conversation.unread{background:#f1fbfb}
+
+    .avatar-wrap{position:relative}
+    .avatar{
+      width:52px;
+      height:52px;
+      border-radius:50%;
+      object-fit:cover;
+      background:var(--brand-soft);
+    }
+
+    .product-mini{
+      position:absolute;
+      right:-3px;
+      bottom:-3px;
+      width:22px;
+      height:22px;
+      border-radius:6px;
+      object-fit:cover;
+      border:2px solid #fff;
+      background:#eef2f6;
+    }
+
+    .conversation-main{min-width:0}
+    .top-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+    }
+
+    .name{
+      margin:0;
+      font-size:14px;
+      font-weight:800;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .badge{
+      flex:0 0 auto;
+      padding:3px 7px;
+      border-radius:999px;
+      background:#dcfce7;
+      color:#15803d;
+      font-size:9.5px;
+      font-weight:800;
+    }
+
+    .preview{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:12.5px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .product-title{
+      margin:5px 0 0;
+      color:var(--brand);
+      font-size:11px;
+      font-weight:700;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .conversation-side{
+      align-self:stretch;
+      min-width:66px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:8px;
+    }
+
+    .time{color:var(--muted);font-size:10.5px}
+    .unread-count{
+      min-width:21px;
+      height:21px;
+      padding:0 6px;
+      border-radius:999px;
+      background:var(--orange);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-size:10px;
+      font-weight:900;
+    }
+
+    .empty-actions{
+      margin-top:10px;
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .empty-actions a{
+      padding:9px 12px;
+      border-radius:9px;
+      background:var(--brand);
+      color:#fff;
+      text-decoration:none;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    @media(max-width:620px){
+      .site-header{align-items:flex-start;flex-wrap:wrap}
+      .header-actions{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}
+      .header-link{text-align:center}
+      .page-shell{width:100%;margin:0}
+      .page-head{padding:18px 14px 10px;margin:0}
+      .messages-card{border-radius:0;border-left:none;border-right:none;box-shadow:none}
+      .toolbar{padding:11px}
+      .conversation{padding:12px}
+      .avatar{width:46px;height:46px}
+      .conversation-side{min-width:55px}
+    }
+  </style>
 </head>
 <body>
-<header class="navbar simple-navbar">
-  <a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text">Waterside</span></a>
-  <div class="simple-nav-actions">
-    <a href="index.html" class="simple-nav-link">Home</a>
-    <a href="dashboard.html" class="simple-nav-link">Dashboard</a>
-    <a href="notifications.html" class="simple-nav-link">Notifications</a>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <img src="icons/icon-512.png" alt="WaterSide">
+    <span>WaterSide</span>
+  </a>
+
+  <div class="header-actions">
+    <a class="header-link" href="index.html">Home</a>
+    <a class="header-link" href="dashboard.html">Dashboard</a>
+    <a class="header-link primary" href="sell.html">Post an Ad</a>
   </div>
 </header>
 
-<section class="page-shell">
-  <h1 class="page-title">Messages</h1>
-  <div id="convoList"><p class="empty-state">Loading your conversations...</p></div>
-</section>
-
-<footer class="lm-footer" id="marketplaceFooter">
-  <div class="lm-footer-simple site-shell">
-    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
-    <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
+<main class="page-shell">
+  <div class="page-head">
+    <div>
+      <h1>My Messages</h1>
+      <p>View buyer and seller conversations in one place.</p>
+    </div>
   </div>
-</footer>
+
+  <section class="messages-card">
+    <div class="toolbar">
+      <input id="searchInput" class="search" type="search" placeholder="Search people, products, or messages...">
+      <button class="filter-btn active" data-filter="all" type="button">All</button>
+      <button class="filter-btn" data-filter="unread" type="button">Unread</button>
+    </div>
+
+    <div id="loadingState" class="status">Loading your conversations...</div>
+    <div id="errorState" class="status error hidden"></div>
+
+    <div id="emptyState" class="status hidden">
+      No conversations yet.
+      <div class="empty-actions">
+        <a href="index.html">Browse Products</a>
+      </div>
+    </div>
+
+    <div id="conversationList" class="conversation-list"></div>
+  </section>
+</main>
 
 <script type="module">
-import { auth, db } from "./firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import { auth, db } from "./firebase.js";
 
-const convoList = document.getElementById("convoList");
-let currentUser = null;
+  import {
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-function safeText(v){return String(v||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
-function formatDate(ts){if(!ts||!ts.seconds)return "";const d=new Date(ts.seconds*1000);const days=Math.floor((Date.now()-d.getTime())/86400000);if(days<1)return d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});if(days<7)return d.toLocaleDateString(undefined,{weekday:"short"});return d.toLocaleDateString();}
+  import {
+    collection,
+    doc,
+    getDoc,
+    onSnapshot,
+    query,
+    where
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-async function loadConversations(){
-  try{
-    const q = query(collection(db,"messages"), where("participants","array-contains",currentUser.uid));
-    const snapshot = await getDocs(q);
-    const allMessages = snapshot.docs.map(d=>({id:d.id,...d.data()}));
+  const searchInput = document.getElementById("searchInput");
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  const loadingState = document.getElementById("loadingState");
+  const errorState = document.getElementById("errorState");
+  const emptyState = document.getElementById("emptyState");
+  const conversationList = document.getElementById("conversationList");
 
-    if(allMessages.length===0){
-      convoList.innerHTML = '<p class="empty-state">You have no messages yet. Start a chat from any listing.</p>';
+  let currentUser = null;
+  let conversations = [];
+  let activeFilter = "all";
+  let unsubscribeChats = null;
+
+  const userCache = new Map();
+  const productCache = new Map();
+
+  function safeString(value, fallback = "") {
+    if (value === null || value === undefined) return fallback;
+    return String(value);
+  }
+
+  function timestampDate(value) {
+    if (!value) return null;
+    if (typeof value.toDate === "function") return value.toDate();
+    if (typeof value.seconds === "number") return new Date(value.seconds * 1000);
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  function formatTime(value) {
+    const date = timestampDate(value);
+    if (!date) return "";
+
+    const today = new Date();
+
+    if (date.toDateString() === today.toDateString()) {
+      return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    return date.toLocaleDateString([], {
+      month: "short",
+      day: "numeric"
+    });
+  }
+
+  function profileName(data) {
+    return (
+      data?.resellerName
+      || data?.businessName
+      || data?.name
+      || data?.email
+      || "WaterSide User"
+    );
+  }
+
+  function profileAvatar(data) {
+    return (
+      data?.resellerPhotoUrl
+      || data?.profilePhotoUrl
+      || data?.photoURL
+      || data?.avatarUrl
+      || "icons/icon-512.png"
+    );
+  }
+
+  function productPhoto(product) {
+    if (Array.isArray(product?.images) && product.images.length) {
+      return product.images[0];
+    }
+
+    return (
+      product?.imageUrl
+      || product?.imageURL
+      || product?.image
+      || "icons/icon-512.png"
+    );
+  }
+
+  async function getUser(userId) {
+    if (!userId) return null;
+    if (userCache.has(userId)) return userCache.get(userId);
+
+    try {
+      const snap = await getDoc(doc(db, "users", userId));
+      const data = snap.exists() ? snap.data() : null;
+      userCache.set(userId, data);
+      return data;
+    } catch (error) {
+      console.warn("Could not load user:", userId, error);
+      userCache.set(userId, null);
+      return null;
+    }
+  }
+
+  async function getProduct(productId) {
+    if (!productId) return null;
+    if (productCache.has(productId)) return productCache.get(productId);
+
+    try {
+      const snap = await getDoc(doc(db, "products", productId));
+      const data = snap.exists() ? snap.data() : null;
+      productCache.set(productId, data);
+      return data;
+    } catch (error) {
+      console.warn("Could not load product:", productId, error);
+      productCache.set(productId, null);
+      return null;
+    }
+  }
+
+  function unreadForCurrentUser(chat) {
+    const unreadByUser = chat.unreadByUser || {};
+
+    if (typeof unreadByUser[currentUser.uid] === "number") {
+      return unreadByUser[currentUser.uid];
+    }
+
+    if (
+      chat.lastSenderId
+      && chat.lastSenderId !== currentUser.uid
+      && chat.lastMessage
+      && chat.lastMessageSeen !== true
+    ) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  async function hydrateConversation(chatDoc) {
+    const chat = {
+      id: chatDoc.id,
+      ...chatDoc.data()
+    };
+
+    const participants = Array.isArray(chat.participants)
+      ? chat.participants
+      : [];
+
+    const otherUserId =
+      participants.find((participantId) => participantId !== currentUser.uid)
+      || "";
+
+    const [otherUser, product] = await Promise.all([
+      getUser(otherUserId),
+      getProduct(chat.productId || "")
+    ]);
+
+    return {
+      ...chat,
+      otherUserId,
+      otherUser,
+      product,
+      unreadCount: unreadForCurrentUser(chat)
+    };
+  }
+
+  function renderConversations() {
+    const term = searchInput.value.trim().toLowerCase();
+
+    const filtered = conversations.filter((conversation) => {
+      if (activeFilter === "unread" && conversation.unreadCount < 1) {
+        return false;
+      }
+
+      if (!term) return true;
+
+      const haystack = [
+        profileName(conversation.otherUser),
+        conversation.lastMessage,
+        conversation.product?.title,
+        conversation.otherUser?.email
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(term);
+    });
+
+    conversationList.innerHTML = "";
+    emptyState.classList.toggle("hidden", filtered.length > 0);
+
+    filtered.forEach((conversation) => {
+      const link = document.createElement("a");
+      link.className =
+        "conversation"
+        + (conversation.unreadCount > 0 ? " unread" : "");
+
+      link.href =
+        `chat.html?chat=${encodeURIComponent(conversation.id)}`;
+
+      const avatarWrap = document.createElement("div");
+      avatarWrap.className = "avatar-wrap";
+
+      const avatar = document.createElement("img");
+      avatar.className = "avatar";
+      avatar.src = profileAvatar(conversation.otherUser);
+      avatar.alt = profileName(conversation.otherUser);
+      avatar.onerror = () => {
+        avatar.src = "icons/icon-512.png";
+      };
+
+      avatarWrap.appendChild(avatar);
+
+      if (conversation.product) {
+        const productMini = document.createElement("img");
+        productMini.className = "product-mini";
+        productMini.src = productPhoto(conversation.product);
+        productMini.alt = "Product";
+        productMini.onerror = () => {
+          productMini.src = "icons/icon-512.png";
+        };
+        avatarWrap.appendChild(productMini);
+      }
+
+      const main = document.createElement("div");
+      main.className = "conversation-main";
+
+      const topRow = document.createElement("div");
+      topRow.className = "top-row";
+
+      const name = document.createElement("h2");
+      name.className = "name";
+      name.textContent = profileName(conversation.otherUser);
+
+      topRow.appendChild(name);
+
+      if (
+        conversation.otherUser?.accountType === "reseller"
+        || conversation.otherUser?.resellerApproved === true
+        || conversation.otherUser?.isReseller === true
+      ) {
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = "Reseller";
+        topRow.appendChild(badge);
+      }
+
+      const preview = document.createElement("p");
+      preview.className = "preview";
+
+      if (conversation.lastSenderId === currentUser.uid && conversation.lastMessage) {
+        preview.textContent = `You: ${conversation.lastMessage}`;
+      } else {
+        preview.textContent =
+          conversation.lastMessage
+          || "No messages yet";
+      }
+
+      const productTitle = document.createElement("p");
+      productTitle.className = "product-title";
+      productTitle.textContent =
+        conversation.product?.title
+        || "General conversation";
+
+      main.append(topRow, preview, productTitle);
+
+      const side = document.createElement("div");
+      side.className = "conversation-side";
+
+      const time = document.createElement("span");
+      time.className = "time";
+      time.textContent =
+        formatTime(
+          conversation.lastMessageTime
+          || conversation.updatedAt
+          || conversation.createdAt
+        );
+
+      side.appendChild(time);
+
+      if (conversation.unreadCount > 0) {
+        const unread = document.createElement("span");
+        unread.className = "unread-count";
+        unread.textContent =
+          conversation.unreadCount > 99
+            ? "99+"
+            : String(conversation.unreadCount);
+
+        side.appendChild(unread);
+      }
+
+      link.append(avatarWrap, main, side);
+      conversationList.appendChild(link);
+    });
+  }
+
+  function listenForChats() {
+    if (unsubscribeChats) unsubscribeChats();
+
+    const chatsQuery = query(
+      collection(db, "chats"),
+      where("participants", "array-contains", currentUser.uid)
+    );
+
+    unsubscribeChats = onSnapshot(
+      chatsQuery,
+      async (snapshot) => {
+        try {
+          const hydrated = await Promise.all(
+            snapshot.docs.map(hydrateConversation)
+          );
+
+          conversations = hydrated.sort((a, b) => {
+            const first =
+              timestampDate(
+                a.lastMessageTime
+                || a.updatedAt
+                || a.createdAt
+              )?.getTime() || 0;
+
+            const second =
+              timestampDate(
+                b.lastMessageTime
+                || b.updatedAt
+                || b.createdAt
+              )?.getTime() || 0;
+
+            return second - first;
+          });
+
+          loadingState.classList.add("hidden");
+          errorState.classList.add("hidden");
+          renderConversations();
+
+        } catch (error) {
+          console.error("Could not prepare conversations:", error);
+          loadingState.classList.add("hidden");
+          errorState.textContent =
+            "Could not display your conversations.";
+          errorState.classList.remove("hidden");
+        }
+      },
+      async (error) => {
+        console.error("Could not load chats:", error);
+
+        // ===== TEMPORARY DEBUG POPUP — re-checks THIS SAME account's =====
+        // ===== Firestore profile at the exact moment the chats query =====
+        // ===== fails, so the error and the profile state are guaranteed =====
+        // ===== to match. Remove this whole block once diagnosed. =====
+        let profileLine = "(could not re-check profile)";
+        try {
+          const profileSnap = await getDoc(doc(db, "users", currentUser.uid));
+          profileLine =
+            "users/{uid} doc exists: " + (profileSnap.exists() ? "YES" : "NO") +
+            "\nsuspended: " + (profileSnap.exists() ? String(profileSnap.data().suspended) : "n/a");
+        } catch (recheckError) {
+          profileLine = "profile re-check itself failed: " + recheckError.message;
+        }
+
+        alert(
+          "DEBUG — chats query failed:\n\n" +
+          "email: " + currentUser.email + "\n" +
+          "uid: " + currentUser.uid + "\n" +
+          "code: " + (error.code || "unknown") + "\n" +
+          "message: " + (error.message || "(no message)") + "\n\n" +
+          profileLine
+        );
+        // ===== END TEMPORARY DEBUG POPUP =====
+
+        loadingState.classList.add("hidden");
+        errorState.textContent =
+          "Could not load messages. Check your Firestore rules.";
+        errorState.classList.remove("hidden");
+      }
+    );
+  }
+
+  searchInput.addEventListener("input", renderConversations);
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      filterButtons.forEach((item) => {
+        item.classList.toggle("active", item === button);
+      });
+
+      activeFilter = button.dataset.filter || "all";
+      renderConversations();
+    });
+  });
+
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+
+    if (!user) {
+      loadingState.classList.add("hidden");
+      errorState.textContent =
+        "Please log in to view your messages.";
+      errorState.classList.remove("hidden");
       return;
     }
 
-    // Group by the other participant so each person shows once,
-    // with their most recent message as the preview.
-    const conversations = {};
+    listenForChats();
+  });
 
-    allMessages.forEach(msg=>{
-      const otherUserId = (msg.participants||[]).find(id=>id!==currentUser.uid);
-      if(!otherUserId) return;
-
-      const existing = conversations[otherUserId];
-      const msgTime = msg.createdAt?.seconds || 0;
-
-      if(!existing || msgTime > (existing.createdAt?.seconds||0)){
-        conversations[otherUserId] = msg;
-      }
-
-      if(msg.receiverId===currentUser.uid && msg.read===false){
-        conversations[otherUserId]._hasUnread = true;
-      }
-    });
-
-    const entries = Object.entries(conversations)
-      .sort((a,b)=>(b[1].createdAt?.seconds||0)-(a[1].createdAt?.seconds||0));
-
-    const rows = await Promise.all(entries.map(async ([otherUserId, msg])=>{
-      let otherName = "Waterside User";
-      try{
-        const userSnap = await getDoc(doc(db,"users",otherUserId));
-        if(userSnap.exists()) otherName = userSnap.data().name || userSnap.data().businessName || otherName;
-      }catch(e){}
-
-      const isUnread = Boolean(msg._hasUnread);
-      const chatUrl = `chat.html?with=${encodeURIComponent(otherUserId)}${msg.productId?`&product=${encodeURIComponent(msg.productId)}`:""}`;
-
-      return `
-        <a class="convo-item ${isUnread?"unread":""}" href="${chatUrl}">
-          <div class="convo-avatar"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
-          <div class="convo-body">
-            <div class="convo-title">${safeText(otherName)}</div>
-            <div class="convo-preview">${safeText(msg.text||msg.message||"")}</div>
-          </div>
-          ${isUnread ? '<span class="unread-dot"></span>' : ""}
-          <span class="convo-time">${formatDate(msg.createdAt)}</span>
-        </a>
-      `;
-    }));
-
-    convoList.innerHTML = rows.join("");
-  }catch(error){
-    convoList.innerHTML = '<p class="empty-state">Could not load your messages right now.</p>';
-    console.error(error.message);
-  }
-}
-
-onAuthStateChanged(auth,(user)=>{
-  if(!user){ alert("Please log in to view your messages."); window.location.href="login.html"; return; }
-  currentUser = user;
-  loadConversations();
-});
+  window.addEventListener("beforeunload", () => {
+    if (unsubscribeChats) unsubscribeChats();
+  });
 </script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{});}</script>
+
 </body>
 </html>

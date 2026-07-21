@@ -535,6 +535,150 @@
       line-height: 1.55;
     }
 
+
+    .reviews-summary{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:170px minmax(0,1fr);
+      gap:18px;
+      align-items:center;
+    }
+
+    .rating-score{
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--brand-soft);
+      text-align:center;
+    }
+
+    .rating-number{
+      font-size:38px;
+      line-height:1;
+      font-weight:900;
+      color:var(--brand);
+    }
+
+    .rating-stars{
+      margin-top:8px;
+      color:#f59e0b;
+      letter-spacing:2px;
+      font-size:17px;
+    }
+
+    .rating-count{
+      margin-top:7px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .rating-bars{
+      display:grid;
+      gap:8px;
+    }
+
+    .rating-bar-row{
+      display:grid;
+      grid-template-columns:34px minmax(0,1fr) 28px;
+      gap:8px;
+      align-items:center;
+      color:var(--muted);
+      font-size:11.5px;
+    }
+
+    .rating-track{
+      height:8px;
+      overflow:hidden;
+      border-radius:999px;
+      background:#eef2f6;
+    }
+
+    .rating-fill{
+      height:100%;
+      border-radius:999px;
+      background:#f59e0b;
+    }
+
+    .reviews-list{
+      margin-top:18px;
+      display:grid;
+      gap:11px;
+    }
+
+    .review-card{
+      padding:15px;
+      border:1px solid var(--line);
+      border-radius:13px;
+      background:#fff;
+    }
+
+    .review-header{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+    }
+
+    .review-header strong{
+      font-size:13.5px;
+    }
+
+    .review-card-stars{
+      color:#f59e0b;
+      letter-spacing:1px;
+    }
+
+    .review-product{
+      margin:6px 0 0;
+      color:var(--brand);
+      font-size:11.5px;
+      font-weight:700;
+    }
+
+    .review-comment{
+      margin:10px 0 7px;
+      color:#344054;
+      line-height:1.65;
+      font-size:13.5px;
+      white-space:pre-wrap;
+    }
+
+    .review-date{
+      margin:0;
+      color:#98a2b3;
+      font-size:11px;
+    }
+
+    .review-photo{
+      display:block;
+      max-width:220px;
+      max-height:180px;
+      margin-top:10px;
+      border-radius:10px;
+      object-fit:cover;
+    }
+
+    @media (max-width:620px){
+      .reviews-summary{grid-template-columns:1fr}
+    }
+
+
+    .report-modal-overlay{display:none;position:fixed;inset:0;z-index:1200;padding:18px;background:rgba(15,23,42,.58);align-items:center;justify-content:center}
+    .report-modal-overlay.open{display:flex}
+    .report-modal{width:min(430px,100%);padding:22px;border-radius:16px;background:#fff;box-shadow:0 20px 60px rgba(15,23,42,.22)}
+    .report-modal h3{margin:0 0 5px;font-size:18px}
+    .report-modal p{margin:0 0 15px;color:var(--muted);font-size:12.5px;line-height:1.55}
+    .report-modal label{display:block;margin:12px 0 6px;font-size:12.5px;font-weight:800}
+    .report-modal select,.report-modal textarea{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:#fff;font:inherit;font-size:13px}
+    .report-modal textarea{min-height:90px;resize:vertical}
+    .report-modal-actions{display:flex;gap:9px;margin-top:17px}
+    .report-modal-actions button{flex:1;min-height:40px;border-radius:9px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
+    .report-modal-actions .submit-report{border-color:var(--danger);background:var(--danger);color:#fff}
+    .report-modal-actions button:disabled{opacity:.6;cursor:not-allowed}
+    .report-feedback{display:none;margin-top:11px;padding:10px 11px;border-radius:9px;font-size:12px;line-height:1.5}
+    .report-feedback.success{display:block;color:var(--success);background:var(--success-soft)}
+    .report-feedback.error{display:block;color:var(--danger);background:var(--danger-soft)}
+
     @media (max-width: 900px) {
       .profile-top {
         grid-template-columns: auto 1fr;
@@ -694,6 +838,10 @@
               <button id="shareBtn" class="action-btn" type="button">
                 Share
               </button>
+
+              <button id="reportSellerBtn" class="action-btn" type="button">
+                Report
+              </button>
             </div>
 
           </div>
@@ -760,6 +908,27 @@
 
             <div id="productEmpty" class="empty-state hidden">
               No active products are currently available from this reseller.
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2 class="panel-title">Seller Reviews</h2>
+            <p class="panel-sub">
+              Reviews can only be left by buyers after a completed WaterSide deal.
+            </p>
+
+            <div class="reviews-summary">
+              <div class="rating-score">
+                <div id="reviewAverage" class="rating-number">—</div>
+                <div id="reviewAverageStars" class="rating-stars">☆☆☆☆☆</div>
+                <div id="reviewCountText" class="rating-count">No reviews yet</div>
+              </div>
+
+              <div id="ratingBars" class="rating-bars"></div>
+            </div>
+
+            <div id="resellerReviewsList" class="reviews-list">
+              <div class="empty-state">Loading reviews...</div>
             </div>
           </section>
 
@@ -835,6 +1004,35 @@
 
   </main>
 
+
+  <div id="reportSellerModal" class="report-modal-overlay" aria-hidden="true">
+    <div class="report-modal" role="dialog" aria-modal="true" aria-labelledby="reportSellerTitle">
+      <h3 id="reportSellerTitle">Report this reseller</h3>
+      <p>Report suspicious, misleading, abusive, or unsafe activity. WaterSide will review your report.</p>
+
+      <label for="reportSellerReason">Reason</label>
+      <select id="reportSellerReason">
+        <option value="">Choose a reason</option>
+        <option value="suspected_scam">Suspected scam or fraud</option>
+        <option value="fake_profile">Fake or misleading profile</option>
+        <option value="abusive_behavior">Abusive or threatening behavior</option>
+        <option value="prohibited_items">Selling prohibited items</option>
+        <option value="impersonation">Impersonation</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="reportSellerDetails">Details</label>
+      <textarea id="reportSellerDetails" maxlength="1000" placeholder="Explain what happened..."></textarea>
+
+      <div id="reportSellerFeedback" class="report-feedback"></div>
+
+      <div class="report-modal-actions">
+        <button id="cancelSellerReportBtn" type="button">Cancel</button>
+        <button id="submitSellerReportBtn" class="submit-report" type="button">Submit Report</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="lm-footer" id="marketplaceFooter">
     <div class="lm-footer-simple site-shell">
       <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
@@ -853,12 +1051,15 @@
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
     import {
+      addDoc,
       collection,
       deleteDoc,
       doc,
       getDoc,
       getDocs,
+      orderBy,
       query,
+      serverTimestamp,
       setDoc,
       where
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
@@ -886,6 +1087,13 @@
     const callBtn = document.getElementById("callBtn");
     const whatsappBtn = document.getElementById("whatsappBtn");
     const shareBtn = document.getElementById("shareBtn");
+    const reportSellerBtn = document.getElementById("reportSellerBtn");
+    const reportSellerModal = document.getElementById("reportSellerModal");
+    const reportSellerReason = document.getElementById("reportSellerReason");
+    const reportSellerDetails = document.getElementById("reportSellerDetails");
+    const reportSellerFeedback = document.getElementById("reportSellerFeedback");
+    const cancelSellerReportBtn = document.getElementById("cancelSellerReportBtn");
+    const submitSellerReportBtn = document.getElementById("submitSellerReportBtn");
 
     const contactName = document.getElementById("contactName");
     const contactPhone = document.getElementById("contactPhone");
@@ -895,6 +1103,12 @@
     const productSearch = document.getElementById("productSearch");
     const productGrid = document.getElementById("productGrid");
     const productEmpty = document.getElementById("productEmpty");
+
+    const reviewAverage = document.getElementById("reviewAverage");
+    const reviewAverageStars = document.getElementById("reviewAverageStars");
+    const reviewCountText = document.getElementById("reviewCountText");
+    const ratingBars = document.getElementById("ratingBars");
+    const resellerReviewsList = document.getElementById("resellerReviewsList");
 
     const params = new URLSearchParams(window.location.search);
 
@@ -1177,6 +1391,114 @@
       });
     }
 
+
+    function reviewStars(rating) {
+      const rounded = Math.max(0, Math.min(5, Math.round(Number(rating) || 0)));
+      return "★".repeat(rounded) + "☆".repeat(5 - rounded);
+    }
+
+    function reviewDate(value) {
+      if (!value) return "";
+      const date = typeof value.toDate === "function"
+        ? value.toDate()
+        : value.seconds
+          ? new Date(value.seconds * 1000)
+          : new Date(value);
+
+      return Number.isNaN(date.getTime())
+        ? ""
+        : date.toLocaleDateString([], {
+            year:"numeric",
+            month:"short",
+            day:"numeric"
+          });
+    }
+
+    async function loadReviews() {
+      try {
+        const snapshot = await getDocs(
+          query(
+            collection(db, "reviews"),
+            where("sellerId", "==", resellerId),
+            orderBy("createdAt", "desc")
+          )
+        );
+
+        const reviews = snapshot.docs.map((item) => ({
+          id:item.id,
+          ...item.data()
+        }));
+
+        if (!reviews.length) {
+          reviewAverage.textContent = "—";
+          reviewAverageStars.textContent = "☆☆☆☆☆";
+          reviewCountText.textContent = "No reviews yet";
+          ratingBars.innerHTML = "";
+          resellerReviewsList.innerHTML =
+            '<div class="empty-state">This reseller has no reviews yet.</div>';
+          return;
+        }
+
+        const counts = {1:0,2:0,3:0,4:0,5:0};
+        let total = 0;
+
+        reviews.forEach((review) => {
+          const rating = Math.max(1, Math.min(5, Number(review.rating) || 1));
+          counts[Math.round(rating)]++;
+          total += rating;
+        });
+
+        const average = total / reviews.length;
+
+        reviewAverage.textContent = average.toFixed(1);
+        reviewAverageStars.textContent = reviewStars(average);
+        reviewCountText.textContent =
+          `${reviews.length} review${reviews.length === 1 ? "" : "s"}`;
+
+        ratingBars.innerHTML = [5,4,3,2,1].map((star) => {
+          const percentage = reviews.length
+            ? Math.round((counts[star] / reviews.length) * 100)
+            : 0;
+
+          return `
+            <div class="rating-bar-row">
+              <span>${star}★</span>
+              <div class="rating-track">
+                <div class="rating-fill" style="width:${percentage}%"></div>
+              </div>
+              <span>${counts[star]}</span>
+            </div>
+          `;
+        }).join("");
+
+        resellerReviewsList.innerHTML = reviews.map((review) => `
+          <article class="review-card">
+            <div class="review-header">
+              <strong>${safeText(review.reviewerName, "WaterSide Buyer")}</strong>
+              <span class="review-card-stars">${reviewStars(review.rating)}</span>
+            </div>
+
+            ${review.productTitle
+              ? `<p class="review-product">${safeText(review.productTitle)}</p>`
+              : ""}
+
+            <p class="review-comment">${safeText(review.comment, "No written comment.")}</p>
+
+            ${review.photoUrl
+              ? `<img class="review-photo" src="${safeText(review.photoUrl)}" alt="Review photo" loading="lazy">`
+              : ""}
+
+            <p class="review-date">${reviewDate(review.createdAt)}</p>
+          </article>
+        `).join("");
+
+      } catch (error) {
+        console.error("Could not load reseller reviews:", error);
+        resellerReviewsList.innerHTML =
+          `<div class="empty-state">Could not load reviews: ${safeText(error.message)}</div>`;
+      }
+    }
+
     async function loadProducts() {
       const productsRef = collection(db, "products");
 
@@ -1289,6 +1611,80 @@
       }
     }
 
+
+    function openSellerReportModal() {
+      if (!currentUser) {
+        alert("Please log in before reporting a reseller.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      if (currentUser.uid === resellerId) {
+        alert("You cannot report your own profile.");
+        return;
+      }
+
+      reportSellerReason.value = "";
+      reportSellerDetails.value = "";
+      reportSellerFeedback.className = "report-feedback";
+      reportSellerFeedback.textContent = "";
+      reportSellerModal.classList.add("open");
+      reportSellerModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeSellerReportModal() {
+      reportSellerModal.classList.remove("open");
+      reportSellerModal.setAttribute("aria-hidden", "true");
+    }
+
+    async function submitSellerReport() {
+      const reason = reportSellerReason.value;
+      const details = reportSellerDetails.value.trim();
+
+      if (!reason) {
+        reportSellerFeedback.className = "report-feedback error";
+        reportSellerFeedback.textContent = "Please choose a reason.";
+        return;
+      }
+
+      if (details.length < 10) {
+        reportSellerFeedback.className = "report-feedback error";
+        reportSellerFeedback.textContent = "Please provide at least 10 characters of details.";
+        return;
+      }
+
+      submitSellerReportBtn.disabled = true;
+      submitSellerReportBtn.textContent = "Submitting...";
+
+      try {
+        await addDoc(collection(db, "reports"), {
+          type: "seller",
+          targetType: "reseller_profile",
+          sellerId: resellerId,
+          targetUserId: resellerId,
+          reportedBy: currentUser.uid,
+          reporterId: currentUser.uid,
+          reporterEmail: currentUser.email || "",
+          reason,
+          details,
+          status: "pending",
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+
+        reportSellerFeedback.className = "report-feedback success";
+        reportSellerFeedback.textContent = "Report submitted. WaterSide will review it.";
+        setTimeout(closeSellerReportModal, 1200);
+      } catch (error) {
+        console.error("Could not submit seller report:", error);
+        reportSellerFeedback.className = "report-feedback error";
+        reportSellerFeedback.textContent = `Could not submit report: ${error.message}`;
+      } finally {
+        submitSellerReportBtn.disabled = false;
+        submitSellerReportBtn.textContent = "Submit Report";
+      }
+    }
+
     async function shareProfile() {
       const shareData = {
         title: `${profileName.textContent} - WaterSide Reseller`,
@@ -1353,7 +1749,8 @@
 
         await Promise.all([
           loadProducts(),
-          loadFollowers()
+          loadFollowers(),
+          loadReviews()
         ]);
 
         showProfile();
@@ -1366,6 +1763,15 @@
 
     followBtn.addEventListener("click", toggleFollow);
     shareBtn.addEventListener("click", shareProfile);
+    reportSellerBtn.addEventListener("click", openSellerReportModal);
+    cancelSellerReportBtn.addEventListener("click", closeSellerReportModal);
+    submitSellerReportBtn.addEventListener("click", submitSellerReport);
+
+    reportSellerModal.addEventListener("click", (event) => {
+      if (event.target === reportSellerModal) {
+        closeSellerReportModal();
+      }
+    });
 
     productSearch.addEventListener("input", () => {
       renderProducts(resellerProducts);
