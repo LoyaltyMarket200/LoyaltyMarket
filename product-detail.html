@@ -93,6 +93,55 @@
       font-weight: 400;
     }
 
+    .material-details {
+      display: none;
+      margin: 14px 0 4px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--navy-soft);
+    }
+
+    .material-details.show { display: block; }
+
+    .material-details h3 {
+      margin: 0 0 10px;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .material-details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .material-detail-item {
+      padding: 10px 11px;
+      border: 1px solid rgba(13, 110, 110, .16);
+      border-radius: 9px;
+      background: #fff;
+    }
+
+    .material-detail-label {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .material-detail-value {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
     .detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 20px 0 12px; }
 
     .buy-now-btn, .contact-btn, .heart-btn, .whatsapp-btn, .show-contact-btn {
@@ -386,6 +435,7 @@
     @media (max-width: 480px) {
       .main-image { height: 250px; }
       .detail-price { font-size: 19px; }
+      .material-details-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -555,10 +605,32 @@
       </p>
       <p class="detail-condition" id="productCondition">Condition: Not listed</p>
 
+      <section class="material-details" id="materialDetails" aria-label="Building material details">
+        <h3>Building Material Details</h3>
+        <div class="material-details-grid">
+          <div class="material-detail-item">
+            <span class="material-detail-label">Material Type</span>
+            <span class="material-detail-value" id="materialTypeValue">—</span>
+          </div>
+          <div class="material-detail-item">
+            <span class="material-detail-label">Brand</span>
+            <span class="material-detail-value" id="materialBrandValue">—</span>
+          </div>
+          <div class="material-detail-item">
+            <span class="material-detail-label">Quantity Available</span>
+            <span class="material-detail-value" id="materialQuantityValue">—</span>
+          </div>
+          <div class="material-detail-item">
+            <span class="material-detail-label">Selling Unit</span>
+            <span class="material-detail-value" id="materialUnitValue">—</span>
+          </div>
+        </div>
+      </section>
+
       <div class="detail-actions">
         <button id="buyNowBtn" class="buy-now-btn" type="button">
-          <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M2 3h2l2.6 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20 7H5.2"/></svg>
-          Buy Now
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.4a8.4 8.4 0 1 1 16.1-4.1Z"/></svg>
+          Arrange Purchase
         </button>
         <a id="whatsappBtn" class="whatsapp-btn" href="#" target="_blank" rel="noopener" style="display:none;">
           <svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.4a8.4 8.4 0 1 1 16.1-4.1Z"/></svg>
@@ -657,60 +729,29 @@
 
   <div class="checkout-modal-overlay" id="checkoutModalOverlay">
     <div class="checkout-modal">
+      <h3>Arrange Purchase</h3>
+      <p class="checkout-modal-subtitle">Contact the seller and agree on the meeting, delivery, and payment directly.</p>
 
-      <div id="checkoutFormScreen">
-        <h3>Complete Your Order</h3>
-        <p class="checkout-modal-subtitle">Choose how you'd like to pay.</p>
-
-        <div class="checkout-summary">
-          <img id="checkoutSummaryImage" src="" alt="">
-          <div>
-            <div class="checkout-summary-title" id="checkoutSummaryTitle"></div>
-            <div class="checkout-summary-price" id="checkoutSummaryPrice"></div>
-          </div>
+      <div class="checkout-summary">
+        <img id="checkoutSummaryImage" src="" alt="">
+        <div>
+          <div class="checkout-summary-title" id="checkoutSummaryTitle"></div>
+          <div class="checkout-summary-price" id="checkoutSummaryPrice"></div>
         </div>
-
-        <p class="checkout-section-label">Payment Option</p>
-
-        <label class="payment-option-card selected" data-payment-option="instant">
-          <input type="radio" name="paymentOption" value="instant" checked>
-          <div class="payment-option-title">Pay Now</div>
-          <div class="payment-option-desc">Payment goes to the seller right away. Fastest option.</div>
-        </label>
-
-        <label class="payment-option-card" data-payment-option="protected">
-          <input type="radio" name="paymentOption" value="protected">
-          <div class="payment-option-title">Pay With Protection <span class="payment-option-badge">Safer</span></div>
-          <div class="payment-option-desc">Waterside holds your payment until you confirm you received the item.</div>
-        </label>
-
-        <p class="checkout-section-label">Pay With</p>
-
-        <div class="provider-row">
-          <button type="button" class="provider-btn selected" id="mtnProviderBtn" data-provider="mtn">MTN Mobile Money</button>
-          <button type="button" class="provider-btn" id="orangeProviderBtn" data-provider="orange">Orange Money</button>
-        </div>
-
-        <input type="tel" id="checkoutPhoneInput" class="checkout-phone-input" placeholder="Mobile Money number to pay from">
-
-        <div class="checkout-note">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg>
-          <span>You'll get a prompt on your phone to approve this payment. Nothing is charged until you approve it there.</span>
-        </div>
-
-        <button type="button" class="checkout-submit-btn" id="checkoutSubmitBtn">Confirm &amp; Pay</button>
-        <button type="button" class="checkout-cancel-btn" id="checkoutCancelBtn">Cancel</button>
       </div>
 
-      <div class="checkout-pending-screen" id="checkoutPendingScreen">
-        <div class="checkout-pending-icon">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7.9 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2Z"/></svg>
-        </div>
-        <h4 id="checkoutPendingHeading">Check Your Phone</h4>
-        <p id="checkoutPendingText">A payment request has been sent to your Mobile Money number. Approve it there to complete your order.</p>
-        <button type="button" class="checkout-pending-done-btn" id="checkoutPendingDoneBtn">Done</button>
+      <div class="checkout-note">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg>
+        <span><strong>WaterSide does not process payments.</strong> Meet in a safe public place, inspect the item, and only pay when satisfied. Never send advance payment to an unknown seller.</span>
       </div>
 
+      <div class="provider-row" style="margin-top:16px;">
+        <a id="arrangeWhatsAppBtn" class="provider-btn" href="#" target="_blank" rel="noopener" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">WhatsApp Seller</a>
+        <a id="arrangeCallBtn" class="provider-btn" href="#" style="text-decoration:none;display:flex;align-items:center;justify-content:center;">Call Seller</a>
+      </div>
+
+      <button type="button" class="checkout-submit-btn" id="arrangeChatBtn">Chat on WaterSide</button>
+      <button type="button" class="checkout-cancel-btn" id="checkoutCancelBtn">Cancel</button>
     </div>
   </div>
 
@@ -829,12 +870,6 @@ import {
   doc, getDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, query, where, limit, getDocs, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
-
-const functions = getFunctions();
-const requestMomoPaymentFn = httpsCallable(functions, "requestMomoPayment");
-const checkMomoPaymentStatusFn = httpsCallable(functions, "checkMomoPaymentStatus");
-
 const DEFAULT_SETTINGS = {
   marketplaceName: "Waterside",
   supportEmail: "princeteah200@gmail.com",
@@ -849,6 +884,11 @@ const postedTimeLine = document.getElementById("postedTimeLine");
 const productPrice = document.getElementById("productPrice");
 const productLocation = document.getElementById("productLocation");
 const productCondition = document.getElementById("productCondition");
+const materialDetails = document.getElementById("materialDetails");
+const materialTypeValue = document.getElementById("materialTypeValue");
+const materialBrandValue = document.getElementById("materialBrandValue");
+const materialQuantityValue = document.getElementById("materialQuantityValue");
+const materialUnitValue = document.getElementById("materialUnitValue");
 const productDescription = document.getElementById("productDescription");
 const productImage = document.getElementById("productImage");
 const thumbnailStrip = document.getElementById("thumbnailStrip");
@@ -925,7 +965,7 @@ let unsubscribeUnreadMessages = null;
 let contactRevealed = false;
 let locationRevealed = false;
 let discoverMoreOpen = false;
-let paymentPollIntervalId = null;
+let productLoaded = false;
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&h=700&fit=crop";
 
@@ -1095,75 +1135,57 @@ async function toggleSave() {
 }
 
 const checkoutModalOverlay = document.getElementById("checkoutModalOverlay");
-const checkoutFormScreen = document.getElementById("checkoutFormScreen");
-const checkoutPendingScreen = document.getElementById("checkoutPendingScreen");
 const checkoutSummaryImage = document.getElementById("checkoutSummaryImage");
 const checkoutSummaryTitle = document.getElementById("checkoutSummaryTitle");
 const checkoutSummaryPrice = document.getElementById("checkoutSummaryPrice");
-const checkoutPhoneInput = document.getElementById("checkoutPhoneInput");
-const checkoutSubmitBtn = document.getElementById("checkoutSubmitBtn");
 const checkoutCancelBtn = document.getElementById("checkoutCancelBtn");
-const checkoutPendingHeading = document.getElementById("checkoutPendingHeading");
-const checkoutPendingText = document.getElementById("checkoutPendingText");
-const checkoutPendingDoneBtn = document.getElementById("checkoutPendingDoneBtn");
-const paymentOptionCards = document.querySelectorAll(".payment-option-card");
-const providerButtons = document.querySelectorAll(".provider-btn");
-
-let selectedPaymentOption = "instant";
-let selectedProvider = "mtn";
+const arrangeWhatsAppBtn = document.getElementById("arrangeWhatsAppBtn");
+const arrangeCallBtn = document.getElementById("arrangeCallBtn");
+const arrangeChatBtn = document.getElementById("arrangeChatBtn");
 
 function openCheckoutModal() {
+  if (!productLoaded) {
+    alert("This listing is still loading. Please wait a moment and try again.");
+    return;
+  }
+
   if (!currentUser) {
-    alert("Please log in to buy a product.");
-    window.location.href = "login.html";
+    alert("Please log in to contact the seller.");
+    window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.href);
     return;
   }
 
   if (!productId) return;
 
   if (currentUser.uid === loadedSellerId) {
-    alert("You can't buy your own listing.");
+    alert("You can't arrange a purchase for your own listing.");
     return;
   }
 
   checkoutSummaryImage.src = loadedImage || FALLBACK_IMAGE;
   checkoutSummaryTitle.textContent = loadedProductTitle;
   checkoutSummaryPrice.textContent = `US$${loadedPriceUsd} | L$${loadedPriceLrd}`;
-  checkoutPhoneInput.value = "";
 
-  checkoutFormScreen.style.display = "block";
-  checkoutPendingScreen.classList.remove("open");
-  checkoutModalOverlay.classList.add("modal-open");
-}
+  const cleanPhone = String(loadedPhone || "").replace(/[^\d+]/g, "");
+  const whatsappPhone = cleanPhone.replace(/^\+/, "");
+  const message = encodeURIComponent(`Hello, I am interested in ${loadedProductTitle} on WaterSide. Is it still available?`);
 
-function stopPaymentPolling() {
-  if (paymentPollIntervalId) {
-    clearInterval(paymentPollIntervalId);
-    paymentPollIntervalId = null;
+  if (whatsappPhone) {
+    arrangeWhatsAppBtn.href = `https://wa.me/${whatsappPhone}?text=${message}`;
+    arrangeWhatsAppBtn.style.display = "flex";
+    arrangeCallBtn.href = `tel:${cleanPhone}`;
+    arrangeCallBtn.style.display = "flex";
+  } else {
+    arrangeWhatsAppBtn.style.display = "none";
+    arrangeCallBtn.style.display = "none";
   }
+
+  checkoutModalOverlay.classList.add("modal-open");
 }
 
 function closeCheckoutModal() {
   checkoutModalOverlay.classList.remove("modal-open");
-  stopPaymentPolling();
 }
-
-paymentOptionCards.forEach((card) => {
-  card.addEventListener("click", () => {
-    paymentOptionCards.forEach((c) => c.classList.remove("selected"));
-    card.classList.add("selected");
-    card.querySelector("input").checked = true;
-    selectedPaymentOption = card.dataset.paymentOption;
-  });
-});
-
-providerButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    providerButtons.forEach((b) => b.classList.remove("selected"));
-    button.classList.add("selected");
-    selectedProvider = button.dataset.provider;
-  });
-});
 
 checkoutCancelBtn.addEventListener("click", closeCheckoutModal);
 
@@ -1171,133 +1193,128 @@ checkoutModalOverlay.addEventListener("click", (event) => {
   if (event.target === checkoutModalOverlay) closeCheckoutModal();
 });
 
-// Polls checkMomoPaymentStatus every 5 seconds after a Request-to-Pay
-// has been sent, so the buyer sees the pending screen update the
-// moment they approve (or reject) the prompt on their phone, instead
-// of staying stuck on "Check Your Phone" forever with no feedback.
-function startPaymentPolling(orderId) {
-  stopPaymentPolling();
-
-  paymentPollIntervalId = setInterval(async () => {
-    try {
-      const result = await checkMomoPaymentStatusFn({ orderId });
-      const status = result?.data?.status;
-
-      if (status === "paid" || status === "confirmed") {
-        stopPaymentPolling();
-        checkoutPendingHeading.textContent = "Payment Confirmed";
-        checkoutPendingText.textContent = "Your payment was approved. Redirecting you to your orders...";
-        setTimeout(() => {
-          closeCheckoutModal();
-          window.location.href = "orders.html";
-        }, 1800);
-      } else if (status === "failed") {
-        stopPaymentPolling();
-        checkoutPendingHeading.textContent = "Payment Failed";
-        checkoutPendingText.textContent = "The payment was not approved or timed out. You can try again from your Orders page.";
-      }
-      // Any other status (e.g. "pending_confirmation") just keeps polling.
-    } catch (error) {
-      console.error("Payment status check failed:", error.message);
-    }
-  }, 5000);
-}
-
-async function submitCheckout() {
-  const phone = checkoutPhoneInput.value.trim();
-
-  if (!phone || phone.replace(/[^\d]/g, "").length < 8) {
-    alert("Enter a valid Mobile Money number to continue.");
-    return;
+async function createPurchaseRequest() {
+  if (!currentUser) {
+    window.location.href =
+      "login.html?redirect=" + encodeURIComponent(window.location.href);
+    return false;
   }
 
-  checkoutSubmitBtn.disabled = true;
-  checkoutSubmitBtn.textContent = "Sending Request...";
+  if (!productId || !loadedSellerId) {
+    alert("The product or seller information is missing.");
+    return false;
+  }
+
+  if (currentUser.uid === loadedSellerId) {
+    alert("You cannot arrange a purchase for your own listing.");
+    return false;
+  }
+
+  // Prevent duplicate active requests for the same buyer/product, but
+  // always create a brand-new order document instead of reusing an old
+  // one — Firestore treats writing to an existing doc ID as an update,
+  // and our rules don't allow a buyer to reopen a cancelled order that way.
+  const activeOrdersQuery = query(
+    collection(db, "orders"),
+    where("buyerId", "==", currentUser.uid),
+    where("productId", "==", productId)
+  );
+  const existingOrdersSnapshot = await getDocs(activeOrdersQuery);
+
+  const hasActiveOrder = existingOrdersSnapshot.docs.some((docSnap) => {
+    const existingStatus = String(docSnap.data().status || "pending").toLowerCase();
+    return ["pending", "confirmed", "completed"].includes(existingStatus);
+  });
+
+  if (hasActiveOrder) {
+    return true;
+  }
+
+  const orderRef = doc(collection(db, "orders"));
+
+  let buyerName = currentUser.displayName || "WaterSide Buyer";
+  let buyerPhone = "";
 
   try {
-    const orderRef = await addDoc(collection(db, "orders"), {
-      productId: productId,
-      productTitle: loadedProductTitle,
-      productImage: loadedImage,
-      priceUsd: loadedPriceUsd,
-      priceLrd: loadedPriceLrd,
-      buyerId: currentUser.uid,
-      buyerEmail: currentUser.email,
-      sellerId: loadedSellerId,
-      status: "pending",
-      paymentMethod: selectedProvider,
-      paymentPhone: phone,
-      protectionEnabled: selectedPaymentOption === "protected",
-      paymentStatus: "awaiting_payment",
+    const buyerSnapshot = await getDoc(
+      doc(db, "users", currentUser.uid)
+    );
+
+    if (buyerSnapshot.exists()) {
+      const buyerData = buyerSnapshot.data();
+
+      buyerName =
+        buyerData.name ||
+        buyerData.fullName ||
+        currentUser.displayName ||
+        "WaterSide Buyer";
+
+      buyerPhone =
+        buyerData.phone ||
+        buyerData.businessPhone ||
+        "";
+    }
+  } catch (profileError) {
+    console.warn("Could not load buyer profile:", profileError);
+  }
+
+  await setDoc(orderRef, {
+    buyerId: currentUser.uid,
+    buyerName,
+    buyerPhone,
+    sellerId: loadedSellerId,
+    productId,
+    productTitle: loadedProductTitle,
+    productImage: loadedImage || FALLBACK_IMAGE,
+    priceUsd: loadedPriceUsd,
+    priceLrd: loadedPriceLrd,
+    status: "pending",
+    source: "arrange_purchase",
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  });
+
+  try {
+    await addDoc(collection(db, "notifications"), {
+      userId: loadedSellerId,
+      type: "order",
+      title: "New purchase request",
+      body: `${buyerName} is interested in ${loadedProductTitle}.`,
+      link: "my-sales.html",
+      read: false,
       createdAt: serverTimestamp()
     });
-
-    try {
-      await addDoc(collection(db, "notifications"), {
-        userId: loadedSellerId,
-        type: "order",
-        title: "New order for " + loadedProductTitle,
-        body: "A buyer started a payment for US$" + loadedPriceUsd,
-        link: "my-sales.html",
-        read: false,
-        createdAt: serverTimestamp()
-      });
-    } catch (notifyError) {
-      // Notification is a nice-to-have; don't block the order.
-    }
-
-    const providerName = selectedProvider === "mtn" ? "MTN Mobile Money" : "Orange Money";
-
-    if (selectedProvider === "mtn") {
-      // Real Request-to-Pay: calls the requestMomoPayment Cloud
-      // Function (sandbox), which sends the actual prompt to the
-      // buyer's phone and updates this order's paymentStatus to
-      // "pending_confirmation" server-side. We then poll every 5
-      // seconds until it resolves to paid/confirmed or failed.
-      try {
-        await requestMomoPaymentFn({
-          orderId: orderRef.id,
-          phone: phone,
-          amountUsd: loadedPriceUsd
-        });
-
-        checkoutPendingHeading.textContent = "Check Your Phone";
-        checkoutPendingText.textContent =
-          `A payment request has been sent to ${phone} via ${providerName}. Approve it there to complete your order.`;
-
-        startPaymentPolling(orderRef.id);
-
-      } catch (momoError) {
-        checkoutPendingHeading.textContent = "Could Not Reach MTN";
-        checkoutPendingText.textContent =
-          "Your order was created, but we couldn't send the payment request right now (" + momoError.message + "). You can retry payment from your Orders page.";
-      }
-    } else {
-      // Orange Money production integration isn't built yet — the
-      // order is still created for tracking, but no real
-      // Request-to-Pay is sent. Being upfront about that here
-      // instead of implying a prompt is coming.
-      checkoutPendingHeading.textContent = "Order Placed";
-      checkoutPendingText.textContent =
-        "Orange Money automatic payment isn't available yet. Your order has been recorded — please contact the seller to arrange payment, or check your Orders page for updates.";
-    }
-
-    checkoutFormScreen.style.display = "none";
-    checkoutPendingScreen.classList.add("open");
-
-  } catch (error) {
-    alert("Could not start checkout: " + error.message);
-  } finally {
-    checkoutSubmitBtn.disabled = false;
-    checkoutSubmitBtn.textContent = "Confirm & Pay";
+  } catch (notificationError) {
+    console.warn("Could not notify the seller:", notificationError);
   }
+
+  return true;
 }
 
-checkoutSubmitBtn.addEventListener("click", submitCheckout);
+arrangeChatBtn.addEventListener("click", async () => {
+  arrangeChatBtn.disabled = true;
+  arrangeChatBtn.textContent = "Creating Request...";
 
-checkoutPendingDoneBtn.addEventListener("click", () => {
-  closeCheckoutModal();
-  window.location.href = "orders.html";
+  try {
+    const requestCreated = await createPurchaseRequest();
+    if (!requestCreated) return;
+
+    closeCheckoutModal();
+
+    const message =
+      "I am interested in this item. Is it still available?";
+
+    window.location.href =
+      "chat.html?product=" + encodeURIComponent(productId) +
+      "&seller=" + encodeURIComponent(loadedSellerId) +
+      "&message=" + encodeURIComponent(message);
+  } catch (error) {
+    console.error("Could not create purchase request:", error);
+    alert("Could not create the purchase request: " + error.message);
+  } finally {
+    arrangeChatBtn.disabled = false;
+    arrangeChatBtn.textContent = "Chat on WaterSide";
+  }
 });
 
 function buyNow() {
@@ -1437,6 +1454,30 @@ function showUnavailable(message) {
   document.title = "Listing Unavailable - Waterside";
 }
 
+function renderMaterialDetails(product) {
+  const isBuildingMaterial = product.category === "Building Materials";
+
+  if (!isBuildingMaterial) {
+    materialDetails.classList.remove("show");
+    return;
+  }
+
+  const materialType = product.materialType || "Not specified";
+  const materialBrand = product.materialBrand || "Not specified";
+  const materialQuantity = product.materialQuantity || "Not specified";
+  const materialUnit = product.materialUnit || "Not specified";
+
+  materialTypeValue.textContent = materialType;
+  materialBrandValue.textContent = materialBrand;
+  materialQuantityValue.textContent =
+    materialQuantity !== "Not specified" && materialUnit !== "Not specified"
+      ? `${materialQuantity} ${materialUnit}${Number(materialQuantity) === 1 ? "" : "s"}`
+      : materialQuantity;
+  materialUnitValue.textContent = materialUnit;
+
+  materialDetails.classList.add("show");
+}
+
 async function loadProduct() {
   if (!productId) {
     showUnavailable("No product ID was provided.");
@@ -1493,6 +1534,7 @@ async function loadProduct() {
     productPrice.textContent = `US$${priceUsd} | L$${priceLrd}`;
     productLocation.innerHTML = `${LOCATION_SVG} ${safeText(city)}, ${safeText(county)}`;
     productCondition.textContent = `Condition: ${condition}`;
+    renderMaterialDetails(product);
     productDescription.textContent = description;
     productImage.src = images[0];
     productImage.alt = title;
@@ -1523,6 +1565,8 @@ async function loadProduct() {
     breadcrumbCategory.textContent = category;
     breadcrumbTitle.textContent = title;
     document.title = `${title} - Waterside`;
+
+    productLoaded = true;
 
     if (currentUser) checkIfSaved();
 
@@ -1707,20 +1751,20 @@ onAuthStateChanged(auth, (user) => {
   currentUser = user;
 
   if (user) {
-    loginBtn.style.display = "none";
-    registerBtn.style.display = "none";
-    dashboardBtn.style.display = "inline-block";
-    messagesBtn.style.display = "inline-block";
+    if (loginBtn) loginBtn.style.display = "none";
+    if (registerBtn) registerBtn.style.display = "none";
+    if (dashboardBtn) dashboardBtn.style.display = "inline-block";
+    if (messagesBtn) messagesBtn.style.display = "inline-block";
 
     listenForUnreadMessages(user.uid);
     touchLastActive(user.uid);
   } else {
-    loginBtn.style.display = "inline-block";
-    registerBtn.style.display = "inline-block";
-    dashboardBtn.style.display = "none";
-    messagesBtn.style.display = "none";
+    if (loginBtn) loginBtn.style.display = "inline-block";
+    if (registerBtn) registerBtn.style.display = "inline-block";
+    if (dashboardBtn) dashboardBtn.style.display = "none";
+    if (messagesBtn) messagesBtn.style.display = "none";
 
-    unreadBadge.classList.remove("has-unread");
+    if (unreadBadge) unreadBadge.classList.remove("has-unread");
     unsubscribeUnreadMessages?.();
     unsubscribeUnreadMessages = null;
   }
@@ -1728,8 +1772,8 @@ onAuthStateChanged(auth, (user) => {
   if (!authReady) {
     authReady = true;
     loadProduct();
-  } else {
-    if (currentUser) checkIfSaved();
+  } else if (currentUser) {
+    checkIfSaved();
   }
 });
 

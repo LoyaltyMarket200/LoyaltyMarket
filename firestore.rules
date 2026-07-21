@@ -47,36 +47,52 @@ service cloud.firestore {
       // Public seller and business profiles
       allow read: if true;
 
-      // Users can create only their own profile
+      // Users can create only their own personal profile.
+      // Trust badges and elevated account types are admin-controlled.
       allow create: if isSignedIn()
         && request.auth.uid == userId
         && request.resource.data.verified == false
         && request.resource.data.businessVerified == false
+        && request.resource.data.get("isBusinessVerified", false) == false
+        && request.resource.data.get("resellerVerified", false) == false
+        && request.resource.data.get("isResellerVerified", false) == false
         && request.resource.data.suspended == false
+        && request.resource.data.get("accountType", "personal") == "personal"
         && (
           request.resource.data.role == "user"
-          || (
-            isAdmin()
-            && request.resource.data.role == "admin"
-          )
+          || (isAdmin() && request.resource.data.role == "admin")
         );
 
       // Admin can update every user field.
-      // Normal users cannot change protected fields.
+      // Normal users may edit profile/application information, but cannot
+      // approve themselves or change protected account/verification fields.
       allow update: if isAdmin()
         || (
           isActiveUser()
           && request.auth.uid == userId
-          && !request.resource.data
-            .diff(resource.data)
-            .affectedKeys()
-            .hasAny([
-              "verified",
-              "businessVerified",
-              "suspended",
-              "role",
-              "email"
-            ])
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+            "verified",
+            "businessVerified",
+            "isBusinessVerified",
+            "resellerVerified",
+            "isResellerVerified",
+            "suspended",
+            "role",
+            "email",
+            "accountType",
+            "businessReviewedBy",
+            "businessReviewedAt",
+            "resellerReviewedBy",
+            "resellerReviewedAt",
+            "sellerVerificationReviewedBy",
+            "sellerVerificationReviewedAt"
+          ])
+          && request.resource.data.get("businessApplicationStatus", "")
+            in [resource.data.get("businessApplicationStatus", ""), "pending"]
+          && request.resource.data.get("resellerApplicationStatus", "")
+            in [resource.data.get("resellerApplicationStatus", ""), "pending"]
+          && request.resource.data.get("sellerVerificationStatus", "")
+            in [resource.data.get("sellerVerificationStatus", ""), "pending"]
         );
 
       // Only admin can delete profiles
@@ -97,10 +113,7 @@ service cloud.firestore {
         && request.resource.data.sellerId == request.auth.uid
         && request.resource.data.sellerEmail
           == request.auth.token.email
-        && request.resource.data.status in [
-          "active",
-          "pending_review"
-        ]
+        && request.resource.data.status == "pending_review"
         && request.resource.data.featured != true;
 
       // Admin can update all listing information.
@@ -457,6 +470,83 @@ service cloud.firestore {
         );
 
       // Only admin can delete orders
+      allow delete: if isAdmin();
+    }
+
+
+    // ==========================================
+    // RESELLER APPLICATIONS
+    // ==========================================
+
+    match /resellerApplications/{userId} {
+
+      // The applicant and admin can read the application.
+      allow read: if isAdmin()
+        || (
+          isSignedIn()
+          && request.auth.uid == userId
+          && resource.data.userId == request.auth.uid
+        );
+
+      // An active user can create only their own pending application.
+      allow create: if isActiveUser()
+        && request.auth.uid == userId
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.status == "pending"
+        && request.resource.data.permissionAgreement == true
+        && request.resource.data.canRepresentMultipleOwners == true
+        && request.resource.data.resellerName is string
+        && request.resource.data.resellerName.size() > 0
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() > 0
+        && request.resource.data.county is string
+        && request.resource.data.county.size() > 0
+        && request.resource.data.city is string
+        && request.resource.data.city.size() > 0
+        && request.resource.data.categories is list
+        && request.resource.data.categories.size() > 0
+        && request.resource.data.experienceYears is number
+        && request.resource.data.experienceYears >= 0
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0
+        && request.resource.data.reason is string
+        && request.resource.data.reason.size() > 0
+        && request.resource.data.ownerPlan is string
+        && request.resource.data.ownerPlan.size() > 0
+        && request.resource.data.commissionPlan is string
+        && request.resource.data.commissionPlan.size() > 0;
+
+      // Admin can review any application.
+      // The applicant may update only their own application and may never
+      // approve themselves or change administrator review information.
+      allow update: if isAdmin()
+        || (
+          isActiveUser()
+          && request.auth.uid == userId
+          && resource.data.userId == request.auth.uid
+          && request.resource.data.userId == resource.data.userId
+          && request.resource.data.email == resource.data.email
+          && resource.data.status in [
+            "pending",
+            "more_information_required"
+          ]
+          && request.resource.data.status == "pending"
+          && request.resource.data.permissionAgreement == true
+          && request.resource.data.canRepresentMultipleOwners == true
+          && !request.resource.data
+            .diff(resource.data)
+            .affectedKeys()
+            .hasAny([
+              "reviewedAt",
+              "reviewedBy",
+              "adminNote",
+              "approvedAt",
+              "approvedBy"
+            ])
+        );
+
+      // Only admin can remove application records.
       allow delete: if isAdmin();
     }
 

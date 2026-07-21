@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Reseller Profile - WaterSide</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="manifest" href="manifest.json">
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="512x512"
+    href="icons/icon-512.png"
+  >
+
+  <meta name="theme-color" content="#0d6e6e">
+
+  <style>
+    :root {
+      --brand: #0d6e6e;
+      --brand-dark: #095959;
+      --brand-soft: #e7f5f5;
+      --orange: #ff6b4a;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #e5e7eb;
+      --bg: #f5f7fa;
+      --white: #ffffff;
+      --success: #15803d;
+      --success-soft: #dcfce7;
+      --warning: #92400e;
+      --warning-soft: #fef3c7;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      min-height: 58px;
+      padding: 9px max(18px, 4vw);
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--brand);
+      font-weight: 800;
+    }
+
+    .brand-link img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-link {
+      min-height: 36px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .header-link.primary {
+      border-color: var(--orange);
+      background: var(--orange);
+      color: #fff;
+    }
+
+    .page-shell {
+      width: min(1180px, 94%);
+      margin: 30px auto 70px;
+    }
+
+    .status-box {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .profile-hero {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .cover {
+      min-height: 220px;
+      padding: 28px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(13, 110, 110, 0.98),
+          rgba(19, 78, 114, 0.95)
+        );
+      color: #fff;
+      display: flex;
+      align-items: flex-end;
+      position: relative;
+    }
+
+    .cover.has-image {
+      background-size: cover;
+      background-position: center;
+    }
+
+    .cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.08),
+          rgba(0, 0, 0, 0.58)
+        );
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+    }
+
+    .hero-kicker {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .hero-title {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.04;
+    }
+
+    .hero-summary {
+      margin: 10px 0 0;
+      max-width: 650px;
+      font-size: 14px;
+      line-height: 1.65;
+      opacity: 0.94;
+    }
+
+    .profile-main {
+      padding: 0 26px 26px;
+    }
+
+    .profile-top {
+      margin-top: -48px;
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 20px;
+      align-items: end;
+    }
+
+    .avatar {
+      width: 118px;
+      height: 118px;
+      border-radius: 24px;
+      border: 5px solid #fff;
+      background: var(--brand-soft);
+      object-fit: cover;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+    }
+
+    .profile-identity {
+      padding-bottom: 8px;
+    }
+
+    .name-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .profile-name {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .badge.reseller {
+      color: #0f5132;
+      background: #d1fae5;
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge.verified {
+      color: #1d4ed8;
+      background: #dbeafe;
+      border: 1px solid #bfdbfe;
+    }
+
+    .location-line {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .profile-actions {
+      padding-bottom: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .action-btn {
+      min-height: 42px;
+      padding: 10px 15px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .action-btn.primary {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .action-btn.primary:hover {
+      background: var(--brand-dark);
+    }
+
+    .action-btn.orange {
+      border-color: var(--orange);
+      background: var(--orange);
+      color: #fff;
+    }
+
+    .stats-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--brand);
+    }
+
+    .stat-label {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .content-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.9fr) minmax(260px, 0.8fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fff;
+      box-shadow: 0 7px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .panel + .panel {
+      margin-top: 16px;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .panel-sub {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+
+    .about-text {
+      margin: 16px 0 0;
+      color: #344054;
+      line-height: 1.75;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+
+    .products-toolbar {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1 1 240px;
+      min-height: 42px;
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(13, 110, 110, 0.08);
+    }
+
+    .product-grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .product-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .product-card a {
+      text-decoration: none;
+      display: block;
+    }
+
+    .product-image {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: #eef2f6;
+    }
+
+    .product-body {
+      padding: 13px;
+    }
+
+    .product-title {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.35;
+      min-height: 38px;
+    }
+
+    .product-price {
+      margin: 9px 0 0;
+      color: var(--brand);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .product-meta {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 11.5px;
+    }
+
+    .empty-state {
+      margin-top: 16px;
+      padding: 28px 18px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      text-align: center;
+      color: var(--muted);
+      background: #fafbfc;
+    }
+
+    .trust-list {
+      margin: 15px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 11px;
+    }
+
+    .trust-list li {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .trust-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .contact-list {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .contact-row {
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fbfcfd;
+      font-size: 13px;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .contact-row strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .owner-note {
+      margin-top: 14px;
+      padding: 12px 13px;
+      border-radius: 11px;
+      color: var(--warning);
+      background: var(--warning-soft);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 900px) {
+      .profile-top {
+        grid-template-columns: auto 1fr;
+      }
+
+      .profile-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .site-header {
+        align-items: flex-start;
+      }
+
+      .header-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .cover {
+        min-height: 190px;
+        padding: 22px;
+      }
+
+      .profile-main {
+        padding: 0 15px 20px;
+      }
+
+      .profile-top {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .avatar {
+        width: 96px;
+        height: 96px;
+      }
+
+      .profile-identity {
+        margin-top: -4px;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <a href="index.html" class="brand-link">
+      <img src="icons/icon-512.png" alt="WaterSide">
+      <span>WaterSide</span>
+    </a>
+
+    <div class="header-actions">
+      <a href="index.html" class="header-link">Home</a>
+      <a href="messages.html" class="header-link">Messages</a>
+      <a href="sell.html" class="header-link primary">Post an Ad</a>
+    </div>
+  </header>
+
+  <main class="page-shell">
+
+    <div id="loadingBox" class="status-box">
+      Loading reseller profile...
+    </div>
+
+    <div id="errorBox" class="status-box hidden"></div>
+
+    <section id="profilePage" class="hidden">
+
+      <article class="profile-hero">
+
+        <div id="cover" class="cover">
+          <div class="hero-copy">
+            <p class="hero-kicker">Authorized WaterSide Reseller</p>
+            <h1 class="hero-title" id="heroTitle">Reseller Store</h1>
+            <p class="hero-summary" id="heroSummary">
+              Helping trusted owners and businesses connect with buyers across Liberia.
+            </p>
+          </div>
+        </div>
+
+        <div class="profile-main">
+
+          <div class="profile-top">
+
+            <img
+              id="avatar"
+              class="avatar"
+              src="icons/icon-512.png"
+              alt="Reseller profile photo"
+            >
+
+            <div class="profile-identity">
+              <div class="name-row">
+                <h2 class="profile-name" id="profileName">Reseller</h2>
+
+                <span class="badge reseller">
+                  ✓ Authorized Reseller
+                </span>
+
+                <span id="verifiedBadge" class="badge verified hidden">
+                  ✓ Verified Seller
+                </span>
+              </div>
+
+              <p class="location-line" id="locationLine">
+                Liberia
+              </p>
+            </div>
+
+            <div class="profile-actions">
+              <button id="followBtn" class="action-btn primary" type="button">
+                Follow Reseller
+              </button>
+
+              <a id="messageBtn" class="action-btn" href="#">
+                Message
+              </a>
+
+              <a id="callBtn" class="action-btn hidden" href="#">
+                Call
+              </a>
+
+              <a
+                id="whatsappBtn"
+                class="action-btn orange hidden"
+                href="#"
+                target="_blank"
+                rel="noopener"
+              >
+                WhatsApp
+              </a>
+
+              <button id="shareBtn" class="action-btn" type="button">
+                Share
+              </button>
+            </div>
+
+          </div>
+
+          <div class="stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-value" id="productCount">0</div>
+              <div class="stat-label">Active Products</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-value" id="followerCount">0</div>
+              <div class="stat-label">Followers</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-value" id="completedSales">0</div>
+              <div class="stat-label">Completed Sales</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-value" id="representedCount">0</div>
+              <div class="stat-label">Owners Represented</div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </article>
+
+      <div class="content-grid">
+
+        <div>
+
+          <section class="panel">
+            <h2 class="panel-title">About This Reseller</h2>
+            <p class="panel-sub">
+              Learn how this authorized reseller works with product owners and businesses.
+            </p>
+
+            <p id="aboutText" class="about-text">
+              No reseller description has been added yet.
+            </p>
+          </section>
+
+          <section class="panel">
+            <h2 class="panel-title">Products Managed by This Reseller</h2>
+            <p class="panel-sub">
+              Only approved and active listings are shown publicly.
+            </p>
+
+            <div class="products-toolbar">
+              <input
+                id="productSearch"
+                class="search-input"
+                type="search"
+                placeholder="Search this reseller's products..."
+              >
+            </div>
+
+            <div id="productGrid" class="product-grid"></div>
+
+            <div id="productEmpty" class="empty-state hidden">
+              No active products are currently available from this reseller.
+            </div>
+          </section>
+
+        </div>
+
+        <aside>
+
+          <section class="panel">
+            <h2 class="panel-title">Trust & Safety</h2>
+            <p class="panel-sub">
+              Resellers must have permission before advertising products for owners.
+            </p>
+
+            <ul class="trust-list">
+              <li>
+                <span class="trust-icon">✓</span>
+                <span>Authorized reseller account approved by WaterSide.</span>
+              </li>
+
+              <li>
+                <span class="trust-icon">✓</span>
+                <span>Can represent multiple product owners and businesses.</span>
+              </li>
+
+              <li>
+                <span class="trust-icon">✓</span>
+                <span>Commission is agreed privately with the product owner.</span>
+              </li>
+
+              <li>
+                <span class="trust-icon">!</span>
+                <span>Buyers should inspect products before paying.</span>
+              </li>
+            </ul>
+
+            <div class="owner-note">
+              WaterSide does not hold the buyer's money. Buyers, owners, and resellers
+              arrange inspection, payment, delivery, and commission directly.
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2 class="panel-title">Contact Information</h2>
+
+            <div class="contact-list">
+              <div class="contact-row">
+                <strong>Reseller Name</strong>
+                <span id="contactName">Not provided</span>
+              </div>
+
+              <div class="contact-row">
+                <strong>Phone</strong>
+                <span id="contactPhone">Not provided</span>
+              </div>
+
+              <div class="contact-row">
+                <strong>Location</strong>
+                <span id="contactLocation">Liberia</span>
+              </div>
+
+              <div class="contact-row">
+                <strong>Product Categories</strong>
+                <span id="contactCategories">Not provided</span>
+              </div>
+            </div>
+          </section>
+
+        </aside>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="lm-footer" id="marketplaceFooter">
+    <div class="lm-footer-simple site-shell">
+      <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+      <p class="lm-footer-copyright">
+        &copy; 2026 <span data-marketplace-name>WaterSide</span>
+      </p>
+    </div>
+  </footer>
+
+  <script type="module">
+
+    import { auth, db } from "./firebase.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    import {
+      collection,
+      deleteDoc,
+      doc,
+      getDoc,
+      getDocs,
+      query,
+      setDoc,
+      where
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const loadingBox = document.getElementById("loadingBox");
+    const errorBox = document.getElementById("errorBox");
+    const profilePage = document.getElementById("profilePage");
+
+    const cover = document.getElementById("cover");
+    const heroTitle = document.getElementById("heroTitle");
+    const heroSummary = document.getElementById("heroSummary");
+    const avatar = document.getElementById("avatar");
+    const profileName = document.getElementById("profileName");
+    const verifiedBadge = document.getElementById("verifiedBadge");
+    const locationLine = document.getElementById("locationLine");
+    const aboutText = document.getElementById("aboutText");
+
+    const productCount = document.getElementById("productCount");
+    const followerCount = document.getElementById("followerCount");
+    const completedSales = document.getElementById("completedSales");
+    const representedCount = document.getElementById("representedCount");
+
+    const followBtn = document.getElementById("followBtn");
+    const messageBtn = document.getElementById("messageBtn");
+    const callBtn = document.getElementById("callBtn");
+    const whatsappBtn = document.getElementById("whatsappBtn");
+    const shareBtn = document.getElementById("shareBtn");
+
+    const contactName = document.getElementById("contactName");
+    const contactPhone = document.getElementById("contactPhone");
+    const contactLocation = document.getElementById("contactLocation");
+    const contactCategories = document.getElementById("contactCategories");
+
+    const productSearch = document.getElementById("productSearch");
+    const productGrid = document.getElementById("productGrid");
+    const productEmpty = document.getElementById("productEmpty");
+
+    const params = new URLSearchParams(window.location.search);
+
+    const resellerId =
+      params.get("id")
+      || params.get("reseller")
+      || params.get("seller");
+
+    let currentUser = null;
+    let resellerProfile = null;
+    let resellerProducts = [];
+    let isFollowing = false;
+
+    function safeText(value, fallback = "") {
+      if (value === null || value === undefined) return fallback;
+      return String(value);
+    }
+
+    function cleanPhone(value) {
+      return safeText(value).replace(/[^\d+]/g, "");
+    }
+
+    function whatsappPhone(value) {
+      let phone = safeText(value).replace(/\D/g, "");
+
+      if (phone.startsWith("0")) {
+        phone = "231" + phone.slice(1);
+      }
+
+      if (!phone.startsWith("231") && phone.length <= 10) {
+        phone = "231" + phone;
+      }
+
+      return phone;
+    }
+
+    function priceText(product) {
+      const usd = product.priceUsd ?? product.priceUSD ?? "";
+      const lrd = product.priceLrd ?? product.priceLRD ?? product.priceLd ?? "";
+
+      const parts = [];
+
+      if (usd !== "" && Number(usd) > 0) {
+        parts.push(`US$${Number(usd).toLocaleString()}`);
+      }
+
+      if (lrd !== "" && Number(lrd) > 0) {
+        parts.push(`L$${Number(lrd).toLocaleString()}`);
+      }
+
+      return parts.length ? parts.join(" | ") : "Contact seller";
+    }
+
+    function productImage(product) {
+      if (Array.isArray(product.images) && product.images.length) {
+        return product.images[0];
+      }
+
+      return (
+        product.imageUrl
+        || product.imageURL
+        || product.image
+        || "icons/icon-512.png"
+      );
+    }
+
+    function showError(message) {
+      loadingBox.classList.add("hidden");
+      profilePage.classList.add("hidden");
+
+      errorBox.textContent = message;
+      errorBox.classList.remove("hidden");
+    }
+
+    function showProfile() {
+      loadingBox.classList.add("hidden");
+      errorBox.classList.add("hidden");
+      profilePage.classList.remove("hidden");
+    }
+
+    function profileLocation(data) {
+      return [
+        data.resellerCity || data.city || "",
+        data.resellerCounty || data.county || ""
+      ]
+        .filter(Boolean)
+        .join(", ") || "Liberia";
+    }
+
+    function profileCategories(data) {
+      const categories =
+        data.resellerCategories
+        || data.categories
+        || data.productCategories
+        || [];
+
+      if (Array.isArray(categories)) {
+        return categories.filter(Boolean).join(", ");
+      }
+
+      return safeText(categories, "Not provided");
+    }
+
+    function renderProfile(data) {
+      const name =
+        data.resellerName
+        || data.storeName
+        || data.businessName
+        || data.name
+        || "WaterSide Reseller";
+
+      const summary =
+        data.resellerTagline
+        || data.storeTagline
+        || "Helping trusted owners and businesses connect with buyers across Liberia.";
+
+      const about =
+        data.resellerDescription
+        || data.resellerReason
+        || data.about
+        || data.bio
+        || "This authorized reseller helps product owners and businesses advertise products, find buyers, and earn agreed commissions.";
+
+      const photo =
+        data.resellerPhotoUrl
+        || data.profilePhotoUrl
+        || data.photoURL
+        || data.photoUrl
+        || data.avatarUrl
+        || "icons/icon-512.png";
+
+      const coverUrl =
+        data.resellerCoverUrl
+        || data.coverPhotoUrl
+        || data.storeBannerUrl
+        || "";
+
+      const phone =
+        data.resellerPhone
+        || data.phone
+        || data.businessPhone
+        || "";
+
+      const location = profileLocation(data);
+      const categories = profileCategories(data);
+
+      heroTitle.textContent = name;
+      heroSummary.textContent = summary;
+      profileName.textContent = name;
+      avatar.src = photo;
+      avatar.onerror = () => {
+        avatar.src = "icons/icon-512.png";
+      };
+
+      locationLine.textContent = location;
+      aboutText.textContent = about;
+
+      contactName.textContent = name;
+      contactPhone.textContent = phone || "Not provided";
+      contactLocation.textContent = location;
+      contactCategories.textContent = categories;
+
+      if (coverUrl) {
+        cover.style.backgroundImage =
+          `linear-gradient(180deg, rgba(0,0,0,.1), rgba(0,0,0,.58)), url("${coverUrl}")`;
+        cover.classList.add("has-image");
+      }
+
+      if (
+        data.verified === true
+        || data.isVerifiedSeller === true
+        || data.sellerVerified === true
+      ) {
+        verifiedBadge.classList.remove("hidden");
+      }
+
+      if (phone) {
+        const callPhone = cleanPhone(phone);
+        callBtn.href = `tel:${callPhone}`;
+        callBtn.classList.remove("hidden");
+
+        const waPhone = whatsappPhone(phone);
+
+        if (waPhone) {
+          whatsappBtn.href =
+            `https://wa.me/${waPhone}?text=${encodeURIComponent(
+              `Hello ${name}, I found your WaterSide reseller profile.`
+            )}`;
+
+          whatsappBtn.classList.remove("hidden");
+        }
+      }
+
+      messageBtn.href =
+        `chat.html?with=${encodeURIComponent(resellerId)}`;
+
+      completedSales.textContent =
+        Number(
+          data.completedSales
+          ?? data.resellerCompletedSales
+          ?? data.salesCompleted
+          ?? 0
+        ).toLocaleString();
+
+      representedCount.textContent =
+        Number(
+          data.ownersRepresented
+          ?? data.businessesRepresented
+          ?? data.representedOwnersCount
+          ?? 0
+        ).toLocaleString();
+    }
+
+    function renderProducts(products) {
+      const term = productSearch.value.trim().toLowerCase();
+
+      const filtered = products.filter((product) => {
+        if (!term) return true;
+
+        return [
+          product.title,
+          product.category,
+          product.city,
+          product.county,
+          product.condition
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(term);
+      });
+
+      productGrid.innerHTML = "";
+      productEmpty.classList.toggle("hidden", filtered.length > 0);
+
+      filtered.forEach((product) => {
+        const card = document.createElement("article");
+        card.className = "product-card";
+
+        const link = document.createElement("a");
+        link.href =
+          `product-detail.html?id=${encodeURIComponent(product.id)}`;
+
+        const image = document.createElement("img");
+        image.className = "product-image";
+        image.src = productImage(product);
+        image.alt = safeText(product.title, "Product");
+        image.loading = "lazy";
+
+        image.onerror = () => {
+          image.src = "icons/icon-512.png";
+        };
+
+        const body = document.createElement("div");
+        body.className = "product-body";
+
+        const title = document.createElement("h3");
+        title.className = "product-title";
+        title.textContent = safeText(product.title, "Untitled listing");
+
+        const price = document.createElement("p");
+        price.className = "product-price";
+        price.textContent = priceText(product);
+
+        const meta = document.createElement("p");
+        meta.className = "product-meta";
+
+        meta.textContent = [
+          product.city,
+          product.county,
+          product.condition
+        ]
+          .filter(Boolean)
+          .join(" • ");
+
+        body.append(title, price, meta);
+        link.append(image, body);
+        card.append(link);
+        productGrid.append(card);
+      });
+    }
+
+    async function loadProducts() {
+      const productsRef = collection(db, "products");
+
+      const snapshot = await getDocs(
+        query(
+          productsRef,
+          where("sellerId", "==", resellerId)
+        )
+      );
+
+      resellerProducts = snapshot.docs
+        .map((item) => ({
+          id: item.id,
+          ...item.data()
+        }))
+        .filter((product) =>
+          product.status === "active"
+          && product.archived !== true
+        );
+
+      productCount.textContent =
+        resellerProducts.length.toLocaleString();
+
+      renderProducts(resellerProducts);
+    }
+
+    async function loadFollowers() {
+      const followersRef = collection(db, "followers");
+
+      const snapshot = await getDocs(
+        query(
+          followersRef,
+          where("sellerId", "==", resellerId)
+        )
+      );
+
+      followerCount.textContent =
+        snapshot.size.toLocaleString();
+
+      if (currentUser) {
+        isFollowing = snapshot.docs.some(
+          (item) =>
+            item.data().followerId === currentUser.uid
+        );
+
+        updateFollowButton();
+      }
+    }
+
+    function updateFollowButton() {
+      if (!currentUser) {
+        followBtn.textContent = "Log In to Follow";
+        return;
+      }
+
+      if (currentUser.uid === resellerId) {
+        followBtn.textContent = "Your Reseller Profile";
+        followBtn.disabled = true;
+        return;
+      }
+
+      followBtn.disabled = false;
+      followBtn.textContent =
+        isFollowing ? "Following ✓" : "Follow Reseller";
+    }
+
+    async function toggleFollow() {
+      if (!currentUser) {
+        window.location.href =
+          `login.html?redirect=${encodeURIComponent(
+            window.location.pathname + window.location.search
+          )}`;
+
+        return;
+      }
+
+      if (currentUser.uid === resellerId) return;
+
+      const followId = `${resellerId}_${currentUser.uid}`;
+      const followRef = doc(db, "followers", followId);
+
+      followBtn.disabled = true;
+
+      try {
+        if (isFollowing) {
+          await deleteDoc(followRef);
+          isFollowing = false;
+        } else {
+          await setDoc(followRef, {
+            sellerId: resellerId,
+            followerId: currentUser.uid,
+            createdAt: new Date()
+          });
+
+          isFollowing = true;
+        }
+
+        await loadFollowers();
+
+      } catch (error) {
+        console.error("Could not update follow status:", error);
+
+        alert(
+          "Could not update follow status: "
+          + error.message
+        );
+
+      } finally {
+        updateFollowButton();
+      }
+    }
+
+    async function shareProfile() {
+      const shareData = {
+        title: `${profileName.textContent} - WaterSide Reseller`,
+        text:
+          `View ${profileName.textContent}'s authorized reseller profile on WaterSide.`,
+        url: window.location.href
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          await navigator.clipboard.writeText(window.location.href);
+          alert("Profile link copied.");
+        }
+      } catch (error) {
+        if (error?.name !== "AbortError") {
+          console.error("Could not share profile:", error);
+        }
+      }
+    }
+
+    async function loadProfile() {
+      if (!resellerId) {
+        showError(
+          "No reseller was selected. Open this page with ?id=USER_ID."
+        );
+
+        return;
+      }
+
+      try {
+        const userSnap = await getDoc(
+          doc(db, "users", resellerId)
+        );
+
+        if (!userSnap.exists()) {
+          throw new Error("This reseller profile was not found.");
+        }
+
+        const data = userSnap.data();
+        resellerProfile = data;
+
+        const approved =
+          data.accountType === "reseller"
+          || data.resellerApproved === true
+          || data.isReseller === true;
+
+        if (!approved) {
+          throw new Error(
+            "This account is not an approved reseller account."
+          );
+        }
+
+        if (data.suspended === true) {
+          throw new Error(
+            "This reseller profile is temporarily unavailable."
+          );
+        }
+
+        renderProfile(data);
+
+        await Promise.all([
+          loadProducts(),
+          loadFollowers()
+        ]);
+
+        showProfile();
+
+      } catch (error) {
+        console.error("Could not load reseller profile:", error);
+        showError(error.message);
+      }
+    }
+
+    followBtn.addEventListener("click", toggleFollow);
+    shareBtn.addEventListener("click", shareProfile);
+
+    productSearch.addEventListener("input", () => {
+      renderProducts(resellerProducts);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      await loadProfile();
+    });
+
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch(() => {});
+    }
+  </script>
+
+</body>
+</html>

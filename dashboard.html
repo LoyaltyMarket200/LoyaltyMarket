@@ -65,9 +65,15 @@
 
     .status-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;text-transform:capitalize}
     .status-badge.active{background:var(--orange-soft);color:#c23f24}
+    .status-badge.pending_review{background:#fff7ed;color:#c2410c}
+    .status-badge.rejected{background:var(--danger-soft);color:var(--danger)}
     .status-badge.sold{background:#e5e7eb;color:#374151}
     .status-badge.archived{background:var(--navy-soft);color:var(--navy)}
     .dashboard-listing-card.is-archived-card{opacity:.7}
+    .dashboard-listing-card.is-review-card{border-color:#fed7aa}
+    .dashboard-listing-card.is-rejected-card{border-color:#fecaca}
+    .listing-status-note{margin:8px 0 0;font-size:12px;line-height:1.45;color:var(--muted)}
+    .listing-status-note.rejected{color:var(--danger)}
 
     .archive-filter-row{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;padding:5px;border-radius:999px;background:#f1f5f9;width:fit-content}
     .archive-filter-btn{background:transparent;border:none;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:500;cursor:pointer;color:var(--ink)}
@@ -129,6 +135,8 @@
     .boost-payment-input:focus{outline:none;border-color:var(--navy)}
 
     .business-badge{display:inline-flex;align-items:center;gap:4px;background:var(--navy-soft);color:var(--navy);font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;margin-top:5px}
+    .reseller-badge{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:#dcfce7;color:#15803d;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;margin-top:5px}
+    .reseller-approved-note{font-size:11.5px!important;color:#15803d!important;margin-top:5px!important}
     .dashboard-business-name{font-size:12.5px;color:var(--muted);margin-top:2px}
 
     /* Header */
@@ -247,6 +255,8 @@
       </div>
       <h3 id="userName">Loading...</h3>
       <p id="verifiedBadge"></p>
+      <p id="resellerBadgeLine" class="reseller-badge" style="display:none;">✓ Authorized Reseller</p>
+      <p id="resellerApprovedNote" class="reseller-approved-note" style="display:none;">Approved by WaterSide</p>
       <p class="dashboard-business-name" id="businessNameLine" style="display:none;"></p>
       <p id="businessBadge" style="display:none;"></p>
       <p class="member-since" id="memberSince"></p>
@@ -265,6 +275,10 @@
         <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         Post New Listing
       </a>
+      <a href="orders.html" class="dashboard-nav-link">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 5h2l2 10h10l2-7H7"/><circle cx="9" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>
+        My Orders
+      </a>
       <a href="my-sales.html" class="dashboard-nav-link">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h4.5a1.5 1.5 0 0 1 0 3H9m0-3v3m0-3h4.5a1.5 1.5 0 0 0 0-3H9"/></svg>
         My Sales
@@ -272,6 +286,10 @@
       <a id="businessStorefrontLink" href="business-profile.html" class="dashboard-nav-link" style="display:none;">
         <svg class="icon" viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12M9 21v-6h6v6"/></svg>
         My Business Storefront
+      </a>
+      <a id="resellerProfileLink" href="reseller-profile.html" class="dashboard-nav-link" style="display:none;">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/><path d="m17 11 1.5 1.5L22 9"/></svg>
+        My Reseller Profile
       </a>
       <a href="account-setting.html" class="dashboard-nav-link">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
@@ -286,6 +304,8 @@
     <div class="archive-filter-row">
       <button class="archive-filter-btn active" data-filter="all">All</button>
       <button class="archive-filter-btn" data-filter="active">Active</button>
+      <button class="archive-filter-btn" data-filter="pending_review">Pending Review</button>
+      <button class="archive-filter-btn" data-filter="rejected">Rejected</button>
       <button class="archive-filter-btn" data-filter="archived">Archived</button>
     </div>
 
@@ -526,6 +546,9 @@ const memberSince = document.getElementById("memberSince");
 const businessNameLine = document.getElementById("businessNameLine");
 const businessBadge = document.getElementById("businessBadge");
 const businessStorefrontLink = document.getElementById("businessStorefrontLink");
+const resellerBadgeLine = document.getElementById("resellerBadgeLine");
+const resellerApprovedNote = document.getElementById("resellerApprovedNote");
+const resellerProfileLink = document.getElementById("resellerProfileLink");
 const logoutBtn = document.getElementById("logoutBtn");
 const dashboardListings = document.getElementById("dashboardListings");
 const archiveFilterButtons = document.querySelectorAll(".archive-filter-btn");
@@ -650,14 +673,37 @@ async function loadUserProfile() {
       // accountType field at all. Treat that as "personal" so
       // nothing changes for them — no migration needed.
       const accountType = userData.accountType || "personal";
-      const isBusiness = accountType === "business";
+      const isBusiness =
+        accountType === "business"
+        || userData.businessApproved === true
+        || userData.businessAccountApproved === true;
+
+      const isApprovedReseller =
+        accountType === "reseller"
+        || userData.resellerApproved === true
+        || userData.isReseller === true
+        || userData.resellerBadge === true;
 
       userName.textContent = userData.name || currentUser.email;
 
-      if (userData.verified === true) {
-        verifiedBadge.textContent = "Verified Seller";
+     if (isApprovedReseller) {
+    verifiedBadge.textContent = "Authorized Reseller";
+} else if (userData.verified === true) {
+    verifiedBadge.textContent = "Verified Seller";
+} else {
+    verifiedBadge.textContent = "Unverified Seller";
+}s
+
+      if (isApprovedReseller) {
+        resellerBadgeLine.style.display = "inline-flex";
+        resellerApprovedNote.style.display = "block";
+        resellerProfileLink.href =
+          "reseller-profile.html?id=" + encodeURIComponent(currentUser.uid);
+        resellerProfileLink.style.display = "flex";
       } else {
-        verifiedBadge.textContent = "Unverified Seller";
+        resellerBadgeLine.style.display = "none";
+        resellerApprovedNote.style.display = "none";
+        resellerProfileLink.style.display = "none";
       }
 
       if (isBusiness) {
@@ -691,9 +737,15 @@ async function loadUserProfile() {
       userName.textContent = currentUser.email;
       verifiedBadge.textContent = "Unverified Seller";
       memberSince.textContent = "Member";
+      resellerBadgeLine.style.display = "none";
+      resellerApprovedNote.style.display = "none";
+      resellerProfileLink.style.display = "none";
     }
   } catch (error) {
     userName.textContent = currentUser.email;
+    resellerBadgeLine.style.display = "none";
+    resellerApprovedNote.style.display = "none";
+    resellerProfileLink.style.display = "none";
   }
 }
 
@@ -754,27 +806,43 @@ async function expireMyFinishedBoosts(products) {
   if (updates.length) await Promise.all(updates);
 }
 
+function normalizedListingStatus(product) {
+  const status = String(product?.status || "active").toLowerCase();
+  const allowed = ["active", "pending_review", "rejected", "sold", "archived"];
+  return allowed.includes(status) ? status : "active";
+}
+
 function updateDashboardStats() {
   totalListingsStat.textContent = String(allMyProducts.length);
-  activeListingsStat.textContent = String(allMyProducts.filter((product) => product.status !== "sold" && product.status !== "archived").length);
-  soldListingsStat.textContent = String(allMyProducts.filter((product) => product.status === "sold").length);
-  archivedListingsStat.textContent = String(allMyProducts.filter((product) => product.status === "archived").length);
+  activeListingsStat.textContent = String(
+    allMyProducts.filter((product) => normalizedListingStatus(product) === "active").length
+  );
+  soldListingsStat.textContent = String(
+    allMyProducts.filter((product) => normalizedListingStatus(product) === "sold").length
+  );
+  archivedListingsStat.textContent = String(
+    allMyProducts.filter((product) => normalizedListingStatus(product) === "archived").length
+  );
 }
 
 function renderListings() {
   updateDashboardStats();
   let productsToShow = allMyProducts;
 
-  if (currentArchiveFilter === "active") {
-    productsToShow = allMyProducts.filter((product) => product.status !== "archived");
-  } else if (currentArchiveFilter === "archived") {
-    productsToShow = allMyProducts.filter((product) => product.status === "archived");
+  if (currentArchiveFilter !== "all") {
+    productsToShow = allMyProducts.filter(
+      (product) => normalizedListingStatus(product) === currentArchiveFilter
+    );
   }
 
   if (productsToShow.length === 0) {
-    dashboardListings.innerHTML = currentArchiveFilter === "archived"
-      ? "<p>No archived listings.</p>"
-      : "<p>You haven't posted any products yet.</p>";
+    const emptyMessages = {
+      active: "No active listings.",
+      pending_review: "No listings are waiting for admin review.",
+      rejected: "No rejected listings.",
+      archived: "No archived listings."
+    };
+    dashboardListings.innerHTML = `<p>${emptyMessages[currentArchiveFilter] || "You haven't posted any products yet."}</p>`;
     return;
   }
 
@@ -786,8 +854,13 @@ function renderListings() {
     const isBoostActive = product.boostStatus === "active";
     const isBoostExpired = product.boostStatus === "expired";
     const isFeatured = product.featured === true && !isBoostExpired;
-    const isSold = product.status === "sold";
-    const isArchived = product.status === "archived";
+    const listingStatus = normalizedListingStatus(product);
+    const isActive = listingStatus === "active";
+    const isPendingReview = listingStatus === "pending_review";
+    const isRejected = listingStatus === "rejected";
+    const isSold = listingStatus === "sold";
+    const isArchived = listingStatus === "archived";
+    const canUseMarketplaceActions = isActive || isSold || isArchived;
 
     const image =
       product.imageUrl ||
@@ -795,14 +868,21 @@ function renderListings() {
 
     const detailUrl = "product-detail.html?id=" + encodeURIComponent(productId);
 
-    let statusLabel = "active";
-    let statusClass = "active";
-    if (isSold) {
-      statusLabel = "sold";
-      statusClass = "sold";
-    } else if (isArchived) {
-      statusLabel = "archived";
-      statusClass = "archived";
+    const statusLabels = {
+      active: "Active",
+      pending_review: "Pending Review",
+      rejected: "Rejected",
+      sold: "Sold",
+      archived: "Archived"
+    };
+    const statusLabel = statusLabels[listingStatus] || "Active";
+    const statusClass = listingStatus;
+
+    let statusNoteHtml = "";
+    if (isPendingReview) {
+      statusNoteHtml = '<p class="listing-status-note">Waiting for administrator approval. This listing is hidden from buyers.</p>';
+    } else if (isRejected) {
+      statusNoteHtml = '<p class="listing-status-note rejected">This listing was rejected and is hidden from buyers. Edit it before submitting again.</p>';
     }
 
     let boostBadgeHtml = "";
@@ -824,7 +904,10 @@ function renderListings() {
     }
 
     const card = document.createElement("div");
-    card.className = "dashboard-listing-card" + (isArchived ? " is-archived-card" : "");
+    card.className = "dashboard-listing-card"
+      + (isArchived ? " is-archived-card" : "")
+      + (isPendingReview ? " is-review-card" : "")
+      + (isRejected ? " is-rejected-card" : "");
 
     card.innerHTML = `
       <div class="dashboard-listing-image">
@@ -837,22 +920,23 @@ function renderListings() {
         <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">Featured</span>' : ""}${boostBadgeHtml}</h4>
         <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
         <span class="status-badge ${statusClass}">${statusLabel}</span>
+        ${statusNoteHtml}
       </div>
 
       <div class="dashboard-listing-actions">
         <button class="edit-btn" data-id="${productId}">Edit</button>
         <button class="duplicate-btn" data-id="${productId}">Duplicate</button>
         <button class="delete-btn" data-id="${productId}">Delete</button>
-        <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}">
+        <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}" ${!isActive ? "disabled" : ""}>
           ${isFeatured ? "Unfeature" : "Feature this listing"}
         </button>
-        <button class="sold-btn ${isSold ? "is-sold" : ""}" data-id="${productId}" data-sold="${isSold}">
+        <button class="sold-btn ${isSold ? "is-sold" : ""}" data-id="${productId}" data-sold="${isSold}" ${!canUseMarketplaceActions || isArchived ? "disabled" : ""}>
           ${isSold ? "Mark as Active" : "Mark as Sold"}
         </button>
-        <button class="archive-btn ${isArchived ? "is-archived" : ""}" data-id="${productId}" data-archived="${isArchived}">
+        <button class="archive-btn ${isArchived ? "is-archived" : ""}" data-id="${productId}" data-archived="${isArchived}" ${isPendingReview || isRejected ? "disabled" : ""}>
           ${isArchived ? "Unarchive" : "Archive"}
         </button>
-        <button class="boost-btn ${isBoostPending || isBoostActive ? "is-pending" : ""}" data-id="${productId}" ${isBoostPending || isBoostActive ? "disabled" : ""}>
+        <button class="boost-btn ${isBoostPending || isBoostActive ? "is-pending" : ""}" data-id="${productId}" ${!isActive || isBoostPending || isBoostActive ? "disabled" : ""}>
           ${boostButtonLabel}
         </button>
       </div>

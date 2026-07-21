@@ -482,12 +482,7 @@
       msg.className = "message";
 
       try {
-        await setPersistence(
-          auth,
-          remember.checked
-            ? browserLocalPersistence
-            : browserSessionPersistence
-        );
+      await setPersistence(auth, browserLocalPersistence);
 
         const credential = await signInWithEmailAndPassword(
           auth,

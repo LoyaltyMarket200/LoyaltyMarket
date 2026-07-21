@@ -737,6 +737,118 @@
         grid-column: auto;
       }
     }
+
+    /* ---------- ACCOUNT APPLICATIONS ---------- */
+    .application-summary {
+      margin: 0 0 18px;
+      padding: 15px 17px;
+      border: 1px solid #cfe8e8;
+      border-radius: 11px;
+      background: #f0fafa;
+      color: #315b5b;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .application-card {
+      margin-bottom: 15px;
+      padding: 19px;
+      border: 1px solid #e2e8f0;
+      border-radius: 13px;
+      background: #ffffff;
+      box-shadow: 0 2px 7px rgba(15, 23, 42, 0.05);
+    }
+
+    .application-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .application-title {
+      margin: 0;
+      color: #111827;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .application-email {
+      margin-top: 4px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .application-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+      margin-top: 15px;
+    }
+
+    .application-field {
+      padding: 11px 12px;
+      border: 1px solid #eef2f7;
+      border-radius: 9px;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .application-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .application-field strong {
+      display: block;
+      margin-bottom: 3px;
+      color: #64748b;
+      font-size: 10.5px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .application-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .application-actions button,
+    .application-actions a {
+      padding: 9px 13px;
+      border: 0;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-application-approve { background: #0d6e6e; color: #fff; }
+    .btn-application-info { background: #f59e0b; color: #fff; }
+    .btn-application-reject { background: #b91c1c; color: #fff; }
+    .btn-application-profile {
+      border: 1px solid #cbd5e1 !important;
+      background: #f8fafc;
+      color: #334155;
+    }
+
+    .status-more_information_required {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    @media (max-width: 700px) {
+      .application-grid { grid-template-columns: 1fr; }
+      .application-field.full { grid-column: auto; }
+    }
+
   </style>
 
   <style>
@@ -1043,6 +1155,12 @@
         <span id="pendingBoostsBadge" class="report-count-badge" aria-label="Pending boost requests"></span>
       </button>
 
+
+      <button class="admin-section-tab-btn" data-section="applications">
+        Reseller Applications
+        <span id="pendingApplicationsBadge" class="report-count-badge" aria-label="Pending reseller applications"></span>
+      </button>
+
       <button class="admin-section-tab-btn" data-section="payments">
         Payments
       </button>
@@ -1062,6 +1180,7 @@
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><div class="stat-card-label">New Users Today</div><div class="stat-card-value" id="statNewUsersToday">—</div></div>
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><div class="stat-card-label">Verified Sellers</div><div class="stat-card-value" id="statVerifiedSellers">—</div></div>
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12M9 21v-6h6v6"/></svg></span><div class="stat-card-label">Verified Businesses</div><div class="stat-card-value" id="statVerifiedBusinesses">—</div></div>
+        <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M4 20V8l8-5 8 5v12M8 20v-6h8v6"/><path d="M9 9h6"/></svg></span><div class="stat-card-label">Pending Reseller Applications</div><div class="stat-card-value" id="statPendingApplications">—</div></div>
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span><div class="stat-card-label">Total Listings</div><div class="stat-card-value" id="statTotalListings">—</div></div>
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span><div class="stat-card-label">New Listings Today</div><div class="stat-card-value" id="statNewListingsToday">—</div></div>
         <div class="stat-card"><span class="stat-card-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg></span><div class="stat-card-label">Pending Review</div><div class="stat-card-value" id="statPendingScamReview">—</div></div>
@@ -1086,6 +1205,7 @@
         <button class="quick-action-btn" type="button" data-goto-section="pendingReview"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg> Pending Review</button>
         <button class="quick-action-btn" type="button" data-goto-section="boosts"><svg class="icon" viewBox="0 0 24 24"><path d="M3 11l18-7-7 18-2-8-9-3Z"/></svg> View Boost Requests</button>
         <button class="quick-action-btn" type="button" data-goto-section="payments"><svg class="icon" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> View Payments</button>
+        <button class="quick-action-btn" type="button" data-goto-section="applications"><svg class="icon" viewBox="0 0 24 24"><path d="M4 20V8l8-5 8 5v12M8 20v-6h8v6"/></svg> Reseller Applications</button>
         <a class="quick-action-btn" href="dashboard.html"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Manage Listings</a>
         <button class="quick-action-btn" type="button" data-goto-section="content"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg> Edit Site Content</button>
         <button class="quick-action-btn" type="button" data-goto-section="settings"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg> Marketplace Settings</button>
@@ -1157,6 +1277,28 @@
 
       <div id="boostsContainer">
         <p class="empty-state">Loading boost requests...</p>
+      </div>
+    </section>
+
+
+    <section id="applicationsSection" style="display:none;">
+      <div class="application-summary">
+        Review people who want to become authorized WaterSide resellers. Approved
+        resellers may represent multiple product owners, but they must have permission
+        for every product they advertise. WaterSide does not collect or split their
+        commission at launch.
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-application-filter="pending">Pending</button>
+        <button class="admin-tab-btn" data-application-filter="approved">Approved</button>
+        <button class="admin-tab-btn" data-application-filter="more_information_required">More Information</button>
+        <button class="admin-tab-btn" data-application-filter="rejected">Rejected</button>
+        <button class="admin-tab-btn" data-application-filter="all">All</button>
+      </div>
+
+      <div id="applicationsContainer">
+        <p class="empty-state">Loading reseller applications...</p>
       </div>
     </section>
 
@@ -1390,6 +1532,7 @@
     const reportsSection = document.getElementById("reportsSection");
     const pendingReviewSection = document.getElementById("pendingReviewSection");
     const boostsSection = document.getElementById("boostsSection");
+    const applicationsSection = document.getElementById("applicationsSection");
     const paymentsSection = document.getElementById("paymentsSection");
     const contentSection = document.getElementById("contentSection");
     const settingsSection = document.getElementById("settingsSection");
@@ -1398,17 +1541,20 @@
     const reportsContainer = document.getElementById("reportsContainer");
     const pendingReviewContainer = document.getElementById("pendingReviewContainer");
     const boostsContainer = document.getElementById("boostsContainer");
+    const applicationsContainer = document.getElementById("applicationsContainer");
     const paymentsContainer = document.getElementById("paymentsContainer");
     const userSearchInput = document.getElementById("userSearchInput");
     const clearUserSearchBtn = document.getElementById("clearUserSearchBtn");
     const refreshBtn = document.getElementById("refreshBtn");
     const pendingReportsBadge = document.getElementById("pendingReportsBadge");
     const pendingBoostsBadge = document.getElementById("pendingBoostsBadge");
+    const pendingApplicationsBadge = document.getElementById("pendingApplicationsBadge");
 
     const sectionButtons = document.querySelectorAll(".admin-section-tab-btn");
     const reportFilterButtons = document.querySelectorAll(".admin-tab-btn[data-filter]");
     const boostFilterButtons = document.querySelectorAll(".admin-tab-btn[data-boost-filter]");
     const paymentFilterButtons = document.querySelectorAll(".admin-tab-btn[data-payment-filter]");
+    const applicationFilterButtons = document.querySelectorAll(".admin-tab-btn[data-application-filter]");
     const quickActionButtons = document.querySelectorAll("[data-goto-section]");
 
     const recentUsersList = document.getElementById("recentUsersList");
@@ -1449,9 +1595,11 @@
     let allBoostProducts = [];
     let allProductsCache = [];
     let allOrdersCache = [];
+    let allResellerApplications = [];
     let currentReportFilter = "all";
     let currentBoostFilter = "pending";
     let currentPaymentFilter = "all";
+    let currentApplicationFilter = "pending";
     let currentAdminUser = null;
     let currentCommissionPercent = 0;
 
@@ -1527,6 +1675,7 @@
       reportsSection.style.display = sectionName === "reports" ? "block" : "none";
       pendingReviewSection.style.display = sectionName === "pendingReview" ? "block" : "none";
       boostsSection.style.display = sectionName === "boosts" ? "block" : "none";
+      applicationsSection.style.display = sectionName === "applications" ? "block" : "none";
       paymentsSection.style.display = sectionName === "payments" ? "block" : "none";
       contentSection.style.display = sectionName === "content" ? "block" : "none";
       settingsSection.style.display = sectionName === "settings" ? "block" : "none";
@@ -1573,11 +1722,15 @@
       const pendingScamReview = products.filter((product) => product.status === "pending_review");
       const featuredListings = products.filter((product) => product.featured === true);
       const completedOrders = orders.filter((order) => order.status === "completed");
+      const pendingApplications = allResellerApplications.filter(
+        (application) => (application.status || "pending") === "pending"
+      );
 
       document.getElementById("statTotalUsers").textContent = allUsers.length;
       document.getElementById("statNewUsersToday").textContent = newUsersToday.length;
       document.getElementById("statVerifiedSellers").textContent = verifiedUsers.length;
       document.getElementById("statVerifiedBusinesses").textContent = verifiedBusinesses.length;
+      document.getElementById("statPendingApplications").textContent = pendingApplications.length;
       document.getElementById("statTotalListings").textContent = products.length;
       document.getElementById("statNewListingsToday").textContent = newListingsToday.length;
       document.getElementById("statPendingScamReview").textContent = pendingScamReview.length;
@@ -1600,6 +1753,15 @@
         pendingBoostsBadge.textContent = "";
         pendingBoostsBadge.style.display = "none";
       }
+      if (pendingApplications.length > 0) {
+        pendingApplicationsBadge.textContent =
+          pendingApplications.length > 99 ? "99+" : String(pendingApplications.length);
+        pendingApplicationsBadge.style.display = "inline-flex";
+      } else {
+        pendingApplicationsBadge.textContent = "";
+        pendingApplicationsBadge.style.display = "none";
+      }
+
       document.getElementById("statActiveListings").textContent = activeListings.length;
       document.getElementById("statArchivedListings").textContent = archivedListings.length;
       document.getElementById("statSoldListings").textContent = soldListings.length;
@@ -1854,17 +2016,24 @@
       refreshBtn.textContent = "Refreshing...";
 
       try {
-        const [usersSnapshot, productsSnapshot, reportsSnapshot, ordersSnapshot] = await Promise.all([
+        const [usersSnapshot, productsSnapshot, reportsSnapshot, ordersSnapshot, applicationsSnapshot] = await Promise.all([
           getDocs(collection(db, "users")),
           getDocs(collection(db, "products")),
           getDocs(collection(db, "reports")),
-          getDocs(collection(db, "orders")).catch(() => ({ docs: [] }))
+          getDocs(collection(db, "orders")).catch(() => ({ docs: [] })),
+          getDocs(collection(db, "resellerApplications")).catch(() => ({ docs: [] }))
         ]);
 
         allUsers = usersSnapshot.docs.map((snapshot) => ({ id: snapshot.id, ...snapshot.data() }));
         allProductsCache = productsSnapshot.docs.map((snapshot) => ({ id: snapshot.id, ...snapshot.data() }));
         allOrdersCache = ordersSnapshot.docs.map((snapshot) => ({ id: snapshot.id, ...snapshot.data() }));
         allReports = reportsSnapshot.docs.map((snapshot) => ({
+          id: snapshot.id,
+          status: "pending",
+          ...snapshot.data()
+        }));
+
+        allResellerApplications = applicationsSnapshot.docs.map((snapshot) => ({
           id: snapshot.id,
           status: "pending",
           ...snapshot.data()
@@ -1885,11 +2054,17 @@
           timestampToMilliseconds(b.boostRequestedAt) - timestampToMilliseconds(a.boostRequestedAt)
         );
 
+        allResellerApplications.sort((a, b) =>
+          timestampToMilliseconds(b.submittedAt || b.updatedAt) -
+          timestampToMilliseconds(a.submittedAt || a.updatedAt)
+        );
+
         updateStatistics(allProductsCache, allOrdersCache);
         renderUsers();
         renderReports();
         renderPendingReview();
         renderBoosts();
+        renderApplications();
         renderPayments();
         renderRecentActivity(allProductsCache, allOrdersCache);
         renderBreakdowns(allProductsCache, allOrdersCache);
@@ -2587,6 +2762,330 @@
     // and let an admin manually correct a payment if the automatic
     // polling (checkMomoPaymentStatus) never resolved it — e.g. the
     // buyer closed the tab before the status finished updating.
+
+    function applicationStatusLabel(status) {
+      if (status === "more_information_required") return "More information required";
+      return String(status || "pending").replaceAll("_", " ");
+    }
+
+    function renderApplications() {
+      const filteredApplications = currentApplicationFilter === "all"
+        ? allResellerApplications
+        : allResellerApplications.filter(
+            (application) =>
+              (application.status || "pending") === currentApplicationFilter
+          );
+
+      if (!filteredApplications.length) {
+        applicationsContainer.innerHTML =
+          '<p class="empty-state">No reseller applications were found for this filter.</p>';
+        return;
+      }
+
+      applicationsContainer.innerHTML = filteredApplications.map((application) => {
+        const status = application.status || "pending";
+        const userId = application.userId || application.id;
+        const categories = Array.isArray(application.categories)
+          ? application.categories.join(", ")
+          : (application.categories || application.category || "Not provided");
+
+        const canReview =
+          status === "pending"
+          || status === "more_information_required";
+
+        return `
+          <article class="application-card">
+            <div class="application-card-top">
+              <div>
+                <h3 class="application-title">
+                  ${safeText(application.resellerName || application.fullName || "Unnamed Applicant")}
+                </h3>
+                <div class="application-email">
+                  ${safeText(application.fullName || "Name not provided")}
+                  &bull; ${safeText(application.email || "Email not provided")}
+                </div>
+              </div>
+
+              <span class="report-status status-${safeText(status)}">
+                ${safeText(applicationStatusLabel(status))}
+              </span>
+            </div>
+
+            <div class="application-grid">
+              <div class="application-field">
+                <strong>Phone</strong>
+                ${safeText(application.phone || "Not provided")}
+              </div>
+
+              <div class="application-field">
+                <strong>Location</strong>
+                ${safeText([application.city, application.county].filter(Boolean).join(", ") || "Not provided")}
+              </div>
+
+              <div class="application-field">
+                <strong>Categories</strong>
+                ${safeText(categories)}
+              </div>
+
+              <div class="application-field">
+                <strong>Selling Experience</strong>
+                ${safeText(application.experienceYears ?? 0)} year(s)
+              </div>
+
+              <div class="application-field full">
+                <strong>What They Sell</strong>
+                ${safeText(application.description || "Not provided")}
+              </div>
+
+              <div class="application-field full">
+                <strong>Reason for Applying</strong>
+                ${safeText(application.reason || "Not provided")}
+              </div>
+
+              <div class="application-field full">
+                <strong>How They Will Work With Product Owners</strong>
+                ${safeText(application.ownerPlan || "Not provided")}
+              </div>
+
+              <div class="application-field full">
+                <strong>Commission Agreement</strong>
+                ${safeText(application.commissionPlan || "Not provided")}
+              </div>
+
+              <div class="application-field">
+                <strong>Multiple Owners</strong>
+                ${application.canRepresentMultipleOwners === true ? "Yes" : "Not confirmed"}
+              </div>
+
+              <div class="application-field">
+                <strong>Owner Permission Agreement</strong>
+                ${application.permissionAgreement === true ? "Accepted" : "Not accepted"}
+              </div>
+
+              <div class="application-field full">
+                <strong>Submitted</strong>
+                ${safeText(formatDate(application.submittedAt || application.updatedAt))}
+                ${application.adminNote ? `<br><br><strong>Administrator Note</strong>${safeText(application.adminNote)}` : ""}
+              </div>
+            </div>
+
+            <div class="application-actions">
+              ${canReview ? `
+                <button
+                  class="btn-application-approve"
+                  data-application-action="approve"
+                  data-application-id="${safeText(application.id)}"
+                >
+                  Approve Reseller
+                </button>
+
+                <button
+                  class="btn-application-info"
+                  data-application-action="moreInfo"
+                  data-application-id="${safeText(application.id)}"
+                >
+                  Request More Information
+                </button>
+
+                <button
+                  class="btn-application-reject"
+                  data-application-action="reject"
+                  data-application-id="${safeText(application.id)}"
+                >
+                  Reject
+                </button>
+              ` : ""}
+
+              ${status === "approved" ? `
+                <a
+                  class="btn-application-profile"
+                  href="reseller-profile.html?id=${encodeURIComponent(userId)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Reseller Profile
+                </a>
+              ` : ""}
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-application-action]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await handleApplicationAction(
+            button.dataset.applicationId,
+            button.dataset.applicationAction
+          );
+        });
+      });
+    }
+
+    async function handleApplicationAction(applicationId, action) {
+      const application = allResellerApplications.find(
+        (item) => item.id === applicationId
+      );
+
+      if (!application) {
+        alert("The reseller application could not be found.");
+        return;
+      }
+
+      const userId = application.userId || application.id;
+      const applicantName =
+        application.resellerName
+        || application.fullName
+        || application.email
+        || "this applicant";
+
+      try {
+        if (action === "approve") {
+          if (!application.permissionAgreement) {
+            alert("This applicant did not accept the owner-permission agreement.");
+            return;
+          }
+
+          if (!confirm(`Approve ${applicantName} as an authorized WaterSide reseller?`)) {
+            return;
+          }
+
+          const adminNote = prompt(
+            "Optional approval note:",
+            "Approved as an authorized WaterSide reseller."
+          ) ?? "";
+
+          await Promise.all([
+            updateDoc(doc(db, "resellerApplications", applicationId), {
+              status: "approved",
+              adminNote: adminNote.trim(),
+              reviewedAt: Timestamp.now(),
+              reviewedBy: currentAdminUser?.email || "admin"
+            }),
+
+            updateDoc(doc(db, "users", userId), {
+              accountType: "reseller",
+              resellerApplicationStatus: "approved",
+              resellerApproved: true,
+              resellerVerified: true,
+              isReseller: true,
+              isResellerVerified: true,
+              resellerBadge: true,
+              resellerApprovedAt: Timestamp.now(),
+              resellerApprovedBy: currentAdminUser?.email || "admin"
+            })
+          ]);
+
+          application.status = "approved";
+          application.adminNote = adminNote.trim();
+          application.reviewedAt = Timestamp.now();
+          application.reviewedBy = currentAdminUser?.email || "admin";
+
+          const localUser = allUsers.find((user) => user.id === userId);
+          if (localUser) {
+            Object.assign(localUser, {
+              accountType: "reseller",
+              resellerApplicationStatus: "approved",
+              resellerApproved: true,
+              resellerVerified: true,
+              isReseller: true,
+              isResellerVerified: true,
+              resellerBadge: true
+            });
+          }
+
+          showSuccess(`${applicantName} is now an authorized reseller.`);
+        }
+
+        if (action === "moreInfo") {
+          const adminNote = prompt(
+            "Explain what additional information is required:"
+          );
+
+          if (adminNote === null) return;
+          if (!adminNote.trim()) {
+            alert("Enter the information you need from the applicant.");
+            return;
+          }
+
+          await Promise.all([
+            updateDoc(doc(db, "resellerApplications", applicationId), {
+              status: "more_information_required",
+              adminNote: adminNote.trim(),
+              reviewedAt: Timestamp.now(),
+              reviewedBy: currentAdminUser?.email || "admin"
+            }),
+
+            updateDoc(doc(db, "users", userId), {
+              resellerApplicationStatus: "more_information_required",
+              resellerApplicationAdminNote: adminNote.trim()
+            })
+          ]);
+
+          application.status = "more_information_required";
+          application.adminNote = adminNote.trim();
+          showSuccess("The applicant has been asked for more information.");
+        }
+
+        if (action === "reject") {
+          const adminNote = prompt(
+            `Why are you rejecting ${applicantName}?`
+          );
+
+          if (adminNote === null) return;
+          if (!adminNote.trim()) {
+            alert("Enter a reason for rejecting the application.");
+            return;
+          }
+
+          if (!confirm(`Reject the reseller application from ${applicantName}?`)) {
+            return;
+          }
+
+          await Promise.all([
+            updateDoc(doc(db, "resellerApplications", applicationId), {
+              status: "rejected",
+              adminNote: adminNote.trim(),
+              reviewedAt: Timestamp.now(),
+              reviewedBy: currentAdminUser?.email || "admin"
+            }),
+
+            updateDoc(doc(db, "users", userId), {
+              resellerApplicationStatus: "rejected",
+              resellerApplicationAdminNote: adminNote.trim(),
+              resellerApproved: false,
+              resellerVerified: false,
+              isReseller: false,
+              isResellerVerified: false,
+              resellerBadge: false
+            })
+          ]);
+
+          application.status = "rejected";
+          application.adminNote = adminNote.trim();
+          showSuccess("The reseller application was rejected.");
+        }
+
+        renderApplications();
+        renderUsers();
+        updateStatistics(allProductsCache, allOrdersCache);
+
+      } catch (error) {
+        alert("The reseller application action failed: " + error.message);
+      }
+    }
+
+    applicationFilterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        currentApplicationFilter = button.dataset.applicationFilter;
+
+        applicationFilterButtons.forEach((filterButton) => {
+          filterButton.classList.toggle("active", filterButton === button);
+        });
+
+        renderApplications();
+      });
+    });
+
     function renderPayments() {
       const filteredOrders = currentPaymentFilter === "all"
         ? allOrdersCache
@@ -2681,7 +3180,6 @@
         });
       });
     }
-
     async function handlePaymentAction(orderId, action) {
       const order = allOrdersCache.find((item) => item.id === orderId);
 
