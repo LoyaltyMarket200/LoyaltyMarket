@@ -10,16 +10,6 @@
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <meta name="theme-color" content="#0d6e6e">
   <style>
-    /* ==================================================
-       DASHBOARD — RESTRAINED 2-COLOR SYSTEM
-       Navy (#0d6e6e) = structure/brand. Orange (#ff6b4a)
-       = the ONLY accent, reserved for primary actions
-       (Post An Ad, Feature toggle when active, Boost).
-       All other listing-card actions are plain outline
-       buttons in navy or neutral gray — differentiated by
-       LABEL, not by five different colors. Bold text is
-       reserved for numbers/headings only.
-       ================================================== */
     :root{
       --navy:#0d6e6e;
       --navy-soft:#e3f2f2;
@@ -37,7 +27,6 @@
 
     .icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-    /* Badges — replaces featured-badge / boost-pending-badge / boost-expired-badge */
     .featured-badge,.boost-pending-badge,.boost-expired-badge{
       display:inline-flex;align-items:center;gap:4px;
       font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;margin-left:6px;
@@ -46,10 +35,6 @@
     .boost-pending-badge{background:var(--navy-soft);color:var(--navy)}
     .boost-expired-badge{background:#f1f5f9;color:var(--muted)}
 
-    /* Listing action buttons — all outline style, differentiated by label only.
-       Edit/Delete share the same base as the rest so they stop falling
-       back to raw browser-default styling; Delete gets the danger
-       palette (already defined in :root) since it's destructive. */
     .edit-btn,.delete-btn,.feature-btn,.sold-btn,.duplicate-btn,.archive-btn,.boost-btn{
       background:#fff;border:1px solid var(--line);color:var(--ink);
       padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;
@@ -90,7 +75,6 @@
     .dashboard-listing-info h4 a{color:inherit;text-decoration:none}
     .dashboard-listing-info h4 a:hover{text-decoration:underline}
 
-    /* Boost modal */
     .boost-modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:1000;align-items:center;justify-content:center}
     .boost-modal-overlay.open{display:flex}
     .boost-modal{background:#fff;border-radius:14px;padding:26px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto}
@@ -125,7 +109,6 @@
     .boost-payment-steps ol{margin:6px 0 0 18px;padding:0}
     .boost-payment-done-btn{width:100%;margin-top:18px;padding:11px;border-radius:8px;border:none;background:var(--navy);color:#fff;font-size:13.5px;font-weight:600;cursor:pointer}
 
-    /* Payment-reference form inside the "send money" screen */
     .boost-payment-field-label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin:14px 0 6px}
     .boost-payment-method-option{display:block;border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--ink)}
     .boost-payment-method-option:hover{border-color:var(--navy)}
@@ -139,7 +122,6 @@
     .reseller-approved-note{font-size:11.5px!important;color:#15803d!important;margin-top:5px!important}
     .dashboard-business-name{font-size:12.5px;color:var(--muted);margin-top:2px}
 
-    /* Header */
     .dashboard-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);justify-content:space-between;position:sticky;top:0;z-index:50;display:flex;align-items:center}
     .dashboard-navbar .logo-link{display:flex;align-items:center;gap:9px;text-decoration:none}
     .dashboard-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
@@ -152,7 +134,6 @@
     .dashboard-post-btn:hover{background:#e5522f}
     .dashboard-logout-btn{color:var(--danger);background:#fff;border-color:#f3d0d0}
 
-    /* Shell */
     .dashboard-shell{width:min(1300px,94%);margin:26px auto 60px}
     .dashboard-plain-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
     .dashboard-plain-header h1{margin:0;font-size:19px;font-weight:600;color:var(--ink)}
@@ -221,7 +202,7 @@
 
 <section class="dashboard-shell">
   <div class="dashboard-plain-header">
-    <h1>My Dashboard</h1>
+    <h1>My Dashboard <small id="dashboardFixVersion" style="font-size:10px;color:#15803d;font-weight:700;">V5</small></h1>
     <a href="sell.html" class="dashboard-welcome-btn">
       <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
       Post New Listing
@@ -599,9 +580,6 @@ const boostPlanDetails = {
   "diamond": { label: "Diamond", days: 30, multiplier: "15x+", refreshHours: 3, settingsField: "boostDiamondPrice" }
 };
 
-// Loaded from settings/marketplace — every tier price defaults to 0
-// (free) until an admin types a real number into Marketplace Settings.
-// Manual MTN/Orange payment flow only kicks in once a tier's price > 0.
 let marketplaceSettings = {
   boostBasicPrice: 0,
   boostBusinessPrice: 0,
@@ -662,93 +640,132 @@ function applyTierPricesToModal() {
     : "Free tiers activate instantly. Paid tiers require Mobile Money payment before activation.";
 }
 
+
 async function loadUserProfile() {
+  userName.textContent = currentUser?.email || "Loading...";
+  verifiedBadge.textContent = "Checking account...";
+  memberSince.textContent = "";
+  resellerBadgeLine.style.display = "none";
+  resellerApprovedNote.style.display = "none";
+  resellerProfileLink.style.display = "none";
+  businessNameLine.style.display = "none";
+  businessBadge.style.display = "none";
+  businessStorefrontLink.style.display = "none";
+
   try {
-    const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+    let userSnapshot = await getDoc(doc(db, "users", currentUser.uid));
+    let userData = userSnapshot.exists() ? userSnapshot.data() : null;
+    let resolvedUserId = currentUser.uid;
 
-    if (userDoc.exists()) {
-      const userData = userDoc.data();
+    if (!userData && currentUser.email) {
+      try {
+        const emailQuery = query(
+          collection(db, "users"),
+          where("email", "==", currentUser.email)
+        );
+        const emailResults = await getDocs(emailQuery);
 
-      // Existing users created before this feature have no
-      // accountType field at all. Treat that as "personal" so
-      // nothing changes for them — no migration needed.
-      const accountType = userData.accountType || "personal";
-      const isBusiness =
-        accountType === "business"
-        || userData.businessApproved === true
-        || userData.businessAccountApproved === true;
+        if (!emailResults.empty) {
+          const matchingDocument = emailResults.docs[0];
+          userData = matchingDocument.data();
+          resolvedUserId = matchingDocument.id;
+        }
+      } catch (fallbackError) {
+        console.warn("Could not search for the profile by email:", fallbackError);
+      }
+    }
+
+    console.log("Dashboard profile check:", {
+      authUid: currentUser.uid,
+      authEmail: currentUser.email,
+      resolvedUserId,
+      userData
+    });
+
+    if (!userData) {
+      verifiedBadge.textContent = "Profile data not found";
+      memberSince.textContent = "Open Account Settings to complete your profile";
+      return;
+    }
+
+    const accountType = String(userData.accountType || "")
+      .trim()
+      .toLowerCase();
+
+    const applicationStatus = String(
+      userData.resellerApplicationStatus || ""
+    )
+      .trim()
+      .toLowerCase();
+
+    const isTrue = (value) =>
+      value === true || String(value).trim().toLowerCase() === "true";
 
     const isApprovedReseller =
-    accountType === "reseller" ||
-    userData.resellerApproved === true ||
-    userData.businessVerified === true ||
-    userData.businessApproved === true ||
-    userData.businessAccountApproved === true ||
-    userData.isReseller === true ||
-    userData.resellerBadge === true;
+      accountType === "reseller" ||
+      applicationStatus === "approved" ||
+      isTrue(userData.resellerApproved) ||
+      isTrue(userData.isReseller) ||
+      isTrue(userData.isResellerVerified) ||
+      isTrue(userData.resellerVerified) ||
+      isTrue(userData.resellerBadge);
 
-      userName.textContent = userData.name || currentUser.email;
+    const isBusiness =
+      accountType === "business" ||
+      isTrue(userData.businessApproved) ||
+      isTrue(userData.businessAccountApproved) ||
+      isTrue(userData.businessVerified);
 
-     if (isApprovedReseller) {
-    verifiedBadge.textContent = "Authorized Reseller";
-} else if (userData.verified === true) {
-    verifiedBadge.textContent = "Verified Seller";
-} else {
-    verifiedBadge.textContent = "Unverified Seller";
-}s
+    userName.textContent =
+      userData.name ||
+      userData.resellerName ||
+      userData.businessName ||
+      currentUser.email;
 
-      if (isApprovedReseller) {
-        resellerBadgeLine.style.display = "inline-flex";
-        resellerApprovedNote.style.display = "block";
-        resellerProfileLink.href =
-          "reseller-profile.html?id=" + encodeURIComponent(currentUser.uid);
-        resellerProfileLink.style.display = "flex";
-      } else {
-        resellerBadgeLine.style.display = "none";
-        resellerApprovedNote.style.display = "none";
-        resellerProfileLink.style.display = "none";
-      }
-
-      if (isBusiness) {
-        businessNameLine.textContent = userData.businessName || "Business Account";
-        businessNameLine.style.display = "block";
-
-        businessStorefrontLink.style.display = "flex";
-
-        if (userData.businessVerified === true) {
-          businessBadge.textContent = "Verified Business";
-          businessBadge.className = "business-badge verified";
-        } else {
-          businessBadge.textContent = "Business Verification Pending";
-          businessBadge.className = "business-badge";
-        }
-        businessBadge.style.display = "inline-flex";
-      } else {
-        businessNameLine.style.display = "none";
-        businessBadge.style.display = "none";
-        businessStorefrontLink.style.display = "none";
-      }
-
-      if (userData.createdAt && userData.createdAt.seconds) {
-        const date = new Date(userData.createdAt.seconds * 1000);
-        const year = date.getFullYear();
-        memberSince.textContent = "Member since " + year;
-      } else {
-        memberSince.textContent = "Member";
-      }
+    if (isApprovedReseller) {
+      verifiedBadge.textContent = "Authorized Reseller";
+      resellerBadgeLine.style.display = "inline-flex";
+      resellerApprovedNote.style.display = "block";
+      resellerProfileLink.href =
+        "reseller-profile.html?id=" + encodeURIComponent(resolvedUserId);
+      resellerProfileLink.style.display = "flex";
+    } else if (isTrue(userData.verified)) {
+      verifiedBadge.textContent = "Verified Seller";
     } else {
-      userName.textContent = currentUser.email;
       verifiedBadge.textContent = "Unverified Seller";
+    }
+
+    if (isBusiness) {
+      businessNameLine.textContent =
+        userData.businessName || "Business Account";
+      businessNameLine.style.display = "block";
+      businessStorefrontLink.style.display = "flex";
+
+      if (isTrue(userData.businessVerified)) {
+        businessBadge.textContent = "Verified Business";
+        businessBadge.className = "business-badge verified";
+      } else {
+        businessBadge.textContent = "Business Verification Pending";
+        businessBadge.className = "business-badge";
+      }
+
+      businessBadge.style.display = "inline-flex";
+    }
+
+    const createdAt = userData.createdAt;
+    if (createdAt?.seconds) {
+      memberSince.textContent =
+        "Member since " + new Date(createdAt.seconds * 1000).getFullYear();
+    } else if (typeof createdAt?.toDate === "function") {
+      memberSince.textContent =
+        "Member since " + createdAt.toDate().getFullYear();
+    } else {
       memberSince.textContent = "Member";
-      resellerBadgeLine.style.display = "none";
-      resellerApprovedNote.style.display = "none";
-      resellerProfileLink.style.display = "none";
     }
   } catch (error) {
-    userName.textContent = currentUser.email;
-    resellerBadgeLine.style.display = "none";
-    resellerApprovedNote.style.display = "none";
-    resellerProfileLink.style.display = "none";
+    console.error("Could not load dashboard profile:", error);
+    verifiedBadge.textContent = "Profile access error";
+    memberSince.textContent = "Check Firestore permissions";
   }
 }
 
@@ -1020,8 +1037,6 @@ boostForm.addEventListener("submit", async (event) => {
   selectedPlanKey = planKey;
   selectedPlanPrice = price;
 
-  // Free tier (either still $0 during launch, or admin hasn't priced it
-  // yet): activate instantly, same as before — no payment flow needed.
   if (price <= 0) {
     boostSubmitBtn.disabled = true;
     boostSubmitBtn.textContent = "Activating...";
@@ -1074,8 +1089,6 @@ boostForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  // Paid tier: don't activate yet — show Mobile Money payment
-  // instructions and collect a payment reference first.
   boostInstructionsAmountValue.textContent = `US$${price.toFixed(2)}`;
   boostMtnNumberDisplay.textContent = marketplaceSettings.mtnMobileMoney || "Not set — contact support";
   boostOrangeNumberDisplay.textContent = marketplaceSettings.orangeMoney || "Not set — contact support";
@@ -1398,8 +1411,19 @@ onAuthStateChanged(auth, async (user) => {
   if (!allowed) return;
 
   currentUser = user;
-  touchLastActive(user.uid);
+
+  // Read the profile FIRST, then touch lastActiveAt after.
+  // Doing it in this order avoids a race: touchLastActive() writes to
+  // the same users/{uid} document, and Firestore's SDK always shows a
+  // client its own pending writes immediately. If that write fired
+  // before this read (as it did before), a fresh browser session with
+  // no cached copy of the document could see only the in-flight
+  // {lastActiveAt: ...} write instead of the full saved profile —
+  // which is what was making approved resellers show "Unverified
+  // Seller" even though their Firestore document was correct all along.
   await loadUserProfile();
+  touchLastActive(user.uid);
+
   await loadMarketplaceSettings();
   await loadMyListings();
   listenForUnreadMessages();
@@ -1413,11 +1437,8 @@ logoutBtn.addEventListener("click", async () => {
 </script>
 
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service worker registered'))
-      .catch((error) => console.log('Service worker registration failed:', error));
-  }
+  // Dashboard intentionally does not register the service worker.
+  // This prevents an older cached dashboard.html from replacing the current file.
 </script>
 
 </body>
