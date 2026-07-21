@@ -89,7 +89,24 @@
     .status-completed{background:var(--success-soft);color:var(--success)}
     .status-cancelled{background:var(--danger-soft);color:var(--danger)}
 
-    .buyer-box{margin:8px 0 10px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:11.5px;line-height:1.55;color:var(--muted)}
+    .buyer-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:8px;
+    }
+    .buyer-row img{
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      object-fit:cover;
+      border:1px solid var(--line);
+      background:var(--navy-soft);
+      flex-shrink:0;
+    }
+    .buyer-row span{font-size:12px;font-weight:700;color:var(--ink)}
+
+    .buyer-box{margin:0 0 10px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:11.5px;line-height:1.55;color:var(--muted)}
     .buyer-box strong{color:var(--ink)}
     .sale-card-meta{color:var(--muted);font-size:11.5px;margin-bottom:10px}
     .sale-card-actions{display:flex;gap:8px;flex-wrap:wrap}
@@ -200,6 +217,7 @@
       where,
       getDocs,
       doc,
+      getDoc,
       updateDoc,
       addDoc,
       serverTimestamp
@@ -217,6 +235,7 @@
     const revenueAverage = document.getElementById("revenueAverage");
 
     const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
+    const WATERSIDE_LOGO = "icons/icon-512.png";
 
     let currentUser = null;
     let allSales = [];
@@ -369,8 +388,17 @@
                 <span class="sale-badge status-${safeText(status)}">${statusLabel(status)}</span>
               </div>
 
+              <div class="buyer-row">
+                <img
+                  src="${safeText(order.buyerPhoto || WATERSIDE_LOGO)}"
+                  alt="${safeText(buyerName)}"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='${WATERSIDE_LOGO}';"
+                >
+                <span>${safeText(buyerName)}</span>
+              </div>
+
               <div class="buyer-box">
-                <strong>Buyer:</strong> ${safeText(buyerName)}<br>
                 ${order.buyerPhone ? `<strong>Phone:</strong> ${safeText(order.buyerPhone)}<br>` : ""}
                 ${order.quantity ? `<strong>Quantity:</strong> ${safeText(order.quantity)}<br>` : ""}
                 ${order.deliveryMethod ? `<strong>Arrangement:</strong> ${safeText(order.deliveryMethod)}<br>` : ""}
@@ -503,6 +531,36 @@
       }
     }
 
+    async function hydrateBuyerDetails(order) {
+      if (!order.buyerId) return order;
+
+      try {
+        const buyerSnapshot = await getDoc(doc(db, "users", order.buyerId));
+
+        if (buyerSnapshot.exists()) {
+          const buyer = buyerSnapshot.data();
+
+          return {
+            ...order,
+            buyerName: order.buyerName || buyer.name || buyer.fullName || buyer.email,
+            buyerEmail: order.buyerEmail || buyer.email,
+            buyerPhone: order.buyerPhone || buyer.phone,
+            buyerPhoto:
+              order.buyerPhoto ||
+              buyer.profileImageUrl ||
+              buyer.resellerPhotoUrl ||
+              buyer.profilePhotoUrl ||
+              buyer.photoURL ||
+              buyer.avatarUrl
+          };
+        }
+      } catch (error) {
+        console.warn("Could not load buyer details:", error);
+      }
+
+      return order;
+    }
+
     async function loadSales() {
       salesList.innerHTML = '<p class="sales-empty">Loading your sales...</p>';
 
@@ -514,8 +572,9 @@
 
         const snapshot = await getDocs(salesQuery);
 
-        allSales = snapshot.docs
-          .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+        const rawSales = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+
+        allSales = (await Promise.all(rawSales.map(hydrateBuyerDetails)))
           .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
         updateStats();

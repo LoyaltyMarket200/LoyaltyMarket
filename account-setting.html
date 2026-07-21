@@ -1,1901 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Account Settings - WaterSide</title>
-
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="footer.css">
-  <link rel="manifest" href="manifest.json">
-  <link
-    rel="icon"
-    type="image/png"
-    sizes="512x512"
-    href="icons/icon-512.png"
-  >
-
-  <meta name="theme-color" content="#0d6e6e">
-
-  <style>
-    :root {
-      --teal: #0d6e6e;
-      --teal-dark: #095959;
-      --teal-soft: #e8f6f6;
-      --orange: #ff6b4a;
-      --orange-dark: #e5522f;
-      --ink: #172033;
-      --muted: #667085;
-      --line: #e5e7eb;
-      --bg: #f5f7fa;
-      --white: #ffffff;
-      --green: #15803d;
-      --green-soft: #dcfce7;
-      --yellow: #92400e;
-      --yellow-soft: #fef3c7;
-      --red: #b91c1c;
-      --red-soft: #fee2e2;
-      --shadow: 0 16px 44px rgba(15, 23, 42, 0.08);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-    }
-
-    body.modal-open {
-      overflow: hidden;
-    }
-
-    button,
-    input,
-    select,
-    textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .simple-navbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      min-height: 60px;
-      padding: 10px max(20px, 4vw);
-      background: rgba(255, 255, 255, 0.96);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-    }
-
-    .logo-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--teal);
-      text-decoration: none;
-      font-weight: 800;
-    }
-
-    .logo-link img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-      border-radius: 8px;
-    }
-
-    .simple-nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .simple-nav-link {
-      min-height: 37px;
-      padding: 8px 13px;
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      background: #fff;
-      color: var(--ink);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .simple-nav-link:hover {
-      border-color: var(--teal);
-      color: var(--teal);
-    }
-
-    .page-shell {
-      width: min(1080px, 94%);
-      margin: 34px auto 70px;
-    }
-
-    .page-header {
-      margin-bottom: 22px;
-    }
-
-    .page-title {
-      margin: 0;
-      font-size: clamp(28px, 4vw, 40px);
-      line-height: 1.1;
-    }
-
-    .page-subtitle {
-      margin: 9px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .settings-card {
-      margin-bottom: 18px;
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
-      box-shadow: 0 8px 26px rgba(15, 23, 42, 0.04);
-    }
-
-    .settings-card h2 {
-      margin: 0;
-      font-size: 19px;
-    }
-
-    .card-sub {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .account-summary {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .account-badges {
-      display: flex;
-      gap: 7px;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #eef2f7;
-      color: #475569;
-      font-size: 11.5px;
-      font-weight: 800;
-    }
-
-    .badge.green {
-      background: var(--green-soft);
-      color: var(--green);
-    }
-
-    .badge.orange {
-      background: #ffece7;
-      color: #c2410c;
-    }
-
-    .badge.teal {
-      background: var(--teal-soft);
-      color: var(--teal);
-    }
-
-    .profile-photo-row {
-      margin-top: 18px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .profile-photo-preview {
-      width: 96px;
-      height: 96px;
-      flex: 0 0 auto;
-      border: 1px solid var(--line);
-      border-radius: 50%;
-      background: var(--teal-soft);
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-    }
-
-    .profile-photo-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .profile-photo-preview img.is-fallback {
-      width: 58%;
-      height: 58%;
-      object-fit: contain;
-    }
-
-    .profile-photo-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      min-width: 220px;
-    }
-
-    .profile-photo-actions .button-row {
-      margin-top: 0;
-    }
-
-    .form-grid {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .field.full {
-      grid-column: 1 / -1;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 13px;
-      font-weight: 750;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      min-height: 48px;
-      padding: 11px 14px;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: #fff;
-      color: var(--ink);
-      font-size: 14px;
-    }
-
-    textarea {
-      min-height: 150px;
-      resize: vertical;
-      line-height: 1.55;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--teal);
-      box-shadow: 0 0 0 4px rgba(13, 110, 110, 0.08);
-    }
-
-    input:disabled {
-      background: #f1f5f9;
-      color: var(--muted);
-    }
-
-    .field.invalid input,
-    .field.invalid select,
-    .field.invalid textarea,
-    .field.invalid .agreement-box {
-      border-color: var(--red);
-      box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.07);
-    }
-
-    .field-error {
-      display: none;
-      margin-top: 7px;
-      color: var(--red);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .field.invalid .field-error {
-      display: block;
-    }
-
-    .helper {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .button-row {
-      margin-top: 18px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .primary-btn,
-    .secondary-btn,
-    .ghost-btn {
-      min-height: 46px;
-      padding: 11px 18px;
-      border-radius: 11px;
-      font-size: 13.5px;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-    }
-
-    .primary-btn {
-      border: 1px solid var(--orange);
-      background: var(--orange);
-      color: #fff;
-    }
-
-    .primary-btn:hover {
-      background: var(--orange-dark);
-    }
-
-    .secondary-btn {
-      border: 1px solid var(--teal);
-      background: var(--teal);
-      color: #fff;
-    }
-
-    .secondary-btn:hover {
-      background: var(--teal-dark);
-    }
-
-    .ghost-btn {
-      border: 1px solid var(--line);
-      background: #fff;
-      color: var(--ink);
-    }
-
-    button:disabled {
-      opacity: 0.58;
-      cursor: not-allowed;
-    }
-
-    #profileForm .primary-btn,
-    #resetBtn {
-      width: 100%;
-    }
-
-    .upgrade-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .upgrade-grid {
-      margin-top: 20px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .upgrade-card {
-      min-height: 100%;
-      padding: 21px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background:
-        linear-gradient(180deg, #fff, #fcfdfd);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .upgrade-icon {
-      width: 46px;
-      height: 46px;
-      margin-bottom: 14px;
-      border-radius: 14px;
-      background: var(--teal-soft);
-      color: var(--teal);
-      display: grid;
-      place-items: center;
-      font-size: 22px;
-    }
-
-    .upgrade-card h3 {
-      margin: 0;
-      font-size: 18px;
-    }
-
-    .upgrade-card p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.65;
-    }
-
-    .upgrade-card ul {
-      margin: 14px 0 18px;
-      padding-left: 19px;
-      color: #475569;
-      font-size: 12.5px;
-      line-height: 1.8;
-    }
-
-    .upgrade-card .secondary-btn {
-      width: 100%;
-      margin-top: auto;
-    }
-
-    .status {
-      display: none;
-      margin: 0 0 14px;
-      padding: 12px 14px;
-      border-radius: 11px;
-      font-size: 12.5px;
-      line-height: 1.55;
-    }
-
-    .status.show {
-      display: block;
-    }
-
-    .status.pending {
-      background: var(--yellow-soft);
-      color: var(--yellow);
-    }
-
-    .status.approved {
-      background: var(--green-soft);
-      color: var(--green);
-    }
-
-    .status.rejected {
-      background: var(--red-soft);
-      color: var(--red);
-    }
-
-    .security-note {
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: #f8fafc;
-      color: #475569;
-      font-size: 12.5px;
-      line-height: 1.65;
-    }
-
-    .message {
-      display: none;
-      margin-top: 13px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-size: 12.5px;
-      line-height: 1.55;
-    }
-
-    .message.show {
-      display: block;
-    }
-
-    .message.success {
-      background: var(--green-soft);
-      color: var(--green);
-    }
-
-    .message.error {
-      background: var(--red-soft);
-      color: var(--red);
-    }
-
-    #resellerSuccessBanner {
-      margin-bottom: 18px;
-      padding: 16px 18px;
-      border: 1px solid #bbf7d0;
-      border-radius: 14px;
-      background: var(--green-soft);
-      color: var(--green);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      padding: 18px;
-      background: rgba(15, 23, 42, 0.62);
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-backdrop.show {
-      display: flex;
-    }
-
-    .modal-card {
-      width: min(920px, 100%);
-      max-height: min(92vh, 900px);
-      overflow-y: auto;
-      border-radius: 20px;
-      background: #fff;
-      box-shadow: 0 30px 80px rgba(15, 23, 42, 0.28);
-    }
-
-    .modal-header {
-      position: sticky;
-      top: 0;
-      z-index: 3;
-      padding: 20px 22px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.97);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .modal-header h2 {
-      margin: 0;
-      font-size: 22px;
-    }
-
-    .modal-header p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.55;
-    }
-
-    .modal-close {
-      width: 38px;
-      height: 38px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: #fff;
-      color: var(--ink);
-      font-size: 21px;
-      line-height: 1;
-    }
-
-    .modal-body {
-      padding: 22px;
-    }
-
-    .progress-row {
-      margin-bottom: 22px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .progress-item {
-      padding: 11px 13px;
-      border-radius: 10px;
-      background: #eef2f6;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .progress-item.active {
-      background: var(--teal-soft);
-      color: var(--teal);
-    }
-
-    [data-reseller-step] {
-      display: none;
-    }
-
-    [data-reseller-step].active {
-      display: block;
-    }
-
-    .example-card {
-      margin-top: 9px;
-      padding: 12px;
-      border: 1px solid #cfe8e8;
-      border-radius: 11px;
-      background: #f5fbfb;
-    }
-
-    .example-card p {
-      margin: 0;
-      color: #365f5f;
-      font-size: 12.5px;
-      line-height: 1.55;
-    }
-
-    .example-btn {
-      margin-top: 8px;
-      padding: 7px 10px;
-      border: 1px solid #b9dddd;
-      border-radius: 8px;
-      background: #fff;
-      color: var(--teal);
-      font-size: 11.5px;
-      font-weight: 800;
-    }
-
-    .counter {
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 11px;
-      text-align: right;
-    }
-
-    .agreement-box {
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: #fbfcfd;
-    }
-
-    .agreement-label {
-      display: flex !important;
-      gap: 10px;
-      align-items: flex-start;
-      margin: 0 !important;
-      line-height: 1.55;
-    }
-
-    .agreement-label input {
-      width: 19px;
-      min-height: 19px;
-      margin-top: 2px;
-      flex: 0 0 auto;
-    }
-
-    .modal-actions {
-      position: sticky;
-      bottom: 0;
-      z-index: 3;
-      padding: 15px 22px;
-      border-top: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.98);
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .application-panel {
-      display: block;
-    }
-
-    @media (max-width: 760px) {
-      .simple-navbar {
-        flex-wrap: wrap;
-      }
-
-      .simple-nav-actions {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .form-grid,
-      .upgrade-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .field.full {
-        grid-column: auto;
-      }
-
-      .settings-card {
-        padding: 18px;
-      }
-
-      .profile-photo-actions {
-        min-width: 0;
-        width: 100%;
-      }
-
-      .modal-backdrop {
-        padding: 0;
-        align-items: stretch;
-      }
-
-      .modal-card {
-        max-height: 100vh;
-        border-radius: 0;
-      }
-
-      .modal-body,
-      .modal-header,
-      .modal-actions {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Settings - Waterside</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="footer.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<meta name="theme-color" content="#0d6e6e">
+<style>
+:root{--navy:#0d6e6e;--navy-soft:#e3f2f2;--orange:#ff6b4a;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.simple-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.simple-navbar .logo-link{display:flex;align-items:center;gap:9px;text-decoration:none}
+.simple-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
+.simple-navbar .logo-text{color:var(--navy);font-size:14px;font-weight:700}
+.simple-nav-actions{display:flex;align-items:center;gap:8px}
+.simple-nav-link{min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:#fff;text-decoration:none;font-size:12px;font-weight:500}
+.simple-nav-link:hover{border-color:var(--navy);color:var(--navy)}
+.page-shell{width:min(560px,92%);margin:26px auto 60px}
+.page-title{margin:0 0 18px;font-size:19px;font-weight:600;color:var(--ink)}
+.settings-card{padding:20px;border:1px solid var(--line);border-radius:14px;background:#fff;margin-bottom:16px}
+.settings-card h2{margin:0 0 4px;font-size:15px;font-weight:600;color:var(--ink)}
+.settings-card p.card-sub{margin:0 0 14px;color:var(--muted);font-size:12px}
+.settings-card label{display:block;margin-top:12px;margin-bottom:6px;font-size:13px;font-weight:500;color:var(--ink)}
+.settings-card input,.settings-card select{width:100%;min-height:44px;padding:10px 13px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:13.5px;color:var(--ink);box-sizing:border-box}
+.settings-card input:focus,.settings-card select:focus{outline:none;border-color:var(--navy)}
+.settings-card input:disabled{background:#f1f5f9;color:var(--muted)}
+.save-btn{width:100%;min-height:46px;margin-top:16px;border:none;border-radius:10px;background:var(--orange);color:#fff;font-weight:700;font-size:13.5px;cursor:pointer}
+.save-btn:hover{background:#e5522f}
+.save-btn:disabled{opacity:.6;cursor:not-allowed}
+.reset-btn{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-weight:600;font-size:13px;cursor:pointer}
+.reset-btn:hover{border-color:var(--navy);color:var(--navy)}
+.success-msg{display:none;margin-top:10px;padding:10px 13px;border-radius:8px;background:var(--navy-soft);color:var(--navy);font-size:12.5px}
+.success-msg.show{display:block}
+
+/* Profile picture card */
+.profile-pic-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.profile-pic-preview{width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid var(--navy);background:var(--navy-soft);flex-shrink:0}
+.choose-pic-btn{min-height:42px;padding:0 16px;border:none;border-radius:9px;background:var(--navy);color:#fff;font-weight:700;font-size:13px;cursor:pointer}
+.choose-pic-btn:hover{background:#0a5757}
+.choose-pic-btn:disabled{opacity:.6;cursor:not-allowed}
+.pic-hint{margin:10px 0 0;color:var(--muted);font-size:11.5px}
+.pic-error{display:none;margin-top:10px;padding:10px 13px;border-radius:8px;background:#fdecea;color:#b3261e;font-size:12.5px}
+.pic-error.show{display:block}
+
+@media (max-width:700px){.simple-navbar{flex-wrap:wrap;gap:10px}.simple-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.page-shell{margin-top:16px}}
+</style>
 </head>
-
 <body>
+<header class="navbar simple-navbar">
+  <a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text">Waterside</span></a>
+  <div class="simple-nav-actions">
+    <a href="index.html" class="simple-nav-link">Home</a>
+    <a href="dashboard.html" class="simple-nav-link">Dashboard</a>
+    <a href="messages.html" class="simple-nav-link">Messages</a>
+  </div>
+</header>
 
-  <header class="simple-navbar">
-    <a href="index.html" class="logo-link">
-      <img src="icons/icon-512.png" alt="WaterSide">
-      <span>WaterSide</span>
-    </a>
+<section class="page-shell">
+  <h1 class="page-title">Account Settings</h1>
 
-    <div class="simple-nav-actions">
-      <a href="index.html" class="simple-nav-link">Home</a>
-      <a href="dashboard.html" class="simple-nav-link">Dashboard</a>
-      <a href="messages.html" class="simple-nav-link">Messages</a>
+  <div class="settings-card">
+    <h2>Profile Picture</h2>
+    <p class="card-sub">Your picture appears on your profile, listings, messages, orders, and reviews across Waterside.</p>
+
+    <div class="profile-pic-row">
+      <img id="profileImagePreview" class="profile-pic-preview" src="icons/icon-512.png" alt="Profile picture">
+      <button type="button" class="choose-pic-btn" id="changePictureBtn">Choose Picture</button>
+      <input type="file" id="profilePictureInput" accept="image/*" hidden>
     </div>
-  </header>
-
-  <main class="page-shell">
-
-    <div class="page-header">
-      <h1 class="page-title">Account Settings</h1>
-      <p class="page-subtitle">
-        Manage your profile, account security, and seller account upgrades.
-      </p>
-    </div>
-
-    <div id="resellerSuccessBanner" class="message success">
-      Your reseller application has been submitted successfully.
-      The WaterSide administrator can now review it.
-    </div>
-
-    <section class="settings-card">
-      <div class="account-summary">
-        <div>
-          <h2>Current Account</h2>
-          <p class="card-sub" id="accountSummaryText">
-            Loading your account status...
-          </p>
-        </div>
-
-        <div class="account-badges" id="accountBadges"></div>
-      </div>
-    </section>
-
-    <section class="settings-card">
-      <h2>Profile Picture</h2>
-      <p class="card-sub">
-        Your picture appears on your profile, listings, messages,
-        orders, and reviews across WaterSide.
-      </p>
-
-      <div class="profile-photo-row">
-        <div class="profile-photo-preview">
-          <img
-            id="profilePhotoPreview"
-            class="is-fallback"
-            src="icons/icon-512.png"
-            alt="Profile picture"
-          >
-        </div>
-
-        <div class="profile-photo-actions">
-          <input
-            id="profilePhotoInput"
-            type="file"
-            accept="image/*"
-            style="display:none;"
-          >
-
-          <div class="button-row">
-            <button
-              id="choosePhotoBtn"
-              class="secondary-btn"
-              type="button"
-            >
-              Choose Picture
-            </button>
-
-            <button
-              id="uploadPhotoBtn"
-              class="primary-btn"
-              type="button"
-              style="display:none;"
-            >
-              Save Picture
-            </button>
-          </div>
-
-          <p class="helper">
-            JPG or PNG, up to 5 MB. A square photo looks best.
-          </p>
-        </div>
-      </div>
-
-      <div class="message success" id="photoSuccess">
-        Your profile picture has been saved.
-      </div>
-
-      <div class="message error" id="photoError"></div>
-    </section>
-
-    <section class="settings-card">
-      <h2>Your Details</h2>
-      <p class="card-sub">
-        These details appear on your WaterSide profile and listings.
-      </p>
-
-      <form id="profileForm">
-        <div class="form-grid">
-          <div class="field">
-            <label for="name">Full Name</label>
-            <input id="name" type="text" required>
-          </div>
-
-          <div class="field">
-            <label for="email">Email</label>
-            <input id="email" type="email" disabled>
-          </div>
-
-          <div class="field">
-            <label for="phone">Phone Number</label>
-            <input
-              id="phone"
-              type="tel"
-              placeholder="Example: 077 123 4567"
-            >
-          </div>
-
-          <div class="field">
-            <label for="city">City</label>
-            <input id="city" type="text" placeholder="Example: Monrovia">
-          </div>
-
-          <div class="field full">
-            <label for="county">County</label>
-            <input
-              id="county"
-              type="text"
-              placeholder="Example: Montserrado"
-            >
-          </div>
-        </div>
-
-        <button class="primary-btn" id="saveBtn" type="submit">
-          Save Changes
-        </button>
-
-        <div class="message success" id="profileSuccess">
-          Your account details have been saved.
-        </div>
-
-        <div class="message error" id="profileError"></div>
-      </form>
-    </section>
-
-    <section class="settings-card">
-      <div class="upgrade-header">
-        <div>
-          <h2>Account Upgrade Center</h2>
-          <p class="card-sub">
-            Choose an account that matches how you sell.
-            Every application must be approved by a WaterSide administrator.
-          </p>
-        </div>
-      </div>
-
-      <div class="upgrade-grid">
-
-        <article class="upgrade-card">
-          <div class="upgrade-icon">🤝</div>
-
-          <h3>Reseller Account</h3>
-
-          <p>
-            Help several owners and businesses advertise products,
-            find buyers, and earn an agreed commission without buying
-            the products first.
-          </p>
-
-          <ul>
-            <li>Represent multiple product owners</li>
-            <li>Authorized Reseller badge</li>
-            <li>Public reseller storefront</li>
-            <li>Commission tracking</li>
-          </ul>
-
-          <div id="resellerStatus" class="status"></div>
-
-          <button
-            id="toggleResellerBtn"
-            class="secondary-btn"
-            type="button"
-          >
-            Apply for Reseller Account
-          </button>
-
-        </article>
-
-        <article class="upgrade-card">
-          <div class="upgrade-icon">🏢</div>
-
-          <h3>Business Account</h3>
-
-          <p>
-            For registered businesses, stores, shops,
-            and professional service providers.
-          </p>
-
-          <ul>
-            <li>Professional business storefront</li>
-            <li>Business badge</li>
-            <li>Company information</li>
-            <li>All listings shown in one shop</li>
-          </ul>
-
-          <div id="businessStatus" class="status"></div>
-
-          <button
-            id="toggleBusinessBtn"
-            class="secondary-btn"
-            type="button"
-          >
-            Apply for Business Account
-          </button>
-
-        </article>
-
-        <article class="upgrade-card">
-          <div class="upgrade-icon">✓</div>
-
-          <h3>Verified Seller</h3>
-
-          <p>
-            Request a trust review for your personal seller account
-            and help buyers identify trusted sellers.
-          </p>
-
-          <ul>
-            <li>Verified Seller badge</li>
-            <li>More buyer confidence</li>
-            <li>Trust-focused seller profile</li>
-          </ul>
-
-          <div id="sellerVerificationStatus" class="status"></div>
-
-          <button
-            id="requestSellerVerificationBtn"
-            class="secondary-btn"
-            type="button"
-          >
-            Request Seller Verification
-          </button>
-
-          <div
-            class="message success"
-            id="sellerVerificationSuccess"
-          ></div>
-
-          <div
-            class="message error"
-            id="sellerVerificationError"
-          ></div>
-        </article>
-
-        <article class="upgrade-card">
-          <div class="upgrade-icon">🏆</div>
-
-          <h3>Verified Business</h3>
-
-          <p>
-            Business verification is granted only after the business
-            account and supporting information are reviewed.
-          </p>
-
-          <div class="security-note">
-            Users cannot approve themselves as resellers, businesses,
-            verified sellers, or verified businesses. Only the
-            WaterSide administrator can approve these account statuses.
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <section class="settings-card">
-      <h2>Password</h2>
-
-      <p class="card-sub">
-        We will email you a secure password-reset link.
-      </p>
-
-      <button id="resetBtn" class="secondary-btn" type="button">
-        Send Password Reset Email
-      </button>
-    </section>
-
-  </main>
-
-  <footer class="lm-footer" id="marketplaceFooter">
-    <div class="lm-footer-simple site-shell">
-      <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
-      <p class="lm-footer-copyright">
-        &copy; 2026 <span data-marketplace-name>WaterSide</span>
-      </p>
-    </div>
-  </footer>
-
-  <div
-    id="resellerModal"
-    class="modal-backdrop"
-    aria-hidden="true"
-  >
-    <section class="modal-card" role="dialog" aria-modal="true">
-      <header class="modal-header">
-        <div>
-          <h2>Apply for a Reseller Account</h2>
-          <p>
-            You do not need to own products first. You may help several
-            owners find buyers after getting permission to advertise.
-          </p>
-        </div>
-
-        <button
-          id="closeResellerModal"
-          class="modal-close"
-          type="button"
-          aria-label="Close"
-        >
-          ×
-        </button>
-      </header>
-
-      <div class="modal-body">
-
-        <div class="progress-row">
-          <div
-            class="progress-item active"
-            data-reseller-progress="1"
-          >
-            1. Basic Information
-          </div>
-
-          <div
-            class="progress-item"
-            data-reseller-progress="2"
-          >
-            2. Selling Plan
-          </div>
-        </div>
-
-        <div id="resellerPanel" class="application-panel">
-
-          <div class="active" data-reseller-step="1">
-            <div class="form-grid">
-
-              <div class="field" data-field="resellerName">
-                <label for="resellerName">Reseller or Shop Name *</label>
-                <input
-                  id="resellerName"
-                  type="text"
-                  required
-                  placeholder="Example: Abraham Electronics Agent"
-                >
-                <div class="field-error">
-                  Enter your reseller or shop name.
-                </div>
-              </div>
-
-              <div class="field" data-field="resellerCategory">
-                <label for="resellerCategory">
-                  Main Product Category *
-                </label>
-
-                <select id="resellerCategory" required>
-                  <option value="">Choose category</option>
-                  <option>Phones & Tablets</option>
-                  <option>Electronics</option>
-                  <option>Vehicles</option>
-                  <option>Fashion</option>
-                  <option>Home & Appliances</option>
-                  <option>Building Materials</option>
-                  <option>Agriculture</option>
-                  <option>Property</option>
-                  <option>Services</option>
-                  <option>Other</option>
-                </select>
-
-                <div class="field-error">
-                  Choose your main product category.
-                </div>
-              </div>
-
-              <div class="field" data-field="resellerPhone">
-                <label for="resellerPhone">Business Phone *</label>
-                <input
-                  id="resellerPhone"
-                  type="tel"
-                  required
-                  placeholder="Example: 077 123 4567"
-                >
-                <div class="field-error">
-                  Enter a phone number buyers and owners can reach.
-                </div>
-              </div>
-
-              <div class="field" data-field="resellerCounty">
-                <label for="resellerCounty">County *</label>
-                <input
-                  id="resellerCounty"
-                  type="text"
-                  required
-                  placeholder="Example: Montserrado"
-                >
-                <div class="field-error">Enter your county.</div>
-              </div>
-
-              <div class="field" data-field="resellerCity">
-                <label for="resellerCity">City *</label>
-                <input
-                  id="resellerCity"
-                  type="text"
-                  required
-                  placeholder="Example: Monrovia"
-                >
-                <div class="field-error">Enter your city.</div>
-              </div>
-
-              <div class="field" data-field="resellerExperience">
-                <label for="resellerExperience">
-                  Years of Selling Experience *
-                </label>
-
-                <input
-                  id="resellerExperience"
-                  type="number"
-                  min="0"
-                  max="60"
-                  required
-                  placeholder="Example: 0"
-                >
-
-                <div class="helper">
-                  Enter <strong>0</strong> when you are just starting.
-                  Do not enter the current year.
-                </div>
-
-                <div class="field-error">
-                  Enter how many years you have sold products.
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <div data-reseller-step="2">
-            <div class="form-grid">
-
-              <div class="field full" data-field="resellerDescription">
-                <label for="resellerDescription">
-                  What products will you help people sell? *
-                </label>
-
-                <textarea
-                  id="resellerDescription"
-                  required
-                  maxlength="500"
-                  data-count-target
-                  placeholder="Write a short answer or use the example below."
-                ></textarea>
-
-                <div class="example-card">
-                  <p>
-                    Example: I will help shops and individuals sell
-                    phones, speakers, chargers, watches, and other
-                    electronics.
-                  </p>
-
-                  <button
-                    class="example-btn"
-                    type="button"
-                    data-example-target="resellerDescription"
-                    data-example-text="I will help shops and individuals sell phones, speakers, chargers, watches, and other electronics."
-                  >
-                    Use this example
-                  </button>
-                </div>
-
-                <div
-                  class="counter"
-                  data-counter-for="resellerDescription"
-                ></div>
-
-                <div class="field-error">
-                  Tell us what products you plan to help sell.
-                </div>
-              </div>
-
-              <div class="field full" data-field="resellerReason">
-                <label for="resellerReason">
-                  Why do you want a reseller account? *
-                </label>
-
-                <textarea
-                  id="resellerReason"
-                  required
-                  maxlength="500"
-                  data-count-target
-                  placeholder="Write a short answer or use the example below."
-                ></textarea>
-
-                <div class="example-card">
-                  <p>
-                    Example: I want to help local shops and individuals
-                    find buyers and earn commission from successful sales.
-                  </p>
-
-                  <button
-                    class="example-btn"
-                    type="button"
-                    data-example-target="resellerReason"
-                    data-example-text="I want to help local shops and individuals find buyers and earn commission from successful sales."
-                  >
-                    Use this example
-                  </button>
-                </div>
-
-                <div
-                  class="counter"
-                  data-counter-for="resellerReason"
-                ></div>
-
-                <div class="field-error">
-                  Tell us why you want to become a reseller.
-                </div>
-              </div>
-
-              <div class="field full" data-field="resellerOwnerPlan">
-                <label for="resellerOwnerPlan">
-                  How will you find and work with product owners? *
-                </label>
-
-                <textarea
-                  id="resellerOwnerPlan"
-                  required
-                  maxlength="500"
-                  data-count-target
-                  placeholder="Write a short answer or use the example below."
-                ></textarea>
-
-                <div class="example-card">
-                  <p>
-                    Example: I will visit shops and speak with product
-                    owners. I will get their permission before posting
-                    their products and confirm that each item is available.
-                  </p>
-
-                  <button
-                    class="example-btn"
-                    type="button"
-                    data-example-target="resellerOwnerPlan"
-                    data-example-text="I will visit shops and speak with product owners. I will get their permission before posting their products and confirm that each item is available."
-                  >
-                    Use this example
-                  </button>
-                </div>
-
-                <div
-                  class="counter"
-                  data-counter-for="resellerOwnerPlan"
-                ></div>
-
-                <div class="field-error">
-                  Explain how you will get permission and work with owners.
-                </div>
-              </div>
-
-              <div
-                class="field full"
-                data-field="resellerCommissionPlan"
-              >
-                <label for="resellerCommissionPlan">
-                  How will your commission be agreed and paid? *
-                </label>
-
-                <textarea
-                  id="resellerCommissionPlan"
-                  required
-                  maxlength="500"
-                  data-count-target
-                  placeholder="Write a short answer or use the example below."
-                ></textarea>
-
-                <div class="example-card">
-                  <p>
-                    Example: The owner will tell me the amount they want.
-                    We will agree on my commission before I advertise the
-                    product, and the owner will pay me after a successful sale.
-                  </p>
-
-                  <button
-                    class="example-btn"
-                    type="button"
-                    data-example-target="resellerCommissionPlan"
-                    data-example-text="The owner will tell me the amount they want. We will agree on my commission before I advertise the product, and the owner will pay me after a successful sale."
-                  >
-                    Use this example
-                  </button>
-                </div>
-
-                <div
-                  class="counter"
-                  data-counter-for="resellerCommissionPlan"
-                ></div>
-
-                <div class="field-error">
-                  Explain how you and the owner will agree on commission.
-                </div>
-              </div>
-
-              <div
-                class="field full"
-                data-field="resellerPermissionAgreement"
-              >
-                <div class="agreement-box">
-                  <label class="agreement-label">
-                    <input
-                      id="resellerPermissionAgreement"
-                      type="checkbox"
-                      required
-                    >
-
-                    <span>
-                      I confirm that I will advertise only products I have
-                      permission to sell, confirm availability before posting,
-                      and never mislead buyers about who owns the product.
-                    </span>
-                  </label>
-                </div>
-
-                <div class="field-error">
-                  You must accept the reseller agreement.
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-
-        <div class="message success" id="resellerSuccess"></div>
-        <div class="message error" id="resellerError"></div>
-
-      </div>
-
-      <footer class="modal-actions">
-        <div class="button-row" style="margin:0;">
-          <button
-            id="cancelResellerBtn"
-            class="ghost-btn"
-            type="button"
-          >
-            Cancel
-          </button>
-
-          <button
-            id="resellerBackBtn"
-            class="ghost-btn"
-            type="button"
-          >
-            Back
-          </button>
-        </div>
-
-        <div class="button-row" style="margin:0;">
-          <button
-            id="resellerNextBtn"
-            class="secondary-btn"
-            type="button"
-          >
-            Continue
-          </button>
-
-          <button
-            id="submitResellerBtn"
-            class="primary-btn"
-            type="button"
-            style="display:none;"
-          >
-            Submit Reseller Application
-          </button>
-        </div>
-      </footer>
-    </section>
+    <p class="pic-hint">JPG or PNG, up to 5 MB. A square photo looks best.</p>
+    <div class="pic-error" id="picError"></div>
   </div>
 
-  <div
-    id="businessModal"
-    class="modal-backdrop"
-    aria-hidden="true"
-  >
-    <section class="modal-card" role="dialog" aria-modal="true">
-      <header class="modal-header">
-        <div>
-          <h2>Apply for a Business Account</h2>
-          <p>
-            Add information about your registered business, shop,
-            or professional service.
-          </p>
-        </div>
+  <div class="settings-card">
+    <h2>Your Details</h2>
+    <p class="card-sub">These details show on your profile and listings.</p>
 
-        <button
-          id="closeBusinessModal"
-          class="modal-close"
-          type="button"
-          aria-label="Close"
-        >
-          ×
-        </button>
-      </header>
+    <form id="profileForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required>
 
-      <div class="modal-body">
-        <div id="businessPanel" class="application-panel">
-          <div class="form-grid">
+      <label for="email">Email</label>
+      <input type="email" id="email" disabled>
 
-            <div class="field">
-              <label for="businessName">Business Name</label>
-              <input
-                id="businessName"
-                type="text"
-                placeholder="Example: Abraham Business Center"
-              >
-            </div>
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone">
 
-            <div class="field">
-              <label for="businessCategory">Business Category</label>
-              <select id="businessCategory">
-                <option value="">Choose category</option>
-                <option>Vehicles</option>
-                <option>Property</option>
-                <option>Phones & Tablets</option>
-                <option>Electronics</option>
-                <option>Fashion</option>
-                <option>Jobs</option>
-                <option>Services</option>
-                <option>Building Materials</option>
-                <option>Home & Appliances</option>
-                <option>Agriculture</option>
-                <option>Other</option>
-              </select>
-            </div>
+      <label for="city">City</label>
+      <input type="text" id="city" placeholder="Monrovia">
 
-            <div class="field">
-              <label for="businessPhone">Business Phone</label>
-              <input
-                id="businessPhone"
-                type="tel"
-                placeholder="Example: 077 123 4567"
-              >
-            </div>
+      <label for="county">County</label>
+      <input type="text" id="county" placeholder="Montserrado">
 
-            <div class="field">
-              <label for="businessRegistrationNumber">
-                Registration Number
-              </label>
-              <input
-                id="businessRegistrationNumber"
-                type="text"
-                placeholder="Optional"
-              >
-            </div>
+      <div id="businessFieldsSection" style="display:none;">
+        <label for="businessName">Business Name</label>
+        <input type="text" id="businessName">
 
-            <div class="field">
-              <label for="businessCity">Business City</label>
-              <input
-                id="businessCity"
-                type="text"
-                placeholder="Example: Monrovia"
-              >
-            </div>
+        <label for="businessCategory">Business Category</label>
+        <input type="text" id="businessCategory">
 
-            <div class="field">
-              <label for="businessCounty">Business County</label>
-              <input
-                id="businessCounty"
-                type="text"
-                placeholder="Example: Montserrado"
-              >
-            </div>
+        <label for="businessCity">Business City</label>
+        <input type="text" id="businessCity">
 
-            <div class="field full">
-              <label for="businessDescription">
-                Business Description
-              </label>
+        <label for="businessCounty">Business County</label>
+        <input type="text" id="businessCounty">
 
-              <textarea
-                id="businessDescription"
-                placeholder="Example: We sell phones, accessories, speakers, and other electronics."
-              ></textarea>
-            </div>
+        <label for="businessPhone">Business Phone</label>
+        <input type="tel" id="businessPhone">
 
-          </div>
-        </div>
-
-        <div class="message success" id="businessSuccess"></div>
-        <div class="message error" id="businessError"></div>
+        <label for="businessRegistrationNumber">Business Registration Number</label>
+        <input type="text" id="businessRegistrationNumber">
       </div>
 
-      <footer class="modal-actions">
-        <button
-          id="cancelBusinessBtn"
-          class="ghost-btn"
-          type="button"
-        >
-          Cancel
-        </button>
-
-        <button
-          id="submitBusinessBtn"
-          class="primary-btn"
-          type="button"
-        >
-          Submit Business Application
-        </button>
-      </footer>
-    </section>
+      <button type="submit" class="save-btn" id="saveBtn">Save Changes</button>
+      <div class="success-msg" id="successMsg">Your details have been saved.</div>
+    </form>
   </div>
+
+  <div class="settings-card">
+    <h2>Password</h2>
+    <p class="card-sub">We'll email you a link to reset your password.</p>
+    <button type="button" class="reset-btn" id="resetBtn">Send Password Reset Email</button>
+  </div>
+</section>
+
+<footer class="lm-footer" id="marketplaceFooter">
+  <div class="lm-footer-simple site-shell">
+    <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+    <p class="lm-footer-copyright">&copy; 2026 <span data-marketplace-name>Waterside</span></p>
+  </div>
+</footer>
 
 <script type="module">
-import { auth, db, storage } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { doc, getDoc, updateDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
-const $ = (id) => document.getElementById(id);
+const profileForm = document.getElementById("profileForm");
+const saveBtn = document.getElementById("saveBtn");
+const successMsg = document.getElementById("successMsg");
+const resetBtn = document.getElementById("resetBtn");
+const businessFieldsSection = document.getElementById("businessFieldsSection");
+
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const cityInput = document.getElementById("city");
+const countyInput = document.getElementById("county");
+const businessNameInput = document.getElementById("businessName");
+const businessCategoryInput = document.getElementById("businessCategory");
+const businessCityInput = document.getElementById("businessCity");
+const businessCountyInput = document.getElementById("businessCounty");
+const businessPhoneInput = document.getElementById("businessPhone");
+const businessRegistrationNumberInput = document.getElementById("businessRegistrationNumber");
+
+// Profile picture elements
+const profileImagePreview = document.getElementById("profileImagePreview");
+const changePictureBtn = document.getElementById("changePictureBtn");
+const profilePictureInput = document.getElementById("profilePictureInput");
+const picError = document.getElementById("picError");
+
+const WATERSIDE_LOGO = "icons/icon-512.png";
+const storage = getStorage();
+
 let currentUser = null;
-let currentProfile = null;
-let selectedPhotoFile = null;
-
-function setMessage(id, text, type="success") { const el=$(id); el.textContent=text; el.className=`message ${type} show`; }
-function clearMessage(id){ const el=$(id); el.textContent=""; el.className="message"; }
-function showStatus(id,status,label){ const el=$(id); el.className="status"; if(!status)return; const css=status==="approved"||status==="verified"?"approved":status==="rejected"?"rejected":"pending"; el.classList.add("show",css); el.textContent=label; }
-function statusLabel(type,status){ if(status==="pending")return `${type} application is awaiting administrator approval.`; if(status==="rejected")return `${type} application was not approved. Update it and submit again.`; if(status==="approved"||status==="verified")return `${type} account is approved.`; return ""; }
-
-function showProfilePhoto(url){
-  const img=$("profilePhotoPreview");
-  if(url){ img.src=url; img.classList.remove("is-fallback"); }
-  else { img.src="icons/icon-512.png"; img.classList.add("is-fallback"); }
-}
-
-function renderAccountSummary(data){
-  const type=data.accountType||"personal";
-  $("accountSummaryText").textContent=`You currently have a ${type.charAt(0).toUpperCase()+type.slice(1)} Account.`;
-  const badges=[`<span class="badge teal">${type} account</span>`];
-  if(data.verified===true)badges.push('<span class="badge green">Verified Seller</span>');
-  if(data.resellerVerified===true||data.isResellerVerified===true)badges.push('<span class="badge orange">Verified Reseller</span>');
-  if(data.businessVerified===true||data.isBusinessVerified===true)badges.push('<span class="badge green">Verified Business</span>');
-  $("accountBadges").innerHTML=badges.join("");
-}
 
 async function loadProfile(){
-  const snap=await getDoc(doc(db,"users",currentUser.uid));
-  if(!snap.exists())throw new Error("Your WaterSide profile was not found.");
-  const d=snap.data(); currentProfile=d;
-  showProfilePhoto(d.profileImageUrl||null);
-  $("name").value=d.name||""; $("email").value=currentUser.email||""; $("phone").value=d.phone||""; $("city").value=d.city||""; $("county").value=d.county||"";
-  $("resellerName").value=d.resellerName||""; $("resellerCategory").value=d.resellerCategory||""; $("resellerPhone").value=d.resellerPhone||d.phone||""; $("resellerCounty").value=d.resellerCounty||d.county||""; $("resellerCity").value=d.resellerCity||d.city||""; $("resellerExperience").value=d.resellerExperience||""; $("resellerDescription").value=d.resellerDescription||""; $("resellerReason").value=d.resellerReason||""; $("resellerOwnerPlan").value=d.resellerOwnerPlan||""; $("resellerCommissionPlan").value=d.resellerCommissionPlan||"";
-  $("businessName").value=d.businessName||""; $("businessCategory").value=d.businessCategory||""; $("businessPhone").value=d.businessPhone||d.phone||""; $("businessRegistrationNumber").value=d.businessRegistrationNumber||""; $("businessCity").value=d.businessCity||d.city||""; $("businessCounty").value=d.businessCounty||d.county||""; $("businessDescription").value=d.businessDescription||"";
-  renderAccountSummary(d);
-  const resellerApproved=d.resellerVerified===true||d.isResellerVerified===true||d.accountType==="reseller";
-  const businessApproved=d.businessVerified===true||d.isBusinessVerified===true;
-  showStatus("resellerStatus",resellerApproved?"approved":d.resellerApplicationStatus,statusLabel("Reseller",resellerApproved?"approved":d.resellerApplicationStatus));
-  showStatus("businessStatus",businessApproved?"approved":d.businessApplicationStatus,statusLabel("Business",businessApproved?"approved":d.businessApplicationStatus));
-  showStatus("sellerVerificationStatus",d.verified===true?"approved":d.sellerVerificationStatus,d.verified===true?"Your seller account is verified.":statusLabel("Seller verification",d.sellerVerificationStatus));
-  if(resellerApproved) $("toggleResellerBtn").style.display="none"; else if(d.resellerApplicationStatus==="pending") $("toggleResellerBtn").textContent="Update Reseller Application";
-  if(businessApproved) $("toggleBusinessBtn").style.display="none"; else if(d.businessApplicationStatus==="pending") $("toggleBusinessBtn").textContent="Update Business Application";
-  if(d.verified===true||d.sellerVerificationStatus==="pending") $("requestSellerVerificationBtn").style.display="none";
+  emailInput.value = currentUser.email || "";
+
+  try{
+    const userSnap = await getDoc(doc(db,"users",currentUser.uid));
+    if(!userSnap.exists()) return;
+
+    const data = userSnap.data();
+    nameInput.value = data.name || "";
+    phoneInput.value = data.phone || "";
+    cityInput.value = data.city || "";
+    countyInput.value = data.county || "";
+
+    // Show existing profile picture, or fall back to the Waterside logo
+    profileImagePreview.src = data.profileImageUrl || WATERSIDE_LOGO;
+
+    if((data.accountType||"personal")==="business"){
+      businessFieldsSection.style.display = "block";
+      businessNameInput.value = data.businessName || "";
+      businessCategoryInput.value = data.businessCategory || "";
+      businessCityInput.value = data.businessCity || "";
+      businessCountyInput.value = data.businessCounty || "";
+      businessPhoneInput.value = data.businessPhone || "";
+      businessRegistrationNumberInput.value = data.businessRegistrationNumber || "";
+    }
+  }catch(error){
+    console.error("Could not load profile:", error.message);
+  }
 }
 
-// ---------- Profile picture upload ----------
-
-$("choosePhotoBtn").addEventListener("click",()=>{ $("profilePhotoInput").click(); });
-
-$("profilePhotoInput").addEventListener("change",()=>{
-  clearMessage("photoSuccess"); clearMessage("photoError");
-  const file=$("profilePhotoInput").files[0];
-  if(!file){ selectedPhotoFile=null; $("uploadPhotoBtn").style.display="none"; return; }
-  if(!file.type.startsWith("image/")){ setMessage("photoError","Please choose an image file (JPG or PNG).","error"); selectedPhotoFile=null; $("uploadPhotoBtn").style.display="none"; return; }
-  if(file.size>5*1024*1024){ setMessage("photoError","That image is larger than 5 MB. Please choose a smaller one.","error"); selectedPhotoFile=null; $("uploadPhotoBtn").style.display="none"; return; }
-  selectedPhotoFile=file;
-  const reader=new FileReader();
-  reader.onload=()=>{ const img=$("profilePhotoPreview"); img.src=reader.result; img.classList.remove("is-fallback"); };
-  reader.readAsDataURL(file);
-  $("uploadPhotoBtn").style.display="inline-flex";
+// If a saved profile picture URL ever breaks, fall back to the logo instead of a broken-image icon
+profileImagePreview.addEventListener("error", ()=>{
+  profileImagePreview.src = WATERSIDE_LOGO;
 });
 
-$("uploadPhotoBtn").addEventListener("click",async()=>{
-  if(!selectedPhotoFile||!currentUser)return;
-  clearMessage("photoSuccess"); clearMessage("photoError");
-  $("uploadPhotoBtn").disabled=true; $("choosePhotoBtn").disabled=true;
-  $("uploadPhotoBtn").textContent="Saving...";
+changePictureBtn.addEventListener("click", ()=>{
+  profilePictureInput.click();
+});
+
+profilePictureInput.addEventListener("change", async (event)=>{
+  const file = event.target.files[0];
+  if(!file) return;
+
+  picError.classList.remove("show");
+  picError.textContent = "";
+
+  if(file.size > 5 * 1024 * 1024){
+    picError.textContent = "That picture is over 5 MB. Please choose a smaller file.";
+    picError.classList.add("show");
+    profilePictureInput.value = "";
+    return;
+  }
+
+  const previousSrc = profileImagePreview.src;
+  profileImagePreview.src = URL.createObjectURL(file); // instant local preview while it uploads
+  changePictureBtn.disabled = true;
+  changePictureBtn.textContent = "Uploading...";
+
   try{
-    // Fixed filename so a new upload replaces the old picture
-    // instead of leaving unused files behind.
-    const photoRef=ref(storage,`profile-images/${currentUser.uid}/profile.jpg`);
-    await uploadBytes(photoRef,selectedPhotoFile,{contentType:selectedPhotoFile.type});
-    const url=await getDownloadURL(photoRef);
-    await updateDoc(doc(db,"users",currentUser.uid),{profileImageUrl:url,updatedAt:serverTimestamp()});
-    showProfilePhoto(url);
-    selectedPhotoFile=null;
-    $("profilePhotoInput").value="";
-    $("uploadPhotoBtn").style.display="none";
-    $("photoSuccess").classList.add("show");
-  }catch(err){
-    setMessage("photoError","Could not save your picture: "+err.message,"error");
+    const fileRef = ref(storage, `profile-images/${currentUser.uid}/profile.jpg`);
+    await uploadBytes(fileRef, file);
+    const downloadUrl = await getDownloadURL(fileRef);
+
+    await updateDoc(doc(db,"users",currentUser.uid), {
+      profileImageUrl: downloadUrl
+    });
+
+    profileImagePreview.src = downloadUrl;
+  }catch(error){
+    console.error("Profile picture upload failed:", error.message);
+    picError.textContent = "Couldn't upload your picture. Please try again.";
+    picError.classList.add("show");
+    profileImagePreview.src = previousSrc;
   }finally{
-    $("uploadPhotoBtn").disabled=false; $("choosePhotoBtn").disabled=false;
-    $("uploadPhotoBtn").textContent="Save Picture";
+    changePictureBtn.disabled = false;
+    changePictureBtn.textContent = "Choose Picture";
+    profilePictureInput.value = "";
   }
 });
 
-$("profileForm").addEventListener("submit",async(e)=>{e.preventDefault();clearMessage("profileError");$("saveBtn").disabled=true;try{await updateDoc(doc(db,"users",currentUser.uid),{name:$("name").value.trim(),phone:$("phone").value.trim(),city:$("city").value.trim(),county:$("county").value.trim(),updatedAt:serverTimestamp()});$("profileSuccess").classList.add("show");}catch(err){setMessage("profileError","Could not save your changes: "+err.message,"error");}finally{$("saveBtn").disabled=false;}});
+profileForm.addEventListener("submit", async (event)=>{
+  event.preventDefault();
 
-$("toggleResellerBtn").addEventListener("click",()=>openModal("resellerModal"));
-$("closeResellerModal").addEventListener("click",()=>closeModal("resellerModal"));
-$("cancelResellerBtn").addEventListener("click",()=>closeModal("resellerModal"));
-$("toggleBusinessBtn").addEventListener("click",()=>openModal("businessModal"));
-$("closeBusinessModal").addEventListener("click",()=>closeModal("businessModal"));
-$("cancelBusinessBtn").addEventListener("click",()=>closeModal("businessModal"));
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Saving...";
+  successMsg.classList.remove("show");
 
-function clearResellerValidation(){document.querySelectorAll("#resellerPanel .field").forEach((field)=>field.classList.remove("invalid"));}
-function markResellerInvalid(id){const input=$(id);const field=input.closest(".field");if(field)field.classList.add("invalid");}
-function validateResellerForm(){
-  clearResellerValidation();
-  const checks=[
-    ["resellerName",$("resellerName").value.trim()],
-    ["resellerCategory",$("resellerCategory").value],
-    ["resellerPhone",$("resellerPhone").value.trim()],
-    ["resellerCounty",$("resellerCounty").value.trim()],
-    ["resellerCity",$("resellerCity").value.trim()],
-    ["resellerExperience",$("resellerExperience").value !== ""],
-    ["resellerDescription",$("resellerDescription").value.trim()],
-    ["resellerReason",$("resellerReason").value.trim()],
-    ["resellerOwnerPlan",$("resellerOwnerPlan").value.trim()],
-    ["resellerCommissionPlan",$("resellerCommissionPlan").value.trim()],
-    ["resellerPermissionAgreement",$("resellerPermissionAgreement").checked]
-  ];
-  const missing=checks.filter(([,ok])=>!ok);
-  missing.forEach(([id])=>markResellerInvalid(id));
-  if(missing.length){
-    setMessage("resellerError",`Please complete ${missing.length} required field${missing.length===1?"":"s"}. The missing boxes are marked in red.`,"error");
-    $(missing[0][0]).scrollIntoView({behavior:"smooth",block:"center"});
-    $(missing[0][0]).focus();
-    return false;
-  }
-  return true;
-}
-
-$("submitResellerBtn").addEventListener("click",async()=>{
-  clearMessage("resellerSuccess");clearMessage("resellerError");
-  if(!validateResellerForm()) return;
-  const data={
-    userId:currentUser.uid,
-    fullName:$("name").value.trim(),
-    email:currentUser.email||"",
-    phone:$("resellerPhone").value.trim(),
-    county:$("resellerCounty").value.trim(),
-    city:$("resellerCity").value.trim(),
-    resellerName:$("resellerName").value.trim(),
-    categories:[$("resellerCategory").value].filter(Boolean),
-    experienceYears:Number($("resellerExperience").value||0),
-    description:$("resellerDescription").value.trim(),
-    reason:$("resellerReason").value.trim(),
-    ownerPlan:$("resellerOwnerPlan").value.trim(),
-    commissionPlan:$("resellerCommissionPlan").value.trim(),
-    canRepresentMultipleOwners:true,
-    permissionAgreement:$("resellerPermissionAgreement").checked,
-    status:"pending",
-    submittedAt:serverTimestamp(),
-    updatedAt:serverTimestamp()
-  };
-  $("submitResellerBtn").disabled=true;
   try{
-    await setDoc(doc(db,"resellerApplications",currentUser.uid),data,{merge:true});
-    await updateDoc(doc(db,"users",currentUser.uid),{
-      resellerApplicationStatus:"pending",
-      resellerApplicationSubmittedAt:serverTimestamp(),
-      resellerName:data.resellerName,
-      resellerCategory:data.categories[0],
-      resellerPhone:data.phone,
-      resellerCounty:data.county,
-      resellerCity:data.city,
-      resellerExperience:data.experienceYears,
-      resellerDescription:data.description,
-      resellerReason:data.reason,
-      resellerOwnerPlan:data.ownerPlan,
-      resellerCommissionPlan:data.commissionPlan,
-      updatedAt:serverTimestamp()
-    });
-    showStatus("resellerStatus","pending",statusLabel("Reseller","pending"));
-    setMessage("resellerSuccess","Your reseller application was submitted successfully. The WaterSide administrator can now review it.");
-    $("resellerSuccessBanner").classList.add("show");
-    $("resellerSuccessBanner").scrollIntoView({behavior:"smooth",block:"center"});
-    closeModal("resellerModal");
-    $("toggleResellerBtn").textContent="Update Reseller Application";
-  }catch(err){setMessage("resellerError","Could not submit reseller application: "+err.message,"error");}finally{$("submitResellerBtn").disabled=false;}
-});
-
-$("submitBusinessBtn").addEventListener("click",async()=>{
-  clearMessage("businessSuccess");clearMessage("businessError");
-  const data={businessName:$("businessName").value.trim(),businessCategory:$("businessCategory").value,businessPhone:$("businessPhone").value.trim(),businessRegistrationNumber:$("businessRegistrationNumber").value.trim(),businessCity:$("businessCity").value.trim(),businessCounty:$("businessCounty").value.trim(),businessDescription:$("businessDescription").value.trim()};
-  if(!data.businessName||!data.businessCategory||!data.businessPhone||!data.businessCity||!data.businessCounty||!data.businessDescription){setMessage("businessError","Complete the business name, category, phone, city, county, and description.","error");return;}
-  $("submitBusinessBtn").disabled=true;
-  try{await updateDoc(doc(db,"users",currentUser.uid),{...data,businessApplicationStatus:"pending",businessApplicationSubmittedAt:serverTimestamp(),updatedAt:serverTimestamp()});showStatus("businessStatus","pending",statusLabel("Business","pending"));setMessage("businessSuccess","Your business application was submitted for administrator review.");
-    closeModal("businessModal");$("toggleBusinessBtn").textContent="Update Business Application";}catch(err){setMessage("businessError","Could not submit business application: "+err.message,"error");}finally{$("submitBusinessBtn").disabled=false;}
-});
-
-$("requestSellerVerificationBtn").addEventListener("click",async()=>{clearMessage("sellerVerificationSuccess");clearMessage("sellerVerificationError");if(!confirm("Submit a seller verification request?"))return;try{await updateDoc(doc(db,"users",currentUser.uid),{sellerVerificationStatus:"pending",sellerVerificationSubmittedAt:serverTimestamp(),updatedAt:serverTimestamp()});showStatus("sellerVerificationStatus","pending",statusLabel("Seller verification","pending"));setMessage("sellerVerificationSuccess","Your seller verification request was submitted.");$("requestSellerVerificationBtn").style.display="none";}catch(err){setMessage("sellerVerificationError","Could not submit verification request: "+err.message,"error");}});
-
-$("resetBtn").addEventListener("click",async()=>{if(!currentUser?.email)return;if(!confirm(`Send a password-reset email to ${currentUser.email}?`))return;try{await sendPasswordResetEmail(auth,currentUser.email);alert("Password-reset email sent.");}catch(err){alert("Could not send reset email: "+err.message);}});
-
-onAuthStateChanged(auth,async(user)=>{if(!user){alert("Please log in to view your account settings.");location.href="login.html";return;}currentUser=user;try{await loadProfile();}catch(err){setMessage("profileError","Could not load your account: "+err.message,"error");}});
-</script>
-
-<script>
-  function openModal(id) {
-    const modal = document.getElementById(id);
-    modal.classList.add("show");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-open");
-
-    if (id === "resellerModal") {
-      showResellerStep(1);
-    }
-  }
-
-  function closeModal(id) {
-    const modal = document.getElementById(id);
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("modal-open");
-  }
-
-  function showResellerStep(step) {
-    document.querySelectorAll("[data-reseller-step]").forEach((panel) => {
-      panel.classList.toggle(
-        "active",
-        Number(panel.dataset.resellerStep) === Number(step)
-      );
-    });
-
-    document.querySelectorAll("[data-reseller-progress]").forEach((item) => {
-      item.classList.toggle(
-        "active",
-        Number(item.dataset.resellerProgress) <= Number(step)
-      );
-    });
-
-    document.getElementById("resellerBackBtn").style.display =
-      Number(step) === 1 ? "none" : "inline-flex";
-
-    document.getElementById("resellerNextBtn").style.display =
-      Number(step) === 1 ? "inline-flex" : "none";
-
-    document.getElementById("submitResellerBtn").style.display =
-      Number(step) === 2 ? "inline-flex" : "none";
-  }
-
-  function validateResellerStepOne() {
-    const ids = [
-      "resellerName",
-      "resellerCategory",
-      "resellerPhone",
-      "resellerCounty",
-      "resellerCity",
-      "resellerExperience"
-    ];
-
-    let firstMissing = null;
-
-    ids.forEach((id) => {
-      const input = document.getElementById(id);
-      const field = input.closest(".field");
-      const missing = input.value.trim() === "";
-
-      field.classList.toggle("invalid", missing);
-
-      if (missing && !firstMissing) {
-        firstMissing = input;
-      }
-    });
-
-    if (firstMissing) {
-      firstMissing.focus();
-      firstMissing.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-
-      return false;
-    }
-
-    return true;
-  }
-
-  document.getElementById("resellerNextBtn").addEventListener("click", () => {
-    if (validateResellerStepOne()) {
-      showResellerStep(2);
-      document.querySelector("#resellerModal .modal-card").scrollTop = 0;
-    }
-  });
-
-  document.getElementById("resellerBackBtn").addEventListener("click", () => {
-    showResellerStep(1);
-    document.querySelector("#resellerModal .modal-card").scrollTop = 0;
-  });
-
-  document.querySelectorAll("[data-example-target]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const target = document.getElementById(button.dataset.exampleTarget);
-      target.value = button.dataset.exampleText || "";
-      target.dispatchEvent(new Event("input"));
-      target.focus();
-    });
-  });
-
-  document.querySelectorAll("[data-count-target]").forEach((field) => {
-    const counter = document.querySelector(
-      `[data-counter-for="${field.id}"]`
-    );
-
-    const updateCounter = () => {
-      counter.textContent = `${field.value.length} / ${field.maxLength}`;
+    const changes = {
+      name: nameInput.value.trim(),
+      phone: phoneInput.value.trim(),
+      city: cityInput.value.trim(),
+      county: countyInput.value.trim()
     };
 
-    field.addEventListener("input", updateCounter);
-    updateCounter();
-  });
-
-  document.querySelectorAll(".modal-backdrop").forEach((modal) => {
-    modal.addEventListener("click", (event) => {
-      if (event.target === modal) {
-        closeModal(modal.id);
-      }
-    });
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      document.querySelectorAll(".modal-backdrop.show").forEach((modal) => {
-        closeModal(modal.id);
-      });
+    if(businessFieldsSection.style.display !== "none"){
+      changes.businessName = businessNameInput.value.trim();
+      changes.businessCategory = businessCategoryInput.value.trim();
+      changes.businessCity = businessCityInput.value.trim();
+      changes.businessCounty = businessCountyInput.value.trim();
+      changes.businessPhone = businessPhoneInput.value.trim();
+      changes.businessRegistrationNumber = businessRegistrationNumberInput.value.trim();
     }
-  });
-</script>
 
+    await updateDoc(doc(db,"users",currentUser.uid), changes);
+
+    successMsg.classList.add("show");
+  }catch(error){
+    alert("Could not save your changes: " + error.message);
+  }finally{
+    saveBtn.disabled = false;
+    saveBtn.textContent = "Save Changes";
+  }
+});
+
+resetBtn.addEventListener("click", async ()=>{
+  if(!currentUser?.email) return;
+  if(!confirm(`Send a password-reset email to ${currentUser.email}?`)) return;
+
+  try{
+    await sendPasswordResetEmail(auth, currentUser.email);
+    alert("Password-reset email sent to " + currentUser.email);
+  }catch(error){
+    alert("Could not send reset email: " + error.message);
+  }
+});
+
+onAuthStateChanged(auth,(user)=>{
+  if(!user){ alert("Please log in to view your account settings."); window.location.href="login.html"; return; }
+  currentUser = user;
+  loadProfile();
+});
+</script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{});}</script>
 </body>
 </html>

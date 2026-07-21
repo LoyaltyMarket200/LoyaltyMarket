@@ -50,15 +50,9 @@
 
     .status-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;text-transform:capitalize}
     .status-badge.active{background:var(--orange-soft);color:#c23f24}
-    .status-badge.pending_review{background:#fff7ed;color:#c2410c}
-    .status-badge.rejected{background:var(--danger-soft);color:var(--danger)}
     .status-badge.sold{background:#e5e7eb;color:#374151}
     .status-badge.archived{background:var(--navy-soft);color:var(--navy)}
     .dashboard-listing-card.is-archived-card{opacity:.7}
-    .dashboard-listing-card.is-review-card{border-color:#fed7aa}
-    .dashboard-listing-card.is-rejected-card{border-color:#fecaca}
-    .listing-status-note{margin:8px 0 0;font-size:12px;line-height:1.45;color:var(--muted)}
-    .listing-status-note.rejected{color:var(--danger)}
 
     .archive-filter-row{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;padding:5px;border-radius:999px;background:#f1f5f9;width:fit-content}
     .archive-filter-btn{background:transparent;border:none;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:500;cursor:pointer;color:var(--ink)}
@@ -118,8 +112,6 @@
     .boost-payment-input:focus{outline:none;border-color:var(--navy)}
 
     .business-badge{display:inline-flex;align-items:center;gap:4px;background:var(--navy-soft);color:var(--navy);font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;margin-top:5px}
-    .reseller-badge{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:#dcfce7;color:#15803d;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;margin-top:5px}
-    .reseller-approved-note{font-size:11.5px!important;color:#15803d!important;margin-top:5px!important}
     .dashboard-business-name{font-size:12.5px;color:var(--muted);margin-top:2px}
 
     .dashboard-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);justify-content:space-between;position:sticky;top:0;z-index:50;display:flex;align-items:center}
@@ -152,7 +144,8 @@
     .dashboard-section{display:grid;grid-template-columns:250px minmax(0,1fr);gap:18px;align-items:start}
     .dashboard-sidebar{border:1px solid var(--line);border-radius:14px;background:#fff;top:88px;position:sticky;padding:22px}
     .dashboard-profile{text-align:center;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:12px}
-    .dashboard-avatar{width:56px;height:56px;margin:0 auto 9px;background:var(--navy-soft);color:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center}
+    .dashboard-avatar{width:56px;height:56px;margin:0 auto 9px;background:var(--navy-soft);color:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .dashboard-avatar img{width:100%;height:100%;object-fit:cover;display:block}
     .dashboard-profile h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:5px;word-break:break-word}
     .dashboard-profile p{font-size:12.5px;color:var(--muted);margin:2px 0}
     .member-since{color:#9ca3af !important}
@@ -202,7 +195,7 @@
 
 <section class="dashboard-shell">
   <div class="dashboard-plain-header">
-    <h1>My Dashboard <small id="dashboardFixVersion" style="font-size:10px;color:#15803d;font-weight:700;">V5</small></h1>
+    <h1>My Dashboard</h1>
     <a href="sell.html" class="dashboard-welcome-btn">
       <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
       Post New Listing
@@ -232,12 +225,10 @@
   <aside class="dashboard-sidebar">
     <div class="dashboard-profile">
       <div class="dashboard-avatar">
-        <svg class="icon" viewBox="0 0 24 24" style="width:24px;height:24px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <img id="dashboardAvatarImg" src="icons/icon-512.png" alt="Your profile picture">
       </div>
       <h3 id="userName">Loading...</h3>
       <p id="verifiedBadge"></p>
-      <p id="resellerBadgeLine" class="reseller-badge" style="display:none;">✓ Authorized Reseller</p>
-      <p id="resellerApprovedNote" class="reseller-approved-note" style="display:none;">Approved by WaterSide</p>
       <p class="dashboard-business-name" id="businessNameLine" style="display:none;"></p>
       <p id="businessBadge" style="display:none;"></p>
       <p class="member-since" id="memberSince"></p>
@@ -252,13 +243,17 @@
         <svg class="icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 5c-2.5 4.5-9.5 9-9.5 9Z"/></svg>
         My Wishlist
       </a>
+      <a href="following.html" class="dashboard-nav-link">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6M14 15c3 0 5 1.7 5 5"/></svg>
+        Sellers I Follow
+      </a>
+      <a href="seller-analytics.html" class="dashboard-nav-link">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 19h16M6 16V9M12 16V5M18 16v-3"/></svg>
+        Seller Analytics
+      </a>
       <a href="sell.html" class="dashboard-nav-link">
         <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         Post New Listing
-      </a>
-      <a href="orders.html" class="dashboard-nav-link">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M3 5h2l2 10h10l2-7H7"/><circle cx="9" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>
-        My Orders
       </a>
       <a href="my-sales.html" class="dashboard-nav-link">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h4.5a1.5 1.5 0 0 1 0 3H9m0-3v3m0-3h4.5a1.5 1.5 0 0 0 0-3H9"/></svg>
@@ -267,10 +262,6 @@
       <a id="businessStorefrontLink" href="business-profile.html" class="dashboard-nav-link" style="display:none;">
         <svg class="icon" viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12M9 21v-6h6v6"/></svg>
         My Business Storefront
-      </a>
-      <a id="resellerProfileLink" href="reseller-profile.html" class="dashboard-nav-link" style="display:none;">
-        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/><path d="m17 11 1.5 1.5L22 9"/></svg>
-        My Reseller Profile
       </a>
       <a href="account-setting.html" class="dashboard-nav-link">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
@@ -285,8 +276,6 @@
     <div class="archive-filter-row">
       <button class="archive-filter-btn active" data-filter="all">All</button>
       <button class="archive-filter-btn" data-filter="active">Active</button>
-      <button class="archive-filter-btn" data-filter="pending_review">Pending Review</button>
-      <button class="archive-filter-btn" data-filter="rejected">Rejected</button>
       <button class="archive-filter-btn" data-filter="archived">Archived</button>
     </div>
 
@@ -527,9 +516,7 @@ const memberSince = document.getElementById("memberSince");
 const businessNameLine = document.getElementById("businessNameLine");
 const businessBadge = document.getElementById("businessBadge");
 const businessStorefrontLink = document.getElementById("businessStorefrontLink");
-const resellerBadgeLine = document.getElementById("resellerBadgeLine");
-const resellerApprovedNote = document.getElementById("resellerApprovedNote");
-const resellerProfileLink = document.getElementById("resellerProfileLink");
+const dashboardAvatarImg = document.getElementById("dashboardAvatarImg");
 const logoutBtn = document.getElementById("logoutBtn");
 const dashboardListings = document.getElementById("dashboardListings");
 const archiveFilterButtons = document.querySelectorAll(".archive-filter-btn");
@@ -563,6 +550,7 @@ const boostResultSubtitle = document.getElementById("boostResultSubtitle");
 const boostResultSteps = document.getElementById("boostResultSteps");
 
 const ADMIN_EMAILS = ["princeteah200@gmail.com"];
+const WATERSIDE_LOGO = "icons/icon-512.png";
 
 let currentUser = null;
 let allMyProducts = [];
@@ -640,132 +628,63 @@ function applyTierPricesToModal() {
     : "Free tiers activate instantly. Paid tiers require Mobile Money payment before activation.";
 }
 
-
 async function loadUserProfile() {
-  userName.textContent = currentUser?.email || "Loading...";
-  verifiedBadge.textContent = "Checking account...";
-  memberSince.textContent = "";
-  resellerBadgeLine.style.display = "none";
-  resellerApprovedNote.style.display = "none";
-  resellerProfileLink.style.display = "none";
-  businessNameLine.style.display = "none";
-  businessBadge.style.display = "none";
-  businessStorefrontLink.style.display = "none";
-
   try {
-    let userSnapshot = await getDoc(doc(db, "users", currentUser.uid));
-    let userData = userSnapshot.exists() ? userSnapshot.data() : null;
-    let resolvedUserId = currentUser.uid;
+    const userDoc = await getDoc(doc(db, "users", currentUser.uid));
 
-    if (!userData && currentUser.email) {
-      try {
-        const emailQuery = query(
-          collection(db, "users"),
-          where("email", "==", currentUser.email)
-        );
-        const emailResults = await getDocs(emailQuery);
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
 
-        if (!emailResults.empty) {
-          const matchingDocument = emailResults.docs[0];
-          userData = matchingDocument.data();
-          resolvedUserId = matchingDocument.id;
-        }
-      } catch (fallbackError) {
-        console.warn("Could not search for the profile by email:", fallbackError);
-      }
-    }
+      const accountType = userData.accountType || "personal";
+      const isBusiness = accountType === "business";
 
-    console.log("Dashboard profile check:", {
-      authUid: currentUser.uid,
-      authEmail: currentUser.email,
-      resolvedUserId,
-      userData
-    });
+      userName.textContent = userData.name || currentUser.email;
 
-    if (!userData) {
-      verifiedBadge.textContent = "Profile data not found";
-      memberSince.textContent = "Open Account Settings to complete your profile";
-      return;
-    }
+      dashboardAvatarImg.src = userData.profileImageUrl || WATERSIDE_LOGO;
+      dashboardAvatarImg.onerror = () => {
+        dashboardAvatarImg.src = WATERSIDE_LOGO;
+      };
 
-    const accountType = String(userData.accountType || "")
-      .trim()
-      .toLowerCase();
-
-    const applicationStatus = String(
-      userData.resellerApplicationStatus || ""
-    )
-      .trim()
-      .toLowerCase();
-
-    const isTrue = (value) =>
-      value === true || String(value).trim().toLowerCase() === "true";
-
-    const isApprovedReseller =
-      accountType === "reseller" ||
-      applicationStatus === "approved" ||
-      isTrue(userData.resellerApproved) ||
-      isTrue(userData.isReseller) ||
-      isTrue(userData.isResellerVerified) ||
-      isTrue(userData.resellerVerified) ||
-      isTrue(userData.resellerBadge);
-
-    const isBusiness =
-      accountType === "business" ||
-      isTrue(userData.businessApproved) ||
-      isTrue(userData.businessAccountApproved) ||
-      isTrue(userData.businessVerified);
-
-    userName.textContent =
-      userData.name ||
-      userData.resellerName ||
-      userData.businessName ||
-      currentUser.email;
-
-    if (isApprovedReseller) {
-      verifiedBadge.textContent = "Authorized Reseller";
-      resellerBadgeLine.style.display = "inline-flex";
-      resellerApprovedNote.style.display = "block";
-      resellerProfileLink.href =
-        "reseller-profile.html?id=" + encodeURIComponent(resolvedUserId);
-      resellerProfileLink.style.display = "flex";
-    } else if (isTrue(userData.verified)) {
-      verifiedBadge.textContent = "Verified Seller";
-    } else {
-      verifiedBadge.textContent = "Unverified Seller";
-    }
-
-    if (isBusiness) {
-      businessNameLine.textContent =
-        userData.businessName || "Business Account";
-      businessNameLine.style.display = "block";
-      businessStorefrontLink.style.display = "flex";
-
-      if (isTrue(userData.businessVerified)) {
-        businessBadge.textContent = "Verified Business";
-        businessBadge.className = "business-badge verified";
+      if (userData.verified === true) {
+        verifiedBadge.textContent = "Verified Seller";
       } else {
-        businessBadge.textContent = "Business Verification Pending";
-        businessBadge.className = "business-badge";
+        verifiedBadge.textContent = "Unverified Seller";
       }
 
-      businessBadge.style.display = "inline-flex";
-    }
+      if (isBusiness) {
+        businessNameLine.textContent = userData.businessName || "Business Account";
+        businessNameLine.style.display = "block";
 
-    const createdAt = userData.createdAt;
-    if (createdAt?.seconds) {
-      memberSince.textContent =
-        "Member since " + new Date(createdAt.seconds * 1000).getFullYear();
-    } else if (typeof createdAt?.toDate === "function") {
-      memberSince.textContent =
-        "Member since " + createdAt.toDate().getFullYear();
+        businessStorefrontLink.style.display = "flex";
+
+        if (userData.businessVerified === true) {
+          businessBadge.textContent = "Verified Business";
+          businessBadge.className = "business-badge verified";
+        } else {
+          businessBadge.textContent = "Business Verification Pending";
+          businessBadge.className = "business-badge";
+        }
+        businessBadge.style.display = "inline-flex";
+      } else {
+        businessNameLine.style.display = "none";
+        businessBadge.style.display = "none";
+        businessStorefrontLink.style.display = "none";
+      }
+
+      if (userData.createdAt && userData.createdAt.seconds) {
+        const date = new Date(userData.createdAt.seconds * 1000);
+        const year = date.getFullYear();
+        memberSince.textContent = "Member since " + year;
+      } else {
+        memberSince.textContent = "Member";
+      }
     } else {
+      userName.textContent = currentUser.email;
+      verifiedBadge.textContent = "Unverified Seller";
       memberSince.textContent = "Member";
     }
   } catch (error) {
-    console.error("Could not load dashboard profile:", error);
-    verifiedBadge.textContent = "Profile access error";
-    memberSince.textContent = "Check Firestore permissions";
+    userName.textContent = currentUser.email;
   }
 }
 
@@ -826,43 +745,27 @@ async function expireMyFinishedBoosts(products) {
   if (updates.length) await Promise.all(updates);
 }
 
-function normalizedListingStatus(product) {
-  const status = String(product?.status || "active").toLowerCase();
-  const allowed = ["active", "pending_review", "rejected", "sold", "archived"];
-  return allowed.includes(status) ? status : "active";
-}
-
 function updateDashboardStats() {
   totalListingsStat.textContent = String(allMyProducts.length);
-  activeListingsStat.textContent = String(
-    allMyProducts.filter((product) => normalizedListingStatus(product) === "active").length
-  );
-  soldListingsStat.textContent = String(
-    allMyProducts.filter((product) => normalizedListingStatus(product) === "sold").length
-  );
-  archivedListingsStat.textContent = String(
-    allMyProducts.filter((product) => normalizedListingStatus(product) === "archived").length
-  );
+  activeListingsStat.textContent = String(allMyProducts.filter((product) => product.status !== "sold" && product.status !== "archived").length);
+  soldListingsStat.textContent = String(allMyProducts.filter((product) => product.status === "sold").length);
+  archivedListingsStat.textContent = String(allMyProducts.filter((product) => product.status === "archived").length);
 }
 
 function renderListings() {
   updateDashboardStats();
   let productsToShow = allMyProducts;
 
-  if (currentArchiveFilter !== "all") {
-    productsToShow = allMyProducts.filter(
-      (product) => normalizedListingStatus(product) === currentArchiveFilter
-    );
+  if (currentArchiveFilter === "active") {
+    productsToShow = allMyProducts.filter((product) => product.status !== "archived");
+  } else if (currentArchiveFilter === "archived") {
+    productsToShow = allMyProducts.filter((product) => product.status === "archived");
   }
 
   if (productsToShow.length === 0) {
-    const emptyMessages = {
-      active: "No active listings.",
-      pending_review: "No listings are waiting for admin review.",
-      rejected: "No rejected listings.",
-      archived: "No archived listings."
-    };
-    dashboardListings.innerHTML = `<p>${emptyMessages[currentArchiveFilter] || "You haven't posted any products yet."}</p>`;
+    dashboardListings.innerHTML = currentArchiveFilter === "archived"
+      ? "<p>No archived listings.</p>"
+      : "<p>You haven't posted any products yet.</p>";
     return;
   }
 
@@ -874,13 +777,8 @@ function renderListings() {
     const isBoostActive = product.boostStatus === "active";
     const isBoostExpired = product.boostStatus === "expired";
     const isFeatured = product.featured === true && !isBoostExpired;
-    const listingStatus = normalizedListingStatus(product);
-    const isActive = listingStatus === "active";
-    const isPendingReview = listingStatus === "pending_review";
-    const isRejected = listingStatus === "rejected";
-    const isSold = listingStatus === "sold";
-    const isArchived = listingStatus === "archived";
-    const canUseMarketplaceActions = isActive || isSold || isArchived;
+    const isSold = product.status === "sold";
+    const isArchived = product.status === "archived";
 
     const image =
       product.imageUrl ||
@@ -888,21 +786,14 @@ function renderListings() {
 
     const detailUrl = "product-detail.html?id=" + encodeURIComponent(productId);
 
-    const statusLabels = {
-      active: "Active",
-      pending_review: "Pending Review",
-      rejected: "Rejected",
-      sold: "Sold",
-      archived: "Archived"
-    };
-    const statusLabel = statusLabels[listingStatus] || "Active";
-    const statusClass = listingStatus;
-
-    let statusNoteHtml = "";
-    if (isPendingReview) {
-      statusNoteHtml = '<p class="listing-status-note">Waiting for administrator approval. This listing is hidden from buyers.</p>';
-    } else if (isRejected) {
-      statusNoteHtml = '<p class="listing-status-note rejected">This listing was rejected and is hidden from buyers. Edit it before submitting again.</p>';
+    let statusLabel = "active";
+    let statusClass = "active";
+    if (isSold) {
+      statusLabel = "sold";
+      statusClass = "sold";
+    } else if (isArchived) {
+      statusLabel = "archived";
+      statusClass = "archived";
     }
 
     let boostBadgeHtml = "";
@@ -924,10 +815,7 @@ function renderListings() {
     }
 
     const card = document.createElement("div");
-    card.className = "dashboard-listing-card"
-      + (isArchived ? " is-archived-card" : "")
-      + (isPendingReview ? " is-review-card" : "")
-      + (isRejected ? " is-rejected-card" : "");
+    card.className = "dashboard-listing-card" + (isArchived ? " is-archived-card" : "");
 
     card.innerHTML = `
       <div class="dashboard-listing-image">
@@ -940,23 +828,22 @@ function renderListings() {
         <h4><a href="${detailUrl}">${safeText(product.title || "Untitled Product")}</a>${isFeatured ? '<span class="featured-badge">Featured</span>' : ""}${boostBadgeHtml}</h4>
         <p class="price">US$${safeText(product.priceUsd || "0")} | L$${safeText(product.priceLrd || "0")}</p>
         <span class="status-badge ${statusClass}">${statusLabel}</span>
-        ${statusNoteHtml}
       </div>
 
       <div class="dashboard-listing-actions">
         <button class="edit-btn" data-id="${productId}">Edit</button>
         <button class="duplicate-btn" data-id="${productId}">Duplicate</button>
         <button class="delete-btn" data-id="${productId}">Delete</button>
-        <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}" ${!isActive ? "disabled" : ""}>
+        <button class="feature-btn ${isFeatured ? "is-featured" : ""}" data-id="${productId}" data-featured="${isFeatured}">
           ${isFeatured ? "Unfeature" : "Feature this listing"}
         </button>
-        <button class="sold-btn ${isSold ? "is-sold" : ""}" data-id="${productId}" data-sold="${isSold}" ${!canUseMarketplaceActions || isArchived ? "disabled" : ""}>
+        <button class="sold-btn ${isSold ? "is-sold" : ""}" data-id="${productId}" data-sold="${isSold}">
           ${isSold ? "Mark as Active" : "Mark as Sold"}
         </button>
-        <button class="archive-btn ${isArchived ? "is-archived" : ""}" data-id="${productId}" data-archived="${isArchived}" ${isPendingReview || isRejected ? "disabled" : ""}>
+        <button class="archive-btn ${isArchived ? "is-archived" : ""}" data-id="${productId}" data-archived="${isArchived}">
           ${isArchived ? "Unarchive" : "Archive"}
         </button>
-        <button class="boost-btn ${isBoostPending || isBoostActive ? "is-pending" : ""}" data-id="${productId}" ${!isActive || isBoostPending || isBoostActive ? "disabled" : ""}>
+        <button class="boost-btn ${isBoostPending || isBoostActive ? "is-pending" : ""}" data-id="${productId}" ${isBoostPending || isBoostActive ? "disabled" : ""}>
           ${boostButtonLabel}
         </button>
       </div>
@@ -1411,19 +1298,8 @@ onAuthStateChanged(auth, async (user) => {
   if (!allowed) return;
 
   currentUser = user;
-
-  // Read the profile FIRST, then touch lastActiveAt after.
-  // Doing it in this order avoids a race: touchLastActive() writes to
-  // the same users/{uid} document, and Firestore's SDK always shows a
-  // client its own pending writes immediately. If that write fired
-  // before this read (as it did before), a fresh browser session with
-  // no cached copy of the document could see only the in-flight
-  // {lastActiveAt: ...} write instead of the full saved profile —
-  // which is what was making approved resellers show "Unverified
-  // Seller" even though their Firestore document was correct all along.
-  await loadUserProfile();
   touchLastActive(user.uid);
-
+  await loadUserProfile();
   await loadMarketplaceSettings();
   await loadMyListings();
   listenForUnreadMessages();
@@ -1437,8 +1313,11 @@ logoutBtn.addEventListener("click", async () => {
 </script>
 
 <script>
-  // Dashboard intentionally does not register the service worker.
-  // This prevents an older cached dashboard.html from replacing the current file.
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service worker registered'))
+      .catch((error) => console.log('Service worker registration failed:', error));
+  }
 </script>
 
 </body>

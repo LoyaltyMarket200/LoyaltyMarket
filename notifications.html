@@ -9,33 +9,186 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 <meta name="theme-color" content="#0d6e6e">
+
 <style>
-:root{--navy:#0d6e6e;--navy-soft:#e3f2f2;--orange:#ff6b4a;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;}
+:root{
+  --navy:#0d6e6e;
+  --navy-soft:#e3f2f2;
+  --orange:#ff6b4a;
+  --orange-soft:#ffece7;
+  --ink:#1f2937;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --bg:#f7f8fa;
+  --danger:#b91c1c;
+  --danger-soft:#fee2e2;
+}
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-.icon{display:inline-block;width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.simple-navbar{min-height:50px;height:auto;padding:7px max(20px,4vw);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
-.simple-navbar .logo-link{display:flex;align-items:center;gap:9px;text-decoration:none}
-.simple-navbar .logo-link img{width:26px;height:26px;object-fit:contain}
-.simple-navbar .logo-text{color:var(--navy);font-size:14px;font-weight:700}
+.icon{display:inline-block;width:1em;height:1em;vertical-align:-.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.simple-navbar{
+  min-height:50px;
+  padding:7px max(20px,4vw);
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:40;
+  gap:12px;
+}
+
+.logo-link{display:flex;align-items:center;gap:9px;text-decoration:none}
+.logo-link img{width:26px;height:26px;object-fit:contain}
+.logo-text{color:var(--navy);font-size:14px;font-weight:700}
+
 .simple-nav-actions{display:flex;align-items:center;gap:8px}
-.simple-nav-link{min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:#fff;text-decoration:none;font-size:12px;font-weight:500}
+.simple-nav-link{
+  min-height:31px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  color:var(--ink);
+  background:#fff;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:600;
+}
 .simple-nav-link:hover{border-color:var(--navy);color:var(--navy)}
-.page-shell{width:min(700px,92%);margin:26px auto 60px}
-.page-title{margin:0 0 18px;font-size:19px;font-weight:600;color:var(--ink)}
-.notif-item{display:flex;gap:12px;padding:15px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:10px;text-decoration:none;color:inherit;cursor:pointer}
-.notif-item.unread{border-color:var(--navy);background:var(--navy-soft)}
-.notif-icon{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--navy)}
-.notif-title{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:3px}
+
+.page-shell{width:min(760px,92%);margin:26px auto 60px}
+
+.page-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.page-title{margin:0;font-size:20px;font-weight:700;color:var(--ink)}
+
+.mark-all-btn{
+  min-height:34px;
+  padding:7px 12px;
+  border:1px solid var(--navy);
+  border-radius:8px;
+  background:#fff;
+  color:var(--navy);
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.mark-all-btn:hover{background:var(--navy-soft)}
+.mark-all-btn:disabled{opacity:.6;cursor:not-allowed}
+
+.notif-item{
+  display:flex;
+  gap:12px;
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  margin-bottom:10px;
+  text-decoration:none;
+  color:inherit;
+  cursor:pointer;
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+
+.notif-item:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 20px rgba(15,23,42,.06);
+}
+
+.notif-item.unread{
+  border-color:var(--navy);
+  background:var(--navy-soft);
+}
+
+.notif-avatar-wrap{
+  position:relative;
+  flex-shrink:0;
+  width:42px;
+  height:42px;
+}
+
+.notif-avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  object-fit:cover;
+  border:1px solid var(--line);
+  background:#fff;
+}
+
+.notif-type-badge{
+  position:absolute;
+  right:-3px;
+  bottom:-3px;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--navy);
+  color:#fff;
+  border:2px solid #fff;
+}
+
+.notif-type-badge .icon{width:11px;height:11px}
+
+.notif-copy{min-width:0;flex:1}
+.notif-title{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .notif-body{font-size:12.5px;color:var(--muted);line-height:1.5}
 .notif-time{font-size:11px;color:#94a3b8;margin-top:4px}
-.empty-state{padding:44px 20px;text-align:center;border:1px dashed var(--line);border-radius:12px;background:#fff;color:var(--muted);font-size:13px}
-@media (max-width:700px){.simple-navbar{flex-wrap:wrap;gap:10px}.simple-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.page-shell{margin-top:16px}}
+
+.unread-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--orange);
+  flex-shrink:0;
+  margin-top:4px;
+}
+
+.empty-state{
+  padding:44px 20px;
+  text-align:center;
+  border:1px dashed var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+}
+
+@media (max-width:700px){
+  .simple-navbar{flex-wrap:wrap;gap:10px}
+  .simple-nav-actions{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .page-shell{margin-top:16px}
+  .page-head{align-items:flex-start;flex-direction:column}
+  .mark-all-btn{width:100%}
+}
 </style>
 </head>
+
 <body>
-<header class="navbar simple-navbar">
-  <a href="index.html" class="logo-link"><img src="icons/icon-512.png" alt="Waterside"><span class="logo-text">Waterside</span></a>
+<header class="simple-navbar">
+  <a href="index.html" class="logo-link">
+    <img src="icons/icon-512.png" alt="Waterside">
+    <span class="logo-text">Waterside</span>
+  </a>
+
   <div class="simple-nav-actions">
     <a href="index.html" class="simple-nav-link">Home</a>
     <a href="dashboard.html" class="simple-nav-link">Dashboard</a>
@@ -44,8 +197,14 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,Bl
 </header>
 
 <section class="page-shell">
-  <h1 class="page-title">Notifications</h1>
-  <div id="notifList"><p class="empty-state">Loading notifications...</p></div>
+  <div class="page-head">
+    <h1 class="page-title">Notifications</h1>
+    <button id="markAllReadBtn" class="mark-all-btn" type="button">Mark All As Read</button>
+  </div>
+
+  <div id="notifList">
+    <p class="empty-state">Loading notifications...</p>
+  </div>
 </section>
 
 <footer class="lm-footer" id="marketplaceFooter">
@@ -58,54 +217,259 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,Bl
 <script type="module">
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { collection, query, where, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  writeBatch,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const notifList = document.getElementById("notifList");
+const markAllReadBtn = document.getElementById("markAllReadBtn");
+
 let currentUser = null;
+let notifications = [];
 
-function safeText(v){return String(v||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
-function formatDate(ts){if(!ts||!ts.seconds)return "";return new Date(ts.seconds*1000).toLocaleString();}
+function safeText(value, fallback = "") {
+  return String(value ?? fallback)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
 
-async function loadNotifications(){
-  try{
-    const q = query(collection(db,"notifications"), where("userId","==",currentUser.uid));
-    const snapshot = await getDocs(q);
-    let items = snapshot.docs.map(d=>({id:d.id,...d.data()}));
-    items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+function formatDate(timestamp) {
+  if (!timestamp?.seconds) return "";
 
-    if(items.length===0){
-      notifList.innerHTML = '<p class="empty-state">You have no notifications yet.</p>';
-      return;
-    }
+  const date = new Date(timestamp.seconds * 1000);
+  const now = new Date();
+  const diffSeconds = Math.floor((now - date) / 1000);
 
-    notifList.innerHTML = items.map(n=>`
-      <a class="notif-item ${n.read?"":"unread"}" data-notif-id="${safeText(n.id)}" href="${safeText(n.link||"#")}">
-        <div class="notif-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg></div>
-        <div>
-          <div class="notif-title">${safeText(n.title||"Notification")}</div>
-          <div class="notif-body">${safeText(n.body||"")}</div>
-          <div class="notif-time">${formatDate(n.createdAt)}</div>
-        </div>
-      </a>
-    `).join("");
+  if (diffSeconds < 60) return "Just now";
+  if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)} min ago`;
+  if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)} hr ago`;
+  if (diffSeconds < 604800) return `${Math.floor(diffSeconds / 86400)} day${Math.floor(diffSeconds / 86400) === 1 ? "" : "s"} ago`;
 
-    document.querySelectorAll("[data-notif-id]").forEach(el=>{
-      el.addEventListener("click", async ()=>{
-        try{ await updateDoc(doc(db,"notifications",el.dataset.notifId), {read:true, readAt: new Date()}); }catch(e){}
-      });
-    });
-  }catch(error){
-    notifList.innerHTML = '<p class="empty-state">Could not load notifications right now.</p>';
-    console.error(error.message);
+  return date.toLocaleDateString(undefined, {
+    month:"short",
+    day:"numeric",
+    year:"numeric"
+  });
+}
+
+function typeIcon(type) {
+  const normalized = String(type || "").toLowerCase();
+
+  if (normalized === "message") {
+    return '<svg class="icon" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>';
+  }
+
+  if (normalized === "order") {
+    return '<svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18l-2 12H5L3 6Z"/><path d="M8 6V4h8v2"/></svg>';
+  }
+
+  if (normalized === "review") {
+    return '<svg class="icon" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>';
+  }
+
+  if (normalized === "follow") {
+    return '<svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6M17 8v6M14 11h6"/></svg>';
+  }
+
+  if (normalized === "boost") {
+    return '<svg class="icon" viewBox="0 0 24 24"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z"/></svg>';
+  }
+
+  if (normalized === "listing") {
+    return '<svg class="icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>';
+  }
+
+  return '<svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg>';
+}
+
+async function senderAvatar(notification) {
+  if (notification.senderPhotoUrl) return notification.senderPhotoUrl;
+  if (notification.profileImageUrl) return notification.profileImageUrl;
+  if (notification.photoUrl) return notification.photoUrl;
+
+  const senderId =
+    notification.senderId ||
+    notification.fromUserId ||
+    notification.sellerId ||
+    notification.buyerId ||
+    notification.reviewerId ||
+    notification.followerId ||
+    "";
+
+  if (!senderId) return "icons/icon-512.png";
+
+  try {
+    const snapshot = await getDoc(doc(db, "users", senderId));
+
+    if (!snapshot.exists()) return "icons/icon-512.png";
+
+    const user = snapshot.data();
+
+    return (
+      user.businessLogoUrl ||
+      user.resellerPhotoUrl ||
+      user.profilePhotoUrl ||
+      user.photoUrl ||
+      user.profileImageUrl ||
+      user.photoURL ||
+      user.avatarUrl ||
+      "icons/icon-512.png"
+    );
+  } catch (error) {
+    console.warn("Could not load notification sender photo:", error);
+    return "icons/icon-512.png";
   }
 }
 
-onAuthStateChanged(auth,(user)=>{
-  if(!user){ alert("Please log in to view notifications."); window.location.href="login.html"; return; }
+function renderNotifications() {
+  if (!notifications.length) {
+    notifList.innerHTML = '<p class="empty-state">You have no notifications yet.</p>';
+    markAllReadBtn.disabled = true;
+    return;
+  }
+
+  markAllReadBtn.disabled = !notifications.some((item) => !item.read);
+
+  notifList.innerHTML = notifications.map((item) => `
+    <a
+      class="notif-item ${item.read ? "" : "unread"}"
+      data-notif-id="${safeText(item.id)}"
+      href="${safeText(item.link || "#")}"
+    >
+      <div class="notif-avatar-wrap">
+        <img
+          class="notif-avatar"
+          src="${safeText(item.senderAvatar || "icons/icon-512.png")}"
+          alt=""
+          onerror="this.src='icons/icon-512.png'"
+        >
+        <span class="notif-type-badge">${typeIcon(item.type)}</span>
+      </div>
+
+      <div class="notif-copy">
+        <div class="notif-title">${safeText(item.title || "Notification")}</div>
+        <div class="notif-body">${safeText(item.body || "")}</div>
+        <div class="notif-time">${safeText(formatDate(item.createdAt))}</div>
+      </div>
+
+      ${item.read ? "" : '<span class="unread-dot" aria-label="Unread"></span>'}
+    </a>
+  `).join("");
+
+  document.querySelectorAll("[data-notif-id]").forEach((element) => {
+    element.addEventListener("click", async () => {
+      const notification = notifications.find((item) => item.id === element.dataset.notifId);
+
+      if (!notification || notification.read) return;
+
+      try {
+        await updateDoc(doc(db, "notifications", notification.id), {
+          read:true,
+          readAt:serverTimestamp()
+        });
+
+        notification.read = true;
+        element.classList.remove("unread");
+        element.querySelector(".unread-dot")?.remove();
+      } catch (error) {
+        console.warn("Could not mark notification as read:", error);
+      }
+    });
+  });
+}
+
+async function loadNotifications() {
+  try {
+    const notificationsQuery = query(
+      collection(db, "notifications"),
+      where("userId", "==", currentUser.uid)
+    );
+
+    const snapshot = await getDocs(notificationsQuery);
+
+    notifications = snapshot.docs.map((item) => ({
+      id:item.id,
+      ...item.data()
+    }));
+
+    notifications.sort(
+      (a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)
+    );
+
+    notifications = await Promise.all(
+      notifications.map(async (item) => ({
+        ...item,
+        senderAvatar:await senderAvatar(item)
+      }))
+    );
+
+    renderNotifications();
+  } catch (error) {
+    console.error("Could not load notifications:", error);
+    notifList.innerHTML =
+      `<p class="empty-state">Could not load notifications: ${safeText(error.message)}</p>`;
+  }
+}
+
+markAllReadBtn.addEventListener("click", async () => {
+  const unread = notifications.filter((item) => !item.read);
+  if (!unread.length) return;
+
+  markAllReadBtn.disabled = true;
+  markAllReadBtn.textContent = "Marking...";
+
+  try {
+    const batch = writeBatch(db);
+
+    unread.forEach((item) => {
+      batch.update(doc(db, "notifications", item.id), {
+        read:true,
+        readAt:serverTimestamp()
+      });
+    });
+
+    await batch.commit();
+
+    notifications.forEach((item) => {
+      item.read = true;
+    });
+
+    renderNotifications();
+  } catch (error) {
+    alert("Could not mark notifications as read: " + error.message);
+  } finally {
+    markAllReadBtn.textContent = "Mark All As Read";
+  }
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    alert("Please log in to view notifications.");
+    window.location.href =
+      "login.html?redirect=" + encodeURIComponent("notifications.html");
+    return;
+  }
+
   currentUser = user;
   loadNotifications();
 });
 </script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{});}</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js").catch(() => {});
+}
+</script>
 </body>
 </html>

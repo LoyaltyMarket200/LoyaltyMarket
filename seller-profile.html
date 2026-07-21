@@ -10,14 +10,6 @@
   <meta name="theme-color" content="#0d6e6e">
 
   <style>
-    /* ==================================================
-       SELLER PROFILE — RESTRAINED 2-COLOR SYSTEM
-       Navy (#0d6e6e) = structure/brand/hero. Orange
-       (#ff6b4a) = the ONLY accent, reserved for the
-       Message Seller button (the one primary conversion
-       action). Everything else is navy, neutral, or
-       outline-on-navy. Bold reserved for name/stats/price.
-       ================================================== */
     :root{
       --navy:#0d6e6e;
       --navy-soft:#e3f2f2;
@@ -71,8 +63,9 @@
     .seller-profile-main{display:flex;gap:15px;align-items:center}
     .seller-avatar{
       width:46px;height:46px;display:grid;place-items:center;border-radius:50%;
-      background:var(--navy-soft);color:var(--navy);flex-shrink:0
+      background:var(--navy-soft);color:var(--navy);flex-shrink:0;overflow:hidden
     }
+    .seller-avatar img{width:100%;height:100%;object-fit:cover;display:block}
     .seller-hero h1{margin:0 0 5px;font-size:clamp(16px,2.2vw,20px);font-weight:700;line-height:1.2;color:var(--ink)}
     .seller-badge-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
     .seller-badge{
@@ -157,11 +150,27 @@
     .reviews-list{display:grid;gap:10px}
     .review-card{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff}
     .review-header{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .review-header-name{display:flex;align-items:center;gap:8px;min-width:0}
+    .review-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;background:var(--navy-soft);flex-shrink:0}
     .review-header strong{font-size:13px;font-weight:600}
     .review-stars{color:var(--orange);display:flex;gap:1px}
     .review-comment{margin:9px 0 6px;color:var(--ink);line-height:1.55;font-size:13px;font-weight:400}
     .review-date{margin:0;color:#9ca3af;font-size:11px}
     .review-photo{margin-top:8px;max-width:160px;border-radius:8px;display:block}
+
+    .verified-purchase-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      margin-left:7px;
+      padding:3px 7px;
+      border-radius:999px;
+      background:#ecfdf3;
+      color:#047857;
+      font-size:9.5px;
+      font-weight:700;
+      white-space:nowrap;
+    }
 
     .about-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
     .about-row{padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--bg)}
@@ -257,7 +266,7 @@
     <section class="seller-hero">
       <div class="seller-profile-main">
         <div class="seller-avatar">
-          <svg class="icon" viewBox="0 0 24 24" style="width:28px;height:28px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+          <img id="sellerAvatarImg" src="icons/icon-512.png" alt="Seller profile picture">
         </div>
         <div>
           <h1 id="sellerName">Loading...</h1>
@@ -476,12 +485,15 @@
       orderBy
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+    const WATERSIDE_LOGO = "icons/icon-512.png";
+
     const params = new URLSearchParams(window.location.search);
     const sellerId = params.get("id");
 
     const businessRedirectNotice = document.getElementById("businessRedirectNotice");
     const businessRedirectLink = document.getElementById("businessRedirectLink");
     const sellerName = document.getElementById("sellerName");
+    const sellerAvatarImg = document.getElementById("sellerAvatarImg");
     const sellerVerified = document.getElementById("sellerVerified");
     const sellerYearsBadge = document.getElementById("sellerYearsBadge");
     const sellerMemberSince = document.getElementById("sellerMemberSince");
@@ -523,9 +535,19 @@
     let sellerListingsCache = [];
     let activeCategoryFilter = null;
 
+    // Cache of reviewer profile pictures, keyed by reviewerId, so each
+    // reviewer's user doc is only fetched once even if they've left
+    // multiple reviews.
+    const reviewerPhotoCache = {};
+
     const LOCATION_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.9em;height:.9em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
     const CHECK_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M20 6 9 17l-5-5"/></svg>';
     const PLUS_SVG = '<svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M12 5v14M5 12h14"/></svg>';
+
+    // If a saved profile picture URL ever breaks, fall back to the Waterside logo
+    sellerAvatarImg.addEventListener("error", () => {
+      sellerAvatarImg.src = WATERSIDE_LOGO;
+    });
 
     function safeText(value) {
       return String(value || "")
@@ -539,6 +561,21 @@
     function starsFor(rating) {
       const filled = '<svg class="icon" viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:.85em;height:.85em;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2Z"/></svg>';
       return filled.repeat(rating);
+    }
+
+    async function getReviewerPhoto(reviewerId) {
+      if (!reviewerId) return "";
+      if (reviewerPhotoCache[reviewerId] !== undefined) return reviewerPhotoCache[reviewerId];
+
+      try {
+        const snap = await getDoc(doc(db, "users", reviewerId));
+        const photo = snap.exists() ? (snap.data().profileImageUrl || "") : "";
+        reviewerPhotoCache[reviewerId] = photo;
+        return photo;
+      } catch {
+        reviewerPhotoCache[reviewerId] = "";
+        return "";
+      }
     }
 
     function getFollowDocumentId(followerId) {
@@ -692,6 +729,9 @@
           const displayName = userData.name || "Waterside Seller";
           sellerName.textContent = displayName;
           aboutName.textContent = displayName;
+
+          // Profile picture, falling back to the Waterside logo
+          sellerAvatarImg.src = userData.profileImageUrl || WATERSIDE_LOGO;
 
           const isVerified = userData.verified === true;
 
@@ -958,12 +998,17 @@
           return;
         }
 
+        const reviews = snapshot.docs.map((reviewDoc) => reviewDoc.data());
+
+        // Fetch each unique reviewer's profile picture once before rendering.
+        const uniqueReviewerIds = [...new Set(reviews.map((r) => r.reviewerId).filter(Boolean))];
+        await Promise.all(uniqueReviewerIds.map((id) => getReviewerPhoto(id)));
+
         let totalStars = 0;
         let reviewCount = 0;
         reviewsList.innerHTML = "";
 
-        snapshot.forEach((reviewDoc) => {
-          const review = reviewDoc.data();
+        reviews.forEach((review) => {
           const rating = Number(review.rating) || 0;
 
           totalStars += rating;
@@ -978,9 +1023,26 @@
             dateText = date.toLocaleDateString();
           }
 
+          const reviewerPhoto =
+            review.reviewerPhotoUrl ||
+            reviewerPhotoCache[review.reviewerId] ||
+            WATERSIDE_LOGO;
+
           reviewCard.innerHTML = `
             <div class="review-header">
-              <strong>${safeText(review.reviewerName || "Anonymous Buyer")}</strong>
+              <div class="review-header-name">
+                <img
+                  class="review-avatar"
+                  src="${safeText(reviewerPhoto)}"
+                  alt="${safeText(review.reviewerName || "Anonymous Buyer")}"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='${WATERSIDE_LOGO}';"
+                >
+                <strong>${safeText(review.reviewerName || "Anonymous Buyer")}</strong>
+                ${review.orderId || review.verifiedPurchase
+                  ? '<span class="verified-purchase-badge">✓ Verified Purchase</span>'
+                  : ""}
+              </div>
               <span class="review-stars">${starsFor(rating)}</span>
             </div>
 

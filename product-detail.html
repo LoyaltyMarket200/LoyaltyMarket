@@ -869,12 +869,22 @@ import { db, auth } from "./firebase.js";
 import {
   doc, getDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, query, where, limit, getDocs, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {
+  getFunctions,
+  httpsCallable
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 const DEFAULT_SETTINGS = {
   marketplaceName: "Waterside",
   supportEmail: "princeteah200@gmail.com",
   supportPhone: "+231 88 147 1694"
 };
+
+const cloudFunctions = getFunctions();
+const recordListingViewCallable = httpsCallable(
+  cloudFunctions,
+  "recordListingView"
+);
 
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
@@ -1026,6 +1036,46 @@ function getRelativeTime(millis) {
   if (days < 30) return `Posted ${days} day${days === 1 ? "" : "s"} ago`;
 
   return "Posted " + new Date(millis).toLocaleDateString();
+}
+
+
+function getOrCreateViewerId() {
+  const storageKey = "waterside_viewer_id";
+  let viewerId = localStorage.getItem(storageKey);
+
+  if (!viewerId) {
+    if (window.crypto?.randomUUID) {
+      viewerId = window.crypto.randomUUID();
+    } else {
+      viewerId =
+        `${Date.now()}-${Math.random().toString(36).slice(2)}` +
+        `-${Math.random().toString(36).slice(2)}`;
+    }
+
+    localStorage.setItem(storageKey, viewerId);
+  }
+
+  return viewerId;
+}
+
+async function trackListingView(sellerId) {
+  if (!productId || !sellerId) return;
+
+  // Avoid making an unnecessary network call for the known owner.
+  if (currentUser && currentUser.uid === sellerId) return;
+
+  try {
+    await recordListingViewCallable({
+      productId,
+      viewerId: getOrCreateViewerId()
+    });
+  } catch (error) {
+    // Analytics must never prevent the listing from loading.
+    console.warn(
+      "Secure listing view was not recorded:",
+      error.message
+    );
+  }
 }
 
 function populateDiscoverMore(category, county) {
@@ -1511,6 +1561,9 @@ async function loadProduct() {
       showUnavailable("This listing is currently under review or is no longer available.");
       return;
     }
+
+    // Record a real buyer view without delaying the page.
+    void trackListingView(sellerId);
 
     const title = product.title || "Untitled Product";
     const category = product.category || "Product";

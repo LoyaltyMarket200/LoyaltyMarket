@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Analytics - Waterside</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+  <meta name="theme-color" content="#0d6e6e">
+
+  <style>
+    :root{
+      --navy:#0d6e6e;
+      --navy-dark:#095959;
+      --navy-soft:#e3f2f2;
+      --orange:#ff6b4a;
+      --orange-soft:#ffece7;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --bg:#f7f8fa;
+      --green:#15803d;
+      --green-soft:#dcfce7;
+    }
+
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+
+    .analytics-navbar{
+      min-height:50px;
+      padding:7px max(20px,4vw);
+      background:#fff;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      position:sticky;
+      top:0;
+      z-index:40;
+    }
+
+    .analytics-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--navy);font-size:14px;font-weight:800}
+    .analytics-logo img{width:26px;height:26px;object-fit:contain}
+    .analytics-nav{display:flex;gap:8px}
+    .analytics-nav a{min-height:31px;display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);text-decoration:none;font-size:12px;font-weight:700}
+    .analytics-nav a.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+
+    .analytics-shell{width:min(1180px,94%);margin:26px auto 65px}
+    .analytics-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
+    .analytics-head h1{margin:0;font-size:24px}
+    .analytics-head p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .period-select{min-height:38px;padding:8px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font:inherit;font-size:12.5px}
+
+    .stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+    .stat-card{padding:17px;border:1px solid var(--line);border-radius:14px;background:#fff}
+    .stat-label{color:var(--muted);font-size:11.5px;font-weight:700}
+    .stat-value{margin-top:7px;color:var(--navy);font-size:25px;font-weight:800}
+    .stat-note{margin-top:5px;color:#94a3b8;font-size:10.5px}
+
+    .analytics-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.8fr);gap:18px;margin-top:18px;align-items:start}
+    .panel{padding:20px;border:1px solid var(--line);border-radius:15px;background:#fff}
+    .panel h2{margin:0;font-size:17px}
+    .panel-sub{margin:5px 0 15px;color:var(--muted);font-size:12px;line-height:1.5}
+
+    .listing-list{display:grid;gap:10px}
+    .listing-row{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:11px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:11px}
+    .listing-row img{width:56px;height:56px;border-radius:9px;object-fit:cover;background:#f1f5f9}
+    .listing-title{font-size:13px;font-weight:700;margin-bottom:4px}
+    .listing-meta{color:var(--muted);font-size:11px}
+    .listing-number{text-align:right;color:var(--navy);font-size:18px;font-weight:800}
+    .listing-number small{display:block;color:var(--muted);font-size:9.5px;font-weight:600}
+
+    .activity-list{display:grid;gap:10px}
+    .activity-item{padding:12px;border:1px solid var(--line);border-radius:11px;background:#fbfcfd}
+    .activity-title{font-size:12.5px;font-weight:700}
+    .activity-time{margin-top:4px;color:var(--muted);font-size:10.5px}
+
+    .empty{padding:35px 18px;border:1px dashed #cbd5e1;border-radius:12px;text-align:center;color:var(--muted);font-size:12.5px}
+
+    @media(max-width:950px){
+      .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .analytics-grid{grid-template-columns:1fr}
+    }
+
+    @media(max-width:620px){
+      .analytics-navbar{flex-wrap:wrap}
+      .analytics-nav{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+      .analytics-head{align-items:flex-start;flex-direction:column}
+      .period-select{width:100%}
+      .stats-grid{grid-template-columns:1fr 1fr;gap:9px}
+      .listing-row{grid-template-columns:46px minmax(0,1fr)}
+      .listing-row img{width:46px;height:46px}
+      .listing-number{grid-column:2;text-align:left}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="analytics-navbar">
+    <a href="index.html" class="analytics-logo">
+      <img src="icons/icon-512.png" alt="Waterside">
+      <span>Waterside</span>
+    </a>
+
+    <nav class="analytics-nav">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="sell.html" class="primary">Post An Ad</a>
+    </nav>
+  </header>
+
+  <main class="analytics-shell">
+    <section class="analytics-head">
+      <div>
+        <h1>Seller Analytics</h1>
+        <p>See how buyers interact with your listings and seller profile.</p>
+      </div>
+
+      <select id="periodSelect" class="period-select">
+        <option value="all">All Time</option>
+        <option value="30">Last 30 Days</option>
+        <option value="7">Last 7 Days</option>
+      </select>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card">
+        <div class="stat-label">Active Listings</div>
+        <div id="activeListings" class="stat-value">0</div>
+        <div class="stat-note">Currently visible to buyers</div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-label">Listing Views</div>
+        <div id="listingViews" class="stat-value">0</div>
+        <div class="stat-note">Combined product views</div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-label">Followers</div>
+        <div id="followersCount" class="stat-value">0</div>
+        <div class="stat-note">Buyers following your profile</div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-label">Reviews</div>
+        <div id="reviewsCount" class="stat-value">0</div>
+        <div id="ratingNote" class="stat-note">No rating yet</div>
+      </article>
+    </section>
+
+    <section class="analytics-grid">
+      <article class="panel">
+        <h2>Top Listings</h2>
+        <p class="panel-sub">Your listings ranked by total views.</p>
+        <div id="topListings" class="listing-list">
+          <div class="empty">Loading listing performance...</div>
+        </div>
+      </article>
+
+      <aside class="panel">
+        <h2>Recent Activity</h2>
+        <p class="panel-sub">Latest messages, orders, reviews and follows.</p>
+        <div id="recentActivity" class="activity-list">
+          <div class="empty">Loading recent activity...</div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="lm-footer" id="marketplaceFooter">
+    <div class="lm-footer-simple site-shell">
+      <p class="lm-footer-tagline">Liberia's Trusted Marketplace</p>
+      <p class="lm-footer-copyright">&copy; 2026 Waterside</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    import {
+      collection,
+      getDocs,
+      query,
+      where
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const activeListings = document.getElementById("activeListings");
+    const listingViews = document.getElementById("listingViews");
+    const followersCount = document.getElementById("followersCount");
+    const reviewsCount = document.getElementById("reviewsCount");
+    const ratingNote = document.getElementById("ratingNote");
+    const topListings = document.getElementById("topListings");
+    const recentActivity = document.getElementById("recentActivity");
+    const periodSelect = document.getElementById("periodSelect");
+
+    let currentUser = null;
+    let allProducts = [];
+    let allNotifications = [];
+    let allReviews = [];
+    let allFollowers = [];
+
+    function safeText(value, fallback = "") {
+      return String(value ?? fallback)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function firstImage(product) {
+      if (Array.isArray(product.images) && product.images.length) return product.images[0];
+      return product.imageUrl || product.image || "icons/icon-512.png";
+    }
+
+    function timestampMs(value) {
+      return value?.seconds ? value.seconds * 1000 : 0;
+    }
+
+    function inPeriod(item) {
+      const days = periodSelect.value;
+      if (days === "all") return true;
+
+      const cutoff = Date.now() - (Number(days) * 86400000);
+      const createdAt =
+        timestampMs(item.createdAt) ||
+        timestampMs(item.updatedAt) ||
+        timestampMs(item.followedAt);
+
+      return createdAt >= cutoff;
+    }
+
+    function renderAnalytics() {
+      const products = allProducts.filter(inPeriod);
+      const reviews = allReviews.filter(inPeriod);
+      const followers = allFollowers.filter(inPeriod);
+      const notifications = allNotifications.filter(inPeriod);
+
+      const active = products.filter((product) =>
+        String(product.status || "active").toLowerCase() === "active"
+      );
+
+      const views = products.reduce(
+        (total, product) => total + Number(product.views || product.viewCount || 0),
+        0
+      );
+
+      const averageRating = reviews.length
+        ? reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / reviews.length
+        : 0;
+
+      activeListings.textContent = active.length;
+      listingViews.textContent = views.toLocaleString();
+      followersCount.textContent = followers.length;
+      reviewsCount.textContent = reviews.length;
+      ratingNote.textContent = reviews.length
+        ? `${averageRating.toFixed(1)} average rating`
+        : "No rating yet";
+
+      const ranked = [...products]
+        .sort((a,b) =>
+          Number(b.views || b.viewCount || 0) -
+          Number(a.views || a.viewCount || 0)
+        )
+        .slice(0,8);
+
+      if (!ranked.length) {
+        topListings.innerHTML = '<div class="empty">No listing analytics yet.</div>';
+      } else {
+        topListings.innerHTML = ranked.map((product) => `
+          <div class="listing-row">
+            <img src="${safeText(firstImage(product))}" alt="${safeText(product.title || "Listing")}" onerror="this.src='icons/icon-512.png'">
+            <div>
+              <div class="listing-title">${safeText(product.title || "Untitled Listing")}</div>
+              <div class="listing-meta">
+                ${safeText(product.status || "active")} ·
+                US$${safeText(product.priceUsd || "0")}
+              </div>
+            </div>
+            <div class="listing-number">
+              ${Number(product.views || product.viewCount || 0).toLocaleString()}
+              <small>views</small>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      const activity = [...notifications]
+        .sort((a,b) =>
+          (b.createdAt?.seconds || 0) -
+          (a.createdAt?.seconds || 0)
+        )
+        .slice(0,8);
+
+      if (!activity.length) {
+        recentActivity.innerHTML = '<div class="empty">No recent activity yet.</div>';
+      } else {
+        recentActivity.innerHTML = activity.map((item) => {
+          const date = item.createdAt?.seconds
+            ? new Date(item.createdAt.seconds * 1000).toLocaleString()
+            : "";
+
+          return `
+            <div class="activity-item">
+              <div class="activity-title">${safeText(item.title || item.body || "Marketplace activity")}</div>
+              <div class="activity-time">${safeText(date)}</div>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+
+    async function loadAnalytics() {
+      try {
+        const [productsSnapshot, followersSnapshot, reviewsSnapshot, notificationsSnapshot] =
+          await Promise.all([
+            getDocs(query(collection(db,"products"), where("sellerId","==",currentUser.uid))),
+            getDocs(query(collection(db,"followers"), where("sellerId","==",currentUser.uid))),
+            getDocs(query(collection(db,"reviews"), where("sellerId","==",currentUser.uid))),
+            getDocs(query(collection(db,"notifications"), where("userId","==",currentUser.uid)))
+          ]);
+
+        allProducts = productsSnapshot.docs.map((item) => ({ id:item.id, ...item.data() }));
+        allFollowers = followersSnapshot.docs.map((item) => ({ id:item.id, ...item.data() }));
+        allReviews = reviewsSnapshot.docs.map((item) => ({ id:item.id, ...item.data() }));
+        allNotifications = notificationsSnapshot.docs.map((item) => ({ id:item.id, ...item.data() }));
+
+        renderAnalytics();
+      } catch (error) {
+        console.error("Could not load seller analytics:", error);
+        topListings.innerHTML =
+          `<div class="empty">Could not load analytics: ${safeText(error.message)}</div>`;
+        recentActivity.innerHTML =
+          '<div class="empty">Activity could not be loaded.</div>';
+      }
+    }
+
+    periodSelect.addEventListener("change", renderAnalytics);
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        alert("Please log in to view seller analytics.");
+        window.location.href =
+          "login.html?redirect=" + encodeURIComponent("seller-analytics.html");
+        return;
+      }
+
+      currentUser = user;
+      loadAnalytics();
+    });
+  </script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js").catch(() => {});
+    }
+  </script>
+</body>
+</html>

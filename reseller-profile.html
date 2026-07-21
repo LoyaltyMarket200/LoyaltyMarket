@@ -377,6 +377,21 @@
       line-height: 1.55;
     }
 
+
+    .verified-purchase-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      margin-left:7px;
+      padding:3px 7px;
+      border-radius:999px;
+      background:#ecfdf3;
+      color:#047857;
+      font-size:9.5px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
     .about-text {
       margin: 16px 0 0;
       color: #344054;
@@ -617,6 +632,22 @@
       justify-content:space-between;
       gap:12px;
       align-items:center;
+    }
+
+    .review-header-name{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+    }
+
+    .review-avatar{
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      object-fit:cover;
+      background:var(--brand-soft);
+      flex-shrink:0;
     }
 
     .review-header strong{
@@ -1122,6 +1153,11 @@
     let resellerProducts = [];
     let isFollowing = false;
 
+    const WATERSIDE_LOGO = "icons/icon-512.png";
+
+    // Cache of reviewer profile pictures, keyed by reviewerId.
+    const reviewerPhotoCache = {};
+
     function safeText(value, fallback = "") {
       if (value === null || value === undefined) return fallback;
       return String(value);
@@ -1232,12 +1268,16 @@
         || data.bio
         || "This authorized reseller helps product owners and businesses advertise products, find buyers, and earn agreed commissions.";
 
+      // Reseller-specific photo fields take priority; if none is set, fall
+      // back to the account's personal Account Settings profile picture;
+      // if neither exists, keep the default Waterside icon.
       const photo =
         data.resellerPhotoUrl
         || data.profilePhotoUrl
         || data.photoURL
         || data.photoUrl
         || data.avatarUrl
+        || data.profileImageUrl
         || "icons/icon-512.png";
 
       const coverUrl =
@@ -1414,6 +1454,21 @@
           });
     }
 
+    async function getReviewerPhoto(reviewerId) {
+      if (!reviewerId) return "";
+      if (reviewerPhotoCache[reviewerId] !== undefined) return reviewerPhotoCache[reviewerId];
+
+      try {
+        const snap = await getDoc(doc(db, "users", reviewerId));
+        const photo = snap.exists() ? (snap.data().profileImageUrl || "") : "";
+        reviewerPhotoCache[reviewerId] = photo;
+        return photo;
+      } catch {
+        reviewerPhotoCache[reviewerId] = "";
+        return "";
+      }
+    }
+
     async function loadReviews() {
       try {
         const snapshot = await getDocs(
@@ -1438,6 +1493,10 @@
             '<div class="empty-state">This reseller has no reviews yet.</div>';
           return;
         }
+
+        // Fetch each unique reviewer's profile picture once before rendering.
+        const uniqueReviewerIds = [...new Set(reviews.map((r) => r.reviewerId).filter(Boolean))];
+        await Promise.all(uniqueReviewerIds.map((id) => getReviewerPhoto(id)));
 
         const counts = {1:0,2:0,3:0,4:0,5:0};
         let total = 0;
@@ -1471,10 +1530,28 @@
           `;
         }).join("");
 
-        resellerReviewsList.innerHTML = reviews.map((review) => `
+        resellerReviewsList.innerHTML = reviews.map((review) => {
+          const reviewerPhoto =
+            review.reviewerPhotoUrl ||
+            reviewerPhotoCache[review.reviewerId] ||
+            WATERSIDE_LOGO;
+
+          return `
           <article class="review-card">
             <div class="review-header">
-              <strong>${safeText(review.reviewerName, "WaterSide Buyer")}</strong>
+              <div class="review-header-name">
+                <img
+                  class="review-avatar"
+                  src="${safeText(reviewerPhoto)}"
+                  alt="${safeText(review.reviewerName, "WaterSide Buyer")}"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='${WATERSIDE_LOGO}';"
+                >
+                <strong>${safeText(review.reviewerName, "WaterSide Buyer")}</strong>
+                ${review.orderId || review.verifiedPurchase
+                  ? '<span class="verified-purchase-badge">✓ Verified Purchase</span>'
+                  : ""}
+              </div>
               <span class="review-card-stars">${reviewStars(review.rating)}</span>
             </div>
 
@@ -1490,7 +1567,8 @@
 
             <p class="review-date">${reviewDate(review.createdAt)}</p>
           </article>
-        `).join("");
+        `;
+        }).join("");
 
       } catch (error) {
         console.error("Could not load reseller reviews:", error);

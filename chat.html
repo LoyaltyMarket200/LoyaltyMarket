@@ -104,7 +104,7 @@
     const data=userSnap.data();
     otherName.textContent=data.resellerName||data.businessName||data.name||data.email||"WaterSide User";
     otherStatus.textContent=data.resellerApproved===true?"Authorized WaterSide Reseller":data.businessVerified===true?"Verified WaterSide Business":data.verified===true?"Verified WaterSide Seller":"WaterSide member";
-    otherAvatar.src=data.resellerPhotoUrl||data.profilePhotoUrl||data.photoURL||data.avatarUrl||"icons/icon-512.png";
+    otherAvatar.src=data.resellerPhotoUrl||data.profilePhotoUrl||data.photoURL||data.avatarUrl||data.profileImageUrl||"icons/icon-512.png";
     otherAvatar.onerror=()=>{ otherAvatar.src="icons/icon-512.png"; };
     const phone=data.resellerPhone||data.businessPhone||data.phone||"";
     if (phone) { callBtn.href=`tel:${normalizePhone(phone)}`; callBtn.classList.remove("hidden"); }

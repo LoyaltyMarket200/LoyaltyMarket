@@ -161,6 +161,25 @@
     .status-cancelled{background:var(--red-soft);color:var(--red)}
     .status-reviewed{background:#eef2ff;color:#4338ca}
 
+    .order-seller-row{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      margin-bottom:8px;
+      font-size:11.5px;
+      color:var(--muted);
+    }
+    .order-seller-row img{
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      object-fit:cover;
+      border:1px solid var(--line);
+      background:var(--navy-soft);
+      flex-shrink:0;
+    }
+    .order-seller-row span{font-weight:600;color:var(--ink)}
+
     .order-details{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
@@ -571,6 +590,8 @@
     const FALLBACK_IMAGE =
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop";
 
+    const WATERSIDE_LOGO = "icons/icon-512.png";
+
     let currentUser = null;
     let allOrders = [];
     let currentFilter = "all";
@@ -695,8 +716,17 @@
                 ${reviewed ? '<span class="order-badge status-reviewed">Reviewed</span>' : ""}
               </div>
 
+              <div class="order-seller-row">
+                <img
+                  src="${safeText(order.sellerPhoto || WATERSIDE_LOGO)}"
+                  alt="${safeText(sellerDisplay(order))}"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='${WATERSIDE_LOGO}';"
+                >
+                Seller: <span>${safeText(sellerDisplay(order))}</span>
+              </div>
+
               <div class="order-details">
-                <div><strong>Seller:</strong> ${safeText(sellerDisplay(order))}</div>
                 <div><strong>Requested:</strong> ${safeText(formatDate(order.createdAt))}</div>
                 ${quantity ? `<div><strong>Quantity:</strong> ${safeText(quantity)}</div>` : ""}
                 <div><strong>Meeting/Delivery:</strong> ${safeText(meetingPlace)}</div>
@@ -879,15 +909,26 @@
         }
 
         let reviewerName = currentUser.email || "Buyer";
+        let reviewerPhotoUrl = currentUser.photoURL || "";
 
         try {
           const userSnapshot = await getDoc(doc(db, "users", currentUser.uid));
           if (userSnapshot.exists()) {
+            const reviewerProfile = userSnapshot.data();
+
             reviewerName =
-              userSnapshot.data().name ||
-              userSnapshot.data().fullName ||
+              reviewerProfile.name ||
+              reviewerProfile.fullName ||
               currentUser.email ||
               "Buyer";
+
+            reviewerPhotoUrl =
+              reviewerProfile.profileImageUrl ||
+              reviewerProfile.photoURL ||
+              reviewerProfile.photoUrl ||
+              reviewerProfile.avatarUrl ||
+              currentUser.photoURL ||
+              "";
           }
         } catch (profileError) {
           console.warn("Buyer profile lookup failed:", profileError);
@@ -899,6 +940,8 @@
           sellerId: order.sellerId,
           reviewerId: currentUser.uid,
           reviewerName,
+          reviewerPhotoUrl,
+          verifiedPurchase: true,
           orderId: order.id,
           productId: order.productId || null,
           productTitle: order.productTitle || null,
@@ -1048,7 +1091,15 @@
               seller.businessName ||
               seller.email,
             sellerEmail: order.sellerEmail || seller.email,
-            sellerPhone: order.sellerPhone || seller.phone || seller.businessPhone
+            sellerPhone: order.sellerPhone || seller.phone || seller.businessPhone,
+            sellerPhoto:
+              order.sellerPhoto ||
+              seller.businessLogoUrl ||
+              seller.profileImageUrl ||
+              seller.resellerPhotoUrl ||
+              seller.profilePhotoUrl ||
+              seller.photoURL ||
+              seller.avatarUrl
           };
         }
       } catch (error) {

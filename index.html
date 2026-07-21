@@ -32,6 +32,42 @@
       object-fit: cover;
       display: block;
     }
+
+    .product-card-seller {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .product-card-seller img {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e5e7eb;
+      flex-shrink: 0;
+      background: #e3f2f2;
+    }
+    .product-card-seller span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* On mobile, style.css lays the card out as an explicit 2-column,
+       4-row grid (image | price/title/location/condition). Our new
+       seller row has no explicit placement, so without this it would
+       fall into the next empty cell under the image instead of under
+       the rest of the text column. */
+    @media (max-width: 680px) {
+      .homepage .product-card-seller {
+        grid-column: 2;
+        margin-top: 2px;
+        font-size: 10px;
+      }
+    }
   </style>
 </head>
 
@@ -401,6 +437,8 @@
       maintenanceMode: false
     };
 
+    const WATERSIDE_LOGO = "icons/icon-512.png";
+
     const productGrid = document.getElementById("productGrid");
     const resultsCountLine = document.getElementById("resultsCountLine");
     const loginBtn = document.getElementById("loginBtn");
@@ -428,8 +466,9 @@
     let marketplaceSettings = { ...DEFAULT_SETTINGS };
     let unsubscribeUnreadMessages = null;
 
-    const sellerNameCache = {};
-    const sellerVerifiedCache = {};
+    // Combined cache: one Firestore read per seller instead of separate
+    // name/verified/photo lookups. Holds { name, verified, profileImageUrl }.
+    const sellerInfoCache = {};
 
     const HIDDEN_STATUSES = [
       "archived",
@@ -599,15 +638,16 @@
       }
     }
 
-    async function getSellerName(sellerId) {
+    // Fetches a seller's name, verified status, and profile picture in a
+    // single cached read per seller (replaces the old separate
+    // getSellerName / getSellerVerified lookups).
+    async function getSellerInfo(sellerId) {
       if (!sellerId) {
-        return "";
+        return { name: "", verified: false, profileImageUrl: "" };
       }
 
-      if (
-        sellerNameCache[sellerId] !== undefined
-      ) {
-        return sellerNameCache[sellerId];
+      if (sellerInfoCache[sellerId] !== undefined) {
+        return sellerInfoCache[sellerId];
       }
 
       try {
@@ -615,45 +655,20 @@
           doc(db, "users", sellerId)
         );
 
-        const name = snapshot.exists()
-          ? snapshot.data().name || ""
-          : "";
+        const data = snapshot.exists() ? snapshot.data() : {};
 
-        sellerNameCache[sellerId] = name;
+        const info = {
+          name: data.name || "",
+          verified: data.verified === true,
+          profileImageUrl: data.profileImageUrl || ""
+        };
 
-        return name;
+        sellerInfoCache[sellerId] = info;
+        return info;
       } catch {
-        sellerNameCache[sellerId] = "";
-        return "";
-      }
-    }
-
-    async function getSellerVerified(sellerId) {
-      if (!sellerId) {
-        return false;
-      }
-
-      if (
-        sellerVerifiedCache[sellerId] !== undefined
-      ) {
-        return sellerVerifiedCache[sellerId];
-      }
-
-      try {
-        const snapshot = await getDoc(
-          doc(db, "users", sellerId)
-        );
-
-        const verified = snapshot.exists()
-          ? snapshot.data().verified === true
-          : false;
-
-        sellerVerifiedCache[sellerId] = verified;
-
-        return verified;
-      } catch {
-        sellerVerifiedCache[sellerId] = false;
-        return false;
+        const fallback = { name: "", verified: false, profileImageUrl: "" };
+        sellerInfoCache[sellerId] = fallback;
+        return fallback;
       }
     }
 
@@ -696,7 +711,7 @@
 
       await Promise.all(
         uniqueSellerIds.map((sellerId) =>
-          getSellerVerified(sellerId)
+          getSellerInfo(sellerId)
         )
       );
 
@@ -766,8 +781,28 @@
         const badgeLabel =
           getBoostLabel(product);
 
-        const isVerified =
-          sellerVerifiedCache[product.sellerId] === true;
+        const sellerInfo =
+          sellerInfoCache[product.sellerId] ||
+          { name: "", verified: false, profileImageUrl: "" };
+
+        const isVerified = sellerInfo.verified;
+
+        const sellerAvatarSrc =
+          sellerInfo.profileImageUrl || WATERSIDE_LOGO;
+
+        const sellerRow = sellerInfo.name
+          ? `
+            <div class="product-card-seller">
+              <img
+                src="${safeText(sellerAvatarSrc)}"
+                alt="${safeText(sellerInfo.name)}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='${WATERSIDE_LOGO}';"
+              >
+              <span>${safeText(sellerInfo.name)}</span>
+            </div>
+          `
+          : "";
 
         const link =
           document.createElement("a");
@@ -819,6 +854,8 @@
               ${safeText(condition)}
               ${isVerified ? '<span class="mp-verified-pill">✓ Verified Seller</span>' : ""}
             </p>
+
+            ${sellerRow}
           </div>
         `;
 
@@ -874,7 +911,7 @@
 
         if (searchTerm) {
           const sellerName =
-            (await getSellerName(product.sellerId))
+            (await getSellerInfo(product.sellerId)).name
               .toLowerCase();
 
           matchesSearch =
