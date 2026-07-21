@@ -678,11 +678,14 @@ async function loadUserProfile() {
         || userData.businessApproved === true
         || userData.businessAccountApproved === true;
 
-      const isApprovedReseller =
-        accountType === "reseller"
-        || userData.resellerApproved === true
-        || userData.isReseller === true
-        || userData.resellerBadge === true;
+    const isApprovedReseller =
+    accountType === "reseller" ||
+    userData.resellerApproved === true ||
+    userData.businessVerified === true ||
+    userData.businessApproved === true ||
+    userData.businessAccountApproved === true ||
+    userData.isReseller === true ||
+    userData.resellerBadge === true;
 
       userName.textContent = userData.name || currentUser.email;
 
