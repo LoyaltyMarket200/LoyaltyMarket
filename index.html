@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="footer.css">
   <link rel="stylesheet" href="marketplace.css">
-
-  <link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
   <meta name="theme-color" content="#0d6e6e">
@@ -76,7 +75,7 @@
     <div class="mp-header-top">
       <a href="index.html" class="mp-logo" aria-label="Waterside home">
         <span class="mp-logo-word mp-logo-water">Water</span><span class="mp-logo-word mp-logo-side">side</span>
-        <span class="mp-logo-sub">Liberia's No.1 Marketplace</span>
+        <span class="mp-logo-sub">Liberia’s No. 1 Marketplace</span>
       </a>
 
       <div class="mp-header-actions">
@@ -214,36 +213,13 @@
     </div>
   </nav>
 
-  <div class="mp-quick-actions-row mp-quick-actions-row-inline site-shell" style="padding-top:14px;">
-    <a href="sell.html" class="mp-quick-action-card mp-quick-action-highlight">
-      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
-      <span>Post Ad</span>
-    </a>
-
-    <a href="search.html" class="mp-quick-action-card">
-      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span>
-      <span>Trending</span>
-    </a>
-
-    <a href="sellers.html" class="mp-quick-action-card">
-      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6M14 15c3 0 5 1.7 5 5"/></svg></span>
-      <span>Find Sellers</span>
-    </a>
-
-    <a href="safety.html" class="mp-quick-action-card">
-      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg></span>
-      <span>How To Sell</span>
-    </a>
-
-    <a href="category-jobs.html" class="mp-quick-action-card">
-      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span>
-      <span>Find A Job</span>
-    </a>
-
-    <a href="#services" class="mp-quick-action-card">
-      <span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 1 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4Z"/></svg></span>
-      <span>Find A Service</span>
-    </a>
+  <div class="mp-quick-actions-row mp-quick-actions-row-inline site-shell">
+    <a href="sell.html" class="mp-quick-action-card mp-quick-action-highlight"><span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="mp-quick-action-label">Post Ad</span></a>
+    <a href="search.html" class="mp-quick-action-card"><span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span><span class="mp-quick-action-label">Trending</span></a>
+    <a href="safety.html" class="mp-quick-action-card"><span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg></span><span class="mp-quick-action-label">How to Sell</span></a>
+    <a href="category-jobs.html" class="mp-quick-action-card"><span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><span class="mp-quick-action-label">Find a Job</span></a>
+    <a href="#products" data-filter-category="Services" class="mp-quick-action-card"><span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 1 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4Z"/></svg></span><span class="mp-quick-action-label">Find a Service</span></a>
+    <a href="sell.html?type=request" class="mp-quick-action-card"><span class="mp-quick-action-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4V4Z"/><path d="M8 8h8M8 12h5"/></svg></span><span class="mp-quick-action-label">Post a Request</span></a>
   </div>
 
   <section class="mp-recommended site-shell">
@@ -836,26 +812,28 @@
               >
             </div>
 
-            <h3>${safeText(title)}</h3>
+            <div class="product-card-body">
+              <h3>${safeText(title)}</h3>
 
-            <p class="price">
-              US$${safeText(formatMoney(priceUsd))}
-              |
-              L$${safeText(formatMoney(priceLrd))}
-            </p>
+              <p class="price">
+                US$${safeText(formatMoney(priceUsd))}
+                |
+                L$${safeText(formatMoney(priceLrd))}
+              </p>
 
-            <p class="location">
-              <svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-              ${safeText(city)}
-              ${county ? `, ${safeText(county)}` : ""}
-            </p>
+              <p class="location">
+                <svg class="icon" viewBox="0 0 24 24" style="width:.85em;height:.85em;"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                ${safeText(city)}
+                ${county ? `, ${safeText(county)}` : ""}
+              </p>
 
-            <p class="condition">
-              ${safeText(condition)}
-              ${isVerified ? '<span class="mp-verified-pill">✓ Verified Seller</span>' : ""}
-            </p>
+              <p class="condition">
+                ${safeText(condition)}
+                ${isVerified ? '<span class="mp-verified-pill">✓ Verified Seller</span>' : ""}
+              </p>
 
-            ${sellerRow}
+              ${sellerRow}
+            </div>
           </div>
         `;
 

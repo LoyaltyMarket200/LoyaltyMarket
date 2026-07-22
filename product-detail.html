@@ -437,6 +437,248 @@
       .detail-price { font-size: 19px; }
       .material-details-grid { grid-template-columns: 1fr; }
     }
+  
+    /* WaterSide premium product-detail layout */
+    body.homepage{
+      font-family:"Roboto",Arial,Helvetica,sans-serif;
+      background:linear-gradient(180deg,#f0f6f6 0,#f7f8fa 320px);
+      color:#1f2937;
+    }
+
+    .mp-logo-name{display:inline-flex;gap:0;white-space:nowrap}
+
+    .cat-breadcrumb{
+      width:min(1360px,94%);
+      margin:20px auto 0;
+      color:#71808c;
+      font-size:13px;
+    }
+    .cat-breadcrumb a{color:#0d6e6e;text-decoration:none;font-weight:600}
+
+    .product-detail{
+      width:min(1360px,94%);
+      margin:18px auto 54px;
+      grid-template-columns:minmax(0,1.35fr) minmax(390px,.65fr);
+      gap:28px;
+      align-items:start;
+    }
+
+    .product-detail-left,.product-detail-right{
+      border:1px solid #dfe7ea;
+      box-shadow:0 10px 32px rgba(23,50,65,.08);
+    }
+
+    .product-detail-left{padding:18px;border-radius:18px}
+    .main-image{
+      height:min(620px,64vw);
+      min-height:460px;
+      border-radius:15px;
+      background:#edf2f4;
+    }
+    .main-image img{object-fit:contain;background:#f4f6f7}
+
+    .thumbnail-strip{gap:10px;margin-top:14px;padding:4px 1px}
+    .thumbnail{width:88px;height:72px;border-radius:10px;background:#eef2f4}
+
+    .product-detail-right{
+      padding:27px;
+      border-radius:18px;
+      top:18px;
+    }
+
+    .product-detail-right>.badge{
+      display:inline-flex;
+      padding:6px 11px;
+      border-radius:999px;
+      background:#e7f5f3;
+      color:#0d6e6e;
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .product-detail-right h1{
+      margin:13px 0 7px;
+      font-size:clamp(25px,2.5vw,34px);
+      line-height:1.2;
+      letter-spacing:-.02em;
+    }
+
+    .posted-time-line{margin-bottom:17px;font-size:13px}
+
+    .detail-price{
+      width:100%;
+      padding:15px 17px;
+      margin:0 0 12px;
+      border:1px solid #ffd5c9;
+      font-size:27px;
+      box-sizing:border-box;
+    }
+
+    .detail-location,.detail-condition{
+      min-height:48px;
+      padding:12px 2px;
+      font-size:14px;
+    }
+
+    .detail-actions{grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 16px}
+
+    .buy-now-btn,.contact-btn,.heart-btn,.share-btn,.whatsapp-btn,.show-contact-btn{
+      min-height:50px;
+      border-radius:11px;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .buy-now-btn{
+      grid-column:span 2;
+      min-height:54px;
+      box-shadow:0 9px 20px rgba(13,110,110,.18);
+    }
+
+    .heart-btn,.share-btn{
+      background:#fff;
+      border:1px solid #dfe5e8;
+      color:#34424d;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      cursor:pointer;
+    }
+
+    .heart-btn:hover,.share-btn:hover{
+      border-color:#0d6e6e;
+      color:#0d6e6e;
+      background:#f0f8f7;
+    }
+
+    .quick-chat-card,.seller-card,.safety-tips-card,.purchase-flow-card{
+      border-color:#dfe7ea;
+      box-shadow:0 5px 18px rgba(20,42,58,.045);
+    }
+
+    .quick-chat-card{padding:18px;border-radius:15px;background:#fbfcfd}
+    .quick-chat-card h3,.safety-tips-card h3,.product-description h3{
+      font-size:16px;
+      font-weight:700;
+    }
+
+    .quick-chat-input,.start-chat-btn{min-height:48px}
+    .start-chat-btn{font-weight:700}
+
+    .seller-card{padding:25px 18px 18px;border-radius:15px;background:#fbfcfd}
+    .seller-avatar{width:58px;height:58px}
+
+    .purchase-flow-card{
+      margin:20px 0;
+      padding:17px;
+      border:1px solid #dfe7ea;
+      border-radius:15px;
+      background:#f0f8f7;
+    }
+
+    .purchase-flow-title{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#0d6e6e;
+      font-size:15px;
+      font-weight:800;
+    }
+
+    .purchase-flow-title .icon{width:18px;height:18px}
+
+    .purchase-flow-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+      margin-top:13px;
+    }
+
+    .purchase-flow-grid>div{
+      min-height:76px;
+      padding:10px 8px;
+      border-radius:11px;
+      background:#fff;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      text-align:center;
+      color:#5d6a74;
+      font-size:11px;
+      line-height:1.3;
+    }
+
+    .purchase-flow-grid strong{
+      width:27px;
+      height:27px;
+      border-radius:50%;
+      background:#0d6e6e;
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-size:12px;
+    }
+
+    .product-description p{
+      color:#55636e;
+      font-size:14px;
+      line-height:1.75;
+      white-space:pre-line;
+    }
+
+    .related-section,.discover-more-section{width:min(1360px,94%)}
+    .related-section h2{font-size:24px;font-weight:800}
+
+    .checkout-modal{
+      max-width:480px;
+      padding:25px;
+      border:1px solid #dfe7ea;
+      box-shadow:0 24px 60px rgba(15,35,48,.22);
+    }
+    .checkout-modal h3{font-size:21px}
+    .checkout-note{background:#fff5f1;color:#9b3b25}
+
+    @media(max-width:980px){
+      .product-detail{width:min(760px,94%);grid-template-columns:1fr}
+      .product-detail-right{position:static}
+      .main-image{height:500px;min-height:0}
+    }
+
+    @media(max-width:700px){
+      .cat-breadcrumb{width:calc(100% - 24px);margin-top:14px}
+      .product-detail{width:calc(100% - 20px);margin-top:12px;gap:14px}
+      .product-detail-left,.product-detail-right{padding:13px;border-radius:14px}
+      .main-image{height:340px;border-radius:11px}
+      .thumbnail{width:72px;height:58px}
+      .product-detail-right h1{font-size:23px}
+      .detail-price{font-size:22px}
+      .purchase-flow-grid{grid-template-columns:1fr}
+      .purchase-flow-grid>div{
+        min-height:58px;
+        flex-direction:row;
+        justify-content:flex-start;
+        padding-inline:13px;
+        text-align:left;
+      }
+      .checkout-modal-overlay,.modal-overlay{align-items:flex-end;padding:0}
+      .checkout-modal,.modal-box{
+        max-width:none;
+        width:100%;
+        max-height:92vh;
+        border-radius:18px 18px 0 0;
+      }
+    }
+
+    @media(max-width:430px){
+      .main-image{height:300px}
+      .detail-actions{grid-template-columns:1fr}
+      .buy-now-btn{grid-column:auto}
+      .provider-row{grid-template-columns:1fr}
+    }
+
   </style>
 </head>
 
@@ -444,7 +686,7 @@
   <header class="mp-header">
     <div class="mp-header-top">
       <a href="index.html" class="mp-logo" aria-label="Waterside home">
-        <span class="mp-logo-word mp-logo-water">Water</span><span class="mp-logo-word mp-logo-side">side</span>
+        <span class="mp-logo-name"><span class="mp-logo-word mp-logo-water">Water</span><span class="mp-logo-word mp-logo-side">Side</span></span>
         <span class="mp-logo-sub">Liberia's No.1 Marketplace</span>
       </a>
 
@@ -644,6 +886,10 @@
           <svg class="icon" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 5c-2.5 4.5-9.5 9-9.5 9Z"/></svg>
           Save
         </button>
+        <button id="shareBtn" class="share-btn" type="button">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.7 6.8-4.1M8.6 13.3l6.8 4.1"/></svg>
+          Share
+        </button>
       </div>
 
       <div class="quick-chat-card">
@@ -682,6 +928,18 @@
           <div id="sellerBadgeRow" class="seller-badge-row"></div>
           <p id="sellerEmail">Loading...</p>
           <p id="sellerPhone">Phone not listed</p>
+        </div>
+      </div>
+
+      <div class="purchase-flow-card">
+        <div class="purchase-flow-title">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V5l-8-3Z"/></svg>
+          How buying works on WaterSide
+        </div>
+        <div class="purchase-flow-grid">
+          <div><strong>1</strong><span>Contact the seller</span></div>
+          <div><strong>2</strong><span>Meet and inspect</span></div>
+          <div><strong>3</strong><span>Pay only when satisfied</span></div>
         </div>
       </div>
 
@@ -933,6 +1191,7 @@ const reportCancelBtn = document.getElementById("reportCancelBtn");
 const reportSubmitBtn = document.getElementById("reportSubmitBtn");
 const unreadBadge = document.getElementById("unreadBadge");
 const saveBtn = document.getElementById("saveBtn");
+const shareBtn = document.getElementById("shareBtn");
 const buyNowBtn = document.getElementById("buyNowBtn");
 const productDetailMain = document.getElementById("productDetailMain");
 const unavailableBox = document.getElementById("unavailableBox");
@@ -1766,28 +2025,66 @@ async function openWaterSideChat(initialMessage = "") {
     return;
   }
 
-  const chatId = buildChatId(
+  let chatId = buildChatId(
     currentUser.uid,
     loadedSellerId,
     productId
   );
 
-  const chatRef = doc(db, "chats", chatId);
+  let chatRef = doc(db, "chats", chatId);
   const cleanMessage = String(initialMessage || "").trim();
 
-  await setDoc(
-    chatRef,
-    {
-      participants: [currentUser.uid, loadedSellerId],
-      productId: productId || "",
-      lastMessage: cleanMessage,
-      lastMessageTime: serverTimestamp(),
-      lastSenderId: cleanMessage ? currentUser.uid : "",
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    },
-    { merge: true }
-  );
+  const newChatData = {
+    participants: [currentUser.uid, loadedSellerId],
+    productId: productId || "",
+    lastMessage: cleanMessage,
+    lastMessageTime: serverTimestamp(),
+    lastSenderId: cleanMessage ? currentUser.uid : "",
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  };
+
+  try {
+    const existingChatSnap = await getDoc(chatRef);
+
+    if (!existingChatSnap.exists()) {
+      await setDoc(chatRef, newChatData);
+    } else {
+      const existingData = existingChatSnap.data();
+      const existingParticipants = Array.isArray(existingData.participants)
+        ? existingData.participants
+        : [];
+
+      const validExistingChat =
+        existingParticipants.includes(currentUser.uid)
+        && existingParticipants.includes(loadedSellerId);
+
+      if (!validExistingChat) {
+        chatRef = doc(collection(db, "chats"));
+        chatId = chatRef.id;
+        await setDoc(chatRef, newChatData);
+      } else {
+        await setDoc(
+          chatRef,
+          {
+            lastMessage: cleanMessage,
+            lastMessageTime: serverTimestamp(),
+            lastSenderId: cleanMessage ? currentUser.uid : "",
+            updatedAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+      }
+    }
+  } catch (chatError) {
+    if (chatError?.code === "permission-denied") {
+      chatRef = doc(collection(db, "chats"));
+      chatId = chatRef.id;
+      await setDoc(chatRef, newChatData);
+    } else {
+      throw chatError;
+    }
+  }
 
   if (cleanMessage) {
     await addDoc(collection(db, "messages"), {
@@ -1795,9 +2092,10 @@ async function openWaterSideChat(initialMessage = "") {
       productId: productId || "",
       senderId: currentUser.uid,
       receiverId: loadedSellerId,
+      participants: [currentUser.uid, loadedSellerId],
       text: cleanMessage,
       type: "text",
-      seen: false,
+      read: false,
       createdAt: serverTimestamp()
     });
   }
@@ -1902,6 +2200,32 @@ onAuthStateChanged(auth, (user) => {
 });
 
 loadMarketplaceSettings();
+
+shareBtn?.addEventListener("click", async () => {
+  const shareData = {
+    title: loadedProductTitle || "WaterSide listing",
+    text: loadedProductTitle
+      ? `Check out ${loadedProductTitle} on WaterSide.`
+      : "Check out this listing on WaterSide.",
+    url: window.location.href
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      const oldText = shareBtn.innerHTML;
+      shareBtn.textContent = "Link copied";
+      setTimeout(() => { shareBtn.innerHTML = oldText; }, 1800);
+    }
+  } catch (error) {
+    if (error?.name !== "AbortError") {
+      console.warn("Could not share listing:", error);
+    }
+  }
+});
+
 </script>
 
 <script>

@@ -294,6 +294,231 @@
       .avatar{width:46px;height:46px}
       .conversation-side{min-width:55px}
     }
+  
+    /* ==========================================================
+       WATERSIDE PREMIUM MESSAGES INBOX
+       Keeps existing Firestore conversation loading, search,
+       unread filtering and profile/product hydration.
+       ========================================================== */
+
+    body{
+      font-family:"Roboto",Arial,Helvetica,sans-serif;
+      background:linear-gradient(180deg,#edf6f6 0,#f4f6f8 280px);
+    }
+
+    .site-header{
+      min-height:70px;
+      padding:10px max(16px,4vw);
+      box-shadow:0 3px 16px rgba(18,39,55,.06);
+    }
+
+    .brand{
+      font-size:21px;
+      letter-spacing:-.3px;
+    }
+
+    .brand img{
+      width:38px;
+      height:38px;
+      border-radius:10px;
+    }
+
+    .header-link{
+      min-height:40px;
+      padding:0 14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:10px;
+      font-size:13px;
+    }
+
+    .page-shell{
+      width:min(1180px,94%);
+      margin:32px auto 72px;
+    }
+
+    .page-head{
+      margin-bottom:20px;
+    }
+
+    .page-head h1{
+      font-size:32px;
+      letter-spacing:-.02em;
+    }
+
+    .page-head p{
+      font-size:14px;
+    }
+
+    .messages-card{
+      border-radius:20px;
+      border-color:#dfe7ea;
+      box-shadow:0 16px 44px rgba(18,39,55,.10);
+    }
+
+    .toolbar{
+      padding:16px;
+      background:#fbfcfd;
+    }
+
+    .search{
+      min-height:46px;
+      border-radius:12px;
+      background:#fff;
+    }
+
+    .filter-btn{
+      min-height:40px;
+      padding:0 15px;
+      font-size:12px;
+    }
+
+    .conversation{
+      min-height:88px;
+      padding:16px 18px;
+      gap:14px;
+      transition:.18s ease;
+    }
+
+    .conversation:hover{
+      background:#f8fbfb;
+      transform:translateX(2px);
+    }
+
+    .conversation.unread{
+      background:#eef9f8;
+    }
+
+    .avatar{
+      width:58px;
+      height:58px;
+      border:2px solid #fff;
+      box-shadow:0 4px 12px rgba(18,39,55,.10);
+    }
+
+    .product-mini{
+      width:24px;
+      height:24px;
+      border-radius:7px;
+    }
+
+    .name{
+      font-size:15px;
+    }
+
+    .preview{
+      margin-top:6px;
+      font-size:13px;
+    }
+
+    .product-title{
+      margin-top:6px;
+      font-size:11.5px;
+    }
+
+    .conversation-side{
+      min-width:72px;
+    }
+
+    .time{
+      font-size:11px;
+    }
+
+    .unread-count{
+      min-width:23px;
+      height:23px;
+      font-size:10.5px;
+    }
+
+    .status{
+      margin:20px;
+      padding:20px;
+      border-radius:14px;
+    }
+
+    @media(max-width:620px){
+      .site-header{
+        min-height:62px;
+        padding:8px 12px;
+      }
+
+      .brand{
+        font-size:18px;
+      }
+
+      .brand img{
+        width:34px;
+        height:34px;
+      }
+
+      .header-actions{
+        width:auto;
+        display:flex;
+      }
+
+      .header-link{
+        min-height:38px;
+        padding:0 10px;
+        font-size:11.5px;
+      }
+
+      .header-link:not(.primary){
+        display:none;
+      }
+
+      .page-shell{
+        width:100%;
+        margin:0;
+      }
+
+      .page-head{
+        padding:18px 14px 12px;
+      }
+
+      .page-head h1{
+        font-size:25px;
+      }
+
+      .messages-card{
+        border-radius:0;
+        border-left:none;
+        border-right:none;
+        box-shadow:none;
+      }
+
+      .toolbar{
+        padding:11px;
+      }
+
+      .search{
+        flex-basis:100%;
+      }
+
+      .conversation{
+        min-height:78px;
+        padding:12px;
+        gap:11px;
+      }
+
+      .avatar{
+        width:48px;
+        height:48px;
+      }
+
+      .conversation-side{
+        min-width:58px;
+      }
+
+      .name{
+        font-size:14px;
+      }
+
+      .preview{
+        font-size:12px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -695,30 +920,6 @@
       },
       async (error) => {
         console.error("Could not load chats:", error);
-
-        // ===== TEMPORARY DEBUG POPUP — re-checks THIS SAME account's =====
-        // ===== Firestore profile at the exact moment the chats query =====
-        // ===== fails, so the error and the profile state are guaranteed =====
-        // ===== to match. Remove this whole block once diagnosed. =====
-        let profileLine = "(could not re-check profile)";
-        try {
-          const profileSnap = await getDoc(doc(db, "users", currentUser.uid));
-          profileLine =
-            "users/{uid} doc exists: " + (profileSnap.exists() ? "YES" : "NO") +
-            "\nsuspended: " + (profileSnap.exists() ? String(profileSnap.data().suspended) : "n/a");
-        } catch (recheckError) {
-          profileLine = "profile re-check itself failed: " + recheckError.message;
-        }
-
-        alert(
-          "DEBUG — chats query failed:\n\n" +
-          "email: " + currentUser.email + "\n" +
-          "uid: " + currentUser.uid + "\n" +
-          "code: " + (error.code || "unknown") + "\n" +
-          "message: " + (error.message || "(no message)") + "\n\n" +
-          profileLine
-        );
-        // ===== END TEMPORARY DEBUG POPUP =====
 
         loadingState.classList.add("hidden");
         errorState.textContent =
